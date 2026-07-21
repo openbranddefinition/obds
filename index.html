@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Open Brand Definition Specification. Approved brand facts, rules, known gaps and exact runtime context for AI systems.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://openbranddefinition.org/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://openbranddefinition.org/">
+  <meta property="og:title" content="Open Brand Definition">
+  <meta property="og:description" content="Brandbooks explain the brand. OBDS controls what may run.">
+  <meta name="twitter:card" content="summary">
+  <title>Open Brand Definition | OBDS</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Open Brand Definition",
+    "alternateName": "OBDS",
+    "url": "https://openbranddefinition.org/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Kill The Dragon GmbH",
+      "email": "lets@killthedragon.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Dürergasse 3 / TOP 4 / HOF",
+        "postalCode": "1060",
+        "addressLocality": "Wien",
+        "addressCountry": "AT"
+      }
+    }
+  }
+  </script>
+  <style>
+    :root {
+      --paper: #fff;
+      --ink: #000;
+      --line: #000;
+      --pad: clamp(18px, 2.6vw, 42px);
+      --max: 1680px;
+      --step: clamp(14px, 1.05vw, 18px);
+      --display: clamp(54px, 10.2vw, 176px);
+      --headline: clamp(34px, 5.5vw, 92px);
+      --subhead: clamp(23px, 3vw, 48px);
+      --body: clamp(17px, 1.35vw, 23px);
+      --small: clamp(12px, .82vw, 15px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: var(--body);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .16em; }
+    a:hover { text-decoration-thickness: 3px; }
+    button { font: inherit; }
+    ::selection { background: var(--ink); color: var(--paper); }
+
+    .skip-link {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      transform: translateY(-110%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .site {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      align-items: center;
+      min-height: 64px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .mark, .status, .language {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--pad);
+      white-space: nowrap;
+    }
+    .mark { font-weight: 700; text-transform: uppercase; letter-spacing: -.04em; }
+    .status, .language { border-left: 1px solid var(--line); font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+    .language { padding: 0; }
+    .language button {
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: transparent;
+      color: inherit;
+      height: 100%;
+      min-width: 58px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: var(--small);
+    }
+    .language button:first-child { border-left: 0; }
+    .language button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    .language button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: -3px;
+    }
+
+    .hero {
+      min-height: calc(100svh - 64px);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-content: space-between;
+      gap: 0;
+      padding: var(--pad);
+    }
+
+    .eyebrow {
+      grid-column: 1 / 13;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .hero-title {
+      grid-column: 1 / 13;
+      margin: clamp(52px, 11vh, 130px) 0 0;
+      font-size: var(--display);
+      line-height: .76;
+      letter-spacing: -.082em;
+      text-transform: uppercase;
+      font-weight: 700;
+      max-width: 11ch;
+    }
+    .hero-title .outline {
+      color: var(--paper);
+      -webkit-text-stroke: max(1px, .012em) var(--ink);
+      text-stroke: max(1px, .012em) var(--ink);
+    }
+
+    .hero-statement {
+      grid-column: 5 / 13;
+      align-self: end;
+      margin: clamp(54px, 10vh, 140px) 0 0;
+      font-size: var(--subhead);
+      line-height: 1.03;
+      letter-spacing: -.05em;
+      max-width: 20ch;
+    }
+
+    .hero-foot {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+    }
+    .hero-foot > div {
+      min-height: 112px;
+      padding: 18px var(--pad);
+      border-left: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero-foot > div:first-child { border-left: 0; }
+    .label { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+    .value { font-size: clamp(20px, 2.2vw, 34px); letter-spacing: -.045em; }
+
+    .section {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-number {
+      grid-column: 1 / 3;
+      padding: var(--pad);
+      border-right: 1px solid var(--line);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .section-content {
+      grid-column: 3 / 13;
+      padding: var(--pad);
+    }
+
+    .section h2 {
+      margin: 0 0 clamp(50px, 9vw, 150px);
+      font-size: var(--headline);
+      line-height: .91;
+      letter-spacing: -.07em;
+      font-weight: 700;
+      max-width: 12ch;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: var(--subhead);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+      max-width: 25ch;
+    }
+
+    .grid-three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: clamp(60px, 10vw, 150px);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .grid-three article {
+      min-height: 350px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .grid-three h3 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 49px);
+      line-height: .94;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+    }
+    .grid-three p { margin: 50px 0 0; max-width: 24ch; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: clamp(60px, 10vw, 150px);
+      border: 1px solid var(--line);
+    }
+    .flow-step {
+      position: relative;
+      min-height: 250px;
+      padding: 18px;
+      border-left: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .flow-step:first-child { border-left: 0; }
+    .flow-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -17px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      font-size: 20px;
+    }
+    .flow-index { font-size: var(--small); letter-spacing: .1em; }
+    .flow-name { font-size: clamp(21px, 2.1vw, 36px); letter-spacing: -.045em; line-height: .95; }
+
+    .inverse { background: var(--ink); color: var(--paper); --line: #fff; }
+    .inverse .flow-step:not(:last-child)::after { background: var(--ink); }
+
+    .contrast-list {
+      margin-top: clamp(60px, 9vw, 130px);
+      border-top: 1px solid var(--line);
+    }
+    .contrast-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .contrast-row > div { padding: 22px 0; }
+    .contrast-row > div:first-child { padding-right: 30px; }
+    .contrast-row > div:last-child { border-left: 1px solid var(--line); padding-left: 30px; }
+    .contrast-row strong { display: block; font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 9px; }
+
+    .status-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .status-board > div { padding: 22px; min-height: 260px; }
+    .status-board > div + div { border-left: 1px solid var(--line); }
+    .status-big { font-size: clamp(54px, 8vw, 130px); line-height: .8; letter-spacing: -.08em; font-weight: 700; }
+    .status-copy { margin-top: 60px; max-width: 28ch; }
+
+    .contact-line {
+      margin-top: clamp(70px, 12vw, 180px);
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+    .contact-line a {
+      font-size: clamp(31px, 5vw, 82px);
+      line-height: .9;
+      letter-spacing: -.06em;
+      overflow-wrap: anywhere;
+    }
+
+    .legal {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+    .legal-title {
+      grid-column: 1 / 5;
+      padding: var(--pad);
+      border-right: 1px solid var(--line);
+    }
+    .legal-title h2 {
+      position: sticky;
+      top: 92px;
+      margin: 0;
+      font-size: var(--headline);
+      line-height: .88;
+      letter-spacing: -.07em;
+      text-transform: uppercase;
+    }
+    .legal-copy {
+      grid-column: 5 / 13;
+      padding: var(--pad);
+      font-size: clamp(14px, 1.05vw, 17px);
+      line-height: 1.45;
+    }
+    .legal-copy h3 {
+      margin: 0 0 16px;
+      font-size: var(--body);
+      letter-spacing: -.03em;
+    }
+    .legal-copy p { margin: 0 0 26px; max-width: 75ch; }
+    .legal-block { padding: 28px 0; border-top: 1px solid var(--line); }
+    .legal-block:first-child { border-top: 0; padding-top: 0; }
+    .legal-data {
+      display: grid;
+      grid-template-columns: minmax(150px, .7fr) 1.3fr;
+      gap: 10px 24px;
+      margin: 0;
+    }
+    .legal-data dt { color: color-mix(in srgb, currentColor 58%, transparent); }
+    .legal-data dd { margin: 0; }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      padding: 20px var(--pad);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    [data-copy] { display: none; }
+    html[data-lang="en"] [data-copy="en"],
+    html[data-lang="de"] [data-copy="de"] { display: revert; }
+
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #000; --ink: #fff; --line: #fff; }
+      .topbar { background: color-mix(in srgb, var(--paper) 94%, transparent); }
+    }
+
+    @media (max-width: 900px) {
+      .site { border-left: 0; border-right: 0; }
+      .topbar { grid-template-columns: 1fr auto; min-height: 58px; }
+      .status { display: none; }
+      .mark { padding: 0 16px; }
+      .language button { min-width: 52px; }
+      .hero { min-height: auto; }
+      .hero-main { padding: 20px 16px 34px; min-height: 78svh; }
+      .hero-title { margin-top: 18vh; font-size: clamp(54px, 19vw, 110px); }
+      .hero-statement { grid-column: 1 / 13; margin-top: 90px; font-size: clamp(28px, 8vw, 48px); }
+      .hero-foot { grid-template-columns: 1fr; }
+      .hero-foot > div { min-height: 90px; padding: 14px 16px; border-left: 0; border-top: 1px solid var(--line); }
+      .hero-foot > div:first-child { border-top: 0; }
+      .section { grid-template-columns: 1fr; }
+      .section-number { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+      .section-content { grid-column: 1; padding: 50px 16px 70px; }
+      .section h2 { margin-bottom: 70px; font-size: clamp(42px, 13vw, 74px); }
+      .grid-three, .flow { grid-template-columns: 1fr; }
+      .grid-three article { min-height: 260px; border-right: 1px solid var(--line); }
+      .flow-step { min-height: 190px; border-left: 0; border-top: 1px solid var(--line); }
+      .flow-step:first-child { border-top: 0; }
+      .flow-step:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -17px; transform: translateX(50%); }
+      .contrast-row { grid-template-columns: 1fr; }
+      .contrast-row > div:last-child { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+      .status-board { grid-template-columns: 1fr; }
+      .status-board > div + div { border-left: 0; border-top: 1px solid var(--line); }
+      .contact-line { grid-template-columns: 1fr; }
+      .legal { grid-template-columns: 1fr; }
+      .legal-title { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); }
+      .legal-title h2 { position: static; }
+      .legal-copy { grid-column: 1; }
+      .legal-data { grid-template-columns: 1fr; gap: 3px; }
+      .legal-data dd { margin-bottom: 13px; }
+      footer { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    @media print {
+      .topbar, .language { display: none; }
+      .site { border: 0; }
+      .hero { min-height: auto; }
+      .section, .legal { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site">
+    <header class="topbar">
+      <a class="mark" href="#top" aria-label="Open Brand Definition home">Open Brand Definition</a>
+      <div class="status">OBDS / Draft 0.9.4</div>
+      <div class="language" aria-label="Language selection">
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-main">
+          <div class="eyebrow">
+            <span>Open Brand Definition Specification</span>
+            <span>Vienna / 2026</span>
+          </div>
+          <h1 class="hero-title">Open<br><span class="outline">Brand</span><br>Definition</h1>
+          <p class="hero-statement" data-copy="en">Brandbooks explain the brand. OBDS controls what may run.</p>
+          <p class="hero-statement" data-copy="de">Brandbooks erklären die Marke. OBDS steuert, was verwendet werden darf.</p>
+        </div>
+        <div class="hero-foot">
+          <div><span class="label" data-copy="en">Form</span><span class="label" data-copy="de">Form</span><span class="value" data-copy="en">Open standard</span><span class="value" data-copy="de">Offener Standard</span></div>
+          <div><span class="label" data-copy="en">Focus</span><span class="label" data-copy="de">Fokus</span><span class="value" data-copy="en">Brand control for AI</span><span class="value" data-copy="de">Markensteuerung für AI</span></div>
+          <div><span class="label" data-copy="en">Status</span><span class="label" data-copy="de">Status</span><span class="value" data-copy="en">Draft. No download yet.</span><span class="value" data-copy="de">Entwurf. Noch kein Download.</span></div>
+        </div>
+      </section>
+
+      <section class="section" id="idea">
+        <div class="section-number">01 / Idea</div>
+        <div class="section-content">
+          <h2 data-copy="en">Clear to read. Strict when it matters.</h2>
+          <h2 data-copy="de">Klar zu verstehen. Strikt, wenn es zählt.</h2>
+          <p class="lead" data-copy="en">OBDS stores approved brand facts, rules, context and known gaps. It builds a small context for the exact market and task. If required information is missing or conflicting, the build stops instead of guessing.</p>
+          <p class="lead" data-copy="de">OBDS speichert freigegebene Markenfakten, Regeln, Kontext und bekannte Lücken. Daraus entsteht ein kleiner Kontext für den richtigen Markt und die konkrete Aufgabe. Fehlen notwendige Informationen oder gibt es Konflikte, stoppt der Build, statt zu raten.</p>
+
+          <div class="grid-three">
+            <article>
+              <span class="label">Simple</span>
+              <h3 data-copy="en">Only build what you use.</h3>
+              <h3 data-copy="de">Nur bauen, was gebraucht wird.</h3>
+              <p data-copy="en">One approved definition. Small contexts. No raw brand database in the prompt.</p>
+              <p data-copy="de">Eine freigegebene Definition. Kleine Kontexte. Keine rohe Markendatenbank im Prompt.</p>
+            </article>
+            <article>
+              <span class="label">Useful</span>
+              <h3 data-copy="en">Known gaps stay visible.</h3>
+              <h3 data-copy="de">Bekannte Lücken bleiben sichtbar.</h3>
+              <p data-copy="en">Defined, unknown, deliberately undefined, not applicable and prohibited are different states.</p>
+              <p data-copy="de">Definiert, unbekannt, bewusst nicht definiert, nicht anwendbar und verboten sind unterschiedliche Zustände.</p>
+            </article>
+            <article>
+              <span class="label">Powerful</span>
+              <h3 data-copy="en">Unsafe tasks stop early.</h3>
+              <h3 data-copy="de">Unsichere Aufgaben stoppen früh.</h3>
+              <p data-copy="en">A target can require approved truth. If it is missing, no runtime context is produced.</p>
+              <p data-copy="de">Ein Target kann freigegebene Fakten voraussetzen. Fehlen sie, entsteht kein Runtime-Kontext.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section inverse" id="flow">
+        <div class="section-number">02 / Flow</div>
+        <div class="section-content">
+          <h2 data-copy="en">Brand truth in. Exact context out.</h2>
+          <h2 data-copy="de">Markenwahrheit hinein. Präziser Kontext hinaus.</h2>
+          <p class="lead" data-copy="en">The complexity lives before release. Runtime stays small and predictable.</p>
+          <p class="lead" data-copy="de">Die Komplexität liegt vor dem Release. Die Runtime bleibt klein und vorhersehbar.</p>
+          <div class="flow" aria-label="OBDS workflow">
+            <div class="flow-step"><span class="flow-index">01</span><span class="flow-name" data-copy="en">Approved brand definition</span><span class="flow-name" data-copy="de">Freigegebene Markendefinition</span></div>
+            <div class="flow-step"><span class="flow-index">02</span><span class="flow-name" data-copy="en">Declared build target</span><span class="flow-name" data-copy="de">Definiertes Build-Target</span></div>
+            <div class="flow-step"><span class="flow-index">03</span><span class="flow-name" data-copy="en">Compiled context and checks</span><span class="flow-name" data-copy="de">Kompilierter Kontext und Checks</span></div>
+            <div class="flow-step"><span class="flow-index">04</span><span class="flow-name" data-copy="en">AI runtime</span><span class="flow-name" data-copy="de">AI-Runtime</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="difference">
+        <div class="section-number">03 / Difference</div>
+        <div class="section-content">
+          <h2 data-copy="en">Not another brandbook.</h2>
+          <h2 data-copy="de">Nicht noch ein Brandbook.</h2>
+          <p class="lead" data-copy="en">A good brandbook remains useful. OBDS adds operational states, exact scope and system consequences.</p>
+          <p class="lead" data-copy="de">Ein gutes Brandbook bleibt wertvoll. OBDS ergänzt operative Zustände, präzisen Scope und technische Konsequenzen.</p>
+
+          <div class="contrast-list">
+            <div class="contrast-row">
+              <div><strong data-copy="en">Brandbook</strong><strong data-copy="de">Brandbook</strong><span data-copy="en">Explains the brand.</span><span data-copy="de">Erklärt die Marke.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Defines what may be used for a context.</span><span data-copy="de">Definiert, was in einem Kontext verwendet werden darf.</span></div>
+            </div>
+            <div class="contrast-row">
+              <div><strong data-copy="en">Prompt</strong><strong data-copy="de">Prompt</strong><span data-copy="en">Asks the model to follow guidance.</span><span data-copy="de">Bittet das Modell, Regeln zu beachten.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Can stop a target before the model is called.</span><span data-copy="de">Kann ein Target stoppen, bevor das Modell aufgerufen wird.</span></div>
+            </div>
+            <div class="contrast-row">
+              <div><strong data-copy="en">Global reference</strong><strong data-copy="de">Globale Referenz</strong><span data-copy="en">Shows what exists in general.</span><span data-copy="de">Zeigt, was grundsätzlich existiert.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Separates reference from local permission.</span><span data-copy="de">Trennt Referenz von lokaler Freigabe.</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="scope">
+        <div class="section-number">04 / Scope</div>
+        <div class="section-content">
+          <h2 data-copy="en">A brand control layer. Not an AI operating system.</h2>
+          <h2 data-copy="de">Eine Markensteuerungsschicht. Kein AI Operating System.</h2>
+          <p class="lead" data-copy="en">OBDS sits between brand sources and AI runtimes. It does not replace models, agents, tools, memory, scheduling or orchestration.</p>
+          <p class="lead" data-copy="de">OBDS sitzt zwischen Markenquellen und AI-Runtimes. Es ersetzt keine Modelle, Agenten, Tools, Memory, Scheduling oder Orchestrierung.</p>
+          <div class="status-board">
+            <div>
+              <div class="label" data-copy="en">It is</div><div class="label" data-copy="de">Es ist</div>
+              <div class="status-copy" data-copy="en">A machine-readable brand definition and runtime context standard.</div>
+              <div class="status-copy" data-copy="de">Ein maschinenlesbarer Standard für Markendefinition und Runtime-Kontext.</div>
+            </div>
+            <div>
+              <div class="label" data-copy="en">It is not</div><div class="label" data-copy="de">Es ist nicht</div>
+              <div class="status-copy" data-copy="en">A prompt library, a model provider or a complete AI platform.</div>
+              <div class="status-copy" data-copy="de">Keine Prompt Library, kein Modellanbieter und keine vollständige AI-Plattform.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section inverse" id="status">
+        <div class="section-number">05 / Status</div>
+        <div class="section-content">
+          <h2 data-copy="en">Open by design. Public release in preparation.</h2>
+          <h2 data-copy="de">Offen gedacht. Öffentliche Veröffentlichung in Vorbereitung.</h2>
+          <div class="status-board">
+            <div>
+              <div class="label" data-copy="en">Current draft</div><div class="label" data-copy="de">Aktueller Entwurf</div>
+              <div class="status-big">0.9.4</div>
+              <p class="status-copy" data-copy="en">Proof release. The model, compiler contract and fail-closed behaviour are being tested. No public download is offered yet.</p>
+              <p class="status-copy" data-copy="de">Proof Release. Datenmodell, Compiler-Vertrag und Fail-Closed-Verhalten werden getestet. Derzeit gibt es noch keinen öffentlichen Download.</p>
+            </div>
+            <div>
+              <div class="label" data-copy="en">Planned publication</div><div class="label" data-copy="de">Geplante Veröffentlichung</div>
+              <p class="status-copy" data-copy="en">Specification and documentation: CC BY 4.0. Schemas, tests and reference code: Apache 2.0. Names and marks: separate trademark policy.</p>
+              <p class="status-copy" data-copy="de">Spezifikation und Dokumentation: CC BY 4.0. Schemas, Tests und Referenzcode: Apache 2.0. Namen und Kennzeichen: separate Markenrichtlinie.</p>
+            </div>
+          </div>
+          <div class="contact-line">
+            <div>
+              <span class="label" data-copy="en">Review, test, challenge</span>
+              <span class="label" data-copy="de">Prüfen, testen, hinterfragen</span>
+            </div>
+            <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal" id="legal">
+        <div class="legal-title">
+          <h2 data-copy="en">Legal<br>notice</h2>
+          <h2 data-copy="de">Impres<br>sum</h2>
+        </div>
+        <div class="legal-copy">
+          <div class="legal-block">
+            <h3 data-copy="de">Impressum und Offenlegung</h3>
+            <h3 data-copy="en">Legal notice and disclosure</h3>
+            <p data-copy="de">Informationen gemäß § 5 E-Commerce-Gesetz sowie Impressum und Offenlegung gemäß §§ 24 und 25 Mediengesetz.</p>
+            <p data-copy="en">Information under section 5 of the Austrian E-Commerce Act and legal notice and disclosure under sections 24 and 25 of the Austrian Media Act. The German version is authoritative.</p>
+            <dl class="legal-data">
+              <dt data-copy="de">Medieninhaber und Herausgeber</dt><dt data-copy="en">Media owner and publisher</dt>
+              <dd>Kill The Dragon GmbH</dd>
+              <dt data-copy="de">Anschrift</dt><dt data-copy="en">Address</dt>
+              <dd>Dürergasse 3 / TOP 4 / HOF<br>1060 Wien<br>Österreich</dd>
+              <dt data-copy="de">Rechtsform</dt><dt data-copy="en">Legal form</dt>
+              <dd data-copy="de">Gesellschaft mit beschränkter Haftung</dd><dd data-copy="en">Limited liability company under Austrian law</dd>
+              <dt data-copy="de">Geschäftsführer</dt><dt data-copy="en">Managing director</dt>
+              <dd>Max Peter Jürschik</dd>
+              <dt>E-Mail</dt><dt data-copy="en">Email</dt>
+              <dd><a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a></dd>
+              <dt data-copy="de">Firmenbuch</dt><dt data-copy="en">Company register</dt>
+              <dd>FN 471464 f, Handelsgericht Wien</dd>
+              <dt data-copy="de">Aufsichtsbehörde gemäß ECG</dt><dt data-copy="en">Supervisory authority under the ECG</dt>
+              <dd data-copy="de">Magistrat der Stadt Wien, MBA 6/7</dd><dd data-copy="en">Municipal Authority of the City of Vienna, MBA 6/7</dd>
+              <dt data-copy="de">Kammermitgliedschaft</dt><dt data-copy="en">Chamber membership</dt>
+              <dd data-copy="de">Wirtschaftskammer Wien, Fachgruppe Werbung und Marktkommunikation, Werbeagentur</dd><dd data-copy="en">Vienna Economic Chamber, Advertising and Market Communication, advertising agency</dd>
+              <dt>UID</dt><dt data-copy="en">VAT ID</dt>
+              <dd>ATU72328938</dd>
+            </dl>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Unternehmensgegenstand und grundlegende Richtung</h3>
+            <h3 data-copy="en">Business purpose and editorial direction</h3>
+            <p data-copy="de"><strong>Unternehmensgegenstand:</strong> Werbung und Marktkommunikation, insbesondere Werbeagentur.</p>
+            <p data-copy="en"><strong>Business purpose:</strong> Advertising and market communication, in particular advertising agency services.</p>
+            <p data-copy="de"><strong>Grundlegende Richtung:</strong> Information über Entwicklung, Funktionsweise und Anwendung der Open Brand Definition Specification sowie verwandte Themen der Markenführung und des Einsatzes von AI-Systemen.</p>
+            <p data-copy="en"><strong>Editorial direction:</strong> Information about the development, operation and use of the Open Brand Definition Specification and related topics in brand management and AI systems.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Anwendbare Vorschriften</h3>
+            <h3 data-copy="en">Applicable rules</h3>
+            <p data-copy="de">Anwendbare Rechtsvorschriften sind insbesondere das E-Commerce-Gesetz, das Mediengesetz und die Gewerbeordnung. Die Rechtsvorschriften sind über das <a href="https://www.ris.bka.gv.at/" target="_blank" rel="noopener noreferrer">Rechtsinformationssystem des Bundes</a> abrufbar. Informationen zur Kammermitgliedschaft finden sich im <a href="https://firmen.wko.at/" target="_blank" rel="noopener noreferrer">Firmen A-Z der Wirtschaftskammer Österreich</a>.</p>
+            <p data-copy="en">Applicable rules include the Austrian E-Commerce Act, Media Act and Trade Regulation Act. The German legal texts are available through the <a href="https://www.ris.bka.gv.at/" target="_blank" rel="noopener noreferrer">Austrian Legal Information System</a>. Chamber information is available through the <a href="https://firmen.wko.at/" target="_blank" rel="noopener noreferrer">Austrian Economic Chamber directory</a>.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Haftung für Links</h3>
+            <h3 data-copy="en">External links</h3>
+            <p data-copy="de">Wir erklären ausdrücklich, dass wir keinen Einfluss auf die Gestaltung und die Inhalte verlinkter Seiten haben. Für die Inhalte externer Seiten sind ausschließlich deren Betreiber verantwortlich. Wir machen uns diese Inhalte nicht zu Eigen.</p>
+            <p data-copy="en">We have no control over the design or content of linked external websites. Their operators are solely responsible for their content. We do not adopt external content as our own.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Datenschutz</h3>
+            <h3 data-copy="en">Privacy</h3>
+            <p data-copy="de">Diese statische Seite setzt selbst keine Cookies und bindet keine Analyse-, Tracking- oder externen Schriftdienste ein. Technisch notwendige Server-Logdaten können durch den Hosting-Anbieter verarbeitet werden.</p>
+            <p data-copy="en">This static page does not set cookies or include analytics, tracking services or external font services. The hosting provider may process technically necessary server log data.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3>Copyright and licensing</h3>
+            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten. OBDS ist ein offener Standard in Entwicklung. Die Lizenz für die Spezifikation, Dokumentation, Schemas, Tests und Referenzimplementierung wird mit der ersten öffentlichen Veröffentlichung festgelegt. Die derzeit geplante Lizenzierung ist CC BY 4.0 für Spezifikation und Dokumentation sowie Apache 2.0 für Schemas, Tests und Referenzcode. Namen und Kennzeichen bleiben einer separaten Markenrichtlinie vorbehalten.</p>
+            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved. OBDS is an open standard in development. The licences for the specification, documentation, schemas, tests and reference implementation will be stated with the first public release. The current publication plan is CC BY 4.0 for the specification and documentation, and Apache 2.0 for schemas, tests and reference code. Names and marks remain subject to a separate trademark policy.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 Kill The Dragon GmbH</span>
+      <span>Open Brand Definition / Vienna</span>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const buttons = [...document.querySelectorAll('[data-set-lang]')];
+      const setLanguage = (language) => {
+        root.dataset.lang = language;
+        root.lang = language;
+        document.title = language === 'de'
+          ? 'Open Brand Definition | OBDS'
+          : 'Open Brand Definition | OBDS';
+        buttons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.setLang === language));
+        });
+      };
+      const initial = navigator.language && navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
+      setLanguage(initial);
+      buttons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.setLang)));
+    })();
+  </script>
+</body>
+</html>
