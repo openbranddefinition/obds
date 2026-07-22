@@ -1,0 +1,18 @@
+{
+  "canonicalUrl": "https://openbranddefinition.org/",
+  "contact": "lets@killthedragon.com",
+  "currentDraftName": "Integrity and Conformance",
+  "currentPublicDraft": "0.9.5",
+  "fullName": "Open Brand Definition Specification",
+  "initialPublicPublication": "2026-07-22",
+  "kind": "open-brand-definition-publication-record",
+  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
+  "plannedStableRelease": "2026-08",
+  "plannedStableVersion": "1.0",
+  "project": "Open Brand Definition",
+  "publisher": "Kill The Dragon GmbH",
+  "publisherLocation": "Vienna, Austria",
+  "schemaVersion": "1.0",
+  "specification": "OBDS",
+  "websiteIndexSha256": "sha256:a5eb8d9bf15f577319fe74ec8bdfbfa652a5c7c8117af3e3d29b6a40820dd09b"
+}

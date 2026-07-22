@@ -6,35 +6,76 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-  <meta name="description" content="Open Brand Definition Specification. Approved brand facts, rules, known gaps and exact runtime context for AI systems.">
+  <meta name="description" content="Open Brand Definition Specification 0.9.5. A machine-readable brand definition and control layer for AI systems. Public draft. Version 1.0 planned for August 2026.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://openbranddefinition.org/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://openbranddefinition.org/">
   <meta property="og:title" content="Open Brand Definition">
-  <meta property="og:description" content="Brandbooks explain the brand. OBDS controls what may run.">
+  <meta property="og:description" content="Brandbooks explain the brand. OBDS controls which brand truth may run in a declared context.">
   <meta name="twitter:card" content="summary">
-  <title>Open Brand Definition | OBDS</title>
+
+  <meta name="author" content="Kill The Dragon GmbH">
+  <meta name="dcterms.title" content="Open Brand Definition Specification">
+  <meta name="dcterms.creator" content="Kill The Dragon GmbH">
+  <meta name="dcterms.date" content="2026-07-22">
+  <meta name="dcterms.type" content="Technical specification">
+  <meta name="dcterms.identifier" content="https://openbranddefinition.org/">
+  <meta name="obds-version" content="0.9.5">
+  <meta property="article:published_time" content="2026-07-22">
+  <meta property="article:modified_time" content="2026-07-22">
+  <link rel="alternate" hreflang="en" href="https://openbranddefinition.org/?lang=en">
+  <link rel="alternate" hreflang="de" href="https://openbranddefinition.org/?lang=de">
+  <title>Open Brand Definition | OBDS 0.9.5</title>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Open Brand Definition",
-    "alternateName": "OBDS",
-    "url": "https://openbranddefinition.org/",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Kill The Dragon GmbH",
-      "email": "lets@killthedragon.com",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Dürergasse 3 / TOP 4 / HOF",
-        "postalCode": "1060",
-        "addressLocality": "Wien",
-        "addressCountry": "AT"
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://openbranddefinition.org/#website",
+        "name": "Open Brand Definition",
+        "alternateName": "OBDS",
+        "url": "https://openbranddefinition.org/",
+        "inLanguage": ["en", "de"],
+        "publisher": {
+          "@id": "https://openbranddefinition.org/#publisher"
+        }
+      },
+      {
+        "@type": "TechArticle",
+        "@id": "https://openbranddefinition.org/#obds",
+        "headline": "Open Brand Definition Specification",
+        "alternativeHeadline": "OBDS",
+        "description": "A machine-readable brand definition and control layer for AI systems.",
+        "url": "https://openbranddefinition.org/",
+        "version": "0.9.5",
+        "datePublished": "2026-07-22",
+        "dateModified": "2026-07-22",
+        "isAccessibleForFree": true,
+        "copyrightYear": 2026,
+        "copyrightHolder": {
+          "@id": "https://openbranddefinition.org/#publisher"
+        },
+        "publisher": {
+          "@id": "https://openbranddefinition.org/#publisher"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://openbranddefinition.org/#publisher",
+        "name": "Kill The Dragon GmbH",
+        "email": "lets@killthedragon.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Dürergasse 3 / TOP 4 / HOF",
+          "postalCode": "1060",
+          "addressLocality": "Wien",
+          "addressCountry": "AT"
+        }
       }
-    }
+    ]
   }
   </script>
   <style>
@@ -397,6 +438,146 @@
     html[data-lang="en"] [data-copy="en"],
     html[data-lang="de"] [data-copy="de"] { display: revert; }
 
+
+    .definition-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: clamp(60px, 9vw, 130px);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .definition-card {
+      min-height: 250px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .definition-code {
+      font-size: var(--small);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .definition-card h3 {
+      margin: 34px 0 10px;
+      font-size: clamp(25px, 2.4vw, 42px);
+      line-height: .95;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+    }
+    .definition-card p { margin: 0; max-width: 25ch; }
+
+    .state-list {
+      margin-top: clamp(60px, 9vw, 130px);
+      border-top: 1px solid var(--line);
+    }
+    .state-row {
+      display: grid;
+      grid-template-columns: minmax(170px, .55fr) 1.45fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .state-row > div { padding: 20px 0; }
+    .state-row > div:last-child { border-left: 1px solid var(--line); padding-left: 28px; }
+    .state-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(17px, 1.5vw, 24px);
+      font-weight: 700;
+    }
+
+    .runtime-slots {
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .runtime-slot {
+      display: grid;
+      grid-template-columns: 70px minmax(200px, .85fr) 1.15fr;
+      border-top: 1px solid var(--line);
+      min-height: 118px;
+      align-items: stretch;
+    }
+    .runtime-slot:first-child { border-top: 0; }
+    .runtime-slot > div {
+      padding: 18px;
+      display: flex;
+      align-items: center;
+    }
+    .runtime-slot > div + div { border-left: 1px solid var(--line); }
+    .runtime-slot .slot-index { font-size: var(--small); letter-spacing: .1em; }
+    .runtime-slot .slot-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+      font-size: clamp(16px, 1.45vw, 23px);
+    }
+
+    .integrity-list {
+      margin-top: clamp(60px, 9vw, 130px);
+      counter-reset: integrity;
+      border-top: 1px solid var(--line);
+    }
+    .integrity-item {
+      counter-increment: integrity;
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .integrity-item::before {
+      content: counter(integrity, decimal-leading-zero);
+      padding: 22px 18px;
+      font-size: var(--small);
+      letter-spacing: .1em;
+      border-right: 1px solid var(--line);
+    }
+    .integrity-item > div { padding: 22px 28px; }
+    .integrity-item h3 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2vw, 34px);
+      letter-spacing: -.045em;
+    }
+    .integrity-item p { margin: 0; max-width: 60ch; }
+
+    .publication-record {
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .publication-row {
+      display: grid;
+      grid-template-columns: minmax(190px, .6fr) 1.4fr;
+      border-top: 1px solid var(--line);
+    }
+    .publication-row:first-child { border-top: 0; }
+    .publication-row > div { padding: 18px 20px; }
+    .publication-row > div:last-child { border-left: 1px solid var(--line); }
+    .publication-key {
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .publication-value {
+      font-size: clamp(18px, 1.7vw, 28px);
+      letter-spacing: -.03em;
+    }
+
+    .micro-note {
+      margin-top: 28px;
+      max-width: 74ch;
+      font-size: var(--small);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .definition-grid { grid-template-columns: 1fr; }
+      .runtime-slot { grid-template-columns: 54px 1fr; }
+      .runtime-slot > div:last-child { grid-column: 1 / 3; border-left: 0; border-top: 1px solid var(--line); }
+      .state-row, .publication-row { grid-template-columns: 1fr; }
+      .state-row > div:last-child, .publication-row > div:last-child {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+      }
+    }
+
     @media (prefers-color-scheme: dark) {
       :root { --paper: #000; --ink: #fff; --line: #fff; }
       .topbar { background: color-mix(in srgb, var(--paper) 94%, transparent); }
@@ -455,7 +636,7 @@
   <div class="site">
     <header class="topbar">
       <a class="mark" href="#top" aria-label="Open Brand Definition home">Open Brand Definition</a>
-      <div class="status">OBDS / Draft 0.9.4</div>
+      <div class="status">OBDS / Public draft 0.9.5</div>
       <div class="language" aria-label="Language selection">
         <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
@@ -476,7 +657,7 @@
         <div class="hero-foot">
           <div><span class="label" data-copy="en">Form</span><span class="label" data-copy="de">Form</span><span class="value" data-copy="en">Open standard</span><span class="value" data-copy="de">Offener Standard</span></div>
           <div><span class="label" data-copy="en">Focus</span><span class="label" data-copy="de">Fokus</span><span class="value" data-copy="en">Brand control for AI</span><span class="value" data-copy="de">Markensteuerung für AI</span></div>
-          <div><span class="label" data-copy="en">Status</span><span class="label" data-copy="de">Status</span><span class="value" data-copy="en">Draft. No download yet.</span><span class="value" data-copy="de">Entwurf. Noch kein Download.</span></div>
+          <div><span class="label" data-copy="en">Status</span><span class="label" data-copy="de">Status</span><span class="value" data-copy="en">Public draft 0.9.5. No download yet.</span><span class="value" data-copy="de">Öffentlicher Entwurf 0.9.5. Noch kein Download.</span></div>
         </div>
       </section>
 
@@ -485,8 +666,8 @@
         <div class="section-content">
           <h2 data-copy="en">Clear to read. Strict when it matters.</h2>
           <h2 data-copy="de">Klar zu verstehen. Strikt, wenn es zählt.</h2>
-          <p class="lead" data-copy="en">OBDS stores approved brand facts, rules, context and known gaps. It builds a small context for the exact market and task. If required information is missing or conflicting, the build stops instead of guessing.</p>
-          <p class="lead" data-copy="de">OBDS speichert freigegebene Markenfakten, Regeln, Kontext und bekannte Lücken. Daraus entsteht ein kleiner Kontext für den richtigen Markt und die konkrete Aufgabe. Fehlen notwendige Informationen oder gibt es Konflikte, stoppt der Build, statt zu raten.</p>
+          <p class="lead" data-copy="en">OBDS stores approved brand facts, rules, context and known gaps. It builds a small context for the exact market and task. If required information is missing, conflicting or internally inconsistent, the build stops instead of guessing.</p>
+          <p class="lead" data-copy="de">OBDS speichert freigegebene Markenfakten, Regeln, Kontext und bekannte Lücken. Daraus entsteht ein kleiner Kontext für den richtigen Markt und die konkrete Aufgabe. Fehlen notwendige Informationen, gibt es Konflikte oder widersprüchliche Werte, stoppt der Build, statt zu raten.</p>
 
           <div class="grid-three">
             <article>
@@ -514,8 +695,36 @@
         </div>
       </section>
 
+
+      <section class="section" id="definition">
+        <div class="section-number">02 / Definition</div>
+        <div class="section-content">
+          <h2 data-copy="en">What belongs in OBDS?</h2>
+          <h2 data-copy="de">Was gehört in OBDS?</h2>
+          <p class="lead" data-copy="en">OBDS keeps related brand knowledge together. It separates facts, context and binding rules only when they behave differently.</p>
+          <p class="lead" data-copy="de">OBDS hält zusammengehöriges Markenwissen zusammen. Fakten, Kontext und verbindliche Regeln werden nur getrennt, wenn sie sich unterschiedlich verhalten.</p>
+
+          <div class="definition-grid">
+            <article class="definition-card"><span class="definition-code">Structure</span><h3 data-copy="en">Brand setup</h3><h3 data-copy="de">Marken-Setup</h3><p data-copy="en">Names, owners, markets, sub-brands and relationships.</p><p data-copy="de">Namen, Eigentümer, Märkte, Subbrands und Beziehungen.</p></article>
+            <article class="definition-card"><span class="definition-code">Identity</span><h3 data-copy="en">Meaning and voice</h3><h3 data-copy="de">Bedeutung und Stimme</h3><p data-copy="en">Purpose, positioning, values, personality, voice and naming.</p><p data-copy="de">Purpose, Positionierung, Werte, Persönlichkeit, Voice und Naming.</p></article>
+            <article class="definition-card"><span class="definition-code">Design</span><h3 data-copy="en">Visual system</h3><h3 data-copy="de">Visuelles System</h3><p data-copy="en">Colours, typography, logo use, imagery, spacing and layout.</p><p data-copy="de">Farben, Typografie, Logo-Nutzung, Bildstil, Spacing und Layout.</p></article>
+            <article class="definition-card"><span class="definition-code">Rules</span><h3 data-copy="en">Must and must not</h3><h3 data-copy="de">Muss und darf nicht</h3><p data-copy="en">Binding requirements with a condition, check and consequence.</p><p data-copy="de">Verbindliche Vorgaben mit Bedingung, Prüfung und Konsequenz.</p></article>
+            <article class="definition-card"><span class="definition-code">Context</span><h3 data-copy="en">Useful background</h3><h3 data-copy="de">Hilfreicher Hintergrund</h3><p data-copy="en">Audiences, situations, history, markets and strategic context.</p><p data-copy="de">Zielgruppen, Situationen, Geschichte, Märkte und strategischer Kontext.</p></article>
+            <article class="definition-card"><span class="definition-code">Stance</span><h3 data-copy="en">Review lens</h3><h3 data-copy="de">Bewertungsmaßstab</h3><p data-copy="en">Qualitative principles such as confident, not arrogant.</p><p data-copy="de">Qualitative Prinzipien wie selbstbewusst, nicht arrogant.</p></article>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">defined</span></div><div data-copy="en">A valid value exists and may be used when the scope matches.</div><div data-copy="de">Ein gültiger Wert existiert und darf bei passendem Scope verwendet werden.</div></div>
+            <div class="state-row"><div><span class="state-name">unknown</span></div><div data-copy="en">The value is needed but not known. The system must not guess.</div><div data-copy="de">Der Wert wird benötigt, ist aber nicht bekannt. Das System darf nicht raten.</div></div>
+            <div class="state-row"><div><span class="state-name">not_defined</span></div><div data-copy="en">The brand deliberately chose not to define a value.</div><div data-copy="de">Die Marke hat bewusst entschieden, keinen Wert festzulegen.</div></div>
+            <div class="state-row"><div><span class="state-name">not_applicable</span></div><div data-copy="en">The element does not apply in this context.</div><div data-copy="de">Das Element trifft in diesem Kontext nicht zu.</div></div>
+            <div class="state-row"><div><span class="state-name">prohibited</span></div><div data-copy="en">The value or action is explicitly forbidden and must be blocked.</div><div data-copy="de">Der Wert oder die Handlung ist ausdrücklich verboten und muss blockiert werden.</div></div>
+          </div>
+        </div>
+      </section>
+
       <section class="section inverse" id="flow">
-        <div class="section-number">02 / Flow</div>
+        <div class="section-number">03 / Flow</div>
         <div class="section-content">
           <h2 data-copy="en">Brand truth in. Exact context out.</h2>
           <h2 data-copy="de">Markenwahrheit hinein. Präziser Kontext hinaus.</h2>
@@ -530,8 +739,47 @@
         </div>
       </section>
 
+
+      <section class="section inverse" id="runtime">
+        <div class="section-number">04 / Runtime</div>
+        <div class="section-content">
+          <h2 data-copy="en">The model receives five clear parts.</h2>
+          <h2 data-copy="de">Das Modell erhält fünf klare Teile.</h2>
+          <p class="lead" data-copy="en">The full manifest does not go into every prompt. The compiler creates a small context for the declared target.</p>
+          <p class="lead" data-copy="de">Das vollständige Manifest landet nicht in jedem Prompt. Der Compiler erzeugt einen kleinen Kontext für das definierte Target.</p>
+
+          <div class="runtime-slots">
+            <div class="runtime-slot"><div class="slot-index">01</div><div class="slot-name">HARD_BOUNDARIES</div><div data-copy="en">Prohibitions and rules that block or require approval.</div><div data-copy="de">Verbote und Regeln, die blockieren oder Freigabe verlangen.</div></div>
+            <div class="runtime-slot"><div class="slot-index">02</div><div class="slot-name">FACT_GROUNDING</div><div data-copy="en">Approved facts that apply to the target.</div><div data-copy="de">Freigegebene Fakten, die für das Target gelten.</div></div>
+            <div class="runtime-slot"><div class="slot-index">03</div><div class="slot-name">STATE_MAP</div><div data-copy="en">Known gaps and deliberately undefined values.</div><div data-copy="de">Bekannte Lücken und bewusst nicht definierte Werte.</div></div>
+            <div class="runtime-slot"><div class="slot-index">04</div><div class="slot-name">STYLE_TEXTURE</div><div data-copy="en">Voice, context and qualitative guidance.</div><div data-copy="de">Voice, Kontext und qualitative Orientierung.</div></div>
+            <div class="runtime-slot"><div class="slot-index">05</div><div class="slot-name">TASK_INPUT</div><div data-copy="en">The current briefing and user request. It cannot rewrite brand truth.</div><div data-copy="de">Das aktuelle Briefing und die Nutzeranfrage. Sie können Brand Truth nicht umschreiben.</div></div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section" id="integrity">
+        <div class="section-number">05 / Integrity</div>
+        <div class="section-content">
+          <h2 data-copy="en">0.9.5 removes silent failure classes.</h2>
+          <h2 data-copy="de">0.9.5 entfernt stille Fehlerklassen.</h2>
+          <p class="lead" data-copy="en">The current draft focuses on integrity and testable conformance, not more features.</p>
+          <p class="lead" data-copy="de">Der aktuelle Entwurf konzentriert sich auf Integrität und testbare Conformance, nicht auf mehr Funktionen.</p>
+
+          <div class="integrity-list">
+            <div class="integrity-item"><div><h3 data-copy="en">IDs are unique</h3><h3 data-copy="de">IDs sind eindeutig</h3><p data-copy="en">One element ID may occur only once in a manifest snapshot.</p><p data-copy="de">Eine Element-ID darf in einem Manifest-Snapshot nur einmal vorkommen.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">References must resolve</h3><h3 data-copy="de">Verweise müssen auflösen</h3><p data-copy="en">Rules and build targets may not refer to elements that do not exist.</p><p data-copy="de">Rules und Build Targets dürfen nicht auf Elemente verweisen, die nicht existieren.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Duplicate values must agree</h3><h3 data-copy="de">Doppelte Werte müssen übereinstimmen</h3><p data-copy="en">For example, HEX and RGB must describe the same sRGB colour.</p><p data-copy="de">Zum Beispiel müssen HEX und RGB dieselbe sRGB-Farbe beschreiben.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Changes are shown before approval</h3><h3 data-copy="de">Änderungen werden vor Freigabe gezeigt</h3><p data-copy="en">A deterministic diff lists added, changed and removed elements.</p><p data-copy="de">Ein deterministischer Diff zeigt hinzugefügte, geänderte und entfernte Elemente.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Runtime decisions are recorded</h3><h3 data-copy="de">Runtime-Entscheidungen werden dokumentiert</h3><p data-copy="en">The record includes target, artefact hash, checks, decision and whether the model was called.</p><p data-copy="de">Der Record enthält Target, Artefakt-Hash, Checks, Entscheidung und ob das Modell aufgerufen wurde.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Conformance requires passing tests</h3><h3 data-copy="de">Conformance braucht bestandene Tests</h3><p data-copy="en">An implementation may claim conformance only after the official suite passes.</p><p data-copy="de">Eine Implementierung darf Conformance erst nach bestandener offizieller Suite behaupten.</p></div></div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="difference">
-        <div class="section-number">03 / Difference</div>
+        <div class="section-number">06 / Difference</div>
         <div class="section-content">
           <h2 data-copy="en">Not another brandbook.</h2>
           <h2 data-copy="de">Nicht noch ein Brandbook.</h2>
@@ -556,7 +804,7 @@
       </section>
 
       <section class="section" id="scope">
-        <div class="section-number">04 / Scope</div>
+        <div class="section-number">07 / Scope</div>
         <div class="section-content">
           <h2 data-copy="en">A brand control layer. Not an AI operating system.</h2>
           <h2 data-copy="de">Eine Markensteuerungsschicht. Kein AI Operating System.</h2>
@@ -577,22 +825,46 @@
         </div>
       </section>
 
+
+      <section class="section" id="publication">
+        <div class="section-number">08 / Publication</div>
+        <div class="section-content">
+          <h2 data-copy="en">Public record.</h2>
+          <h2 data-copy="de">Öffentlicher Nachweis.</h2>
+          <p class="lead" data-copy="en">This page publicly records the project name, core idea, current draft and planned release path.</p>
+          <p class="lead" data-copy="de">Diese Seite dokumentiert öffentlich den Projektnamen, die Kernidee, den aktuellen Entwurf und den geplanten Release-Pfad.</p>
+
+          <div class="publication-record">
+            <div class="publication-row"><div class="publication-key" data-copy="en">Project</div><div class="publication-key" data-copy="de">Projekt</div><div class="publication-value">Open Brand Definition</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Specification</div><div class="publication-key" data-copy="de">Spezifikation</div><div class="publication-value">OBDS - Open Brand Definition Specification</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Initial public publication</div><div class="publication-key" data-copy="de">Erste öffentliche Veröffentlichung</div><div class="publication-value">22 July 2026 / 22. Juli 2026</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Current public draft</div><div class="publication-key" data-copy="de">Aktueller öffentlicher Entwurf</div><div class="publication-value">0.9.5 - Integrity and Conformance</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Planned stable release</div><div class="publication-key" data-copy="de">Geplanter stabiler Release</div><div class="publication-value">OBDS 1.0 - August 2026</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Publisher</div><div class="publication-key" data-copy="de">Herausgeber</div><div class="publication-value">Kill The Dragon GmbH, Vienna</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Canonical address</div><div class="publication-key" data-copy="de">Kanonische Adresse</div><div class="publication-value">openbranddefinition.org</div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">The visible publication date and the machine-readable publication record document when this project page was made public. They do not replace formal intellectual-property advice or a later versioned public release.</p>
+          <p class="micro-note" data-copy="de">Das sichtbare Veröffentlichungsdatum und der maschinenlesbare Publication Record dokumentieren, wann diese Projektseite öffentlich gemacht wurde. Sie ersetzen keine formale IP-Beratung oder einen späteren versionierten öffentlichen Release.</p>
+        </div>
+      </section>
+
       <section class="section inverse" id="status">
-        <div class="section-number">05 / Status</div>
+        <div class="section-number">09 / Status</div>
         <div class="section-content">
           <h2 data-copy="en">Open by design. Public release in preparation.</h2>
           <h2 data-copy="de">Offen gedacht. Öffentliche Veröffentlichung in Vorbereitung.</h2>
           <div class="status-board">
             <div>
               <div class="label" data-copy="en">Current draft</div><div class="label" data-copy="de">Aktueller Entwurf</div>
-              <div class="status-big">0.9.4</div>
-              <p class="status-copy" data-copy="en">Proof release. The model, compiler contract and fail-closed behaviour are being tested. No public download is offered yet.</p>
-              <p class="status-copy" data-copy="de">Proof Release. Datenmodell, Compiler-Vertrag und Fail-Closed-Verhalten werden getestet. Derzeit gibt es noch keinen öffentlichen Download.</p>
+              <div class="status-big">0.9.5</div>
+              <p class="status-copy" data-copy="en">Integrity and conformance draft. The data model, reference compiler, manifest diff, runtime decision record and conformance suite are being tested. No public download is offered yet.</p>
+              <p class="status-copy" data-copy="de">Integrity-and-Conformance-Entwurf. Datenmodell, Referenzcompiler, Manifest-Diff, Runtime Decision Record und Conformance Suite werden getestet. Derzeit gibt es noch keinen öffentlichen Download.</p>
             </div>
             <div>
               <div class="label" data-copy="en">Planned publication</div><div class="label" data-copy="de">Geplante Veröffentlichung</div>
-              <p class="status-copy" data-copy="en">Specification and documentation: CC BY 4.0. Schemas, tests and reference code: Apache 2.0. Names and marks: separate trademark policy.</p>
-              <p class="status-copy" data-copy="de">Spezifikation und Dokumentation: CC BY 4.0. Schemas, Tests und Referenzcode: Apache 2.0. Namen und Kennzeichen: separate Markenrichtlinie.</p>
+              <p class="status-copy" data-copy="en"><strong>OBDS 1.0 is planned for August 2026.</strong><br><br>Planned licensing: specification and documentation under CC BY 4.0; schemas, tests and reference code under Apache 2.0; names and marks under a separate trademark policy.</p>
+              <p class="status-copy" data-copy="de"><strong>OBDS 1.0 ist für August 2026 geplant.</strong><br><br>Geplante Lizenzierung: Spezifikation und Dokumentation unter CC BY 4.0; Schemas, Tests und Referenzcode unter Apache 2.0; Namen und Kennzeichen unter einer separaten Markenrichtlinie.</p>
             </div>
           </div>
           <div class="contact-line">
@@ -670,8 +942,8 @@
 
           <div class="legal-block">
             <h3>Copyright and licensing</h3>
-            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten. OBDS ist ein offener Standard in Entwicklung. Die Lizenz für die Spezifikation, Dokumentation, Schemas, Tests und Referenzimplementierung wird mit der ersten öffentlichen Veröffentlichung festgelegt. Die derzeit geplante Lizenzierung ist CC BY 4.0 für Spezifikation und Dokumentation sowie Apache 2.0 für Schemas, Tests und Referenzcode. Namen und Kennzeichen bleiben einer separaten Markenrichtlinie vorbehalten.</p>
-            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved. OBDS is an open standard in development. The licences for the specification, documentation, schemas, tests and reference implementation will be stated with the first public release. The current publication plan is CC BY 4.0 for the specification and documentation, and Apache 2.0 for schemas, tests and reference code. Names and marks remain subject to a separate trademark policy.</p>
+            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Der stabile Release OBDS 1.0 ist für August 2026 geplant. Die derzeit geplante Lizenzierung ist CC BY 4.0 für Spezifikation und Dokumentation sowie Apache 2.0 für Schemas, Tests und Referenzcode. Namen, Logos und Kennzeichen bleiben einer separaten Markenrichtlinie vorbehalten. Diese Website allein gewährt noch keine Lizenz an unveröffentlichte Draft-Dateien.</p>
+            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0 release is planned for August 2026. The current licensing plan is CC BY 4.0 for the specification and documentation, and Apache 2.0 for schemas, tests and reference code. Names, logos and marks remain subject to a separate trademark policy. This website alone does not grant a licence to unreleased draft files.</p>
           </div>
         </div>
       </section>
@@ -697,9 +969,19 @@
           button.setAttribute('aria-pressed', String(button.dataset.setLang === language));
         });
       };
-      const initial = navigator.language && navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
+      const params = new URLSearchParams(window.location.search);
+      const requested = params.get('lang');
+      const initial = requested === 'de' || requested === 'en'
+        ? requested
+        : (navigator.language && navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en');
       setLanguage(initial);
-      buttons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.setLang)));
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        const language = button.dataset.setLang;
+        setLanguage(language);
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', language);
+        history.replaceState(null, '', url);
+      }));
     })();
   </script>
 </body>
