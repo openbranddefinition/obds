@@ -1,0 +1,45 @@
+{
+  "$id": "https://openbranddefinition.org/value-schemas/1.0.0/colour.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "cmyk": {
+      "items": {
+        "maximum": 100,
+        "minimum": 0,
+        "type": "number"
+      },
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+    },
+    "hex": {
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "pantone": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "rgb": {
+      "items": {
+        "maximum": 255,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "hex"
+  ],
+  "title": "OBDS Colour Value 1.0.0",
+  "type": "object"
+}

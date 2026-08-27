@@ -1,0 +1,97 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/search-card.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "aliases": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "cardHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "chapterRefs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "elementId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "generator": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-search-card"
+    },
+    "label": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "contentHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "summary": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "id",
+    "manifest",
+    "elementId",
+    "label",
+    "summary",
+    "aliases",
+    "chapterRefs",
+    "generator",
+    "cardHash"
+  ],
+  "title": "OBDS Search Card 1.0.0",
+  "type": "object"
+}

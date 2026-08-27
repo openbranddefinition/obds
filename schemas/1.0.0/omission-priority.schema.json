@@ -1,0 +1,29 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/omission-priority.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "neverOmit": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "omitOrder": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "neverOmit",
+    "omitOrder"
+  ],
+  "title": "OBDS Omission Priority",
+  "type": "object"
+}

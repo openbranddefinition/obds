@@ -1,0 +1,148 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/assembly-request.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationMode": {
+      "enum": [
+        "create",
+        "review",
+        "compliance"
+      ]
+    },
+    "deliveryMode": {
+      "enum": [
+        "lookup",
+        "reasoning",
+        "full"
+      ]
+    },
+    "kind": {
+      "const": "obds-assembly-request"
+    },
+    "retrieval": {
+      "additionalProperties": false,
+      "properties": {
+        "resolution": {
+          "enum": [
+            "direct",
+            "widened",
+            "manifest_checked",
+            "unresolved"
+          ]
+        },
+        "status": {
+          "enum": [
+            "hit",
+            "partial",
+            "no_match",
+            "low_confidence",
+            "access_filtered"
+          ]
+        },
+        "truthOutcome": {
+          "enum": [
+            "defined",
+            "unknown",
+            "not_defined",
+            "not_applicable",
+            "prohibited",
+            "not_covered",
+            "access_limited",
+            "mixed",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "resolution",
+        "truthOutcome"
+      ],
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "selection": {
+      "additionalProperties": false,
+      "properties": {
+        "activeGuidanceElementIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "factElementIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "gapElementIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reasoningChapterIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "searchCardIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "searchCardIds",
+        "reasoningChapterIds",
+        "factElementIds",
+        "gapElementIds",
+        "activeGuidanceElementIds"
+      ],
+      "type": "object"
+    },
+    "targetId": {
+      "type": "string"
+    },
+    "taskInput": {
+      "type": "string"
+    },
+    "tokenBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "targetId",
+    "deliveryMode",
+    "applicationMode",
+    "retrieval",
+    "selection",
+    "taskInput",
+    "tokenBudget"
+  ],
+  "title": "OBDS Assembly Request 1.0.0",
+  "type": "object"
+}

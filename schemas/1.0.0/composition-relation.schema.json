@@ -1,0 +1,50 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/composition-relation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "relation": {
+            "const": "subsuming"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "dominantElementId"
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "between": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "dominantElementId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "relation": {
+      "enum": [
+        "additive",
+        "subsuming",
+        "exclusive"
+      ]
+    }
+  },
+  "required": [
+    "between",
+    "relation"
+  ],
+  "title": "OBDS Composition Relation",
+  "type": "object"
+}

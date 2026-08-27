@@ -1,0 +1,232 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/compiled-context.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifactHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "availableElementIds": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "build": {
+      "additionalProperties": false,
+      "properties": {
+        "asOf": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "compilerId": {
+          "type": "string"
+        },
+        "compilerVersion": {
+          "type": "string"
+        },
+        "planHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "planId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "planId",
+        "planHash",
+        "compilerId",
+        "compilerVersion",
+        "asOf"
+      ],
+      "type": "object"
+    },
+    "checkRegistryVersion": {
+      "minimum": 1,
+      "type": "integer"
+    },
+    "compiledChecks": {
+      "type": "array"
+    },
+    "contextAssembly": {
+      "additionalProperties": false,
+      "properties": {
+        "applicationMode": {
+          "enum": [
+            "create",
+            "review",
+            "compliance"
+          ]
+        },
+        "deliveryMode": {
+          "enum": [
+            "lookup",
+            "reasoning",
+            "full"
+          ]
+        },
+        "eligibleGuidanceIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "noHitPolicy": {
+          "enum": [
+            "resolve_before_answer"
+          ]
+        }
+      },
+      "required": [
+        "deliveryMode",
+        "applicationMode",
+        "eligibleGuidanceIds",
+        "noHitPolicy"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "elementRecords": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "id": {
+      "type": "string"
+    },
+    "includedElementIds": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "kind": {
+      "const": "obds-compiled-brand-context"
+    },
+    "manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "contentHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "scope": {
+      "additionalProperties": {
+        "items": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "maxItems": 1,
+        "minItems": 1,
+        "type": "array"
+      },
+      "type": "object"
+    },
+    "slots": {
+      "additionalProperties": false,
+      "properties": {
+        "factGrounding": {
+          "type": "string"
+        },
+        "hardBoundaries": {
+          "type": "string"
+        },
+        "stateMap": {
+          "type": "string"
+        },
+        "styleTexture": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "hardBoundaries",
+        "factGrounding",
+        "stateMap",
+        "styleTexture"
+      ],
+      "type": "object"
+    },
+    "stateMapCoverage": {
+      "enum": [
+        "none",
+        "partial",
+        "complete"
+      ]
+    },
+    "stateMapEntryCount": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "targetId": {
+      "type": "string"
+    },
+    "tokenBudget": {
+      "type": "object"
+    },
+    "validFrom": {
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "validTo": {
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "id",
+    "targetId",
+    "manifest",
+    "build",
+    "scope",
+    "tokenBudget",
+    "checkRegistryVersion",
+    "compiledChecks",
+    "stateMapCoverage",
+    "stateMapEntryCount",
+    "includedElementIds",
+    "slots",
+    "artifactHash",
+    "availableElementIds",
+    "elementRecords",
+    "contextAssembly",
+    "validFrom",
+    "validTo"
+  ],
+  "title": "OBDS Compiled Brand Context 1.0.0",
+  "type": "object"
+}

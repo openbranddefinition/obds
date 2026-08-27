@@ -1,0 +1,151 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/manifest-change-report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "added": {
+      "type": "array"
+    },
+    "changed": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "changeKinds": {
+            "items": {
+              "enum": [
+                "value",
+                "value_shape",
+                "contract",
+                "subject",
+                "state",
+                "scope",
+                "sources",
+                "validity",
+                "annotations",
+                "classification",
+                "metadata"
+              ]
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "elementId": {
+            "type": "string"
+          },
+          "newContractId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "newHash": {
+            "type": "string"
+          },
+          "newValueHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "newValueShapeHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "oldContractId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "oldHash": {
+            "type": "string"
+          },
+          "oldValueHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "oldValueShapeHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "elementId",
+          "oldHash",
+          "newHash",
+          "changeKinds",
+          "oldValueHash",
+          "newValueHash",
+          "oldValueShapeHash",
+          "newValueShapeHash",
+          "oldContractId",
+          "newContractId"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "compatibility": {
+      "additionalProperties": false,
+      "properties": {
+        "contractChangedElementIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "patchEligible": {
+          "type": "boolean"
+        },
+        "shapeChangedElementIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "patchEligible",
+        "shapeChangedElementIds",
+        "contractChangedElementIds"
+      ],
+      "type": "object"
+    },
+    "kind": {
+      "const": "obds-manifest-change-report"
+    },
+    "newManifest": {
+      "type": "object"
+    },
+    "oldManifest": {
+      "type": "object"
+    },
+    "removed": {
+      "type": "array"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "oldManifest",
+    "newManifest",
+    "added",
+    "changed",
+    "removed",
+    "compatibility"
+  ],
+  "title": "OBDS Manifest Change Report 1.0.0",
+  "type": "object"
+}

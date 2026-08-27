@@ -4,11 +4,11 @@ Static bilingual one-page website for `openbranddefinition.org`.
 
 ## Public status
 
-- Current public draft: OBDS 0.9.5
-- Draft name: Integrity and Conformance
+- Current release: OBDS 1.0.0 (stable)
+- Stable release date shown on the site: 27 August 2026
 - Initial public publication shown on the site: 22 July 2026
-- Planned stable release: OBDS 1.0 in August 2026
-- Public downloads: intentionally not offered yet
+- Conformance suite: 105 tests passed, 0 failed
+- Public downloads: specification files are not published on this site yet
 
 ## Files
 
@@ -35,7 +35,7 @@ The page uses:
 
 ## Important publication note
 
-The page states an initial public publication date of 22 July 2026. Publish this version on that date, or update the visible date, JSON-LD, sitemap and `publication-record.json` before deployment.
+The page states an initial public publication date of 22 July 2026 and a stable OBDS 1.0.0 release date of 27 August 2026. Keep the visible dates, JSON-LD, sitemap and `publication-record.json` in sync before deployment.
 
 A website publication records public disclosure. It does not by itself create ownership of an abstract idea or replace legal advice.
 
@@ -43,6 +43,7 @@ A website publication records public disclosure. It does not by itself create ow
 
 - Confirm the legal notice and disclosure details.
 - Confirm the planned CC BY 4.0 and Apache 2.0 licensing.
+- Decide whether the OBDS 1.0.0 specification files and schemas are published under `/schemas/1.0.0/` (the schema `$id` values already point there).
 - Configure HTTPS.
 - Configure the preferred `www` redirect.
 - Keep a copy of the deployed files and hosting or Git commit timestamps.

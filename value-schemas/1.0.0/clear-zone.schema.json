@@ -1,0 +1,21 @@
+{
+  "$id": "https://openbranddefinition.org/value-schemas/1.0.0/clear-zone.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "description": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "description"
+  ],
+  "title": "OBDS Clear Zone Value 1.0.0",
+  "type": "object"
+}

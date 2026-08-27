@@ -1,0 +1,74 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/curation-assessment.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assessedAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "assessmentId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "elementId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-curation-assessment"
+    },
+    "note": {
+      "type": "string"
+    },
+    "recheckOn": {
+      "items": {
+        "enum": [
+          "source_snapshot_change",
+          "brand_review",
+          "manual_request",
+          "scheduled_review"
+        ]
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "searchedModalities": {
+      "items": {
+        "enum": [
+          "text",
+          "figures",
+          "tables",
+          "metadata"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "sourceRefs": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "assessmentId",
+    "elementId",
+    "searchedModalities",
+    "sourceRefs",
+    "assessedAt",
+    "recheckOn"
+  ],
+  "title": "OBDS Curation Assessment",
+  "type": "object"
+}

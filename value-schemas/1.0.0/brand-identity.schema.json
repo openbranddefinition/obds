@@ -1,0 +1,16 @@
+{
+  "$id": "https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "OBDS Brand Identity Value 1.0.0",
+  "type": "object"
+}

@@ -1,0 +1,150 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/measurement-v2.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "relative"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "basisRef"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "absolute"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "unit"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "system": {
+            "properties": {
+              "type": {
+                "const": "relative"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        },
+        "required": [
+          "system"
+        ]
+      },
+      "then": {
+        "properties": {
+          "system": {
+            "required": [
+              "type",
+              "id"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "amount": {
+      "type": "number"
+    },
+    "basisRef": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "max": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "unit": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount",
+        "unit"
+      ],
+      "type": "object"
+    },
+    "min": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "unit": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "amount",
+        "unit"
+      ],
+      "type": "object"
+    },
+    "mode": {
+      "enum": [
+        "relative",
+        "absolute"
+      ]
+    },
+    "quantityKind": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "symbol": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "system": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "relative",
+            "absolute"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "unit": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "mode",
+    "amount"
+  ],
+  "title": "OBDS Measurement Contract v2",
+  "type": "object"
+}

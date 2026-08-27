@@ -1,0 +1,62 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/source-contradiction-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "elementId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-source-contradiction"
+    },
+    "readings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "sourceRef": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "value": {}
+        },
+        "required": [
+          "sourceRef",
+          "value"
+        ],
+        "type": "object"
+      },
+      "minItems": 2,
+      "type": "array"
+    },
+    "recordId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "resolutionRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "enum": [
+        "unresolved",
+        "resolved"
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "recordId",
+    "elementId",
+    "status",
+    "readings"
+  ],
+  "title": "OBDS Source Contradiction Record",
+  "type": "object"
+}
