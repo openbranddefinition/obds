@@ -1,0 +1,26 @@
+{
+  "failedCount": 0,
+  "kind": "obds-release-test-result",
+  "notes": [
+    "OBDS 1.0.1 is a licensing clarification in section 32. No normative contract change.",
+    "The public schema surface is byte-identical to OBDS 1.0.0.",
+    "Node.js is required to execute the three cross-language canonicalisation tests. See OBDS-1.0.1-TEST-REQUIREMENTS.md."
+  ],
+  "passed": true,
+  "passedCount": 105,
+  "promotedFrom": "1.0.0",
+  "release": "1.0.1",
+  "schemaVersion": "1.0.0",
+  "skippedCount": 0,
+  "status": "stable",
+  "suiteCounts": {
+    "adversarial": 23,
+    "context-assembly": 15,
+    "context-delivery": 3,
+    "design-space": 18,
+    "foundation": 25,
+    "golden": 6,
+    "integration": 15
+  },
+  "testOutputHash": "sha256:cc2c14bec1561f57d4ab4fd62a427ba222f08432084d04bd99a2daf04087d42d"
+}

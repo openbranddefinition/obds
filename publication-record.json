@@ -4,7 +4,7 @@
   "conformanceTestsPassed": 105,
   "conformanceTestsSkipped": 0,
   "contact": "lets@killthedragon.com",
-  "currentRelease": "1.0.0",
+  "currentRelease": "1.0.1",
   "currentReleaseStatus": "stable",
   "fullName": "Open Brand Definition Specification",
   "initialPublicPublication": "2026-07-22",
@@ -33,24 +33,46 @@
     "internalEvaluationByCommercialOrganisations": "free-use, if not in production and not delivered to a paying client",
     "licenceFilesPublished": false,
     "note": "The licensing model is described on the published page. It is a statement of intent. Permissions become effective under the published licence terms.",
+    "specificationSection": "32.1",
     "status": "intended",
     "trademarksReserved": true
   },
   "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
-  "packageZipSha256": "sha256:7ea6e2a1c249dcd73120737aa47fad5b5e9cb93d51219f43c6ad09345900d8dc",
+  "packageZipSha256": "sha256:0564754d51078ee6421bbd2eb06cd8650b7f5548abba99e171cc71c382214715",
+  "previousRelease": "1.0.0",
   "project": "Open Brand Definition",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
   "publisher": "Kill The Dragon GmbH",
   "publisherLocation": "Vienna, Austria",
+  "releases": {
+    "1.0.0": {
+      "baseUrl": "https://openbranddefinition.org/spec/1.0.0/",
+      "date": "2026-08-27",
+      "note": "published as released and not modified",
+      "packageZipSha256": "sha256:7ea6e2a1c249dcd73120737aa47fad5b5e9cb93d51219f43c6ad09345900d8dc",
+      "status": "stable",
+      "testOutputHash": "sha256:d83668330ba1236d5c82115734f2cde4d1ca6ca47649056453dd15e6c4852ed6"
+    },
+    "1.0.1": {
+      "baseUrl": "https://openbranddefinition.org/spec/1.0.1/",
+      "date": "2026-08-27",
+      "note": "licensing clarification in section 32, no normative contract change",
+      "packageZipSha256": "sha256:0564754d51078ee6421bbd2eb06cd8650b7f5548abba99e171cc71c382214715",
+      "status": "stable",
+      "testOutputHash": "sha256:cc2c14bec1561f57d4ab4fd62a427ba222f08432084d04bd99a2daf04087d42d"
+    }
+  },
   "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
+  "schemaContractVersion": "1.0.0",
+  "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaVersion": "1.0",
   "specification": "OBDS",
-  "specificationBaseUrl": "https://openbranddefinition.org/spec/1.0.0/",
+  "specificationBaseUrl": "https://openbranddefinition.org/spec/1.0.1/",
   "specificationFilesPublished": true,
   "specificationPublishedAt": "2026-08-27",
   "stableReleaseDate": "2026-08-27",
-  "testOutputHash": "sha256:d83668330ba1236d5c82115734f2cde4d1ca6ca47649056453dd15e6c4852ed6",
+  "testOutputHash": "sha256:cc2c14bec1561f57d4ab4fd62a427ba222f08432084d04bd99a2daf04087d42d",
   "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
-  "websiteIndexSha256": "sha256:4cb92f455cf39197ac0ce3bda7055e24aedce4e34be62e378760512eca40cfa6"
+  "websiteIndexSha256": "sha256:a8796904e2da1f431cc8a40ca8ebed874f3601b8cbd80271a840ab09d5ec9215"
 }

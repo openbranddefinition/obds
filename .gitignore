@@ -3,6 +3,7 @@
 # Build artifacts / draft bundles
 *.zip
 !spec/1.0.0/OBDS-1.0.0-FINAL.zip
+!spec/1.0.1/OBDS-1.0.1-FINAL.zip
 openbranddefinition-site-*-public-draft/
 
 # Scraped external brand references (local research only, not for publication)
