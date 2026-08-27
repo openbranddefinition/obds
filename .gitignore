@@ -12,5 +12,7 @@ reference/
 # Local working notes, not site content
 answers/
 
-# Licensing source documents, staged manually into the published tree
+# Licensing documents, in legal review, deliberately not published
 md/
+licensing/
+/LICENSE.md

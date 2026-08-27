@@ -11,9 +11,14 @@
   "kind": "open-brand-definition-publication-record",
   "licensing": {
     "certificationProgrammeLive": false,
-    "certificationProgrammeUrl": "https://openbranddefinition.org/licensing/CERTIFICATION.md",
-    "classification": "source-available with a non-commercial restriction and limited tooling and conformance carve-outs",
-    "commercialLicenceRequired": [
+    "contact": "lets@killthedragon.com",
+    "coversUnderlyingIdeas": false,
+    "independentImplementationsRestricted": false,
+    "intendedCarveOutForAnyPurpose": [
+      "redistribute-unmodified-machine-readable-schemas",
+      "run-unmodified-official-conformance-suite-and-publish-accurate-results"
+    ],
+    "intendedCommercialLicenceRequired": [
       "paid-client-delivery",
       "agency-services",
       "consulting",
@@ -24,10 +29,7 @@
       "commercial-integrations",
       "redistribution-of-protected-materials"
     ],
-    "commercialPolicyUrl": "https://openbranddefinition.org/licensing/COMMERCIAL-LICENSING.md",
-    "contact": "lets@killthedragon.com",
-    "coversUnderlyingIdeas": false,
-    "freeUse": [
+    "intendedFreeUse": [
       "personal",
       "education-and-teaching",
       "academic-research",
@@ -38,21 +40,13 @@
       "internal-evaluation-by-commercial-organisations",
       "unpaid-pitch-or-pre-contract-demo"
     ],
-    "grantedForAnyPurpose": [
-      "redistribute-unmodified-machine-readable-schemas",
-      "run-unmodified-official-conformance-suite-and-publish-accurate-results"
-    ],
-    "independentImplementationsRestricted": false,
-    "legalReviewComplete": false,
-    "licence": "OBDS Free Use Licence 1.0",
-    "licenceUrl": "https://openbranddefinition.org/licensing/LICENSE.md",
+    "licenceFilesPublished": false,
+    "note": "The licence documents are drafted and under review by qualified legal counsel. They are not published and no licence is granted by this website. The intended model is described on the published page and in section 32.1 of the specification.",
     "openSource": false,
     "osiApproved": false,
     "patentRightsGranted": false,
-    "revision": "council revision 2",
     "specificationSection": "32.1",
-    "status": "published",
-    "trademarkPolicyUrl": "https://openbranddefinition.org/licensing/TRADEMARKS.md",
+    "status": "drafted-in-legal-review",
     "trademarksReserved": true
   },
   "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
@@ -92,5 +86,5 @@
   "stableReleaseDate": "2026-08-27",
   "testOutputHash": "sha256:cc2c14bec1561f57d4ab4fd62a427ba222f08432084d04bd99a2daf04087d42d",
   "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
-  "websiteIndexSha256": "sha256:9e6b326e60177ae929f03204f8edc7ef410c418f2e29edaf67c495e8f7c89268"
+  "websiteIndexSha256": "sha256:2d80cc0c3493a4d9ea847931b9aee268cc47ef945d4fdf0adc21fad2a1729715"
 }
