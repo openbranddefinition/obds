@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-  <meta name="description" content="OBDS 1.0.0, stable. An open standard for governed brand truth: which brand truth applies, what is explicitly unknown, which visual design space is permitted, and why a system released or blocked a result.">
+  <meta name="description" content="OBDS 1.0.0, stable. A publicly available, vendor-neutral specification for governed brand truth in AI systems. Free to study, teach, research and evaluate. Commercial use requires a licence.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://openbranddefinition.org/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -48,7 +48,8 @@
         "@id": "https://openbranddefinition.org/#obds",
         "headline": "Open Brand Definition Specification",
         "alternativeHeadline": "OBDS",
-        "description": "An open, vendor-neutral specification for governed brand truth used by AI systems and renderers. It defines which brand truth applies to a declared target, what is explicitly unknown, the permissible visual design space, and the evidence a runtime decision leaves behind.",
+        "description": "A publicly available, vendor-neutral specification for governed brand truth used by AI systems and renderers. It defines which brand truth applies to a declared target, what is explicitly unknown, the permissible visual design space, and the evidence a runtime decision leaves behind.",
+        "usageInfo": "https://openbranddefinition.org/#licensing",
         "url": "https://openbranddefinition.org/",
         "version": "1.0.0",
         "datePublished": "2026-07-22",
@@ -722,7 +723,7 @@
       font-size: clamp(19px, 1.8vw, 30px);
       letter-spacing: -.04em;
     }
-    .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; }
+    .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; max-width: 84ch; }
 
     /* --- proof chain --- */
     .proof-chain { margin-top: clamp(56px, 8vw, 120px); border-top: 1px solid var(--line); }
@@ -781,7 +782,7 @@
           <p class="hero-statement" data-copy="de">Markenwahrheit, aus der ein System entscheiden kann. Und in der es gestaltet.</p>
         </div>
         <div class="hero-foot">
-          <div><span class="label" data-copy="en">Form</span><span class="label" data-copy="de">Form</span><span class="value" data-copy="en">Open standard</span><span class="value" data-copy="de">Offener Standard</span></div>
+          <div><span class="label" data-copy="en">Form</span><span class="label" data-copy="de">Form</span><span class="value" data-copy="en">Public specification</span><span class="value" data-copy="de">Öffentliche Spezifikation</span></div>
           <div><span class="label" data-copy="en">Layer</span><span class="label" data-copy="de">Ebene</span><span class="value" data-copy="en">Brand control for AI systems</span><span class="value" data-copy="de">Markensteuerung für AI-Systeme</span></div>
           <div><span class="label">Status</span><span class="value" data-copy="en">1.0.0 stable. 27 August 2026.</span><span class="value" data-copy="de">1.0.0 stabil. 27. August 2026.</span></div>
         </div>
@@ -1136,7 +1137,7 @@
       </section>
 
       <section class="section inverse" id="open">
-        <div class="section-number"><span data-copy="en">09 / Open</span><span data-copy="de">09 / Offen</span></div>
+        <div class="section-number"><span data-copy="en">09 / Extend</span><span data-copy="de">09 / Erweitern</span></div>
         <div class="section-content">
           <h2 data-copy="en">One specification. One Foundation. Optional capabilities.</h2>
           <h2 data-copy="de">Eine Spezifikation. Eine Foundation. Optionale Capabilities.</h2>
@@ -1155,8 +1156,8 @@
             <article class="definition-card"><span class="definition-code">Process</span><h3>Operations</h3><p data-copy="en">Governed records, release approval, assurance and lineage.</p><p data-copy="de">Governed Records, Release-Freigabe, Assurance und Lineage.</p></article>
           </div>
 
-          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Recommended licensing: CC BY 4.0 for the specification and documentation, Apache 2.0 for schemas, fixtures and reference software. Breaking semantics require OBDS 2.0.</p>
-          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Empfohlene Lizenzierung: CC BY 4.0 für Spezifikation und Dokumentation, Apache 2.0 für Schemas, Fixtures und Referenzsoftware. Brechende Semantik erfordert OBDS 2.0.</p>
+          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Breaking semantics require OBDS 2.0. Use and licensing are set out in section 11.</p>
+          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Brechende Semantik erfordert OBDS 2.0. Nutzung und Lizenzierung stehen in Abschnitt 11.</p>
         </div>
       </section>
 
@@ -1204,6 +1205,76 @@
             <div>
               <span class="label" data-copy="en">Review, test, challenge</span>
               <span class="label" data-copy="de">Prüfen, testen, hinterfragen</span>
+            </div>
+            <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section inverse" id="licensing">
+        <div class="section-number"><span data-copy="en">11 / Licensing</span><span data-copy="de">11 / Lizenz</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Public to study. Commercial use needs a licence.</h2>
+          <h2 data-copy="de">Öffentlich zum Prüfen. Kommerzielle Nutzung braucht eine Lizenz.</h2>
+          <p class="lead" data-copy="en">OBDS 1.0.0 is a publicly available specification. Anyone may read it, study it, test it and implement against it to find out whether it holds. Putting it to work commercially is a separate arrangement.</p>
+          <p class="lead" data-copy="de">OBDS 1.0.0 ist eine öffentlich verfügbare Spezifikation. Jede und jeder darf sie lesen, prüfen, testen und dagegen implementieren, um herauszufinden, ob sie trägt. Der kommerzielle Einsatz ist eine eigene Vereinbarung.</p>
+
+          <div class="boundary">
+            <div class="boundary-body">
+              <div>
+                <span class="label" data-copy="en">Free use</span>
+                <span class="label" data-copy="de">Freie Nutzung</span>
+                <ul>
+                  <li data-copy="en">Personal use</li><li data-copy="de">Persönliche Nutzung</li>
+                  <li data-copy="en">Education and teaching</li><li data-copy="de">Lehre und Unterricht</li>
+                  <li data-copy="en">Academic research</li><li data-copy="de">Akademische Forschung</li>
+                  <li data-copy="en">Non-profit research</li><li data-copy="de">Non-Profit-Forschung</li>
+                  <li data-copy="en">Testing and experimentation</li><li data-copy="de">Testen und Experimentieren</li>
+                  <li data-copy="en">Evaluation</li><li data-copy="de">Evaluierung</li>
+                  <li data-copy="en">Proof of concept outside production</li><li data-copy="de">Proof of Concept ausserhalb der Produktion</li>
+                </ul>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Commercial licence</span>
+                <span class="label" data-copy="de">Kommerzielle Lizenz</span>
+                <ul>
+                  <li data-copy="en">Paid client work</li><li data-copy="de">Bezahlte Kundenarbeit</li>
+                  <li data-copy="en">Agency services</li><li data-copy="de">Agenturleistungen</li>
+                  <li data-copy="en">Consulting using OBDS</li><li data-copy="de">Beratung mit OBDS</li>
+                  <li data-copy="en">Production use</li><li data-copy="de">Produktiveinsatz</li>
+                  <li data-copy="en">SaaS and managed services</li><li data-copy="de">SaaS und Managed Services</li>
+                  <li data-copy="en">Commercial products</li><li data-copy="de">Kommerzielle Produkte</li>
+                  <li data-copy="en">Commercial redistribution</li><li data-copy="de">Kommerzielle Weitergabe</li>
+                </ul>
+              </div>
+            </div>
+            <div class="boundary-foot">
+              <span data-copy="en">A commercial organisation may evaluate OBDS internally under free use, as long as the work does not run in production and is not delivered to a paying client.</span>
+              <span data-copy="de">Ein kommerzielles Unternehmen darf OBDS intern evaluieren, solange die Arbeit nicht produktiv läuft und nicht an zahlende Kundschaft geliefert wird.</span>
+            </div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key" data-copy="en">intended model</span><span class="callout-key" data-copy="de">geplantes Modell</span></div>
+            <div>
+              <p data-copy="en">The licence documents are not published yet. What is written here describes the intended licensing model. It is not a grant. Permissions become effective under the published licence terms, and this section will be replaced by the actual grant and a link to the exact documents once they exist. Until then, ask before you rely on it.</p>
+              <p data-copy="de">Die Lizenzdokumente sind noch nicht veröffentlicht. Was hier steht, beschreibt das geplante Lizenzmodell. Es ist keine Rechteeinräumung. Berechtigungen werden mit den veröffentlichten Lizenzbedingungen wirksam, und dieser Abschnitt wird durch die tatsächliche Einräumung und den Link auf die genauen Dokumente ersetzt, sobald es sie gibt. Bis dahin gilt: vorher fragen.</p>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Publication does not grant trademark rights in Open Brand Definition, OBDS or associated marks. Those are reserved separately and are not covered by the content or software licence.</p>
+          <p class="micro-note" data-copy="de">Die Veröffentlichung gewährt keine Markenrechte an Open Brand Definition, OBDS oder zugehörigen Kennzeichen. Diese bleiben gesondert vorbehalten und sind von der Inhalts- oder Softwarelizenz nicht erfasst.</p>
+
+          <p class="micro-note" data-copy="en">OBDS protects its published specification, schemas, tests, reference implementation and other original materials. It does not claim exclusive ownership of the underlying ideas, principles or methods. Anyone may build a different system from similar ideas, as long as they do not copy or use OBDS materials.</p>
+          <p class="micro-note" data-copy="de">OBDS schützt die veröffentlichte Spezifikation, die Schemas, die Tests, die Referenzimplementierung und weitere eigene Materialien. Es beansprucht kein Exklusivrecht an den zugrunde liegenden Ideen, Prinzipien oder Methoden. Jede und jeder darf aus ähnlichen Ideen ein anderes System bauen, solange keine OBDS-Materialien kopiert oder verwendet werden.</p>
+
+          <p class="micro-note" data-copy="en">Section 32 of the frozen 1.0.0 specification records CC BY 4.0 and Apache 2.0 as recommended licences for an open standard. That paragraph is guidance inside a text that will not be changed. The licensing that applies to the OBDS materials published on this site is the model described above.</p>
+          <p class="micro-note" data-copy="de">Abschnitt 32 der eingefrorenen Spezifikation 1.0.0 nennt CC BY 4.0 und Apache 2.0 als empfohlene Lizenzen für einen offenen Standard. Dieser Absatz ist eine Empfehlung in einem Text, der nicht mehr geändert wird. Für die auf dieser Seite veröffentlichten OBDS-Materialien gilt das oben beschriebene Modell.</p>
+
+          <div class="contact-line">
+            <div>
+              <span class="label" data-copy="en">Commercial licensing</span>
+              <span class="label" data-copy="de">Kommerzielle Lizenzierung</span>
             </div>
             <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
           </div>
@@ -1275,8 +1346,8 @@
 
           <div class="legal-block">
             <h3>Copyright and licensing</h3>
-            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Die stabile Spezifikation OBDS 1.0.0 wurde am 27. August 2026 fertiggestellt und auf dieser Website veröffentlicht. Die derzeit geplante Lizenzierung ist CC BY 4.0 für Spezifikation und Dokumentation sowie Apache 2.0 für Schemas, Tests und Referenzcode. Namen, Logos und Kennzeichen bleiben einer separaten Markenrichtlinie vorbehalten. Die oben genannte Lizenzierung ist eine Absichtserklärung. Es wird keine Lizenz gewährt, solange die Lizenzdateien nicht gemeinsam mit der Spezifikation veröffentlicht sind.</p>
-            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0.0 specification was released on 27 August 2026 and is published on this website. The current licensing plan is CC BY 4.0 for the specification and documentation, and Apache 2.0 for schemas, tests and reference code. Names, logos and marks remain subject to a separate trademark policy. The licensing plan above is a statement of intent. No licence is granted until the licence files are published alongside the specification.</p>
+            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Die stabile Spezifikation OBDS 1.0.0 wurde am 27. August 2026 fertiggestellt und auf dieser Website veröffentlicht. Sie darf frei gelesen, geprüft, gelehrt, beforscht und evaluiert werden. Kommerzielle Nutzung, darunter bezahlte Kundenarbeit, Agenturleistungen, Beratung, Produktiveinsatz, Managed Services, kommerzielle Produkte und kommerzielle Weitergabe, erfordert eine gesonderte Lizenz der Kill The Dragon GmbH. Kontakt lets@killthedragon.com. Die Lizenzdokumente sind noch nicht veröffentlicht, das in Abschnitt 11 beschriebene Modell ist daher eine Absichtserklärung und keine Rechteeinräumung. Berechtigungen werden mit den veröffentlichten Lizenzbedingungen wirksam. Namen, Logos und Kennzeichen sind von keiner Inhalts- oder Softwarelizenz erfasst und bleiben einer separaten Markenrichtlinie vorbehalten.</p>
+            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0.0 specification was released on 27 August 2026 and is published on this website. It may be read, studied, taught, researched and evaluated freely. Commercial use, including paid client work, agency services, consulting, production use, managed services, commercial products and commercial redistribution, requires a separate licence from Kill The Dragon GmbH. Contact lets@killthedragon.com. The licence documents are not published yet, so the model described in section 11 is a statement of intent and not a grant. Permissions become effective under the published licence terms. Names, logos and marks are not covered by any content or software licence and remain subject to a separate trademark policy.</p>
           </div>
         </div>
       </section>

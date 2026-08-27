@@ -9,6 +9,33 @@
   "fullName": "Open Brand Definition Specification",
   "initialPublicPublication": "2026-07-22",
   "kind": "open-brand-definition-publication-record",
+  "licensing": {
+    "commercialLicenceRequired": [
+      "paid-client-work",
+      "agency-services",
+      "consulting",
+      "production-use",
+      "saas-and-managed-services",
+      "commercial-products",
+      "commercial-redistribution"
+    ],
+    "contact": "lets@killthedragon.com",
+    "coversUnderlyingIdeas": false,
+    "freeUse": [
+      "personal",
+      "education-and-teaching",
+      "academic-research",
+      "non-profit-research",
+      "testing-and-experimentation",
+      "evaluation",
+      "proof-of-concept-outside-production"
+    ],
+    "internalEvaluationByCommercialOrganisations": "free-use, if not in production and not delivered to a paying client",
+    "licenceFilesPublished": false,
+    "note": "The licensing model is described on the published page. It is a statement of intent. Permissions become effective under the published licence terms.",
+    "status": "intended",
+    "trademarksReserved": true
+  },
   "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
   "packageZipSha256": "sha256:7ea6e2a1c249dcd73120737aa47fad5b5e9cb93d51219f43c6ad09345900d8dc",
   "project": "Open Brand Definition",
@@ -25,5 +52,5 @@
   "stableReleaseDate": "2026-08-27",
   "testOutputHash": "sha256:d83668330ba1236d5c82115734f2cde4d1ca6ca47649056453dd15e6c4852ed6",
   "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
-  "websiteIndexSha256": "sha256:cc91beafaa493154530f49471217152ac3fc94edbc212b4af66c1f4cfff7cc4e"
+  "websiteIndexSha256": "sha256:4cb92f455cf39197ac0ce3bda7055e24aedce4e34be62e378760512eca40cfa6"
 }

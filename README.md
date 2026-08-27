@@ -42,7 +42,7 @@ A website publication records public disclosure. It does not by itself create ow
 ## Before publishing
 
 - Confirm the legal notice and disclosure details.
-- Confirm the planned CC BY 4.0 and Apache 2.0 licensing.
+- Publish the licence documents for the licensing model described in section 11 of the page. Until they exist, the page states an intended model and grants nothing.
 - Decide whether the OBDS 1.0.0 specification files and schemas are published under `/schemas/1.0.0/` (the schema `$id` values already point there).
 - Configure HTTPS.
 - Configure the preferred `www` redirect.
