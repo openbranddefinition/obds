@@ -6,7 +6,7 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-  <meta name="description" content="OBDS 1.0.1, stable. A publicly available, vendor-neutral specification for governed brand truth in AI systems. Free to study, teach, research and evaluate. Commercial use requires a licence.">
+  <meta name="description" content="OBDS 1.0.1. A publicly available, vendor-neutral specification for governed brand truth in AI systems. Decide what applies, compile the exact context, define where AI may create, and prove the result stayed inside the rules.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://openbranddefinition.org/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -49,7 +49,8 @@
         "headline": "Open Brand Definition Specification",
         "alternativeHeadline": "OBDS",
         "description": "A publicly available, vendor-neutral specification for governed brand truth used by AI systems and renderers. It defines which brand truth applies to a declared target, what is explicitly unknown, the permissible visual design space, and the evidence a runtime decision leaves behind.",
-        "usageInfo": "https://openbranddefinition.org/#licensing",
+        "usageInfo": "https://openbranddefinition.org/licensing/LICENSE.md",
+        "license": "https://openbranddefinition.org/licensing/LICENSE.md",
         "url": "https://openbranddefinition.org/",
         "version": "1.0.1",
         "datePublished": "2026-07-22",
@@ -725,6 +726,58 @@
     }
     .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; max-width: 84ch; }
 
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .actions > a {
+      padding: 22px 20px 26px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+    }
+    .actions > a + a { border-left: 1px solid var(--line); }
+    .actions > a:hover { background: var(--ink); color: var(--paper); }
+    .action-name {
+      font-size: clamp(26px, 2.7vw, 46px);
+      line-height: .94;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .action-note { font-size: var(--small); line-height: 1.4; max-width: 24ch; }
+
+    /* --- the chain --- */
+    .chain {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      margin-top: clamp(56px, 8vw, 120px);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .chain > div {
+      position: relative;
+      padding: 18px 14px 22px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .chain-step {
+      font-size: clamp(16px, 1.5vw, 24px);
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 20ch; opacity: .72; }
+    .chain-index { font-size: var(--small); letter-spacing: .1em; }
+
     /* --- proof chain --- */
     .proof-chain { margin-top: clamp(56px, 8vw, 120px); border-top: 1px solid var(--line); }
     .proof-row {
@@ -753,6 +806,11 @@
       .boundary-head, .boundary-body { grid-template-columns: 1fr; }
       .boundary-head > div + div, .boundary-body > div + div { border-left: 0; border-top: 1px solid var(--line); }
       .boundary-body > div { min-height: 0; }
+      .actions { grid-template-columns: 1fr; }
+      .actions > a + a { border-left: 0; border-top: 1px solid var(--line); }
+      .actions > a { min-height: 150px; }
+      .chain { grid-template-columns: repeat(2, 1fr); }
+      .chain > div { min-height: 120px; }
       .proof-row { grid-template-columns: 1fr 40px 1fr; }
       .proof-b { padding-left: 14px; }
     }
@@ -805,6 +863,16 @@
             <p data-copy="de">OBDS legt fest, was gilt.</p>
           </div>
 
+
+          <div class="chain" aria-label="What OBDS does, in order">
+            <div><span class="chain-index">01</span><span class="chain-step">Know</span><span class="chain-note" data-copy="en">Approved brand truth, with its scope, sources and knowledge state.</span><span class="chain-note" data-copy="de">Freigegebene Markenwahrheit, mit Scope, Quellen und Knowledge State.</span></div>
+            <div><span class="chain-index">02</span><span class="chain-step">Decide</span><span class="chain-note" data-copy="en">Which truth applies here, and whether enough of it exists.</span><span class="chain-note" data-copy="de">Welche Wahrheit hier gilt, und ob genug davon vorhanden ist.</span></div>
+            <div><span class="chain-index">03</span><span class="chain-step">Compile</span><span class="chain-note" data-copy="en">The exact context for one task, not the whole archive.</span><span class="chain-note" data-copy="de">Der exakte Kontext für eine Aufgabe, nicht das ganze Archiv.</span></div>
+            <div><span class="chain-index">04</span><span class="chain-step">Create</span><span class="chain-note" data-copy="en">A renderer produces one solution inside the permitted design space.</span><span class="chain-note" data-copy="de">Ein Renderer erzeugt eine Lösung im zulässigen Design Space.</span></div>
+            <div><span class="chain-index">05</span><span class="chain-step">Validate</span><span class="chain-note" data-copy="en">The result is checked against the same governed truth.</span><span class="chain-note" data-copy="de">Das Ergebnis wird gegen dieselbe freigegebene Wahrheit geprüft.</span></div>
+            <div><span class="chain-index">06</span><span class="chain-step">Prove</span><span class="chain-note" data-copy="en">Why it was released, blocked or sent to approval stays on record.</span><span class="chain-note" data-copy="de">Warum es freigegeben, blockiert oder zur Freigabe geleitet wurde, bleibt dokumentiert.</span></div>
+          </div>
+
           <p class="micro-note" data-copy="en">Brandbooks are written for people and stay useful. A prompt can carry guidance but cannot guarantee that it was followed. OBDS is the layer underneath: governed brand truth a system can resolve, check and record.</p>
           <p class="micro-note" data-copy="de">Brandbooks sind für Menschen geschrieben und bleiben wertvoll. Ein Prompt kann Orientierung transportieren, aber nicht garantieren, dass sie befolgt wurde. OBDS liegt darunter: freigegebene Markenwahrheit, die ein System auflösen, prüfen und protokollieren kann.</p>
         </div>
@@ -848,8 +916,65 @@
         </div>
       </section>
 
+      <section class="section inverse" id="distinctive">
+        <div class="section-number"><span data-copy="en">03 / Distinctive</span><span data-copy="de">03 / Unterscheidbar</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">A brand is easier to hold by its edges.</h2>
+          <h2 data-copy="de">Eine Marke lässt sich an ihren Kanten besser fassen.</h2>
+          <p class="lead" data-copy="en">Qualitative direction usually dies as a list of adjectives that every brand could claim. A Semantic Boundary keeps it structured and machine-readable: one subject, one quality, what it is, what it is not, and the trade-off the brand has already settled.</p>
+          <p class="lead" data-copy="de">Qualitative Richtung stirbt meist als Adjektivliste, die jede Marke für sich beanspruchen könnte. Eine Semantic Boundary hält sie strukturiert und maschinenlesbar: ein Subject, eine Quality, was sie ist, was sie nicht ist, und der Trade-off, den die Marke bereits entschieden hat.</p>
+
+          <div class="boundary">
+            <div class="boundary-head">
+              <div><span class="label">subject</span><span class="boundary-term">voice</span></div>
+              <div><span class="label">quality</span><span class="boundary-term">confident</span></div>
+            </div>
+            <div class="boundary-body">
+              <div>
+                <span class="label">is</span>
+                <ul>
+                  <li data-copy="en">clear</li><li data-copy="de">klar</li>
+                  <li data-copy="en">specific</li><li data-copy="de">konkret</li>
+                  <li data-copy="en">decisive</li><li data-copy="de">entschieden</li>
+                  <li data-copy="en">grounded</li><li data-copy="de">belegt</li>
+                </ul>
+              </div>
+              <div>
+                <span class="label">is not</span>
+                <ul>
+                  <li data-copy="en">aggressive</li><li data-copy="de">aggressiv</li>
+                  <li data-copy="en">boastful</li><li data-copy="de">prahlerisch</li>
+                  <li data-copy="en">absolute without evidence</li><li data-copy="de">absolut ohne Beleg</li>
+                </ul>
+              </div>
+            </div>
+            <div class="boundary-foot">
+              <span data-copy="en">tieBreaker: prefer precise over forceful.</span>
+              <span data-copy="de">tieBreaker: precise vor forceful.</span>
+            </div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key">guidance != compliance</span></div>
+            <div>
+              <p data-copy="en">A missing positive trait is not a violation. Strong evidence of an is-not trait may support a material conflict and send the result to review. Only a separate applicable RULE turns that conflict into a compliance violation. Keeping the two apart is what stops qualitative direction from silently becoming a blocking checklist.</p>
+              <p data-copy="de">Ein fehlendes positives Merkmal ist keine Verletzung. Starke Evidenz für ein Is-not-Merkmal kann einen Material Conflict stützen und das Ergebnis in die Prüfung geben. Erst eine separate anwendbare RULE macht daraus eine Compliance-Verletzung. Diese Trennung verhindert, dass qualitative Richtung still zur blockierenden Checkliste wird.</p>
+            </div>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">photography</span></div><div data-copy="en">is: available light, working environments. is not: staged perfection, stock gestures.</div><div data-copy="de">is: vorhandenes Licht, echte Arbeitsumgebungen. is not: gestellte Perfektion, Stock-Gesten.</div></div>
+            <div class="state-row"><div><span class="state-name">art direction</span></div><div data-copy="en">is: structural, high contrast. is not: decorative, softened, ornamental.</div><div data-copy="de">is: strukturell, kontrastreich. is not: dekorativ, weichgezeichnet, ornamental.</div></div>
+            <div class="state-row"><div><span class="state-name">composition</span></div><div data-copy="en">is: one clear subject, generous space. is not: crowded, competing focal points.</div><div data-copy="de">is: ein klares Motiv, großzügiger Raum. is not: überfüllt, konkurrierende Blickpunkte.</div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">The same contract holds for voice, photography, art direction, composition and product depiction. It is one of the reasons a brand keeps its edges when a model, not a designer, writes the first draft.</p>
+          <p class="micro-note" data-copy="de">Derselbe Contract gilt für Voice, Fotografie, Art Direction, Komposition und Produktdarstellung. Er ist einer der Gründe, warum eine Marke ihre Kanten behält, wenn ein Modell und kein Designer den ersten Entwurf schreibt.</p>
+        </div>
+      </section>
+
       <section class="section" id="compile">
-        <div class="section-number"><span data-copy="en">03 / Compile</span><span data-copy="de">03 / Kompilieren</span></div>
+        <div class="section-number"><span data-copy="en">04 / Compile</span><span data-copy="de">04 / Kompilieren</span></div>
         <div class="section-content">
           <h2 data-copy="en">Not the archive. The exact truth for this task.</h2>
           <h2 data-copy="de">Nicht das Archiv. Genau die Wahrheit für diese Aufgabe.</h2>
@@ -904,7 +1029,7 @@
       </section>
 
       <section class="section inverse" id="create">
-        <div class="section-number"><span data-copy="en">04 / Create</span><span data-copy="de">04 / Gestalten</span></div>
+        <div class="section-number"><span data-copy="en">05 / Create</span><span data-copy="de">05 / Gestalten</span></div>
         <div class="section-content">
           <h2 data-copy="en">Define the design space. Not the layout.</h2>
           <h2 data-copy="de">Den Design Space definieren. Nicht das Layout.</h2>
@@ -912,11 +1037,11 @@
           <p class="lead" data-copy="de">OBDS speichert keine Pixelkoordinaten. Es speichert, woraus eine Komposition besteht, was nie entfallen darf, was Abstand halten muss und wie Werte zusammenwirken. Ein Renderer erzeugt eine Lösung in diesem Raum. Ein Validator weist nach, dass sie darin geblieben ist.</p>
 
           <div class="flow flow-five" aria-label="From brief to validated render">
-            <div class="flow-step"><span class="flow-index">01</span><span class="flow-name" data-copy="en">Brief</span><span class="flow-name" data-copy="de">Briefing</span></div>
-            <div class="flow-step"><span class="flow-index">02</span><span class="flow-name" data-copy="en">Design space</span><span class="flow-name" data-copy="de">Design Space</span></div>
-            <div class="flow-step"><span class="flow-index">03</span><span class="flow-name" data-copy="en">Composition</span><span class="flow-name" data-copy="de">Komposition</span></div>
-            <div class="flow-step"><span class="flow-index">04</span><span class="flow-name" data-copy="en">Render</span><span class="flow-name" data-copy="de">Render</span></div>
-            <div class="flow-step"><span class="flow-index">05</span><span class="flow-name" data-copy="en">Validate</span><span class="flow-name" data-copy="de">Validierung</span></div>
+            <div class="flow-step"><span class="flow-index">01</span><span class="flow-name" data-copy="en">Brief</span><span class="flow-name" data-copy="de">Briefing</span><span class="flow-note" data-copy="en">One product, a headline, a call to action, legal, three formats.</span><span class="flow-note" data-copy="de">Ein Produkt, eine Headline, ein Call to Action, Legal, drei Formate.</span></div>
+            <div class="flow-step"><span class="flow-index">02</span><span class="flow-name" data-copy="en">Design space</span><span class="flow-name" data-copy="de">Design Space</span><span class="flow-note" data-copy="en">Roles, hierarchy, clear zones, minimum sizes, what may never be dropped.</span><span class="flow-note" data-copy="de">Roles, Hierarchie, Clear Zones, Mindestgrößen, was nie entfallen darf.</span></div>
+            <div class="flow-step"><span class="flow-index">03</span><span class="flow-name" data-copy="en">Composition</span><span class="flow-name" data-copy="de">Komposition</span><span class="flow-note" data-copy="en">One valid arrangement per format, chosen by the renderer.</span><span class="flow-note" data-copy="de">Eine gültige Anordnung je Format, gewählt vom Renderer.</span></div>
+            <div class="flow-step"><span class="flow-index">04</span><span class="flow-name" data-copy="en">Render</span><span class="flow-name" data-copy="de">Render</span><span class="flow-note" data-copy="en">HTML, PDF, banner, image, video. The renderer is not part of OBDS.</span><span class="flow-note" data-copy="de">HTML, PDF, Banner, Bild, Video. Der Renderer ist nicht Teil von OBDS.</span></div>
+            <div class="flow-step"><span class="flow-index">05</span><span class="flow-name" data-copy="en">Validate</span><span class="flow-name" data-copy="de">Validierung</span><span class="flow-note" data-copy="en">Geometry evidence goes back through the same governed truth.</span><span class="flow-note" data-copy="de">Geometry Evidence läuft zurück durch dieselbe freigegebene Wahrheit.</span></div>
           </div>
 
           <p class="micro-note" data-copy="en">One product, two logos, a headline, a call to action and a legal line. Three formats, three different solutions, one governed truth. The diagrams below name the composition roles the renderer placed in each canvas.</p>
@@ -993,64 +1118,7 @@
         </div>
       </section>
 
-      <section class="section" id="distinctive">
-        <div class="section-number"><span data-copy="en">05 / Distinctive</span><span data-copy="de">05 / Unterscheidbar</span></div>
-        <div class="section-content">
-          <h2 data-copy="en">A brand is easier to hold by its edges.</h2>
-          <h2 data-copy="de">Eine Marke lässt sich an ihren Kanten besser fassen.</h2>
-          <p class="lead" data-copy="en">Qualitative direction usually dies as a list of adjectives that every brand could claim. A Semantic Boundary keeps it structured and machine-readable: one subject, one quality, what it is, what it is not, and the trade-off the brand has already settled.</p>
-          <p class="lead" data-copy="de">Qualitative Richtung stirbt meist als Adjektivliste, die jede Marke für sich beanspruchen könnte. Eine Semantic Boundary hält sie strukturiert und maschinenlesbar: ein Subject, eine Quality, was sie ist, was sie nicht ist, und der Trade-off, den die Marke bereits entschieden hat.</p>
-
-          <div class="boundary">
-            <div class="boundary-head">
-              <div><span class="label">subject</span><span class="boundary-term">voice</span></div>
-              <div><span class="label">quality</span><span class="boundary-term">confident</span></div>
-            </div>
-            <div class="boundary-body">
-              <div>
-                <span class="label">is</span>
-                <ul>
-                  <li data-copy="en">clear</li><li data-copy="de">klar</li>
-                  <li data-copy="en">specific</li><li data-copy="de">konkret</li>
-                  <li data-copy="en">decisive</li><li data-copy="de">entschieden</li>
-                  <li data-copy="en">grounded</li><li data-copy="de">belegt</li>
-                </ul>
-              </div>
-              <div>
-                <span class="label">is not</span>
-                <ul>
-                  <li data-copy="en">aggressive</li><li data-copy="de">aggressiv</li>
-                  <li data-copy="en">boastful</li><li data-copy="de">prahlerisch</li>
-                  <li data-copy="en">absolute without evidence</li><li data-copy="de">absolut ohne Beleg</li>
-                </ul>
-              </div>
-            </div>
-            <div class="boundary-foot">
-              <span data-copy="en">tieBreaker: prefer precise over forceful.</span>
-              <span data-copy="de">tieBreaker: precise vor forceful.</span>
-            </div>
-          </div>
-
-          <div class="callout">
-            <div><span class="callout-key">guidance != compliance</span></div>
-            <div>
-              <p data-copy="en">A missing positive trait is not a violation. Strong evidence of an is-not trait may support a material conflict and send the result to review. Only a separate applicable RULE turns that conflict into a compliance violation. Keeping the two apart is what stops qualitative direction from silently becoming a blocking checklist.</p>
-              <p data-copy="de">Ein fehlendes positives Merkmal ist keine Verletzung. Starke Evidenz für ein Is-not-Merkmal kann einen Material Conflict stützen und das Ergebnis in die Prüfung geben. Erst eine separate anwendbare RULE macht daraus eine Compliance-Verletzung. Diese Trennung verhindert, dass qualitative Richtung still zur blockierenden Checkliste wird.</p>
-            </div>
-          </div>
-
-          <div class="state-list">
-            <div class="state-row"><div><span class="state-name">photography</span></div><div data-copy="en">is: available light, working environments. is not: staged perfection, stock gestures.</div><div data-copy="de">is: vorhandenes Licht, echte Arbeitsumgebungen. is not: gestellte Perfektion, Stock-Gesten.</div></div>
-            <div class="state-row"><div><span class="state-name">art direction</span></div><div data-copy="en">is: structural, high contrast. is not: decorative, softened, ornamental.</div><div data-copy="de">is: strukturell, kontrastreich. is not: dekorativ, weichgezeichnet, ornamental.</div></div>
-            <div class="state-row"><div><span class="state-name">composition</span></div><div data-copy="en">is: one clear subject, generous space. is not: crowded, competing focal points.</div><div data-copy="de">is: ein klares Motiv, großzügiger Raum. is not: überfüllt, konkurrierende Blickpunkte.</div></div>
-          </div>
-
-          <p class="micro-note" data-copy="en">The same contract holds for voice, photography, art direction, composition and product depiction. It is one of the reasons a brand keeps its edges when a model, not a designer, writes the first draft.</p>
-          <p class="micro-note" data-copy="de">Derselbe Contract gilt für Voice, Fotografie, Art Direction, Komposition und Produktdarstellung. Er ist einer der Gründe, warum eine Marke ihre Kanten behält, wenn ein Modell und kein Designer den ersten Entwurf schreibt.</p>
-        </div>
-      </section>
-
-      <section class="section inverse" id="prove">
+      <section class="section" id="prove">
         <div class="section-number"><span data-copy="en">06 / Prove</span><span data-copy="de">06 / Nachweisen</span></div>
         <div class="section-content">
           <h2 data-copy="en">Months later, you can still show why.</h2>
@@ -1059,11 +1127,12 @@
           <p class="lead" data-copy="de">Welche freigegebene Wahrheit verwendet wurde. Welche Rules galten. Welcher Kontext assembliert wurde. Ob überhaupt ein Modell aufgerufen wurde. Warum das Ergebnis freigegeben, blockiert oder zur Freigabe geleitet wurde. Der Nachweis fällt im Lauf an und wird nicht nachträglich geschrieben.</p>
 
           <div class="proof-chain" aria-label="What is recorded at each stage">
-            <div class="proof-row"><span class="proof-a" data-copy="en">Truth</span><span class="proof-a" data-copy="de">Wahrheit</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">canonical hash</span></div>
-            <div class="proof-row"><span class="proof-a" data-copy="en">Context</span><span class="proof-a" data-copy="de">Kontext</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">compiledContextHash</span></div>
-            <div class="proof-row"><span class="proof-a" data-copy="en">Input</span><span class="proof-a" data-copy="de">Input</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">modelInputHash</span></div>
-            <div class="proof-row"><span class="proof-a" data-copy="en">Decision</span><span class="proof-a" data-copy="de">Entscheidung</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">runtime decision record</span></div>
-            <div class="proof-row"><span class="proof-a" data-copy="en">Render</span><span class="proof-a" data-copy="de">Render</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">render geometry record</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Truth</span><span class="proof-a" data-copy="de">Wahrheit</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">versioned and canonically hashed</span><span class="proof-b" data-copy="de">versioniert und kanonisch gehasht</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Context</span><span class="proof-a" data-copy="de">Kontext</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">compiled for one declared target</span><span class="proof-b" data-copy="de">kompiliert für ein deklariertes Target</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Input</span><span class="proof-a" data-copy="de">Input</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">hashed before the model is called</span><span class="proof-b" data-copy="de">gehasht, bevor das Modell aufgerufen wird</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Output</span><span class="proof-a" data-copy="de">Output</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">checked before and after generation</span><span class="proof-b" data-copy="de">geprüft vor und nach der Generierung</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Decision</span><span class="proof-a" data-copy="de">Entscheidung</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">recorded with its reason</span><span class="proof-b" data-copy="de">mit Begründung protokolliert</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Render</span><span class="proof-a" data-copy="de">Render</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">measured against the design space</span><span class="proof-b" data-copy="de">gegen den Design Space gemessen</span></div>
           </div>
 
           <div class="integrity-list">
@@ -1080,7 +1149,7 @@
         </div>
       </section>
 
-      <section class="section" id="difference">
+      <section class="section inverse" id="difference">
         <div class="section-number"><span data-copy="en">07 / Difference</span><span data-copy="de">07 / Unterschied</span></div>
         <div class="section-content">
           <h2 data-copy="en">Next to what you already have.</h2>
@@ -1131,8 +1200,8 @@
             <div class="state-row"><div><span class="state-name">total</span></div><div class="publication-value" data-copy="en">105 passed, 0 failed</div><div class="publication-value" data-copy="de">105 bestanden, 0 fehlgeschlagen</div></div>
           </div>
 
-          <p class="micro-note" data-copy="en">That is a signal, not a proof. What it suggests is narrow and useful: an unfamiliar implementer can infer what the contract is for and work inside it. Late review cycles increasingly surfaced canonicalisation and interoperability defects rather than confusion about the architecture. Those were the ones worth fixing.</p>
-          <p class="micro-note" data-copy="de">Das ist ein Signal, kein Beweis. Die Aussage ist eng und trotzdem nützlich: Ein fremder Implementierer kann ableiten, wofür der Contract da ist, und darin arbeiten. Späte Review-Zyklen fanden zunehmend Canonicalisation- und Interoperabilitätsfehler statt Verwirrung über die Architektur. Genau die waren es wert, behoben zu werden.</p>
+          <p class="micro-note" data-copy="en">That is a signal, not a proof. What it suggests is narrow and useful: an unfamiliar implementer can infer what the contract is for and work inside it. Late review cycles increasingly surfaced canonicalisation and interoperability defects rather than confusion about the architecture. Those were the ones worth fixing. The result proves the declared conformance suite passes. It proves nothing about how any particular model behaves in production.</p>
+          <p class="micro-note" data-copy="de">Das ist ein Signal, kein Beweis. Die Aussage ist eng und trotzdem nützlich: Ein fremder Implementierer kann ableiten, wofür der Contract da ist, und darin arbeiten. Späte Review-Zyklen fanden zunehmend Canonicalisation- und Interoperabilitätsfehler statt Verwirrung über die Architektur. Genau die waren es wert, behoben zu werden. Das Ergebnis belegt, dass die deklarierte Conformance Suite besteht. Es belegt nichts darüber, wie sich ein bestimmtes Modell in der Produktion verhält.</p>
         </div>
       </section>
 
@@ -1156,13 +1225,99 @@
             <article class="definition-card"><span class="definition-code">Process</span><h3>Operations</h3><p data-copy="en">Governed records, release approval, assurance and lineage.</p><p data-copy="de">Governed Records, Release-Freigabe, Assurance und Lineage.</p></article>
           </div>
 
-          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Breaking semantics require OBDS 2.0. Use and licensing are set out in section 11.</p>
-          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Brechende Semantik erfordert OBDS 2.0. Nutzung und Lizenzierung stehen in Abschnitt 11.</p>
+          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Breaking semantics require OBDS 2.0. Use and licensing are set out in section 10.</p>
+          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Brechende Semantik erfordert OBDS 2.0. Nutzung und Lizenzierung stehen in Abschnitt 10.</p>
+        </div>
+      </section>
+
+      <section class="section" id="licensing">
+        <div class="section-number"><span data-copy="en">10 / Licensing</span><span data-copy="de">10 / Lizenz</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Public to study. Open enough to build against.</h2>
+          <h2 data-copy="de">Öffentlich zum Prüfen. Offen genug, um dagegen zu bauen.</h2>
+          <p class="lead" data-copy="en">Anyone may read the specification, run the conformance suite and ship a validator against the schemas. What needs a licence is commercial use of the authored OBDS materials: the specification text, the documentation and the reference implementation.</p>
+          <p class="lead" data-copy="de">Jede und jeder darf die Spezifikation lesen, die Conformance Suite laufen lassen und einen Validator gegen die Schemas ausliefern. Eine Lizenz braucht die kommerzielle Nutzung der geschützten OBDS-Materialien: Spezifikationstext, Dokumentation und Referenzimplementierung.</p>
+
+          <div class="boundary">
+            <div class="boundary-body">
+              <div>
+                <span class="label" data-copy="en">Free use</span>
+                <span class="label" data-copy="de">Freie Nutzung</span>
+                <ul>
+                  <li data-copy="en">Personal use</li><li data-copy="de">Persönliche Nutzung</li>
+                  <li data-copy="en">Education and teaching</li><li data-copy="de">Lehre und Unterricht</li>
+                  <li data-copy="en">Academic and non-profit research</li><li data-copy="de">Akademische und Non-Profit-Forschung</li>
+                  <li data-copy="en">Testing and benchmarking</li><li data-copy="de">Testen und Benchmarking</li>
+                  <li data-copy="en">Evaluation, including inside a company</li><li data-copy="de">Evaluierung, auch im Unternehmen</li>
+                  <li data-copy="en">Proof of concept outside production</li><li data-copy="de">Proof of Concept ausserhalb der Produktion</li>
+                  <li data-copy="en">Unpaid pitch or pre-contract demo</li><li data-copy="de">Unbezahlter Pitch oder Demo vor Vertrag</li>
+                </ul>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Commercial licence</span>
+                <span class="label" data-copy="de">Kommerzielle Lizenz</span>
+                <ul>
+                  <li data-copy="en">Paid client delivery</li><li data-copy="de">Bezahlte Kundenlieferung</li>
+                  <li data-copy="en">Agency and consulting services</li><li data-copy="de">Agentur- und Beratungsleistungen</li>
+                  <li data-copy="en">Paid training and workshops</li><li data-copy="de">Bezahlte Trainings und Workshops</li>
+                  <li data-copy="en">Commercial production use</li><li data-copy="de">Kommerzieller Produktiveinsatz</li>
+                  <li data-copy="en">SaaS and managed services</li><li data-copy="de">SaaS und Managed Services</li>
+                  <li data-copy="en">Commercial products and integrations</li><li data-copy="de">Kommerzielle Produkte und Integrationen</li>
+                  <li data-copy="en">Redistribution of protected materials</li><li data-copy="de">Weitergabe geschützter Materialien</li>
+                </ul>
+              </div>
+            </div>
+            <div class="boundary-foot">
+              <span data-copy="en">Evaluation is bounded by the kind of activity, not by a clock. There is no trial period. A commercial organisation may evaluate OBDS for as long as it likes, as long as the work stays out of production and out of paid delivery.</span>
+              <span data-copy="de">Die Evaluierung ist durch die Art der Tätigkeit begrenzt, nicht durch eine Uhr. Es gibt keine Testphase. Ein Unternehmen darf OBDS beliebig lange evaluieren, solange die Arbeit weder produktiv läuft noch in bezahlte Lieferung eingeht.</span>
+            </div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key" data-copy="en">free for any purpose</span><span class="callout-key" data-copy="de">frei für jeden Zweck</span></div>
+            <div>
+              <p data-copy="en">Two rights are carved out and granted for any purpose, commercial included. You may copy, use and redistribute the unmodified machine-readable schemas to read, write, validate or interoperate with OBDS data. You may run the unmodified official conformance suite against any implementation, including a commercial one, and publish accurate results. Keep the files unmodified, keep the notices, claim neither endorsement nor certification.</p>
+              <p data-copy="de">Zwei Rechte sind ausgenommen und für jeden Zweck eingeräumt, kommerziell eingeschlossen. Die unveränderten maschinenlesbaren Schemas dürfen kopiert, verwendet und weitergegeben werden, um OBDS-Daten zu lesen, zu schreiben, zu validieren oder interoperabel zu verarbeiten. Die unveränderte offizielle Conformance Suite darf gegen jede Implementierung laufen, auch gegen eine kommerzielle, und die Ergebnisse dürfen korrekt veröffentlicht werden. Dateien unverändert lassen, Hinweise erhalten, weder Endorsement noch Zertifizierung behaupten.</p>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">This is why a parser, a validator or a CI integration is not blocked. Those are the parts that need to spread for the format to be worth anything. The licence draws its commercial line around the authored governance content, not around the machine-readable surface.</p>
+          <p class="micro-note" data-copy="de">Deshalb sind Parser, Validator und CI-Integration nicht blockiert. Genau diese Teile müssen sich verbreiten, damit das Format etwas wert ist. Die Lizenz zieht ihre kommerzielle Grenze um die verfassten Governance-Inhalte, nicht um die maschinenlesbare Oberfläche.</p>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name" data-copy="en">Ideas</span><span class="state-name" data-copy="de">Ideen</span></div><div data-copy="en">No claim is made on general ideas, principles, methods, functionality, concepts or formats. Building a different or compatible system from similar ideas is not restricted, as long as protected materials are not copied and the marks are not misused.</div><div data-copy="de">Auf allgemeine Ideen, Prinzipien, Methoden, Funktionsweisen, Konzepte oder Formate wird kein Anspruch erhoben. Ein anderes oder kompatibles System aus ähnlichen Ideen zu bauen ist nicht eingeschränkt, solange keine geschützten Materialien kopiert und die Kennzeichen nicht missbraucht werden.</div></div>
+            <div class="state-row"><div><span class="state-name" data-copy="en">Names</span><span class="state-name" data-copy="de">Namen</span></div><div data-copy="en">Truthful descriptive use such as "implements OBDS 1.0" or a package called obds-parser needs no permission. Logos, badges, OBDS Certified and official-looking product naming stay controlled. Not every mark is registered in every territory.</div><div data-copy="de">Wahrheitsgemäße beschreibende Nutzung wie "implements OBDS 1.0" oder ein Paket namens obds-parser braucht keine Erlaubnis. Logos, Badges, OBDS Certified und offiziell wirkende Produktnamen bleiben kontrolliert. Nicht jedes Kennzeichen ist in jedem Gebiet registriert.</div></div>
+            <div class="state-row"><div><span class="state-name" data-copy="en">Certification</span><span class="state-name" data-copy="de">Zertifizierung</span></div><div data-copy="en">The programme is a draft outline and is not live. Nobody holds OBDS Certified status. Passing the suite is technical conformance and self-assessment, which is a different thing and may be stated as such.</div><div data-copy="de">Das Programm ist ein Entwurf und nicht aktiv. Niemand hat den Status OBDS Certified. Eine bestandene Suite ist technische Conformance und Selbstauskunft, das ist etwas anderes und darf auch so genannt werden.</div></div>
+            <div class="state-row"><div><span class="state-name" data-copy="en">Patents</span><span class="state-name" data-copy="de">Patente</span></div><div data-copy="en">No patent rights are granted, and no claim is made that any patent is needed to implement OBDS.</div><div data-copy="de">Es werden keine Patentrechte eingeräumt, und es wird nicht behauptet, dass für eine OBDS-Implementierung ein Patent nötig wäre.</div></div>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name"><a href="/licensing/LICENSE.md">LICENSE.md</a></span></div><div data-copy="en">The Free Use grant, the tooling and conformance carve-outs, and what is not granted.</div><div data-copy="de">Die Free-Use-Einräumung, die Tooling- und Conformance-Ausnahmen, und was nicht eingeräumt wird.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/licensing/COMMERCIAL-LICENSING.md">COMMERCIAL-LICENSING.md</a></span></div><div data-copy="en">When a written commercial licence is normally required, and what one can cover. Policy, not a grant.</div><div data-copy="de">Wann eine schriftliche kommerzielle Lizenz normalerweise nötig ist und was sie abdecken kann. Policy, keine Einräumung.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/licensing/TRADEMARKS.md">TRADEMARKS.md</a></span></div><div data-copy="en">Which descriptive references are fine, and which names and badges are not.</div><div data-copy="de">Welche beschreibenden Verweise in Ordnung sind und welche Namen und Badges nicht.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/licensing/CERTIFICATION.md">CERTIFICATION.md</a></span></div><div data-copy="en">The planned programme, as a draft. It grants nothing today.</div><div data-copy="de">Das geplante Programm, als Entwurf. Es räumt heute nichts ein.</div></div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key" data-copy="en">legal status</span><span class="callout-key" data-copy="de">rechtlicher Stand</span></div>
+            <div>
+              <p data-copy="en">These documents are published as council revision 2 and are still going through review by qualified legal counsel. Read them as the operative terms and the current direction. If you plan to rely on a specific clause, write first and get it in writing. This is a custom source-available licence with a non-commercial restriction and limited carve-outs. It is not an OSI approved open-source licence, and OBDS is not described as open source.</p>
+              <p data-copy="de">Diese Dokumente sind als Council Revision 2 veröffentlicht und befinden sich weiterhin in der Prüfung durch qualifizierte Rechtsberatung. Sie gelten als operative Bedingungen und als aktuelle Richtung. Wer sich auf eine bestimmte Klausel stützen will, schreibt vorher und lässt es sich schriftlich geben. Dies ist eine eigene Source-available-Lizenz mit nicht-kommerzieller Beschränkung und begrenzten Ausnahmen. Sie ist keine OSI-anerkannte Open-Source-Lizenz, und OBDS wird nicht als Open Source bezeichnet.</p>
+            </div>
+          </div>
+
+          <div class="contact-line">
+            <div>
+              <span class="label" data-copy="en">Commercial licensing</span>
+              <span class="label" data-copy="de">Kommerzielle Lizenzierung</span>
+            </div>
+            <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
+          </div>
         </div>
       </section>
 
       <section class="section" id="release">
-        <div class="section-number"><span data-copy="en">10 / Release</span><span data-copy="de">10 / Release</span></div>
+        <div class="section-number"><span data-copy="en">11 / Release</span><span data-copy="de">11 / Release</span></div>
         <div class="section-content">
           <h2 data-copy="en">1.0.1 is the current release.</h2>
           <h2 data-copy="de">1.0.1 ist der aktuelle Release.</h2>
@@ -1201,6 +1356,30 @@
             </div>
           </div>
 
+          <p class="micro-note" data-copy="en">Section 32 of the historic 1.0.0 document still recommends CC BY 4.0 and Apache 2.0. It stays published as released. From 1.0.1 onwards, section 32.1 carries the licensing model, and the documents in section 10 are the operative terms.</p>
+          <p class="micro-note" data-copy="de">Abschnitt 32 des historischen Dokuments 1.0.0 empfiehlt weiterhin CC BY 4.0 und Apache 2.0. Es bleibt unverändert veröffentlicht. Ab 1.0.1 trägt Abschnitt 32.1 das Lizenzmodell, und die Dokumente aus Abschnitt 10 sind die geltenden Bedingungen.</p>
+
+          <div class="actions">
+            <a href="/spec/1.0.1/OBDS-1.0.1.md">
+              <span class="action-name" data-copy="en">Read the spec</span>
+              <span class="action-name" data-copy="de">Spec lesen</span>
+              <span class="action-note" data-copy="en">One normative document. Start at section 3 if you want the shape of it in five minutes.</span>
+              <span class="action-note" data-copy="de">Ein normatives Dokument. Für die Form in fünf Minuten bei Abschnitt 3 anfangen.</span>
+            </a>
+            <a href="/spec/1.0.1/OBDS-1.0.1-FINAL.zip">
+              <span class="action-name" data-copy="en">Download OBDS</span>
+              <span class="action-name" data-copy="de">OBDS laden</span>
+              <span class="action-note" data-copy="en">Specification, 27 schemas, reference implementation and the conformance suite. 215 KB.</span>
+              <span class="action-note" data-copy="de">Spezifikation, 27 Schemas, Referenzimplementierung und Conformance Suite. 215 KB.</span>
+            </a>
+            <a href="#licensing">
+              <span class="action-name" data-copy="en">Licensing</span>
+              <span class="action-name" data-copy="de">Lizenz</span>
+              <span class="action-note" data-copy="en">What is free, what is carved out for any purpose, and what needs a written licence.</span>
+              <span class="action-note" data-copy="de">Was frei ist, was für jeden Zweck ausgenommen ist und was eine schriftliche Lizenz braucht.</span>
+            </a>
+          </div>
+
           <p class="micro-note" data-copy="en">The visible dates and the machine-readable publication record document when this project page was made public. They do not replace formal intellectual-property advice.</p>
           <p class="micro-note" data-copy="de">Die sichtbaren Daten und der maschinenlesbare Publication Record dokumentieren, wann diese Projektseite öffentlich gemacht wurde. Sie ersetzen keine formale IP-Beratung.</p>
 
@@ -1208,76 +1387,6 @@
             <div>
               <span class="label" data-copy="en">Review, test, challenge</span>
               <span class="label" data-copy="de">Prüfen, testen, hinterfragen</span>
-            </div>
-            <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section inverse" id="licensing">
-        <div class="section-number"><span data-copy="en">11 / Licensing</span><span data-copy="de">11 / Lizenz</span></div>
-        <div class="section-content">
-          <h2 data-copy="en">Public to study. Commercial use needs a licence.</h2>
-          <h2 data-copy="de">Öffentlich zum Prüfen. Kommerzielle Nutzung braucht eine Lizenz.</h2>
-          <p class="lead" data-copy="en">OBDS 1.0.0 is a publicly available specification. Anyone may read it, study it, test it and implement against it to find out whether it holds. Putting it to work commercially is a separate arrangement.</p>
-          <p class="lead" data-copy="de">OBDS 1.0.0 ist eine öffentlich verfügbare Spezifikation. Jede und jeder darf sie lesen, prüfen, testen und dagegen implementieren, um herauszufinden, ob sie trägt. Der kommerzielle Einsatz ist eine eigene Vereinbarung.</p>
-
-          <div class="boundary">
-            <div class="boundary-body">
-              <div>
-                <span class="label" data-copy="en">Free use</span>
-                <span class="label" data-copy="de">Freie Nutzung</span>
-                <ul>
-                  <li data-copy="en">Personal use</li><li data-copy="de">Persönliche Nutzung</li>
-                  <li data-copy="en">Education and teaching</li><li data-copy="de">Lehre und Unterricht</li>
-                  <li data-copy="en">Academic research</li><li data-copy="de">Akademische Forschung</li>
-                  <li data-copy="en">Non-profit research</li><li data-copy="de">Non-Profit-Forschung</li>
-                  <li data-copy="en">Testing and experimentation</li><li data-copy="de">Testen und Experimentieren</li>
-                  <li data-copy="en">Evaluation</li><li data-copy="de">Evaluierung</li>
-                  <li data-copy="en">Proof of concept outside production</li><li data-copy="de">Proof of Concept ausserhalb der Produktion</li>
-                </ul>
-              </div>
-              <div>
-                <span class="label" data-copy="en">Commercial licence</span>
-                <span class="label" data-copy="de">Kommerzielle Lizenz</span>
-                <ul>
-                  <li data-copy="en">Paid client work</li><li data-copy="de">Bezahlte Kundenarbeit</li>
-                  <li data-copy="en">Agency services</li><li data-copy="de">Agenturleistungen</li>
-                  <li data-copy="en">Consulting using OBDS</li><li data-copy="de">Beratung mit OBDS</li>
-                  <li data-copy="en">Production use</li><li data-copy="de">Produktiveinsatz</li>
-                  <li data-copy="en">SaaS and managed services</li><li data-copy="de">SaaS und Managed Services</li>
-                  <li data-copy="en">Commercial products</li><li data-copy="de">Kommerzielle Produkte</li>
-                  <li data-copy="en">Commercial redistribution</li><li data-copy="de">Kommerzielle Weitergabe</li>
-                </ul>
-              </div>
-            </div>
-            <div class="boundary-foot">
-              <span data-copy="en">A commercial organisation may evaluate OBDS internally under free use, as long as the work does not run in production and is not delivered to a paying client.</span>
-              <span data-copy="de">Ein kommerzielles Unternehmen darf OBDS intern evaluieren, solange die Arbeit nicht produktiv läuft und nicht an zahlende Kundschaft geliefert wird.</span>
-            </div>
-          </div>
-
-          <div class="callout">
-            <div><span class="callout-key" data-copy="en">intended model</span><span class="callout-key" data-copy="de">geplantes Modell</span></div>
-            <div>
-              <p data-copy="en">The licence documents are not published yet. What is written here describes the intended licensing model. It is not a grant. Permissions become effective under the published licence terms, and this section will be replaced by the actual grant and a link to the exact documents once they exist. Until then, ask before you rely on it.</p>
-              <p data-copy="de">Die Lizenzdokumente sind noch nicht veröffentlicht. Was hier steht, beschreibt das geplante Lizenzmodell. Es ist keine Rechteeinräumung. Berechtigungen werden mit den veröffentlichten Lizenzbedingungen wirksam, und dieser Abschnitt wird durch die tatsächliche Einräumung und den Link auf die genauen Dokumente ersetzt, sobald es sie gibt. Bis dahin gilt: vorher fragen.</p>
-            </div>
-          </div>
-
-          <p class="micro-note" data-copy="en">Publication does not grant trademark rights in Open Brand Definition, OBDS or associated marks. Those are reserved separately and are not covered by the content or software licence.</p>
-          <p class="micro-note" data-copy="de">Die Veröffentlichung gewährt keine Markenrechte an Open Brand Definition, OBDS oder zugehörigen Kennzeichen. Diese bleiben gesondert vorbehalten und sind von der Inhalts- oder Softwarelizenz nicht erfasst.</p>
-
-          <p class="micro-note" data-copy="en">OBDS protects its published specification, schemas, tests, reference implementation and other original materials. It does not claim exclusive ownership of the underlying ideas, principles or methods. Anyone may build a different system from similar ideas, as long as they do not copy or use OBDS materials.</p>
-          <p class="micro-note" data-copy="de">OBDS schützt die veröffentlichte Spezifikation, die Schemas, die Tests, die Referenzimplementierung und weitere eigene Materialien. Es beansprucht kein Exklusivrecht an den zugrunde liegenden Ideen, Prinzipien oder Methoden. Jede und jeder darf aus ähnlichen Ideen ein anderes System bauen, solange keine OBDS-Materialien kopiert oder verwendet werden.</p>
-
-          <p class="micro-note" data-copy="en">Section 32 of the specification carries this model from OBDS 1.0.1 onwards. The historic 1.0.0 document still recommends CC BY 4.0 and Apache 2.0 there. It stays published exactly as released, and it is superseded on that point by 1.0.1.</p>
-          <p class="micro-note" data-copy="de">Abschnitt 32 der Spezifikation führt dieses Modell ab OBDS 1.0.1. Das historische Dokument 1.0.0 empfiehlt dort weiterhin CC BY 4.0 und Apache 2.0. Es bleibt unverändert veröffentlicht und ist in diesem Punkt durch 1.0.1 überholt.</p>
-
-          <div class="contact-line">
-            <div>
-              <span class="label" data-copy="en">Commercial licensing</span>
-              <span class="label" data-copy="de">Kommerzielle Lizenzierung</span>
             </div>
             <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
           </div>
@@ -1349,8 +1458,8 @@
 
           <div class="legal-block">
             <h3>Copyright and licensing</h3>
-            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Die stabile Spezifikation OBDS 1.0.0 wurde am 27. August 2026 fertiggestellt und auf dieser Website veröffentlicht, ebenso OBDS 1.0.1, das die Lizenzierung in Abschnitt 32 klärt, ohne einen normativen Contract zu ändern. Sie darf frei gelesen, geprüft, gelehrt, beforscht und evaluiert werden. Kommerzielle Nutzung, darunter bezahlte Kundenarbeit, Agenturleistungen, Beratung, Produktiveinsatz, Managed Services, kommerzielle Produkte und kommerzielle Weitergabe, erfordert eine gesonderte Lizenz der Kill The Dragon GmbH. Kontakt lets@killthedragon.com. Die Lizenzdokumente sind noch nicht veröffentlicht, das in Abschnitt 11 und in Abschnitt 32.1 der Spezifikation beschriebene Modell ist daher eine Absichtserklärung und keine Rechteeinräumung. Berechtigungen werden mit den veröffentlichten Lizenzbedingungen wirksam. Namen, Logos und Kennzeichen sind von keiner Inhalts- oder Softwarelizenz erfasst und bleiben einer separaten Markenrichtlinie vorbehalten.</p>
-            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0.0 specification was released on 27 August 2026 and is published on this website, together with OBDS 1.0.1, which clarifies licensing in section 32 without changing any normative contract. It may be read, studied, taught, researched and evaluated freely. Commercial use, including paid client work, agency services, consulting, production use, managed services, commercial products and commercial redistribution, requires a separate licence from Kill The Dragon GmbH. Contact lets@killthedragon.com. The licence documents are not published yet, so the model described in section 11 and in section 32.1 of the specification is a statement of intent and not a grant. Permissions become effective under the published licence terms. Names, logos and marks are not covered by any content or software licence and remain subject to a separate trademark policy.</p>
+            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Die stabile Spezifikation OBDS 1.0.0 wurde am 27. August 2026 fertiggestellt und auf dieser Website veröffentlicht, ebenso OBDS 1.0.1, das die Lizenzierung in Abschnitt 32 klärt, ohne einen normativen Contract zu ändern. Die Nutzung richtet sich nach der OBDS Free Use Licence 1.0, veröffentlicht unter /licensing/LICENSE.md. Sie räumt freie Nutzung ein für persönliche, Bildungs-, akademische, Non-Profit-, Test-, Benchmarking-, Evaluierungs- und nicht produktive Proof-of-Concept-Zwecke, einschließlich interner Evaluierung durch ein Unternehmen. Sie erlaubt zusätzlich für jeden Zweck, kommerzielle eingeschlossen, Nutzung und Weitergabe der unveränderten maschinenlesbaren OBDS-Schemas sowie das Ausführen der unveränderten offiziellen Conformance Suite gegen jede Implementierung samt korrekter Veröffentlichung der Ergebnisse. Die kommerzielle Ausübung von Rechten an anderen geschützten OBDS-Materialien erfordert eine gesonderte schriftliche Lizenz der Kill The Dragon GmbH. Kontakt lets@killthedragon.com. Die Lizenz erhebt keinen Anspruch auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme. Namen, Logos, Badges und Zertifizierungskennzeichen richten sich gesondert nach /licensing/TRADEMARKS.md und werden von keiner Inhalts- oder Softwarelizenz eingeräumt. Das in /licensing/CERTIFICATION.md beschriebene Zertifizierungsprogramm ist ein Entwurf und nicht aktiv. Die Lizenzdokumente sind als Council Revision 2 veröffentlicht und stehen weiter unter Prüfung durch qualifizierte Rechtsberatung.</p>
+            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0.0 specification was released on 27 August 2026 and is published on this website, together with OBDS 1.0.1, which clarifies licensing in section 32 without changing any normative contract. Use is governed by the OBDS Free Use Licence 1.0, published at /licensing/LICENSE.md. It grants free use for personal, educational, academic, non-profit, testing, benchmarking, evaluation and non-production proof-of-concept work, including internal evaluation by a commercial organisation. It further permits, for any purpose including commercial purposes, use and redistribution of the unmodified machine-readable OBDS schemas and running the unmodified official conformance suite against any implementation with accurate publication of results. Commercial exercise of rights in other protected OBDS Materials requires a separate written licence from Kill The Dragon GmbH. Contact lets@killthedragon.com. The licence does not claim ownership of general ideas, principles, methods or independently developed compatible systems. Names, logos, badges and certification marks are governed separately by /licensing/TRADEMARKS.md and are not granted by any content or software licence. The certification programme described in /licensing/CERTIFICATION.md is a draft and is not live. The licensing documents are published as council revision 2 and remain subject to review by qualified legal counsel.</p>
           </div>
         </div>
       </section>

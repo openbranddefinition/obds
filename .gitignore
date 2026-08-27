@@ -11,3 +11,6 @@ reference/
 
 # Local working notes, not site content
 answers/
+
+# Licensing source documents, staged manually into the published tree
+md/
