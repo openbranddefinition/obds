@@ -1,0 +1,106 @@
+# Open Brand Definition
+
+Project: Open Brand Definition
+Specification: OBDS
+Current release: 1.0.1 (stable, 27 August 2026)
+Publisher: Kill The Dragon GmbH, Vienna, Austria
+Canonical address: https://openbranddefinition.org/
+
+## Purpose
+
+A governed brand control layer for AI systems.
+
+OBDS determines which brand truth applies in a declared context, compiles the
+exact context for one task, declares the permissible design space a renderer
+may create inside, and records why a result was released, blocked or routed to
+approval.
+
+It is not a brandbook format, a prompt library or a template system.
+
+## Minimum
+
+OBDS Foundation. Nothing above it is required.
+
+Foundation covers Brand Elements, the four Brand States, Rules, Scope,
+Semantic Boundaries, provenance and Value Contracts.
+
+## Optional capabilities
+
+Added only when the task requires them. Registered Runtime Capability
+identifiers in 1.0:
+
+  compiled-runtime
+  context-delivery
+  context-assembly
+  text
+  visual-operations
+  composition
+  claims
+  localisation
+  operations
+
+Optional Brand Profile identifiers in 1.0:
+
+  obds-governed-records
+  obds-release-approval
+  obds-claims-evidence
+  obds-assets-rights
+  obds-localisation
+  obds-assurance-lineage
+  obds-composition
+  obds-visual-operations
+
+Every manifest declares obds-foundation. Section 4.2 of the specification
+describes the minimal implementation path.
+
+## Core principles
+
+Facts establish truth.
+Rules establish obligations.
+Semantic Boundaries establish qualitative guidance, not compliance.
+Unknown remains unknown, and is never filled in by inference.
+Scope determines what applies. asOf determines when.
+OBDS defines the permissible design space. Renderers create inside it.
+
+The four Brand States are: defined, unknown, not_defined, not_applicable.
+Prohibition is not a state. It is an explicit Rule with obligation: prohibit.
+
+The assembled model input is rendered in this fixed order:
+HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
+
+## Authoritative specification
+
+https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
+
+## Schemas
+
+Schema index: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-PUBLICATION-MAP.json
+Schema base: https://openbranddefinition.org/schemas/1.0.0/
+Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
+
+## Downloads
+
+Complete package: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-CHANGELOG.md
+Publication record: https://openbranddefinition.org/publication-record.json
+
+## Licensing
+
+Status: drafted, under review by qualified legal counsel. Not published, and
+no licence is granted by the website. The intended model is described at
+https://openbranddefinition.org/#licensing and in section 32.1 of the
+specification. Independent implementation of the underlying ideas, principles,
+methods and formats is not restricted.
+
+## Previous release
+
+OBDS 1.0.0 remains published as released and is historical.
+https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
+
+## Note
+
+This file is navigation and orientation only. It is not a source of Brand
+Truth and it is not normative. The published specification and the published
+contracts remain authoritative.

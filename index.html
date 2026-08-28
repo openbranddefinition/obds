@@ -6,14 +6,14 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-  <meta name="description" content="OBDS 1.0.1. A publicly available, vendor-neutral specification for governed brand truth in AI systems. Decide what applies, compile the exact context, define where AI may create, and prove the result stayed inside the rules.">
+  <meta name="description" content="OBDS 1.0.1. A publicly available, vendor-neutral specification for governed brand truth in AI systems. Foundation is the minimum. Optional capabilities are added only when scale, risk or automation require them: decide what applies, compile the exact context, define where AI may create, and prove the result stayed inside the rules.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://openbranddefinition.org/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://openbranddefinition.org/">
   <meta property="og:title" content="Open Brand Definition">
-  <meta property="og:description" content="Brand truth a system can decide from. And create inside. OBDS 1.0.1, stable.">
+  <meta property="og:description" content="Brand truth a system can decide from. And create inside. Start with Foundation, add control only when you need it. OBDS 1.0.1, stable.">
   <meta name="twitter:card" content="summary">
 
   <meta name="author" content="Kill The Dragon GmbH">
@@ -24,7 +24,7 @@
   <meta name="dcterms.identifier" content="https://openbranddefinition.org/">
   <meta name="obds-version" content="1.0.1">
   <meta property="article:published_time" content="2026-07-22">
-  <meta property="article:modified_time" content="2026-08-27">
+  <meta property="article:modified_time" content="2026-08-28">
   <link rel="alternate" hreflang="en" href="https://openbranddefinition.org/?lang=en">
   <link rel="alternate" hreflang="de" href="https://openbranddefinition.org/?lang=de">
   <title>Open Brand Definition | OBDS 1.0.1</title>
@@ -48,12 +48,12 @@
         "@id": "https://openbranddefinition.org/#obds",
         "headline": "Open Brand Definition Specification",
         "alternativeHeadline": "OBDS",
-        "description": "A publicly available, vendor-neutral specification for governed brand truth used by AI systems and renderers. It defines which brand truth applies to a declared target, what is explicitly unknown, the permissible visual design space, and the evidence a runtime decision leaves behind.",
+        "description": "A publicly available, vendor-neutral specification for governed brand truth used by AI systems and renderers. It has one required Foundation and optional capabilities that are added only when the task requires them. It defines which brand truth applies to a declared target, what is explicitly unknown, the permissible visual design space, and the evidence a runtime decision leaves behind.",
         "usageInfo": "https://openbranddefinition.org/#licensing",
         "url": "https://openbranddefinition.org/",
         "version": "1.0.1",
         "datePublished": "2026-07-22",
-        "dateModified": "2026-08-27",
+        "dateModified": "2026-08-28",
         "isAccessibleForFree": true,
         "copyrightYear": 2026,
         "copyrightHolder": {
@@ -813,6 +813,116 @@
       .proof-row { grid-template-columns: 1fr 40px 1fr; }
       .proof-b { padding-left: 14px; }
     }
+
+    /* --- progressive complexity --- */
+    .scale-stack {
+      margin-top: clamp(56px, 8vw, 120px);
+      border: 1px solid var(--line);
+    }
+    .scale-tier {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+    }
+    .scale-tier:first-child { border-top: 0; }
+    .scale-cell {
+      display: flex;
+      align-items: center;
+      min-height: 66px;
+      padding: 12px 16px;
+      border-left: 1px solid var(--line);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .scale-cell:first-child { border-left: 0; }
+    .scale-cell.on { background: var(--line); color: var(--paper); }
+    .inverse .scale-cell.on { color: var(--ink); }
+
+    .levels {
+      margin-top: clamp(46px, 6vw, 90px);
+      border-top: 1px solid var(--line);
+    }
+    .level {
+      display: grid;
+      grid-template-columns: 74px minmax(210px, .9fr) 1.15fr 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .level > div { padding: 22px 24px; }
+    .level > div:first-child { padding: 22px 14px 22px 0; }
+    .level > div + div { border-left: 1px solid var(--line); }
+    .level-index { font-size: var(--small); letter-spacing: .1em; }
+    .level-name {
+      display: block;
+      font-size: clamp(23px, 2.2vw, 38px);
+      line-height: .95;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .level-purpose { display: block; margin-top: 12px; max-width: 24ch; }
+    .level p { margin: 10px 0 0; max-width: 42ch; }
+
+    .statement-head {
+      margin: clamp(56px, 8vw, 120px) 0 0;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .statement-head + .proof-chain { margin-top: 0; border-top: 0; }
+
+    .questions {
+      margin-top: clamp(56px, 8vw, 120px);
+      border-top: 1px solid var(--line);
+    }
+    .questions p {
+      margin: 0;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(23px, 2.9vw, 48px);
+      line-height: 1;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .ai-card {
+      margin-top: clamp(56px, 8vw, 120px);
+      border: 1px solid var(--line);
+    }
+    .ai-card-head {
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--line);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .ai-card ul { margin: 0; padding: 0; list-style: none; }
+    .ai-card li {
+      display: block;
+      padding: 13px 20px;
+      border-top: 1px solid var(--line);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(13px, 1.12vw, 17px);
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+    .ai-card li:first-of-type { border-top: 0; }
+
+    @media (max-width: 900px) {
+      .scale-stack { border: 0; }
+      .scale-tier {
+        grid-template-columns: 1fr;
+        margin-top: 10px;
+        border: 1px solid var(--line);
+      }
+      .scale-tier:first-child { margin-top: 0; }
+      .scale-cell { border-left: 0; border-top: 1px solid var(--line); min-height: 52px; }
+      .scale-cell:first-child { border-top: 0; }
+      .scale-tier .scale-cell:not(.on) { display: none; }
+      .level { grid-template-columns: 1fr; }
+      .level > div, .level > div:first-child { padding: 18px 0; }
+      .level > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    }
   </style>
 </head>
 <body>
@@ -821,7 +931,7 @@
     <header class="topbar">
       <a class="mark" href="#top" aria-label="Open Brand Definition home">Open Brand Definition</a>
       <div class="status">OBDS / 1.0.1 stable</div>
-      <div class="language" aria-label="Language selection">
+      <div class="language" role="group" aria-label="Language selection">
         <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
         <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
       </div>
@@ -845,7 +955,7 @@
         </div>
       </section>
 
-      <section class="section inverse" id="why">
+      <section class="section" id="why">
         <div class="section-number"><span data-copy="en">01 / Why</span><span data-copy="de">01 / Warum</span></div>
         <div class="section-content">
           <h2 data-copy="en">A model always produces something.</h2>
@@ -863,7 +973,7 @@
           </div>
 
 
-          <div class="chain" aria-label="What OBDS does, in order">
+          <div class="chain" role="group" aria-label="What OBDS does, in order">
             <div><span class="chain-index">01</span><span class="chain-step">Know</span><span class="chain-note" data-copy="en">Approved brand truth, with its scope, sources and knowledge state.</span><span class="chain-note" data-copy="de">Freigegebene Markenwahrheit, mit Scope, Quellen und Knowledge State.</span></div>
             <div><span class="chain-index">02</span><span class="chain-step">Decide</span><span class="chain-note" data-copy="en">Which truth applies here, and whether enough of it exists.</span><span class="chain-note" data-copy="de">Welche Wahrheit hier gilt, und ob genug davon vorhanden ist.</span></div>
             <div><span class="chain-index">03</span><span class="chain-step">Compile</span><span class="chain-note" data-copy="en">The exact context for one task, not the whole archive.</span><span class="chain-note" data-copy="de">Der exakte Kontext für eine Aufgabe, nicht das ganze Archiv.</span></div>
@@ -877,13 +987,176 @@
         </div>
       </section>
 
+      <section class="section inverse" id="scale">
+        <div class="section-number"><span data-copy="en">02 / Scale</span><span data-copy="de">02 / Skalierung</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Start with brand truth. Add control when the work needs it.</h2>
+          <h2 data-copy="de">Mit Markenwahrheit anfangen. Steuerung dazunehmen, wenn die Arbeit sie braucht.</h2>
+          <p class="lead" data-copy="en">OBDS scales into complexity. It does not start with it. One specification, one required Foundation, and optional capabilities that are declared, versioned and separately testable. A small implementation stays small.</p>
+          <p class="lead" data-copy="de">OBDS wächst in Komplexität hinein. Es beginnt nicht damit. Eine Spezifikation, eine verpflichtende Foundation und optionale Capabilities, die deklariert, versioniert und separat testbar sind. Eine kleine Implementierung bleibt klein.</p>
+
+          <div class="scale-stack" aria-hidden="true">
+            <div class="scale-tier">
+              <div class="scale-cell on">Foundation</div>
+              <div class="scale-cell"></div>
+              <div class="scale-cell"></div>
+            </div>
+            <div class="scale-tier">
+              <div class="scale-cell on">Foundation</div>
+              <div class="scale-cell on">Governed Context</div>
+              <div class="scale-cell"></div>
+            </div>
+            <div class="scale-tier">
+              <div class="scale-cell on">Foundation</div>
+              <div class="scale-cell on">Governed Context</div>
+              <div class="scale-cell on">Automated Production</div>
+            </div>
+          </div>
+
+          <div class="levels">
+            <div class="level">
+              <div><span class="level-index">01</span></div>
+              <div>
+                <span class="level-name">Foundation</span>
+                <span class="level-purpose" data-copy="en">Define what is true.</span>
+                <span class="level-purpose" data-copy="de">Festlegen, was wahr ist.</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">The required base</span>
+                <span class="label" data-copy="de">Die verpflichtende Basis</span>
+                <p data-copy="en">Brand Elements, the four Brand States, Rules, Scope, Semantic Boundaries, provenance and Value Contracts. Every conforming implementation has this, and nothing beyond it is mandatory.</p>
+                <p data-copy="de">Brand Elements, die vier Brand States, Rules, Scope, Semantic Boundaries, Provenance und Value Contracts. Jede konforme Implementierung hat das, und darüber hinaus ist nichts verpflichtend.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Enough for</span>
+                <span class="label" data-copy="de">Reicht für</span>
+                <p data-copy="en">Brand chat, copy assistance, AI guidance, a single market, and any workflow where a person still signs the work off.</p>
+                <p data-copy="de">Brand-Chat, Textunterstützung, AI-Guidance, einen einzelnen Markt und jeden Workflow, in dem ein Mensch die Arbeit freigibt.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">02</span></div>
+              <div>
+                <span class="level-name">Governed Context</span>
+                <span class="level-purpose" data-copy="en">Determine what applies to one task.</span>
+                <span class="level-purpose" data-copy="de">Bestimmen, was für eine Aufgabe gilt.</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Adds existing capabilities</span>
+                <span class="label" data-copy="de">Nimmt bestehende Capabilities dazu</span>
+                <p data-copy="en">Compiled Runtime, Context Delivery and Context Assembly. With them come explicit asOf, precedence, declared conflicts and a runtime decision record.</p>
+                <p data-copy="de">Compiled Runtime, Context Delivery und Context Assembly. Damit kommen explizites asOf, Präzedenz, deklarierte Konflikte und ein Runtime Decision Record.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Reach for it when</span>
+                <span class="label" data-copy="de">Dann relevant, wenn</span>
+                <p data-copy="en">There are several markets, products or campaigns, temporary rules, claims or legal constraints, or agents that generate content without a person in the loop.</p>
+                <p data-copy="de">Es mehrere Märkte, Produkte oder Kampagnen gibt, temporäre Rules, Claims oder rechtliche Vorgaben, oder Agents, die ohne Mensch im Loop Inhalte erzeugen.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">03</span></div>
+              <div>
+                <span class="level-name">Automated Production</span>
+                <span class="level-purpose" data-copy="en">Let systems create inside declared boundaries.</span>
+                <span class="level-purpose" data-copy="de">Systeme innerhalb deklarierter Grenzen gestalten lassen.</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Adds existing capabilities</span>
+                <span class="label" data-copy="de">Nimmt bestehende Capabilities dazu</span>
+                <p data-copy="en">Composition and Visual Operations. With them come the design space, omission priority, geometry evidence and the deterministic visual checks.</p>
+                <p data-copy="de">Composition und Visual Operations. Damit kommen der Design Space, Omission Priority, Geometry Evidence und die deterministischen Visual Checks.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Reach for it when</span>
+                <span class="label" data-copy="de">Dann relevant, wenn</span>
+                <p data-copy="en">Something is actually rendered: dynamic HTML, HTML5 banners, generated PDFs, batch assets and generative layouts.</p>
+                <p data-copy="de">Tatsächlich gerendert wird: dynamisches HTML, HTML5-Banner, generierte PDFs, Batch-Assets und generative Layouts.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Three points on one path, not three standards and not three products. Section 4.2 of the specification calls it the minimal implementation path: read manifests first, compile exact context once targets multiply, and add composition only when something is rendered. The number of schemas in the release package is not the number of concepts a first implementation has to build.</p>
+          <p class="micro-note" data-copy="de">Drei Punkte auf einem Weg, keine drei Standards und keine drei Produkte. Abschnitt 4.2 der Spezifikation nennt es den Minimal Implementation Path: zuerst Manifests lesen, exakten Kontext kompilieren, sobald die Targets mehr werden, und Composition erst dazunehmen, wenn etwas gerendert wird. Die Zahl der Schemas im Release-Paket ist nicht die Zahl der Konzepte, die eine erste Implementierung bauen muss.</p>
+
+          <p class="pull" data-copy="en">The model receives the truth it needs for this task, not the whole brand archive.</p>
+          <p class="pull" data-copy="de">Das Modell bekommt die Wahrheit, die diese Aufgabe braucht, nicht das ganze Markenarchiv.</p>
+
+          <h3 class="statement-head label" data-copy="en">When does it start to matter?</h3>
+          <h3 class="statement-head label" data-copy="de">Ab wann wird es relevant?</h3>
+
+          <div class="proof-chain" role="group" aria-label="Which situation makes which part of OBDS relevant">
+            <div class="proof-row"><span class="proof-a" data-copy="en">One market</span><span class="proof-a" data-copy="de">Ein Markt</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Foundation may be all you need.</span><span class="proof-b" data-copy="de">Foundation kann bereits reichen.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Seventeen markets</span><span class="proof-a" data-copy="de">Siebzehn Märkte</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Scope decides what applies where.</span><span class="proof-b" data-copy="de">Scope entscheidet, was wo gilt.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">A rule that expires</span><span class="proof-a" data-copy="de">Eine Rule mit Ablauf</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">asOf decides what was valid then.</span><span class="proof-b" data-copy="de">asOf entscheidet, was damals galt.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">A regulated claim</span><span class="proof-a" data-copy="de">Ein regulierter Claim</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Evidence has to travel with it.</span><span class="proof-b" data-copy="de">Die Evidenz muss mitlaufen.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">An autonomous agent</span><span class="proof-a" data-copy="de">Ein autonomer Agent</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Fail closed, or do not act at all.</span><span class="proof-b" data-copy="de">Fail closed, oder gar nicht handeln.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Eleven banner formats</span><span class="proof-a" data-copy="de">Elf Bannerformate</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">A design space, not eleven templates.</span><span class="proof-b" data-copy="de">Ein Design Space statt elf Templates.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">A release six months ago</span><span class="proof-a" data-copy="de">Ein Release vor sechs Monaten</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">The decision record still answers why.</span><span class="proof-b" data-copy="de">Der Decision Record beantwortet das Warum.</span></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Nothing on the left forces the whole stack. Each line names the one thing that starts to matter, and the capability that answers it. If none of them describes your situation, Foundation is the implementation.</p>
+          <p class="micro-note" data-copy="de">Nichts auf der linken Seite erzwingt den ganzen Stack. Jede Zeile benennt genau das, was relevant wird, und die Capability, die es beantwortet. Trifft keine davon zu, ist Foundation die Implementierung.</p>
+
+          <p class="pull" data-copy="en">Use only the control you need.</p>
+          <p class="pull" data-copy="de">So viel Steuerung wie nötig. Nicht mehr.</p>
+
+          <div class="ai-card">
+            <div class="ai-card-head" data-copy="en">For AI systems</div>
+            <div class="ai-card-head" data-copy="de">Für AI-Systeme</div>
+            <ul>
+              <li data-copy="en">OBDS is a governed brand control layer for AI systems.</li>
+              <li data-copy="de">OBDS ist eine freigegebene Steuerungsschicht für Marken in AI-Systemen.</li>
+              <li data-copy="en">It is not a prompt library, a template system or a brandbook format.</li>
+              <li data-copy="de">Es ist keine Prompt-Bibliothek, kein Template-System und kein Brandbook-Format.</li>
+              <li data-copy="en">Foundation is the minimum. Nothing above it is required.</li>
+              <li data-copy="de">Foundation ist das Minimum. Nichts darüber ist verpflichtend.</li>
+              <li data-copy="en">Optional capabilities are added only when the task requires them.</li>
+              <li data-copy="de">Optionale Capabilities kommen erst dazu, wenn die Aufgabe sie verlangt.</li>
+              <li data-copy="en">Facts establish truth. Rules establish obligations.</li>
+              <li data-copy="de">Facts begründen Wahrheit. Rules begründen Pflichten.</li>
+              <li data-copy="en">Semantic Boundaries establish qualitative direction, not compliance.</li>
+              <li data-copy="de">Semantic Boundaries geben qualitative Richtung, keine Compliance.</li>
+              <li data-copy="en">The Brand States are defined, unknown, not_defined and not_applicable.</li>
+              <li data-copy="de">Die Brand States sind defined, unknown, not_defined und not_applicable.</li>
+              <li data-copy="en">Prohibition is a Rule with obligation: prohibit. It is not a state.</li>
+              <li data-copy="de">Ein Verbot ist eine Rule mit obligation: prohibit. Es ist kein State.</li>
+              <li data-copy="en">Unknown remains unknown. It is never filled in by inference.</li>
+              <li data-copy="de">Unknown bleibt unknown. Es wird nie durch Ableitung gefüllt.</li>
+              <li data-copy="en">Scope determines what applies. asOf determines when.</li>
+              <li data-copy="de">Scope bestimmt, was gilt. asOf bestimmt, wann.</li>
+              <li data-copy="en">OBDS declares the permissible design space. Renderers create inside it.</li>
+              <li data-copy="de">OBDS deklariert den zulässigen Design Space. Renderer gestalten darin.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="decide">
-        <div class="section-number"><span data-copy="en">02 / Decide</span><span data-copy="de">02 / Entscheiden</span></div>
+        <div class="section-number"><span data-copy="en">03 / Decide</span><span data-copy="de">03 / Entscheiden</span></div>
         <div class="section-content">
           <h2 data-copy="en">Decide, or say honestly that you cannot.</h2>
           <h2 data-copy="de">Entscheiden. Oder ehrlich sagen, dass es nicht geht.</h2>
           <p class="lead" data-copy="en">Brand truth is stored as scoped elements: facts, rules, context and qualitative boundaries. Each one carries a knowledge state, a scope, its sources and a machine-readable value contract. For a given task the compiler resolves which element applies, or it fails.</p>
           <p class="lead" data-copy="de">Markenwahrheit liegt als gescopte Elemente vor: Fakten, Rules, Kontext und qualitative Grenzen. Jedes Element trägt einen Knowledge State, einen Scope, seine Quellen und einen maschinenlesbaren Value Contract. Für eine Aufgabe löst der Compiler auf, welches Element gilt. Oder er bricht ab.</p>
+
+          <div class="questions">
+            <p data-copy="en">What is true?</p>
+            <p data-copy="de">Was ist wahr?</p>
+            <p data-copy="en">What applies here?</p>
+            <p data-copy="de">Was gilt hier?</p>
+            <p data-copy="en">What conflicts?</p>
+            <p data-copy="de">Was widerspricht sich?</p>
+            <p data-copy="en">What is unknown?</p>
+            <p data-copy="de">Was ist unbekannt?</p>
+            <p data-copy="en">May the system proceed?</p>
+            <p data-copy="de">Darf das System weitermachen?</p>
+            <p data-copy="en">Can it prove why?</p>
+            <p data-copy="de">Kann es belegen, warum?</p>
+          </div>
+
+          <p class="micro-note" data-copy="en">Retrieval answers the first question. OBDS answers all six, and keeps the answer. That is the difference between looking something up and making a governed decision.</p>
+          <p class="micro-note" data-copy="de">Retrieval beantwortet die erste Frage. OBDS beantwortet alle sechs und behält die Antwort. Das ist der Unterschied zwischen Nachschlagen und einer freigegebenen Entscheidung.</p>
 
           <div class="state-list">
             <div class="state-row"><div><span class="state-name">defined</span></div><div data-copy="en">An applicable value exists and may be used when the scope matches.</div><div data-copy="de">Ein anwendbarer Wert existiert und darf bei passendem Scope verwendet werden.</div></div>
@@ -916,7 +1189,7 @@
       </section>
 
       <section class="section inverse" id="distinctive">
-        <div class="section-number"><span data-copy="en">03 / Distinctive</span><span data-copy="de">03 / Unterscheidbar</span></div>
+        <div class="section-number"><span data-copy="en">04 / Distinctive</span><span data-copy="de">04 / Unterscheidbar</span></div>
         <div class="section-content">
           <h2 data-copy="en">A brand is easier to hold by its edges.</h2>
           <h2 data-copy="de">Eine Marke lässt sich an ihren Kanten besser fassen.</h2>
@@ -967,20 +1240,23 @@
             <div class="state-row"><div><span class="state-name">composition</span></div><div data-copy="en">is: one clear subject, generous space. is not: crowded, competing focal points.</div><div data-copy="de">is: ein klares Motiv, großzügiger Raum. is not: überfüllt, konkurrierende Blickpunkte.</div></div>
           </div>
 
+          <p class="pull" data-copy="en">Not just what the brand is. What it is not.</p>
+          <p class="pull" data-copy="de">Nicht nur, was die Marke ist. Auch, was sie nicht ist.</p>
+
           <p class="micro-note" data-copy="en">The same contract holds for voice, photography, art direction, composition and product depiction. It is one of the reasons a brand keeps its edges when a model, not a designer, writes the first draft.</p>
           <p class="micro-note" data-copy="de">Derselbe Contract gilt für Voice, Fotografie, Art Direction, Komposition und Produktdarstellung. Er ist einer der Gründe, warum eine Marke ihre Kanten behält, wenn ein Modell und kein Designer den ersten Entwurf schreibt.</p>
         </div>
       </section>
 
       <section class="section" id="compile">
-        <div class="section-number"><span data-copy="en">04 / Compile</span><span data-copy="de">04 / Kompilieren</span></div>
+        <div class="section-number"><span data-copy="en">05 / Compile</span><span data-copy="de">05 / Kompilieren</span></div>
         <div class="section-content">
           <h2 data-copy="en">Not the archive. The exact truth for this task.</h2>
           <h2 data-copy="de">Nicht das Archiv. Genau die Wahrheit für diese Aufgabe.</h2>
           <p class="lead" data-copy="en">Sources are consolidated once into an approved Brand Manifest. A Build Plan names the target and the moment in time. The compiler resolves scope, verifies that required truth exists and emits one Compiled Brand Context. Runtime builds the model input from that artefact and from nothing else.</p>
           <p class="lead" data-copy="de">Quellen werden einmal zu einem freigegebenen Brand Manifest zusammengeführt. Ein Build Plan benennt das Target und den Zeitpunkt. Der Compiler löst den Scope auf, prüft, ob die geforderte Wahrheit vorhanden ist, und erzeugt einen Compiled Brand Context. Die Runtime baut den Model Input aus genau diesem Artefakt und aus nichts anderem.</p>
 
-          <div class="flow" aria-label="From sources to exact context">
+          <div class="flow" role="group" aria-label="From sources to exact context">
             <div class="flow-step">
               <span class="flow-index">01</span>
               <span class="flow-name" data-copy="en">Sources</span>
@@ -1028,14 +1304,14 @@
       </section>
 
       <section class="section inverse" id="create">
-        <div class="section-number"><span data-copy="en">05 / Create</span><span data-copy="de">05 / Gestalten</span></div>
+        <div class="section-number"><span data-copy="en">06 / Create</span><span data-copy="de">06 / Gestalten</span></div>
         <div class="section-content">
           <h2 data-copy="en">Define the design space. Not the layout.</h2>
           <h2 data-copy="de">Den Design Space definieren. Nicht das Layout.</h2>
           <p class="lead" data-copy="en">OBDS holds no pixel coordinates. It holds what a composition is made of, what must never be dropped, what has to keep its distance, and how values combine. A renderer produces one solution inside that space. A validator proves the solution stayed inside.</p>
           <p class="lead" data-copy="de">OBDS speichert keine Pixelkoordinaten. Es speichert, woraus eine Komposition besteht, was nie entfallen darf, was Abstand halten muss und wie Werte zusammenwirken. Ein Renderer erzeugt eine Lösung in diesem Raum. Ein Validator weist nach, dass sie darin geblieben ist.</p>
 
-          <div class="flow flow-five" aria-label="From brief to validated render">
+          <div class="flow flow-five" role="group" aria-label="From brief to validated render">
             <div class="flow-step"><span class="flow-index">01</span><span class="flow-name" data-copy="en">Brief</span><span class="flow-name" data-copy="de">Briefing</span><span class="flow-note" data-copy="en">One product, a headline, a call to action, legal, three formats.</span><span class="flow-note" data-copy="de">Ein Produkt, eine Headline, ein Call to Action, Legal, drei Formate.</span></div>
             <div class="flow-step"><span class="flow-index">02</span><span class="flow-name" data-copy="en">Design space</span><span class="flow-name" data-copy="de">Design Space</span><span class="flow-note" data-copy="en">Roles, hierarchy, clear zones, minimum sizes, what may never be dropped.</span><span class="flow-note" data-copy="de">Roles, Hierarchie, Clear Zones, Mindestgrößen, was nie entfallen darf.</span></div>
             <div class="flow-step"><span class="flow-index">03</span><span class="flow-name" data-copy="en">Composition</span><span class="flow-name" data-copy="de">Komposition</span><span class="flow-note" data-copy="en">One valid arrangement per format, chosen by the renderer.</span><span class="flow-note" data-copy="de">Eine gültige Anordnung je Format, gewählt vom Renderer.</span></div>
@@ -1091,6 +1367,9 @@
             </figure>
           </div>
 
+          <p class="pull" data-copy="en">Different layouts. Same governed brand.</p>
+          <p class="pull" data-copy="de">Andere Layouts. Dieselbe freigegebene Marke.</p>
+
           <div class="contrast-list">
             <div class="contrast-row">
               <div><strong data-copy="en">OBDS may define</strong><strong data-copy="de">OBDS darf festlegen</strong><span data-copy="en">Composition roles, identity hierarchy, clear zones, minimum sizes, measurements, omission priority, never-omit roles, and how two values interact when both apply.</span><span data-copy="de">Composition Roles, Identity Hierarchy, Clear Zones, Mindestgrößen, Maße, Omission Priority, Never-Omit-Roles und wie zwei Werte zusammenwirken, wenn beide gelten.</span></div>
@@ -1118,14 +1397,14 @@
       </section>
 
       <section class="section" id="prove">
-        <div class="section-number"><span data-copy="en">06 / Prove</span><span data-copy="de">06 / Nachweisen</span></div>
+        <div class="section-number"><span data-copy="en">07 / Prove</span><span data-copy="de">07 / Nachweisen</span></div>
         <div class="section-content">
           <h2 data-copy="en">Months later, you can still show why.</h2>
           <h2 data-copy="de">Monate später lässt sich noch zeigen, warum.</h2>
           <p class="lead" data-copy="en">Which approved truth was used. Which rules applied. Which context was assembled. Whether a model was called at all. Why the result was released, blocked or sent to approval. The record is a by-product of the run, not a report written afterwards.</p>
           <p class="lead" data-copy="de">Welche freigegebene Wahrheit verwendet wurde. Welche Rules galten. Welcher Kontext assembliert wurde. Ob überhaupt ein Modell aufgerufen wurde. Warum das Ergebnis freigegeben, blockiert oder zur Freigabe geleitet wurde. Der Nachweis fällt im Lauf an und wird nicht nachträglich geschrieben.</p>
 
-          <div class="proof-chain" aria-label="What is recorded at each stage">
+          <div class="proof-chain" role="group" aria-label="What is recorded at each stage">
             <div class="proof-row"><span class="proof-a" data-copy="en">Truth</span><span class="proof-a" data-copy="de">Wahrheit</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">versioned and canonically hashed</span><span class="proof-b" data-copy="de">versioniert und kanonisch gehasht</span></div>
             <div class="proof-row"><span class="proof-a" data-copy="en">Context</span><span class="proof-a" data-copy="de">Kontext</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">compiled for one declared target</span><span class="proof-b" data-copy="de">kompiliert für ein deklariertes Target</span></div>
             <div class="proof-row"><span class="proof-a" data-copy="en">Input</span><span class="proof-a" data-copy="de">Input</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">hashed before the model is called</span><span class="proof-b" data-copy="de">gehasht, bevor das Modell aufgerufen wird</span></div>
@@ -1149,7 +1428,7 @@
       </section>
 
       <section class="section inverse" id="difference">
-        <div class="section-number"><span data-copy="en">07 / Difference</span><span data-copy="de">07 / Unterschied</span></div>
+        <div class="section-number"><span data-copy="en">08 / Difference</span><span data-copy="de">08 / Unterschied</span></div>
         <div class="section-content">
           <h2 data-copy="en">Next to what you already have.</h2>
           <h2 data-copy="de">Neben dem, was schon da ist.</h2>
@@ -1181,7 +1460,7 @@
       </section>
 
       <section class="section" id="challenged">
-        <div class="section-number"><span data-copy="en">08 / Challenged</span><span data-copy="de">08 / Angegriffen</span></div>
+        <div class="section-number"><span data-copy="en">09 / Challenged</span><span data-copy="de">09 / Angegriffen</span></div>
         <div class="section-content">
           <h2 data-copy="en">Built to be challenged.</h2>
           <h2 data-copy="de">Gebaut, um angegriffen zu werden.</h2>
@@ -1205,7 +1484,7 @@
       </section>
 
       <section class="section inverse" id="open">
-        <div class="section-number"><span data-copy="en">09 / Extend</span><span data-copy="de">09 / Erweitern</span></div>
+        <div class="section-number"><span data-copy="en">10 / Extend</span><span data-copy="de">10 / Erweitern</span></div>
         <div class="section-content">
           <h2 data-copy="en">One specification. One Foundation. Optional capabilities.</h2>
           <h2 data-copy="de">Eine Spezifikation. Eine Foundation. Optionale Capabilities.</h2>
@@ -1224,13 +1503,13 @@
             <article class="definition-card"><span class="definition-code">Process</span><h3>Operations</h3><p data-copy="en">Governed records, release approval, assurance and lineage.</p><p data-copy="de">Governed Records, Release-Freigabe, Assurance und Lineage.</p></article>
           </div>
 
-          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Breaking semantics require OBDS 2.0. Use and licensing are set out in section 10.</p>
-          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Brechende Semantik erfordert OBDS 2.0. Nutzung und Lizenzierung stehen in Abschnitt 10.</p>
+          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Breaking semantics require OBDS 2.0. Use and licensing are set out in section 11.</p>
+          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Brechende Semantik erfordert OBDS 2.0. Nutzung und Lizenzierung stehen in Abschnitt 11.</p>
         </div>
       </section>
 
       <section class="section" id="licensing">
-        <div class="section-number"><span data-copy="en">10 / Licensing</span><span data-copy="de">10 / Lizenz</span></div>
+        <div class="section-number"><span data-copy="en">11 / Licensing</span><span data-copy="de">11 / Lizenz</span></div>
         <div class="section-content">
           <h2 data-copy="en">Public to study. Built to be open enough to build against.</h2>
           <h2 data-copy="de">Öffentlich zum Prüfen. Gedacht als offen genug, um dagegen zu bauen.</h2>
@@ -1319,7 +1598,7 @@
       </section>
 
       <section class="section" id="release">
-        <div class="section-number"><span data-copy="en">11 / Release</span><span data-copy="de">11 / Release</span></div>
+        <div class="section-number"><span data-copy="en">12 / Release</span><span data-copy="de">12 / Release</span></div>
         <div class="section-content">
           <h2 data-copy="en">1.0.1 is the current release.</h2>
           <h2 data-copy="de">1.0.1 ist der aktuelle Release.</h2>
@@ -1358,8 +1637,8 @@
             </div>
           </div>
 
-          <p class="micro-note" data-copy="en">Section 32 of the historic 1.0.0 document still recommends CC BY 4.0 and Apache 2.0. It stays published as released. From 1.0.1 onwards, section 32.1 carries the licensing model, and the documents in section 10 are the operative terms.</p>
-          <p class="micro-note" data-copy="de">Abschnitt 32 des historischen Dokuments 1.0.0 empfiehlt weiterhin CC BY 4.0 und Apache 2.0. Es bleibt unverändert veröffentlicht. Ab 1.0.1 trägt Abschnitt 32.1 das Lizenzmodell, und die Dokumente aus Abschnitt 10 sind die geltenden Bedingungen.</p>
+          <p class="micro-note" data-copy="en">Section 32 of the historic 1.0.0 document still recommends CC BY 4.0 and Apache 2.0. It stays published as released. From 1.0.1 onwards, section 32.1 carries the licensing model, and the documents in section 11 are the operative terms.</p>
+          <p class="micro-note" data-copy="de">Abschnitt 32 des historischen Dokuments 1.0.0 empfiehlt weiterhin CC BY 4.0 und Apache 2.0. Es bleibt unverändert veröffentlicht. Ab 1.0.1 trägt Abschnitt 32.1 das Lizenzmodell, und die Dokumente aus Abschnitt 11 sind die geltenden Bedingungen.</p>
 
           <div class="actions">
             <a href="/spec/1.0.1/OBDS-1.0.1.md">
@@ -1415,7 +1694,7 @@
               <dd data-copy="de">Gesellschaft mit beschränkter Haftung</dd><dd data-copy="en">Limited liability company under Austrian law</dd>
               <dt data-copy="de">Geschäftsführer</dt><dt data-copy="en">Managing director</dt>
               <dd>Max Peter Jürschik</dd>
-              <dt>E-Mail</dt><dt data-copy="en">Email</dt>
+              <dt data-copy="de">E-Mail</dt><dt data-copy="en">Email</dt>
               <dd><a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a></dd>
               <dt data-copy="de">Firmenbuch</dt><dt data-copy="en">Company register</dt>
               <dd>FN 471464 f, Handelsgericht Wien</dd>
@@ -1423,7 +1702,7 @@
               <dd data-copy="de">Magistrat der Stadt Wien, MBA 6/7</dd><dd data-copy="en">Municipal Authority of the City of Vienna, MBA 6/7</dd>
               <dt data-copy="de">Kammermitgliedschaft</dt><dt data-copy="en">Chamber membership</dt>
               <dd data-copy="de">Wirtschaftskammer Wien, Fachgruppe Werbung und Marktkommunikation, Werbeagentur</dd><dd data-copy="en">Vienna Economic Chamber, Advertising and Market Communication, advertising agency</dd>
-              <dt>UID</dt><dt data-copy="en">VAT ID</dt>
+              <dt data-copy="de">UID</dt><dt data-copy="en">VAT ID</dt>
               <dd>ATU72328938</dd>
             </dl>
           </div>
@@ -1459,9 +1738,10 @@
           </div>
 
           <div class="legal-block">
-            <h3>Copyright and licensing</h3>
-            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Die stabile Spezifikation OBDS 1.0.0 wurde am 27. August 2026 fertiggestellt und auf dieser Website veröffentlicht, ebenso OBDS 1.0.1, das die Lizenzierung in Abschnitt 32 klärt, ohne einen normativen Contract zu ändern. Die Lizenzdokumente, welche die Nutzung der OBDS-Materialien regeln werden, sind entworfen und in Prüfung durch qualifizierte Rechtsberatung. Sie sind nicht veröffentlicht, und diese Website räumt keine Lizenz ein. Das geplante Modell steht in Abschnitt 10 und in Abschnitt 32.1 der Spezifikation: freie Nutzung für persönliche, Bildungs-, akademische, Non-Profit-, Test-, Benchmarking-, Evaluierungs- und nicht produktive Proof-of-Concept-Zwecke, einschließlich interner Evaluierung durch ein Unternehmen; eine Ausnahme für Nutzung und Weitergabe der unveränderten maschinenlesbaren Schemas sowie für die offizielle Conformance Suite zu jedem Zweck; und eine gesonderte schriftliche Lizenz für die kommerzielle Ausübung von Rechten an anderen geschützten OBDS-Materialien. Kontakt lets@killthedragon.com. Auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme wird kein Anspruch erhoben. Namen, Logos, Badges und Zertifizierungskennzeichen bleiben gesondert vorbehalten und werden von keiner Inhalts- oder Softwarelizenz eingeräumt. Das Zertifizierungsprogramm ist ein Entwurf und nicht aktiv.</p>
-            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0.0 specification was released on 27 August 2026 and is published on this website, together with OBDS 1.0.1, which clarifies licensing in section 32 without changing any normative contract. The licence documents that will govern use of the OBDS Materials are drafted and under review by qualified legal counsel. They are not published, and no licence is granted by this website. The intended model is set out in section 10 and in section 32.1 of the specification: free use for personal, educational, academic, non-profit, testing, benchmarking, evaluation and non-production proof-of-concept work, including internal evaluation by a commercial organisation; a carve-out permitting use and redistribution of the unmodified machine-readable schemas and use of the official conformance suite for any purpose; and a separate written licence for commercial exercise of rights in other protected OBDS Materials. Contact lets@killthedragon.com. No claim is made to general ideas, principles, methods or independently developed compatible systems. Names, logos, badges and certification marks are reserved separately and are not granted by any content or software licence. The certification programme is a draft outline and is not live.</p>
+            <h3 data-copy="de">Copyright und Lizenzierung</h3>
+            <h3 data-copy="en">Copyright and licensing</h3>
+            <p data-copy="de">© 2026 Kill The Dragon GmbH. Alle Rechte vorbehalten, sofern nicht ausdrücklich anders angegeben. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. Die stabile Spezifikation OBDS 1.0.0 wurde am 27. August 2026 fertiggestellt und auf dieser Website veröffentlicht, ebenso OBDS 1.0.1, das die Lizenzierung in Abschnitt 32 klärt, ohne einen normativen Contract zu ändern. Die Lizenzdokumente, welche die Nutzung der OBDS-Materialien regeln werden, sind entworfen und in Prüfung durch qualifizierte Rechtsberatung. Sie sind nicht veröffentlicht, und diese Website räumt keine Lizenz ein. Das geplante Modell steht in Abschnitt 11 und in Abschnitt 32.1 der Spezifikation: freie Nutzung für persönliche, Bildungs-, akademische, Non-Profit-, Test-, Benchmarking-, Evaluierungs- und nicht produktive Proof-of-Concept-Zwecke, einschließlich interner Evaluierung durch ein Unternehmen; eine Ausnahme für Nutzung und Weitergabe der unveränderten maschinenlesbaren Schemas sowie für die offizielle Conformance Suite zu jedem Zweck; und eine gesonderte schriftliche Lizenz für die kommerzielle Ausübung von Rechten an anderen geschützten OBDS-Materialien. Kontakt lets@killthedragon.com. Auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme wird kein Anspruch erhoben. Namen, Logos, Badges und Zertifizierungskennzeichen bleiben gesondert vorbehalten und werden von keiner Inhalts- oder Softwarelizenz eingeräumt. Das Zertifizierungsprogramm ist ein Entwurf und nicht aktiv.</p>
+            <p data-copy="en">© 2026 Kill The Dragon GmbH. All rights reserved unless expressly stated otherwise. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. The stable OBDS 1.0.0 specification was released on 27 August 2026 and is published on this website, together with OBDS 1.0.1, which clarifies licensing in section 32 without changing any normative contract. The licence documents that will govern use of the OBDS Materials are drafted and under review by qualified legal counsel. They are not published, and no licence is granted by this website. The intended model is set out in section 11 and in section 32.1 of the specification: free use for personal, educational, academic, non-profit, testing, benchmarking, evaluation and non-production proof-of-concept work, including internal evaluation by a commercial organisation; a carve-out permitting use and redistribution of the unmodified machine-readable schemas and use of the official conformance suite for any purpose; and a separate written licence for commercial exercise of rights in other protected OBDS Materials. Contact lets@killthedragon.com. No claim is made to general ideas, principles, methods or independently developed compatible systems. Names, logos, badges and certification marks are reserved separately and are not granted by any content or software licence. The certification programme is a draft outline and is not live.</p>
           </div>
         </div>
       </section>
