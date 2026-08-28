@@ -163,7 +163,7 @@ this proposal exists to avoid.
 ## 4. How should bundle membership map to existing capability IDs?
 
 Directly and only to identifiers already registered in
-`OBDS-1.0.1-CAPABILITY-REGISTRY.json`.
+`OBDS-1.0.2-CAPABILITY-REGISTRY.json`.
 
 | Bundle | Member Runtime Capabilities | Related optional Brand Profiles |
 |---|---|---|

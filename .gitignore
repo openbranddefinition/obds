@@ -4,6 +4,7 @@
 *.zip
 !spec/1.0.0/OBDS-1.0.0-FINAL.zip
 !spec/1.0.1/OBDS-1.0.1-FINAL.zip
+!spec/1.0.2/OBDS-1.0.2-FINAL.zip
 openbranddefinition-site-*-public-draft/
 
 # Scraped external brand references (local research only, not for publication)
@@ -12,7 +13,6 @@ reference/
 # Local working notes, not site content
 answers/
 
-# Licensing documents, in legal review, deliberately not published
+# Withdrawn custom-licensing drafts, replaced by CC BY 4.0 + Apache 2.0 in 1.0.2
 md/
 licensing/
-/LICENSE.md

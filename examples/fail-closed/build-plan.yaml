@@ -1,0 +1,32 @@
+id: urn:obds:build-plan:example-fail-closed
+kind: obds-build-plan
+schemaVersion: 1.0.0
+manifestRef:
+  id: urn:obds:brand:example-fail-closed
+  version: 1.0.0
+  contentHash: sha256:16e8f99008d5c32e73d449cc76213ff30d86999a1786070da5022eab22c602ed
+compiler:
+  id: org.openbranddefinition.reference-compiler
+  version: 1.0.0
+tokenizer:
+  id: obds:whitespace-v1
+  version: 1.0.0
+targets:
+- id: claim-copy-global-en
+  scope:
+    locales:
+    - en
+    outputTypes:
+    - social-copy
+  requiresDefined:
+  - structure.brand
+  - context.efficacy-claim
+  styleTexture:
+    mode: all
+    elementIds: []
+  stateMap:
+    mode: all_applicable
+    kinds: []
+  releasePolicy: build_only
+  maxTokens: 500
+asOf: '2026-08-28T00:00:00Z'

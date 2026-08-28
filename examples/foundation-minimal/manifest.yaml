@@ -1,0 +1,38 @@
+id: urn:obds:brand:example-minimal
+kind: brand-manifest
+name: Example Minimal Brand
+owner: Example Organisation
+schemaVersion: 1.0.0
+version: 1.0.0
+status: approved
+createdAt: '2026-08-28T12:00:00+02:00'
+updatedAt: '2026-08-28T12:00:00+02:00'
+profiles:
+- obds-foundation
+elements:
+- id: structure.brand
+  family: structure
+  kind: brand-identity
+  nature: fact
+  state: defined
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  value:
+    name: Example Minimal Brand
+  valueContractRef: urn:obds:brand:example-minimal#value-contract:structure:brand-identity:2b7196d8
+valueContracts:
+- id: urn:obds:brand:example-minimal#value-contract:structure:brand-identity:2b7196d8
+  family: structure
+  kind: brand-identity
+  shapeHash: sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json
+  schemaHash: sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51
+  validatorRef: null
+approval:
+  approvedBy: role:brand-owner
+  approvedAt: '2026-08-28T12:00:00+02:00'
+  contentHash: sha256:cd241c93e865aa9a71bb2305d6eb144f6fed72396b482185de84ddba22cc4da4

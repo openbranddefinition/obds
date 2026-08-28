@@ -2,13 +2,17 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 1.0.1 (stable, 27 August 2026)
+Current release: 1.0.2 (stable, 28 August 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
 ## Purpose
 
-A governed brand control layer for AI systems.
+An open standard for governed brand truth and AI creation.
+
+OBDS is a governed brand control layer for AI systems. It is a standard for
+brand specifically, not a general policy, compliance or enterprise-governance
+framework.
 
 OBDS determines which brand truth applies in a declared context, compiles the
 exact context for one task, declares the permissible design space a renderer
@@ -70,34 +74,62 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
+https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2.md
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1-CHANGELOG.md
+Complete package: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-CHANGELOG.md
 Publication record: https://openbranddefinition.org/publication-record.json
 
 ## Licensing
 
-Status: drafted, under review by qualified legal counsel. Not published, and
-no licence is granted by the website. The intended model is described at
-https://openbranddefinition.org/#licensing and in section 32.1 of the
-specification. Independent implementation of the underlying ideas, principles,
-methods and formats is not restricted.
+Two standard licences, neither text modified.
 
-## Previous release
+  Specification and documentation   CC BY 4.0
+  Implementation layer              Apache License 2.0
+  Commercial implementation         Permitted, no separate permission required
+  Official marks                    Separately governed
 
-OBDS 1.0.0 remains published as released and is historical.
-https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
+The implementation layer is the schemas, the release metadata, the reference
+implementation, the conformance suite and the machine-readable examples.
+
+Licence mapping:  https://openbranddefinition.org/LICENSE.md
+CC BY 4.0 text:   https://openbranddefinition.org/LICENSES/CC-BY-4.0.txt
+Apache 2.0 text:  https://openbranddefinition.org/LICENSES/Apache-2.0.txt
+Trademarks:       https://openbranddefinition.org/TRADEMARKS.md
+Governance:       https://openbranddefinition.org/GOVERNANCE.md
+Contributing:     https://openbranddefinition.org/CONTRIBUTING.md
+
+Neither licence grants trademark rights. Truthful compatibility statements such
+as "implements OBDS 1.0" require no permission. No trademark registration is
+claimed and no certification programme is live. Independent implementation of
+the underlying ideas, principles, methods and formats is not restricted.
+
+## Examples
+
+Minimal Foundation example, and a fail-closed example in which required truth is
+unresolved, no compiled context is produced and no model is called:
+https://openbranddefinition.org/examples/README.md
+
+## Previous releases
+
+Published as released, not modified, historical.
+
+OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
+OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
+
+Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
+the licensing wording that was current at the time. Section 32.1 of 1.0.2 is
+the operative one.
 
 ## Note
 
