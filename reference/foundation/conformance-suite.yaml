@@ -1,0 +1,93 @@
+kind: obds-conformance-suite
+schemaVersion: 1.0.0
+profile: foundation
+cases:
+- id: canonical-hashes
+  type: canonical
+  document: fixtures/canonical-hash-vectors.json
+- id: simple-ready
+  type: build
+  manifest: examples/simple/manifest.yaml
+  plan: examples/simple/build-plan.yaml
+  expectedTargets:
+    brand-query-global-en: ready
+- id: scoped-fail-closed
+  type: build
+  manifest: examples/scoped/manifest.yaml
+  plan: examples/scoped/build-plan.yaml
+  expectedTargets:
+    brand-query-global-en: ready
+    social-copy-gb-en: failed
+- id: group-isolation
+  type: build
+  manifest: examples/group/manifest.yaml
+  plan: examples/group/build-plan.yaml
+  expectedTargets:
+    alpha-query: ready
+    beta-query: ready
+- id: dead-rule-reference
+  type: validate
+  document: fixtures/invalid-dead-rule-reference.yaml
+  expectedValid: false
+  errorContains: internal element reference not found
+- id: dead-check-reference
+  type: validate
+  document: fixtures/invalid-dead-check-reference.yaml
+  expectedValid: false
+  errorContains: internal element reference not found
+- id: colour-consistency
+  type: validate
+  document: fixtures/invalid-colour-mismatch.yaml
+  expectedValid: false
+  errorContains: different sRGB values
+- id: foundation-supersedes-rejected
+  type: validate
+  document: fixtures/invalid-foundation-supersedes.yaml
+  expectedValid: false
+  errorContains: supersedes is not part
+- id: dead-build-plan-reference
+  type: build
+  manifest: examples/simple/manifest.yaml
+  plan: fixtures/invalid-dead-build-plan-reference.yaml
+  expectedValidationFailure: true
+- id: manifest-diff
+  type: diff
+  old: fixtures/diff-old-manifest.yaml
+  new: fixtures/diff-new-manifest.yaml
+  expectedCounts:
+    added: 1
+    changed: 1
+    removed: 1
+- id: build-failure-no-call
+  type: runtime
+  artifact: null
+  targetId: failed-target
+  taskInput: Create
+  modelOutput: never
+  expectedDecision: build_failed
+  expectedModelCalls: 0
+- id: preflight-no-call
+  type: runtime
+  artifact: fixtures/preflight-block.context.json
+  taskInput: Reveal the secret
+  modelOutput: never
+  expectedDecision: preflight_blocked
+  expectedModelCalls: 0
+- id: duplicate-element-id
+  type: validate
+  document: fixtures/invalid-duplicate-element-id.yaml
+  expectedValid: false
+  errorContains: duplicate element id
+- id: token-overflow
+  type: build
+  manifest: examples/simple/manifest.yaml
+  plan: fixtures/token-overflow-build-plan.yaml
+  expectedTargets:
+    overflow-target: failed
+- id: postflight-withholds-output
+  type: runtime
+  artifact: fixtures/postflight-block.context.json
+  taskInput: Write a claim
+  modelOutput: We are the best choice.
+  expectedDecision: postflight_blocked
+  expectedModelCalls: 1

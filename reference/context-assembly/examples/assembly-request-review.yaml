@@ -1,0 +1,27 @@
+kind: obds-assembly-request
+schemaVersion: 1.0.0
+targetId: marketing-review-global-en
+deliveryMode: reasoning
+applicationMode: review
+retrieval:
+  status: hit
+  resolution: direct
+  truthOutcome: mixed
+selection:
+  searchCardIds:
+  - urn:obds:search-card:identity.value.simplicity
+  - urn:obds:search-card:design.logo.clear-zone
+  reasoningChapterIds:
+  - chapter.brand-expression
+  - chapter.logo-system
+  factElementIds:
+  - structure.brand
+  - design.logo.clear-zone
+  gapElementIds:
+  - claims.approved-register
+  activeGuidanceElementIds:
+  - identity.value.simplicity
+  - identity.value.reliability
+taskInput: 'Review: New technology. Simple to use.'
+tokenBudget:
+  max: 1200

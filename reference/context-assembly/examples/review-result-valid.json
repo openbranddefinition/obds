@@ -1,0 +1,19 @@
+{
+  "applicationMode": "review",
+  "decision": "pass_with_suggestions",
+  "findings": [
+    {
+      "category": "opportunity",
+      "elementIds": [
+        "identity.value.simplicity"
+      ],
+      "id": "finding-1",
+      "message": "The opening could express the active simplicity principle more directly."
+    }
+  ],
+  "kind": "obds-review-result",
+  "modelInputHash": "sha256:4490f0e2f3d3af88c002a530011af931168b408c398bf48ce2b9e2813ea569a1",
+  "reviewHash": "sha256:f833e4992258be1bb9671a24e1d8ce4304f249f62b4e14be979f21e9a85c47fd",
+  "schemaVersion": "1.0.0",
+  "targetId": "marketing-review-global-en"
+}

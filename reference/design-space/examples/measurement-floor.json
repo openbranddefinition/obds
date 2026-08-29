@@ -1,0 +1,14 @@
+{
+  "amount": 0.5,
+  "basisRef": "design.box.cta",
+  "min": {
+    "amount": 9,
+    "unit": "px"
+  },
+  "mode": "relative",
+  "quantityKind": "cap-height",
+  "system": {
+    "id": "H",
+    "type": "relative"
+  }
+}

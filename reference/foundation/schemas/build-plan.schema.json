@@ -1,0 +1,185 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/build-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "asOf": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "compiler": {
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-build-plan"
+    },
+    "manifestRef": {
+      "properties": {
+        "contentHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "targets": {
+      "items": {
+        "properties": {
+          "contextAssembly": {
+            "additionalProperties": false,
+            "properties": {
+              "applicationMode": {
+                "enum": [
+                  "create",
+                  "review",
+                  "compliance"
+                ]
+              },
+              "deliveryMode": {
+                "enum": [
+                  "lookup",
+                  "reasoning",
+                  "full"
+                ]
+              },
+              "eligibleGuidanceIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "noHitPolicy": {
+                "enum": [
+                  "resolve_before_answer"
+                ]
+              }
+            },
+            "required": [
+              "deliveryMode",
+              "applicationMode",
+              "eligibleGuidanceIds",
+              "noHitPolicy"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "maxTokens": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "releasePolicy": {
+            "enum": [
+              "build_only",
+              "artifact_approval_required"
+            ]
+          },
+          "requiresDefined": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "additionalProperties": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxItems": 1,
+              "minItems": 1,
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "stateMap": {
+            "properties": {
+              "kinds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "mode": {
+                "enum": [
+                  "none",
+                  "kinds",
+                  "all_applicable"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "styleTexture": {
+            "properties": {
+              "elementIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "mode": {
+                "enum": [
+                  "all",
+                  "selected",
+                  "none"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "scope",
+          "maxTokens"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "tokenizer": {
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "schemaVersion",
+    "asOf",
+    "manifestRef",
+    "compiler",
+    "tokenizer",
+    "targets"
+  ],
+  "title": "OBDS Build Plan 1.0.0",
+  "type": "object"
+}

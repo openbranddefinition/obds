@@ -1,0 +1,144 @@
+{
+  "cards": [
+    {
+      "aliases": [
+        "approved",
+        "claims"
+      ],
+      "cardHash": "sha256:fef1e996d72bfb311da619c3d547efd3c9d5bdf277836b4ecf5cccd6d0b0baae",
+      "chapterRefs": [
+        "chapter.known-gaps"
+      ],
+      "elementId": "claims.approved",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:urn:obds:brand:example-context:claims.approved",
+      "kind": "obds-search-card",
+      "label": "Approved",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "rules claims-register element: Approved."
+    },
+    {
+      "aliases": [
+        "clear",
+        "design",
+        "logo",
+        "zone"
+      ],
+      "cardHash": "sha256:165951e974ce508810e6384cac48403104ac5cb481d37f7faa557aeb1dedcaa5",
+      "chapterRefs": [
+        "chapter.logo-system"
+      ],
+      "elementId": "design.logo.clear-zone",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:urn:obds:brand:example-context:design.logo.clear-zone",
+      "kind": "obds-search-card",
+      "label": "Logo Clear Zone",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Keep one logo-height clear around the primary logo."
+    },
+    {
+      "aliases": [
+        "core",
+        "identity",
+        "voice"
+      ],
+      "cardHash": "sha256:65cdca2ec6fd2778eda70af2394ba682a9fce0db85b275f54e8d7f6ff6f8e82d",
+      "chapterRefs": [
+        "chapter.brand-foundation"
+      ],
+      "elementId": "identity.voice",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:urn:obds:brand:example-context:identity.voice",
+      "kind": "obds-search-card",
+      "label": "Core Voice",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Clear, calm and useful. State the relevant fact first."
+    },
+    {
+      "aliases": [
+        "clear",
+        "logo",
+        "rule",
+        "zone"
+      ],
+      "cardHash": "sha256:de50baedf5f1162be043a4371238cdd6ebd459e6325e1214771ca54d5a2fedca",
+      "chapterRefs": [
+        "chapter.logo-system"
+      ],
+      "elementId": "rule.logo.clear-zone",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:urn:obds:brand:example-context:rule.logo.clear-zone",
+      "kind": "obds-search-card",
+      "label": "Clear Zone",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Preserve the approved logo clear zone in every layout."
+    },
+    {
+      "aliases": [
+        "brand",
+        "context",
+        "example",
+        "structure"
+      ],
+      "cardHash": "sha256:3d9f19ad8e04b454e1eace550be6e9f3af70b1384672fc27d441149f90f99e94",
+      "chapterRefs": [
+        "chapter.brand-foundation"
+      ],
+      "elementId": "structure.brand",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:urn:obds:brand:example-context:structure.brand",
+      "kind": "obds-search-card",
+      "label": "Example Context Brand",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Example Context Brand"
+    }
+  ],
+  "indexHash": "sha256:9c700ce8deeb90778a04dcbc6e4d59046b952c7b20a33fd6834159c6b1970323",
+  "kind": "obds-search-index",
+  "manifest": {
+    "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+    "id": "urn:obds:brand:example-context",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "1.0.0"
+}

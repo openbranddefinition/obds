@@ -1,0 +1,29 @@
+{
+  "failedCount": 0,
+  "kind": "obds-release-test-result",
+  "notes": [
+    "OBDS 1.0.3 is a documentation, packaging and developer-experience release. No normative contract change.",
+    "The public schema surface is byte-identical to OBDS 1.0.0, OBDS 1.0.1 and OBDS 1.0.2.",
+    "The specification and the documentation are licensed under CC BY 4.0. The schemas, release metadata, reference implementation, conformance suite and examples are licensed under the Apache License 2.0.",
+    "The suite has run 107 cases with 27 in foundation since 1.0.2, when two cases were added to verify the published examples in examples/. Releases up to and including 1.0.1 ran 105 with 25 in foundation.",
+    "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
+    "Node.js is required to execute the three cross-language canonicalisation tests. See OBDS-1.0.3-TEST-REQUIREMENTS.md."
+  ],
+  "passed": true,
+  "passedCount": 107,
+  "promotedFrom": "1.0.1",
+  "release": "1.0.3",
+  "schemaVersion": "1.0.0",
+  "skippedCount": 0,
+  "status": "stable",
+  "suiteCounts": {
+    "adversarial": 23,
+    "context-assembly": 15,
+    "context-delivery": 3,
+    "design-space": 18,
+    "foundation": 27,
+    "golden": 6,
+    "integration": 15
+  },
+  "testOutputHash": "sha256:95e2296a06fa5bea78dfaf38e46df873d156e487e1e16096d2f9619781731392"
+}

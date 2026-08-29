@@ -1,0 +1,130 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/render-geometry-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canvas": {
+      "additionalProperties": false,
+      "properties": {
+        "height": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "origin": {
+          "const": "top-left"
+        },
+        "unit": {
+          "enum": [
+            "px",
+            "mm",
+            "pt"
+          ]
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "width",
+        "height",
+        "unit",
+        "origin"
+      ],
+      "type": "object"
+    },
+    "kind": {
+      "const": "obds-render-geometry-record"
+    },
+    "objects": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "box": {
+            "additionalProperties": false,
+            "properties": {
+              "height": {
+                "minimum": 0,
+                "type": "number"
+              },
+              "width": {
+                "minimum": 0,
+                "type": "number"
+              },
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "x",
+              "y",
+              "width",
+              "height"
+            ],
+            "type": "object"
+          },
+          "elementRefs": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          },
+          "metrics": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object"
+          },
+          "objectId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "roles": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "objectId",
+          "roles",
+          "elementRefs",
+          "box",
+          "metrics"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "renderedArtifactHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "targetId": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "targetId",
+    "renderedArtifactHash",
+    "canvas",
+    "objects"
+  ],
+  "title": "OBDS Render Geometry Record",
+  "type": "object"
+}

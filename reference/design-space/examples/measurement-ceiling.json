@@ -1,0 +1,14 @@
+{
+  "amount": 1.2,
+  "basisRef": "design.container",
+  "max": {
+    "amount": 18,
+    "unit": "px"
+  },
+  "mode": "relative",
+  "quantityKind": "width",
+  "system": {
+    "id": "R",
+    "type": "relative"
+  }
+}

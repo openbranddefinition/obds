@@ -1,0 +1,19 @@
+kind: obds-chapter-map
+schemaVersion: 1.0.0
+chapters:
+- id: chapter.brand-expression
+  title: Brand expression
+  elementIds:
+  - identity.value.innovation
+  - identity.value.simplicity
+  - identity.value.reliability
+- id: chapter.logo-system
+  title: Logo system
+  elementIds:
+  - design.logo.clear-zone
+  - rule.logo.clear-zone
+- id: chapter.claims
+  title: Claims
+  elementIds:
+  - rule.claims.require-approval
+  - claims.approved-register

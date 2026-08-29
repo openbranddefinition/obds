@@ -1,0 +1,19 @@
+{
+  "assessedAt": "2026-08-26T18:00:00Z",
+  "assessmentId": "assessment.template-registry",
+  "elementId": "design.template.registry",
+  "kind": "obds-curation-assessment",
+  "note": "Figures were inspected because the template evidence is visual.",
+  "recheckOn": [
+    "source_snapshot_change",
+    "brand_review"
+  ],
+  "schemaVersion": "1.0.0",
+  "searchedModalities": [
+    "text",
+    "figures"
+  ],
+  "sourceRefs": [
+    "guideline.pdf"
+  ]
+}

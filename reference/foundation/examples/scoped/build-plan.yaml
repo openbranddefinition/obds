@@ -1,0 +1,51 @@
+id: urn:obds:build-plan:example-scoped
+kind: obds-build-plan
+schemaVersion: 1.0.0
+manifestRef:
+  id: urn:obds:brand:example-scoped
+  version: 1.0.0
+  contentHash: sha256:b9c6e13631ef58189051e15ef372d20e1193eda88a46f8861ec379daa7c364c1
+compiler:
+  id: org.openbranddefinition.reference-compiler
+  version: 1.0.0
+tokenizer:
+  id: obds:whitespace-v1
+  version: 1.0.0
+targets:
+- id: brand-query-global-en
+  scope:
+    locales:
+    - en
+    outputTypes:
+    - brand-query
+  requiresDefined:
+  - structure.brand
+  styleTexture:
+    mode: all
+    elementIds: []
+  stateMap:
+    mode: all_applicable
+    kinds: []
+  releasePolicy: build_only
+  maxTokens: 500
+- id: social-copy-gb-en
+  scope:
+    markets:
+    - GB
+    locales:
+    - en-GB
+    outputTypes:
+    - social-copy
+  requiresDefined:
+  - structure.brand
+  - product.availability
+  - claims.approved
+  styleTexture:
+    mode: all
+    elementIds: []
+  stateMap:
+    mode: all_applicable
+    kinds: []
+  releasePolicy: build_only
+  maxTokens: 500
+asOf: '2026-08-27T00:00:00Z'

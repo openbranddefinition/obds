@@ -1,0 +1,228 @@
+{
+  "artifactHash": "sha256:bb56888ba2f3e88584e128f27121467f8084acc60eaae82fc23991cd445a410e",
+  "availableElementIds": [
+    "claims.approved-register",
+    "design.logo.clear-zone",
+    "identity.value.innovation",
+    "identity.value.reliability",
+    "identity.value.simplicity",
+    "rule.claims.require-approval",
+    "rule.logo.clear-zone",
+    "structure.brand"
+  ],
+  "build": {
+    "asOf": "2026-08-27T00:00:00Z",
+    "compilerId": "org.openbranddefinition.reference-compiler",
+    "compilerVersion": "1.0.0",
+    "planHash": "sha256:4b61dbe905ff91c117036a87131c550b6894db859833d940018f4e0eaf31a5e6",
+    "planId": "urn:obds:build-plan:example-assembly"
+  },
+  "checkRegistryVersion": 1,
+  "compiledChecks": [],
+  "contextAssembly": {
+    "applicationMode": "review",
+    "deliveryMode": "reasoning",
+    "eligibleGuidanceIds": [
+      "identity.value.innovation",
+      "identity.value.simplicity",
+      "identity.value.reliability"
+    ],
+    "noHitPolicy": "resolve_before_answer"
+  },
+  "elementRecords": [
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "claims.approved-register",
+      "kind": "claims-register",
+      "nature": "fact",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "design",
+      "id": "design.logo.clear-zone",
+      "kind": "clear-zone",
+      "nature": "fact",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "description": "Keep one logo-height clear around the logo.",
+        "name": "Logo Clear Zone"
+      },
+      "valueContractRef": "urn:obds:brand:example-assembly#value-contract:design:clear-zone:2a2bbd99"
+    },
+    {
+      "annotations": [],
+      "family": "identity",
+      "id": "identity.value.innovation",
+      "kind": "core-value",
+      "nature": "knowledge",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "description": "Find useful new ways to solve real customer problems.",
+        "name": "Innovation"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "identity",
+      "id": "identity.value.reliability",
+      "kind": "core-value",
+      "nature": "knowledge",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "description": "Use precise information and avoid unsupported certainty.",
+        "name": "Reliability"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "identity",
+      "id": "identity.value.simplicity",
+      "kind": "core-value",
+      "nature": "knowledge",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "description": "Make the relevant idea easy to understand and use.",
+        "name": "Simplicity"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "rule.claims.require-approval",
+      "kind": "rule",
+      "nature": "fact",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "checks": [],
+        "condition": {},
+        "enforcement": "require_approval",
+        "obligation": "require",
+        "references": [
+          "claims.approved-register"
+        ],
+        "requirement": {},
+        "statement": "Unregistered performance claims require approval.",
+        "validationMode": "human",
+        "validatorRef": null
+      },
+      "valueContractRef": "urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb"
+    },
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "rule.logo.clear-zone",
+      "kind": "rule",
+      "nature": "fact",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "checks": [],
+        "condition": {},
+        "enforcement": "block",
+        "obligation": "require",
+        "references": [
+          "design.logo.clear-zone"
+        ],
+        "requirement": {},
+        "statement": "Preserve the approved logo clear zone.",
+        "validationMode": "human",
+        "validatorRef": null
+      },
+      "valueContractRef": "urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb"
+    },
+    {
+      "annotations": [],
+      "family": "structure",
+      "id": "structure.brand",
+      "kind": "brand-identity",
+      "nature": "fact",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "name": "Example Assembly Brand"
+      },
+      "valueContractRef": "urn:obds:brand:example-assembly#value-contract:structure:brand-identity:2b7196d8"
+    }
+  ],
+  "id": "urn:obds:brand:example-assembly:context:marketing-review-global-en",
+  "includedElementIds": [
+    "claims.approved-register",
+    "design.logo.clear-zone",
+    "rule.claims.require-approval",
+    "rule.logo.clear-zone",
+    "structure.brand"
+  ],
+  "kind": "obds-compiled-brand-context",
+  "manifest": {
+    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "id": "urn:obds:brand:example-assembly",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "1.0.0",
+  "scope": {},
+  "slots": {
+    "factGrounding": "- `design.logo.clear-zone` — {\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\n- `structure.brand` — {\"name\":\"Example Assembly Brand\"}",
+    "hardBoundaries": "- `rule.claims.require-approval` — Unregistered performance claims require approval. [human, require_approval]\n- `rule.logo.clear-zone` — Preserve the approved logo clear zone. [human, block]",
+    "stateMap": "- `claims.approved-register` — unknown.",
+    "styleTexture": ""
+  },
+  "stateMapCoverage": "complete",
+  "stateMapEntryCount": 1,
+  "targetId": "marketing-review-global-en",
+  "tokenBudget": {
+    "actual": 43,
+    "max": 1500,
+    "tokenizerId": "obds:whitespace-v1",
+    "tokenizerVersion": "1.0.0"
+  },
+  "validFrom": null,
+  "validTo": null
+}

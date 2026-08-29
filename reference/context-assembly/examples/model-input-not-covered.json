@@ -1,0 +1,55 @@
+{
+  "applicationMode": "create",
+  "assembledAt": "2026-08-27T09:19:53.185385+00:00",
+  "assemblyHash": "sha256:7ca4a56565a61f15035eba508e0894ddc11cfb981d2ea3bd38054eacebc53612",
+  "deliveryMode": "lookup",
+  "id": "urn:obds:model-input:98136ca8-798d-4997-b1ef-607ff94d0f98",
+  "kind": "obds-model-input-package",
+  "manifest": {
+    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "id": "urn:obds:brand:example-assembly",
+    "version": "1.0.0"
+  },
+  "modelInputHash": "sha256:2d5bfbd15dec27e799439a7d9f48deed36d27e4f4a3fc70f512cca205aa9468c",
+  "retrieval": {
+    "resolution": "manifest_checked",
+    "status": "no_match",
+    "truthOutcome": "not_covered"
+  },
+  "schemaVersion": "1.0.0",
+  "selection": {
+    "activeGuidanceElementIds": [],
+    "factElementIds": [
+      "structure.brand"
+    ],
+    "gapElementIds": [],
+    "hardBoundaryElementIds": [
+      "rule.claims.require-approval",
+      "rule.logo.clear-zone"
+    ],
+    "reasoningChapterIds": [],
+    "searchCardIds": [
+      "urn:obds:search-card:identity.value.simplicity",
+      "urn:obds:search-card:design.logo.clear-zone"
+    ]
+  },
+  "slots": {
+    "factGrounding": "structure.brand [defined]: {\"name\":\"Example Assembly Brand\"}",
+    "guidanceContext": "",
+    "hardBoundaries": "rule.claims.require-approval [require/require_approval]: Unregistered performance claims require approval. | refs=claims.approved-register\nrule.logo.clear-zone [require/block]: Preserve the approved logo clear zone. | refs=design.logo.clear-zone",
+    "stateMap": "runtime.coverage [not_covered]: The current manifest contains no applicable element for the question. This does not imply permission or prohibition.",
+    "taskInput": "What is the approved sonic logo duration?"
+  },
+  "sources": {
+    "chapterSetHash": "sha256:a935116c82149714ad9b75293e623b2c6cba50d3be3e0ffa8bc5c8f9af6944ee",
+    "compiledContextHash": "sha256:2a70a87ef804bbd92cf338409b982fa3e321f8b4002b637441f1f6fa48901427",
+    "searchIndexHash": "sha256:01324fafa8010675b913ad0faf19618ca789afd990a7432bad64e8d99f2f4483"
+  },
+  "targetId": "brand-query-global-en",
+  "tokenBudget": {
+    "actual": 55,
+    "max": 1200,
+    "tokenizerId": "obds:whitespace-v1",
+    "tokenizerVersion": "1.0.0"
+  }
+}

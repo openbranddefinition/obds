@@ -1,0 +1,222 @@
+{
+  "cards": [
+    {
+      "aliases": [
+        "approved",
+        "claims",
+        "register"
+      ],
+      "cardHash": "sha256:322bd83945e58f69716ebbbeb7e24c6759cbe074f9d17007665a489ebdc5c4ce",
+      "chapterRefs": [
+        "chapter.claims"
+      ],
+      "elementId": "claims.approved-register",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:claims.approved-register",
+      "kind": "obds-search-card",
+      "label": "Approved Register",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "rules claims-register element: Approved Register."
+    },
+    {
+      "aliases": [
+        "clear",
+        "design",
+        "logo",
+        "zone"
+      ],
+      "cardHash": "sha256:90dbed7c597cdc8f518c9b6478903287702195572f67b50e306341ce1496c2d8",
+      "chapterRefs": [
+        "chapter.logo-system"
+      ],
+      "elementId": "design.logo.clear-zone",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:design.logo.clear-zone",
+      "kind": "obds-search-card",
+      "label": "Logo Clear Zone",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Keep one logo-height clear around the logo."
+    },
+    {
+      "aliases": [
+        "identity",
+        "innovation",
+        "value"
+      ],
+      "cardHash": "sha256:ca82bd1dad244b521872125624438634412c078796d496e28640a89ed5af0209",
+      "chapterRefs": [
+        "chapter.brand-expression"
+      ],
+      "elementId": "identity.value.innovation",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:identity.value.innovation",
+      "kind": "obds-search-card",
+      "label": "Innovation",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Find useful new ways to solve real customer problems."
+    },
+    {
+      "aliases": [
+        "identity",
+        "reliability",
+        "value"
+      ],
+      "cardHash": "sha256:cd44edff1771aa75fd9044be22b3b7ac567f1f344b8e005a7bafe473f8fc579a",
+      "chapterRefs": [
+        "chapter.brand-expression"
+      ],
+      "elementId": "identity.value.reliability",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:identity.value.reliability",
+      "kind": "obds-search-card",
+      "label": "Reliability",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Use precise information and avoid unsupported certainty."
+    },
+    {
+      "aliases": [
+        "identity",
+        "simplicity",
+        "value"
+      ],
+      "cardHash": "sha256:b3fee8adc336223534285b97a89b32bc7c9eac9cc9c6490623722977ff595713",
+      "chapterRefs": [
+        "chapter.brand-expression"
+      ],
+      "elementId": "identity.value.simplicity",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:identity.value.simplicity",
+      "kind": "obds-search-card",
+      "label": "Simplicity",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Make the relevant idea easy to understand and use."
+    },
+    {
+      "aliases": [
+        "approval",
+        "claims",
+        "require",
+        "rule"
+      ],
+      "cardHash": "sha256:77a6953e2e0fd7806fa38ba3f035f5faaef9c72de5ce04a1095f638589a3a5a6",
+      "chapterRefs": [
+        "chapter.claims"
+      ],
+      "elementId": "rule.claims.require-approval",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:rule.claims.require-approval",
+      "kind": "obds-search-card",
+      "label": "Require Approval",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Unregistered performance claims require approval."
+    },
+    {
+      "aliases": [
+        "clear",
+        "logo",
+        "rule",
+        "zone"
+      ],
+      "cardHash": "sha256:5dd478638f2934663c1a4610e14ef6244fdff2ab0cc6e9e9c458bab81b899276",
+      "chapterRefs": [
+        "chapter.logo-system"
+      ],
+      "elementId": "rule.logo.clear-zone",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:rule.logo.clear-zone",
+      "kind": "obds-search-card",
+      "label": "Clear Zone",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Preserve the approved logo clear zone."
+    },
+    {
+      "aliases": [
+        "assembly",
+        "brand",
+        "example",
+        "structure"
+      ],
+      "cardHash": "sha256:b4ca26958ba1855741af4f3328ae7c1e5b6a9a6e9912701fae2b193c3e574a62",
+      "chapterRefs": [],
+      "elementId": "structure.brand",
+      "generator": {
+        "id": "org.openbranddefinition.reference-search-card-renderer",
+        "version": "1.0.0"
+      },
+      "id": "urn:obds:search-card:structure.brand",
+      "kind": "obds-search-card",
+      "label": "Example Assembly Brand",
+      "manifest": {
+        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "id": "urn:obds:brand:example-assembly",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "summary": "Example Assembly Brand"
+    }
+  ],
+  "indexHash": "sha256:01324fafa8010675b913ad0faf19618ca789afd990a7432bad64e8d99f2f4483",
+  "kind": "obds-search-index",
+  "manifest": {
+    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "id": "urn:obds:brand:example-assembly",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "1.0.0"
+}

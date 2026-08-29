@@ -1,0 +1,164 @@
+id: urn:obds:brand:example-assembly
+kind: brand-manifest
+name: Example Assembly Brand
+schemaVersion: 1.0.0
+version: 1.0.0
+status: approved
+owner: Example Company
+elements:
+- id: structure.brand
+  family: structure
+  kind: brand-identity
+  nature: fact
+  state: defined
+  value:
+    name: Example Assembly Brand
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-assembly#value-contract:structure:brand-identity:2b7196d8
+- id: identity.value.innovation
+  family: identity
+  kind: core-value
+  nature: knowledge
+  state: defined
+  value:
+    name: Innovation
+    description: Find useful new ways to solve real customer problems.
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+- id: identity.value.simplicity
+  family: identity
+  kind: core-value
+  nature: knowledge
+  state: defined
+  value:
+    name: Simplicity
+    description: Make the relevant idea easy to understand and use.
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+- id: identity.value.reliability
+  family: identity
+  kind: core-value
+  nature: knowledge
+  state: defined
+  value:
+    name: Reliability
+    description: Use precise information and avoid unsupported certainty.
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+- id: design.logo.clear-zone
+  family: design
+  kind: clear-zone
+  nature: fact
+  state: defined
+  value:
+    name: Logo Clear Zone
+    description: Keep one logo-height clear around the logo.
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-assembly#value-contract:design:clear-zone:2a2bbd99
+- id: rule.logo.clear-zone
+  family: rules
+  kind: rule
+  nature: fact
+  state: defined
+  value:
+    statement: Preserve the approved logo clear zone.
+    obligation: require
+    enforcement: block
+    validationMode: human
+    checks: []
+    validatorRef: null
+    condition: {}
+    requirement: {}
+    references:
+    - design.logo.clear-zone
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb
+- id: rule.claims.require-approval
+  family: rules
+  kind: rule
+  nature: fact
+  state: defined
+  value:
+    statement: Unregistered performance claims require approval.
+    obligation: require
+    enforcement: require_approval
+    validationMode: human
+    checks: []
+    validatorRef: null
+    condition: {}
+    requirement: {}
+    references:
+    - claims.approved-register
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb
+- id: claims.approved-register
+  family: rules
+  kind: claims-register
+  nature: fact
+  state: unknown
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+approval:
+  approvedBy: role:brand-owner
+  approvedAt: '2026-07-31T09:00:00Z'
+  contentHash: sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5
+profiles:
+- obds-foundation
+valueContracts:
+- id: urn:obds:brand:example-assembly#value-contract:structure:brand-identity:2b7196d8
+  family: structure
+  kind: brand-identity
+  shapeHash: sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json
+  schemaHash: sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51
+  validatorRef: null
+- id: urn:obds:brand:example-assembly#value-contract:design:clear-zone:2a2bbd99
+  family: design
+  kind: clear-zone
+  shapeHash: sha256:2a2bbd99245929bc40e1b8e84a50d7fa4452249fcff136b4b14542bdc76dc06d
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/clear-zone.schema.json
+  schemaHash: sha256:130382ace9fc3a6e23ada9160f6ee2329f918a91ca186d8ce3f67065cd093d33
+  validatorRef: null
+- id: urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb
+  family: rules
+  kind: rule
+  shapeHash: sha256:782241ebb0bac34d6a1675e6ec409419ac253a6da2a0d19a457d633d70b33f28
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json
+  schemaHash: sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787
+  validatorRef: null

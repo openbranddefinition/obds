@@ -1,0 +1,74 @@
+{
+  "canvas": {
+    "height": 250,
+    "origin": "top-left",
+    "unit": "px",
+    "width": 300
+  },
+  "kind": "obds-render-geometry-record",
+  "objects": [
+    {
+      "box": {
+        "height": 20,
+        "width": 50,
+        "x": 230,
+        "y": 20
+      },
+      "elementRefs": [
+        "design.logo.primary"
+      ],
+      "metrics": {},
+      "objectId": "logo",
+      "roles": [
+        "brand-logo"
+      ]
+    },
+    {
+      "box": {
+        "height": 40,
+        "width": 150,
+        "x": 30,
+        "y": 50
+      },
+      "elementRefs": [],
+      "metrics": {
+        "cap-height": 14
+      },
+      "objectId": "headline",
+      "roles": [
+        "headline"
+      ]
+    },
+    {
+      "box": {
+        "height": 15,
+        "width": 30,
+        "x": 180,
+        "y": 20
+      },
+      "elementRefs": [],
+      "metrics": {},
+      "objectId": "partner",
+      "roles": [
+        "partner-logo"
+      ]
+    },
+    {
+      "box": {
+        "height": 12,
+        "width": 100,
+        "x": 20,
+        "y": 225
+      },
+      "elementRefs": [],
+      "metrics": {},
+      "objectId": "legal",
+      "roles": [
+        "required-legal"
+      ]
+    }
+  ],
+  "renderedArtifactHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "schemaVersion": "1.0.0",
+  "targetId": "banner-300x250"
+}

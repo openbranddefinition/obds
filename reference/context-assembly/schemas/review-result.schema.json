@@ -1,0 +1,87 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/review-result.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationMode": {
+      "enum": [
+        "review",
+        "compliance"
+      ]
+    },
+    "decision": {
+      "enum": [
+        "pass",
+        "pass_with_suggestions",
+        "approval_required",
+        "fail"
+      ]
+    },
+    "findings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": [
+              "violation",
+              "material_conflict",
+              "opportunity"
+            ]
+          },
+          "elementIds": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "elementIds",
+          "message"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "kind": {
+      "const": "obds-review-result"
+    },
+    "modelInputHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "reviewHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "targetId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "targetId",
+    "applicationMode",
+    "modelInputHash",
+    "decision",
+    "findings",
+    "reviewHash"
+  ],
+  "title": "OBDS Review Result 1.0.0",
+  "type": "object"
+}

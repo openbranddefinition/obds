@@ -1,0 +1,109 @@
+id: urn:obds:brand:example-simple
+kind: brand-manifest
+name: Example Simple Brand
+owner: Example Organisation
+schemaVersion: 1.0.0
+version: 1.0.0
+status: draft
+createdAt: '2026-07-21T12:00:00+02:00'
+updatedAt: '2026-07-21T12:00:00+02:00'
+profiles:
+- obds-foundation
+elements:
+- id: structure.brand
+  family: structure
+  kind: brand-identity
+  nature: fact
+  state: defined
+  value:
+    name: Example Simple Brand
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-simple#value-contract:structure:brand-identity:2b7196d8
+- id: design.primary-colour
+  family: design
+  kind: colour
+  nature: fact
+  state: defined
+  value:
+    name: Primary
+    hex: '#246BFD'
+    rgb:
+    - 36
+    - 107
+    - 253
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-simple#value-contract:design:colour:c78a1bc4
+- id: identity.voice
+  family: identity
+  kind: voice-system
+  nature: knowledge
+  state: defined
+  value: Clear, direct and useful. Avoid hype.
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+- id: rule.no-best
+  family: rules
+  kind: rule
+  nature: fact
+  state: defined
+  value:
+    statement: Do not describe the brand as the best.
+    obligation: prohibit
+    enforcement: block
+    validationMode: deterministic
+    checks:
+    - primitive: term_prohibited
+      phase: postflight
+      params:
+        terms:
+        - the best
+        match: case_insensitive
+        appliesTo: output
+    validatorRef: null
+    condition: {}
+    requirement: {}
+    references:
+    - identity.voice
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-simple#value-contract:rules:rule:3fcc86f8
+valueContracts:
+- id: urn:obds:brand:example-simple#value-contract:structure:brand-identity:2b7196d8
+  family: structure
+  kind: brand-identity
+  shapeHash: sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json
+  schemaHash: sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51
+  validatorRef: null
+- id: urn:obds:brand:example-simple#value-contract:design:colour:c78a1bc4
+  family: design
+  kind: colour
+  shapeHash: sha256:c78a1bc4939bfd4014a885ea858d2361ed935379f57ab2af3af74fd7347949d9
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/colour.schema.json
+  schemaHash: sha256:2a037f40a4fe192a478482a07911fb0362a1f9a428ce1d438442fdf9d65dc592
+  validatorRef: obds:validator:colour-consistency-v1
+- id: urn:obds:brand:example-simple#value-contract:rules:rule:3fcc86f8
+  family: rules
+  kind: rule
+  shapeHash: sha256:3fcc86f8b2cb441e271b40e01d66e63c3e6a99c685b60105f9721cfab29fc17c
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json
+  schemaHash: sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787
+  validatorRef: null

@@ -1,0 +1,58 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/curation-coverage.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "enum": [
+        "complete",
+        "partial",
+        "unknown"
+      ]
+    },
+    "modalities": {
+      "additionalProperties": false,
+      "properties": {
+        "figures": {
+          "enum": [
+            "complete",
+            "partial",
+            "not_assessed",
+            "not_applicable"
+          ]
+        },
+        "metadata": {
+          "enum": [
+            "complete",
+            "partial",
+            "not_assessed",
+            "not_applicable"
+          ]
+        },
+        "tables": {
+          "enum": [
+            "complete",
+            "partial",
+            "not_assessed",
+            "not_applicable"
+          ]
+        },
+        "text": {
+          "enum": [
+            "complete",
+            "partial",
+            "not_assessed",
+            "not_applicable"
+          ]
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "coverage",
+    "modalities"
+  ],
+  "title": "OBDS Modality-aware Curation Coverage",
+  "type": "object"
+}

@@ -1,0 +1,22 @@
+## foundation
+...........................                                              [100%]
+27 passed in 2.44s
+## context-delivery
+...                                                                      [100%]
+3 passed in 0.07s
+## context-assembly
+...............                                                          [100%]
+15 passed in 0.17s
+## design-space
+..................                                                       [100%]
+18 passed in 0.05s
+## integration
+...............                                                          [100%]
+15 passed in 0.13s
+## golden
+......                                                                   [100%]
+6 passed in 0.13s
+## adversarial
+.......................                                                  [100%]
+23 passed in 0.22s
+TOTAL: 107 passed

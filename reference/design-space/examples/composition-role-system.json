@@ -1,0 +1,32 @@
+{
+  "roles": [
+    {
+      "category": "identity",
+      "id": "brand-logo"
+    },
+    {
+      "category": "identity",
+      "id": "partner-logo"
+    },
+    {
+      "category": "product",
+      "id": "hero-product"
+    },
+    {
+      "category": "copy",
+      "id": "headline"
+    },
+    {
+      "category": "copy",
+      "id": "supporting-copy"
+    },
+    {
+      "category": "interaction",
+      "id": "optional-cta"
+    },
+    {
+      "category": "legal",
+      "id": "required-legal"
+    }
+  ]
+}

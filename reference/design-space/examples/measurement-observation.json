@@ -1,0 +1,13 @@
+{
+  "amount": 12,
+  "authority": "non-authoritative",
+  "candidateElementId": "design.frame.thickness",
+  "kind": "obds-measurement-observation",
+  "method": "pixel measurement against rendered PDF figure",
+  "observationId": "obs.frame.001",
+  "origin": "measured",
+  "quantityKind": "border-thickness",
+  "schemaVersion": "1.0.0",
+  "sourceRef": "guideline.pdf#page=20",
+  "unit": "px"
+}

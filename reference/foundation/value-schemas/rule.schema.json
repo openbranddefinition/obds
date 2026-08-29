@@ -1,0 +1,75 @@
+{
+  "$id": "https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "checks": {
+      "type": "array"
+    },
+    "condition": {
+      "type": "object"
+    },
+    "enforcement": {
+      "enum": [
+        "block",
+        "require_approval",
+        "warn",
+        "inform"
+      ]
+    },
+    "obligation": {
+      "enum": [
+        "require",
+        "prohibit",
+        "permit",
+        "recommend"
+      ]
+    },
+    "references": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "requirement": {
+      "type": "object"
+    },
+    "requiresDefinedRefs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "statement": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "validationMode": {
+      "enum": [
+        "deterministic",
+        "semantic",
+        "human",
+        "external"
+      ]
+    },
+    "validatorRef": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "statement",
+    "obligation",
+    "enforcement",
+    "validationMode",
+    "checks",
+    "condition",
+    "requirement",
+    "references"
+  ],
+  "title": "OBDS Rule Value 1.0.0",
+  "type": "object"
+}

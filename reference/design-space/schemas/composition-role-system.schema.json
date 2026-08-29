@@ -1,0 +1,45 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/composition-role-system.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "roles": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "enum": [
+              "identity",
+              "product",
+              "copy",
+              "legal",
+              "interaction",
+              "imagery",
+              "decorative",
+              "other"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "category"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "roles"
+  ],
+  "title": "OBDS Composition Role System",
+  "type": "object"
+}

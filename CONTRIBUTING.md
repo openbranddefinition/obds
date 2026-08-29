@@ -49,16 +49,36 @@ These are the constraints a change has to respect, not preferences:
 
 ## Running the suite
 
-From the release package root:
+The repository root is the package root, so a clone is directly runnable:
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python reference/run_all.py        # 105 passed, 0 failed, 0 skipped
-.venv/bin/python reference/release-gate.py   # package metadata and junk check
+.venv/bin/python reference/run_all.py        # 107 passed, 0 failed, 0 skipped
+.venv/bin/python reference/release-gate.py   # metadata, contract identity, licences, junk
 ```
 
-A pull request that touches the implementation layer has to keep both green.
-Zero skipped cases is part of the gate, not a nice-to-have.
+Node.js 18 or later must be on `PATH`. That order needs no cleanup step: the
+gate treats `__pycache__`, `.pytest_cache`, `*.pyc` and a local `.venv` as
+generated caches, not as package junk.
+
+Before opening a pull request, also run:
+
+```bash
+python3 tools/docs-smoke-test.py
+```
+
+It executes every command documented in `README.md`, `CONTRIBUTING.md` and
+`examples/README.md`. If you change a documented command, change it there too.
+
+A pull request that touches the implementation layer has to keep all three
+green. Zero skipped cases is part of the gate, not a nice-to-have.
+
+If you changed a file that ships in the release archive, regenerate the manifest
+and the archive, or the release gate will fail on a stale hash:
+
+```bash
+python3 tools/build-release.py
+```
 
 ## Licensing of contributions
 

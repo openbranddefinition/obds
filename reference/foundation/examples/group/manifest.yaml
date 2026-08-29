@@ -1,0 +1,105 @@
+id: urn:obds:brand:example-group
+kind: brand-manifest
+name: Example Brand Group
+owner: Example Group
+schemaVersion: 1.0.0
+version: 1.0.0
+status: approved
+createdAt: '2026-07-21T12:00:00+02:00'
+updatedAt: '2026-07-21T12:00:00+02:00'
+profiles:
+- obds-foundation
+elements:
+- id: structure.group
+  family: structure
+  kind: brand-group
+  nature: fact
+  state: defined
+  value:
+    name: Example Brand Group
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-group#value-contract:structure:brand-group:2b7196d8
+- id: alpha.identity
+  family: identity
+  kind: brand-identity
+  nature: fact
+  state: defined
+  value:
+    name: Alpha
+  scope:
+    brands:
+    - alpha
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-group#value-contract:identity:brand-identity:2b7196d8
+- id: alpha.voice
+  family: identity
+  kind: voice-system
+  nature: knowledge
+  state: defined
+  value: Precise and analytical.
+  scope:
+    brands:
+    - alpha
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+- id: beta.identity
+  family: identity
+  kind: brand-identity
+  nature: fact
+  state: defined
+  value:
+    name: Beta
+  scope:
+    brands:
+    - beta
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-group#value-contract:identity:brand-identity:2b7196d8
+- id: beta.voice
+  family: identity
+  kind: voice-system
+  nature: knowledge
+  state: defined
+  value: Warm and conversational.
+  scope:
+    brands:
+    - beta
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+approval:
+  approvedBy: role:brand-owner
+  approvedAt: '2026-07-21T12:00:00+02:00'
+  contentHash: sha256:6b6f448064f8324b302d43363cd50e5ad13a8a2967400ef12451e99304046bc6
+valueContracts:
+- id: urn:obds:brand:example-group#value-contract:structure:brand-group:2b7196d8
+  family: structure
+  kind: brand-group
+  shapeHash: sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/brand-group.schema.json
+  schemaHash: sha256:b84a5fd2fb8dbc7a46b66a3cea97d6496f454ab0d78b11668ed5793491304f91
+  validatorRef: null
+- id: urn:obds:brand:example-group#value-contract:identity:brand-identity:2b7196d8
+  family: identity
+  kind: brand-identity
+  shapeHash: sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json
+  schemaHash: sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51
+  validatorRef: null

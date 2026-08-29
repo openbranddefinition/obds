@@ -1,0 +1,64 @@
+{
+  "artifactHash": "sha256:ef17abe5608f2994468f881c1d215202d58e4a85171f07fb6e4246a9cdfbc63a",
+  "build": {
+    "compilerId": "org.openbranddefinition.reference-compiler",
+    "compilerVersion": "1.0.0",
+    "planHash": "sha256:9cf7cf1a2477288eef4342118a84256e2aeacb03642d99248e99832a757eb23c",
+    "planId": "urn:obds:build-plan:example-simple"
+  },
+  "checkRegistryVersion": 1,
+  "compiledChecks": [
+    {
+      "enforcement": "block",
+      "params": {
+        "appliesTo": "output",
+        "match": "case_insensitive",
+        "terms": [
+          "the best"
+        ]
+      },
+      "phase": "postflight",
+      "primitive": "term_prohibited",
+      "ruleElementId": "rule.no-best"
+    }
+  ],
+  "id": "urn:obds:brand:example-simple:context:brand-query-global-en",
+  "includedElementIds": [
+    "design.primary-colour",
+    "identity.voice",
+    "rule.no-best",
+    "structure.brand"
+  ],
+  "kind": "obds-compiled-brand-context",
+  "manifest": {
+    "contentHash": "sha256:4c464af9811c3f6f927e4a2eab4586b50f6f94183ba36d543bd4825684f4a73a",
+    "id": "urn:obds:brand:example-simple",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "1.0.0",
+  "scope": {
+    "locales": [
+      "en"
+    ],
+    "outputTypes": [
+      "brand-query"
+    ]
+  },
+  "slots": {
+    "factGrounding": "- `design.primary-colour` \u2014 {\"hex\":\"#246BFD\",\"name\":\"Primary\",\"rgb\":[36,107,253]}\n- `structure.brand` \u2014 {\"name\":\"Example Simple Brand\"}",
+    "hardBoundaries": "- `rule.no-best` \u2014 Do not describe the brand as the best. [deterministic, block]",
+    "stateMap": "",
+    "styleTexture": "`identity.voice`\n\nClear, direct and useful. Avoid hype."
+  },
+  "stateMapCoverage": "complete",
+  "stateMapEntryCount": 0,
+  "targetId": "brand-query-global-en",
+  "tokenBudget": {
+    "actual": 30,
+    "max": 500,
+    "tokenizerId": "obds:whitespace-v1",
+    "tokenizerVersion": "1.0.0"
+  },
+  "validFrom": null,
+  "validTo": null
+}

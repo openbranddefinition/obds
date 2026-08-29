@@ -1,0 +1,10 @@
+{
+  "neverOmit": [
+    "brand-logo",
+    "required-legal"
+  ],
+  "omitOrder": [
+    "supporting-copy",
+    "optional-cta"
+  ]
+}

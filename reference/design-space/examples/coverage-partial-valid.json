@@ -1,0 +1,9 @@
+{
+  "coverage": "partial",
+  "modalities": {
+    "figures": "partial",
+    "metadata": "complete",
+    "tables": "complete",
+    "text": "complete"
+  }
+}

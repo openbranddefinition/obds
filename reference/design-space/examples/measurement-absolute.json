@@ -1,0 +1,9 @@
+{
+  "amount": 40,
+  "mode": "absolute",
+  "quantityKind": "height",
+  "system": {
+    "type": "absolute"
+  },
+  "unit": "px"
+}

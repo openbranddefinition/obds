@@ -1,0 +1,26 @@
+kind: obds-assembly-request
+schemaVersion: 1.0.0
+targetId: social-copy-global-en
+deliveryMode: reasoning
+applicationMode: create
+retrieval:
+  status: hit
+  resolution: direct
+  truthOutcome: mixed
+selection:
+  searchCardIds:
+  - urn:obds:search-card:identity.value.simplicity
+  - urn:obds:search-card:design.logo.clear-zone
+  reasoningChapterIds:
+  - chapter.brand-expression
+  - chapter.logo-system
+  factElementIds:
+  - structure.brand
+  - design.logo.clear-zone
+  gapElementIds:
+  - claims.approved-register
+  activeGuidanceElementIds:
+  - identity.value.simplicity
+taskInput: Create a concise product-launch headline.
+tokenBudget:
+  max: 1200

@@ -1,0 +1,18 @@
+{
+  "elementId": "design.frame.thickness",
+  "kind": "obds-source-contradiction",
+  "readings": [
+    {
+      "sourceRef": "guideline.pdf#text",
+      "value": "H"
+    },
+    {
+      "sourceRef": "guideline.pdf#figure",
+      "value": "0.567H"
+    }
+  ],
+  "recordId": "contradiction.frame.001",
+  "resolutionRef": null,
+  "schemaVersion": "1.0.0",
+  "status": "unresolved"
+}

@@ -1,0 +1,7 @@
+{
+  "$id": "https://openbranddefinition.org/reference/1.0.0/value-schemas/colour-hex.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "pattern": "^#[0-9A-Fa-f]{6}$",
+  "title": "OBDS Reference-only Legacy Hex Colour Fixture 1.0.0",
+  "type": "string"
+}

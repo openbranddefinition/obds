@@ -1,0 +1,74 @@
+{
+  "chapterSetHash": "sha256:43e6ea6b14de96f4ac0d10f6f6c58967d36a67042908647789bcc2349a53b19b",
+  "chapters": [
+    {
+      "chapterHash": "sha256:6857bc40b67c52d20d6012f0835e65f4c76612f77da65c8cccc4c1229c2649d1",
+      "content": "## structure.brand\nFamily: structure\nKind: brand-identity\nState: defined\n\n{\n  \"name\": \"Example Context Brand\"\n}\n\n## identity.voice\nFamily: identity\nKind: voice-system\nState: defined\n\n{\n  \"description\": \"Clear, calm and useful. State the relevant fact first.\",\n  \"name\": \"Core Voice\"\n}",
+      "elementIds": [
+        "structure.brand",
+        "identity.voice"
+      ],
+      "id": "chapter.brand-foundation",
+      "kind": "obds-reasoning-chapter",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "renderer": {
+        "id": "org.openbranddefinition.reference-chapter-renderer",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "title": "Brand foundation"
+    },
+    {
+      "chapterHash": "sha256:d5a83ceafe84eb42e90927edc8164996396a1d9be5581b5f8ed7f66d704b6ff6",
+      "content": "## design.logo.clear-zone\nFamily: design\nKind: clear-zone\nState: defined\n\n{\n  \"description\": \"Keep one logo-height clear around the primary logo.\",\n  \"name\": \"Logo Clear Zone\"\n}\n\n## rule.logo.clear-zone\nFamily: rules\nKind: rule\nState: defined\n\n{\n  \"checks\": [],\n  \"condition\": {},\n  \"enforcement\": \"block\",\n  \"obligation\": \"require\",\n  \"references\": [\n    \"design.logo.clear-zone\"\n  ],\n  \"requirement\": {},\n  \"statement\": \"Preserve the approved logo clear zone in every layout.\",\n  \"validationMode\": \"human\",\n  \"validatorRef\": null\n}",
+      "elementIds": [
+        "design.logo.clear-zone",
+        "rule.logo.clear-zone"
+      ],
+      "id": "chapter.logo-system",
+      "kind": "obds-reasoning-chapter",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "renderer": {
+        "id": "org.openbranddefinition.reference-chapter-renderer",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "title": "Logo system"
+    },
+    {
+      "chapterHash": "sha256:776de56ef464a9ede9fb058d838a8cdebc7598af7e600a67ddf7be8a927dde3f",
+      "content": "## claims.approved\nFamily: rules\nKind: claims-register\nState: unknown\n\nNo value.",
+      "elementIds": [
+        "claims.approved"
+      ],
+      "id": "chapter.known-gaps",
+      "kind": "obds-reasoning-chapter",
+      "manifest": {
+        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "id": "urn:obds:brand:example-context",
+        "version": "1.0.0"
+      },
+      "renderer": {
+        "id": "org.openbranddefinition.reference-chapter-renderer",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "title": "Known gaps"
+    }
+  ],
+  "kind": "obds-reasoning-chapter-set",
+  "manifest": {
+    "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+    "id": "urn:obds:brand:example-context",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "1.0.0"
+}

@@ -1,0 +1,65 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/measurement-observation.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "amount": {
+      "type": "number"
+    },
+    "authority": {
+      "const": "non-authoritative"
+    },
+    "candidateElementId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kind": {
+      "const": "obds-measurement-observation"
+    },
+    "method": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "observationId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "origin": {
+      "enum": [
+        "measured",
+        "lab"
+      ]
+    },
+    "quantityKind": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "sourceRef": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "unit": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "observationId",
+    "origin",
+    "sourceRef",
+    "method",
+    "quantityKind",
+    "amount",
+    "unit",
+    "authority"
+  ],
+  "title": "OBDS Measurement Observation",
+  "type": "object"
+}

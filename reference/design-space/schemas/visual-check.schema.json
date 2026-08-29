@@ -1,0 +1,33 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/visual-check.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "enforcement": {
+      "enum": [
+        "block",
+        "require_approval",
+        "warn",
+        "inform"
+      ]
+    },
+    "params": {
+      "type": "object"
+    },
+    "primitive": {
+      "enum": [
+        "visual.min_size",
+        "visual.clear_zone",
+        "visual.contains",
+        "visual.no_overlap"
+      ]
+    }
+  },
+  "required": [
+    "primitive",
+    "enforcement",
+    "params"
+  ],
+  "title": "OBDS Visual Check v1",
+  "type": "object"
+}

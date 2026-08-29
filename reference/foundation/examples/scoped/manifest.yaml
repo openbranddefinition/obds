@@ -1,0 +1,78 @@
+id: urn:obds:brand:example-scoped
+kind: brand-manifest
+name: Example Scoped Brand
+owner: Example Organisation
+schemaVersion: 1.0.0
+version: 1.0.0
+status: approved
+createdAt: '2026-07-21T12:00:00+02:00'
+updatedAt: '2026-07-21T12:00:00+02:00'
+profiles:
+- obds-foundation
+elements:
+- id: structure.brand
+  family: structure
+  kind: brand-identity
+  nature: fact
+  state: defined
+  value:
+    name: Example Scoped Brand
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+  valueContractRef: urn:obds:brand:example-scoped#value-contract:structure:brand-identity:2b7196d8
+- id: product.availability
+  family: structure
+  kind: product-availability
+  nature: fact
+  state: unknown
+  scope:
+    markets:
+    - GB
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations:
+  - Confirm current product availability with the responsible market owner.
+- id: claims.approved
+  family: rules
+  kind: claims-register
+  nature: fact
+  state: unknown
+  scope:
+    markets:
+    - GB
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations:
+  - Confirm approved local claims and evidence before publication.
+- id: identity.voice
+  family: identity
+  kind: voice-system
+  nature: knowledge
+  state: defined
+  value: Direct, calm and specific.
+  scope: {}
+  sourceRefs: []
+  validity:
+    from: null
+    to: null
+  annotations: []
+approval:
+  approvedBy: role:brand-owner
+  approvedAt: '2026-07-21T12:00:00+02:00'
+  contentHash: sha256:b9c6e13631ef58189051e15ef372d20e1193eda88a46f8861ec379daa7c364c1
+valueContracts:
+- id: urn:obds:brand:example-scoped#value-contract:structure:brand-identity:2b7196d8
+  family: structure
+  kind: brand-identity
+  shapeHash: sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2
+  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json
+  schemaHash: sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51
+  validatorRef: null

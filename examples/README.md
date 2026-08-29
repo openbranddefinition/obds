@@ -7,22 +7,33 @@ Licensed under the Apache License 2.0. See [`../LICENSE.md`](../LICENSE.md).
 
 ## Running them
 
-From the unpacked release package root, with the reference implementation on the
-path:
+The repository root is the package root. From a clone:
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 export PYTHONPATH=reference/foundation/src
 .venv/bin/python -m obds_ref.cli validate examples/foundation-minimal/manifest.yaml
-.venv/bin/python -m obds_ref.cli build \
-  --manifest examples/foundation-minimal/manifest.yaml \
-  --plan examples/foundation-minimal/build-plan.yaml \
-  --out /tmp/obds-out
+.venv/bin/python -m obds_ref.cli build examples/foundation-minimal/manifest.yaml examples/foundation-minimal/build-plan.yaml --out /tmp/obds-out
 ```
+
+`build` takes the manifest and the build plan as positional arguments, in that
+order. `--out` is the only option.
+
+The fail-closed example runs the same way and is supposed to fail:
+
+```bash
+.venv/bin/python -m obds_ref.cli build examples/fail-closed/manifest.yaml examples/fail-closed/build-plan.yaml --out /tmp/obds-fail
+```
+
+It exits `2`, writes `build-report.yaml` and writes no Compiled Brand Context.
+
+Both examples are also conformance cases. `reference/foundation/tests/test_examples.py`
+asserts exactly the behaviour documented below, so an example that drifts from
+the reference implementation fails the suite.
 
 ## `foundation-minimal/`
 
-The smallest thing that is a valid OBDS implementation.
+The smallest runnable Foundation example: one manifest, one element, one target.
 
 One manifest declaring `obds-foundation` and nothing else. One element,
 `structure.brand`, a `brand-identity` fact in state `defined`, with its value

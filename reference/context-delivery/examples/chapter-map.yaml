@@ -1,0 +1,17 @@
+kind: obds-chapter-map
+schemaVersion: 1.0.0
+chapters:
+- id: chapter.brand-foundation
+  title: Brand foundation
+  elementIds:
+  - structure.brand
+  - identity.voice
+- id: chapter.logo-system
+  title: Logo system
+  elementIds:
+  - design.logo.clear-zone
+  - rule.logo.clear-zone
+- id: chapter.known-gaps
+  title: Known gaps
+  elementIds:
+  - claims.approved

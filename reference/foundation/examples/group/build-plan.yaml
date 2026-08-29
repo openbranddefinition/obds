@@ -1,0 +1,49 @@
+id: urn:obds:build-plan:example-group
+kind: obds-build-plan
+schemaVersion: 1.0.0
+manifestRef:
+  id: urn:obds:brand:example-group
+  version: 1.0.0
+  contentHash: sha256:6b6f448064f8324b302d43363cd50e5ad13a8a2967400ef12451e99304046bc6
+compiler:
+  id: org.openbranddefinition.reference-compiler
+  version: 1.0.0
+tokenizer:
+  id: obds:whitespace-v1
+  version: 1.0.0
+targets:
+- id: alpha-query
+  scope:
+    brands:
+    - alpha
+    locales:
+    - en
+    outputTypes:
+    - brand-query
+  requiresDefined:
+  - alpha.identity
+  styleTexture:
+    mode: all
+    elementIds: []
+  stateMap:
+    mode: all_applicable
+    kinds: []
+  maxTokens: 300
+- id: beta-query
+  scope:
+    brands:
+    - beta
+    locales:
+    - en
+    outputTypes:
+    - brand-query
+  requiresDefined:
+  - beta.identity
+  styleTexture:
+    mode: all
+    elementIds: []
+  stateMap:
+    mode: all_applicable
+    kinds: []
+  maxTokens: 300
+asOf: '2026-08-27T00:00:00Z'

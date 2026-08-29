@@ -1,0 +1,433 @@
+{
+  "$defs": {
+    "element": {
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "else": {
+            "not": {
+              "required": [
+                "value"
+              ]
+            }
+          },
+          "if": {
+            "properties": {
+              "state": {
+                "const": "defined"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "nature": {
+                "const": "fact"
+              },
+              "state": {
+                "const": "defined"
+              }
+            },
+            "required": [
+              "state",
+              "nature"
+            ]
+          },
+          "then": {
+            "required": [
+              "valueContractRef"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "family": {
+                "const": "stance"
+              },
+              "kind": {
+                "const": "semantic-boundary"
+              },
+              "state": {
+                "const": "defined"
+              }
+            },
+            "required": [
+              "state",
+              "family",
+              "kind"
+            ]
+          },
+          "then": {
+            "required": [
+              "valueContractRef"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "annotations": {
+          "type": "array"
+        },
+        "family": {
+          "enum": [
+            "structure",
+            "identity",
+            "design",
+            "rules",
+            "context",
+            "stance"
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "nature": {
+          "enum": [
+            "fact",
+            "knowledge"
+          ]
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "sourceRefs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "state": {
+          "enum": [
+            "defined",
+            "unknown",
+            "not_defined",
+            "not_applicable"
+          ]
+        },
+        "subject": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "supersedes": false,
+        "validity": {
+          "type": "object"
+        },
+        "value": {},
+        "valueContractRef": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "family",
+        "kind",
+        "nature",
+        "state"
+      ],
+      "type": "object"
+    },
+    "scope": {
+      "additionalProperties": {
+        "items": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "minItems": 1,
+        "type": "array"
+      },
+      "type": "object"
+    },
+    "valueContract": {
+      "additionalProperties": false,
+      "properties": {
+        "family": {
+          "enum": [
+            "structure",
+            "identity",
+            "design",
+            "rules",
+            "context",
+            "stance"
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "schemaHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "schemaRef": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "shapeHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "validatorRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "family",
+        "kind",
+        "shapeHash",
+        "schemaRef",
+        "schemaHash"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/brand-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "approved"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "approval"
+        ]
+      }
+    }
+  ],
+  "properties": {
+    "approval": {
+      "additionalProperties": true,
+      "properties": {
+        "approvedAt": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "approvedBy": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "contentHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "reviewedAgainst": {
+          "additionalProperties": false,
+          "properties": {
+            "contentHash": {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            "version": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "version",
+            "contentHash"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "approvedBy",
+        "approvedAt",
+        "contentHash"
+      ],
+      "type": "object"
+    },
+    "createdAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "curation": {
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "coverage": {
+                "enum": [
+                  "complete",
+                  "partial"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "reportRef"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "coverage": {
+          "enum": [
+            "complete",
+            "partial",
+            "unknown"
+          ]
+        },
+        "modalities": {
+          "additionalProperties": false,
+          "properties": {
+            "figures": {
+              "enum": [
+                "complete",
+                "partial",
+                "not_assessed",
+                "not_applicable"
+              ]
+            },
+            "metadata": {
+              "enum": [
+                "complete",
+                "partial",
+                "not_assessed",
+                "not_applicable"
+              ]
+            },
+            "tables": {
+              "enum": [
+                "complete",
+                "partial",
+                "not_assessed",
+                "not_applicable"
+              ]
+            },
+            "text": {
+              "enum": [
+                "complete",
+                "partial",
+                "not_assessed",
+                "not_applicable"
+              ]
+            }
+          },
+          "type": "object"
+        },
+        "reportRef": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sourceSnapshotRefs": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "sourceSnapshotRefs",
+        "coverage"
+      ],
+      "type": "object"
+    },
+    "elements": {
+      "items": {
+        "$ref": "#/$defs/element"
+      },
+      "type": "array"
+    },
+    "id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "kind": {
+      "const": "brand-manifest"
+    },
+    "name": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "owner": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "profiles": {
+      "contains": {
+        "const": "obds-foundation"
+      },
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "approved",
+        "archived"
+      ]
+    },
+    "updatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "valueContracts": {
+      "items": {
+        "$ref": "#/$defs/valueContract"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "name",
+    "schemaVersion",
+    "version",
+    "status",
+    "owner",
+    "profiles",
+    "elements",
+    "valueContracts"
+  ],
+  "title": "OBDS Brand Manifest 1.0.0",
+  "type": "object"
+}

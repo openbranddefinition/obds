@@ -1,0 +1,21 @@
+kind: obds-assembly-request
+schemaVersion: 1.0.0
+targetId: brand-query-global-en
+deliveryMode: lookup
+applicationMode: create
+retrieval:
+  status: no_match
+  resolution: manifest_checked
+  truthOutcome: not_covered
+selection:
+  searchCardIds:
+  - urn:obds:search-card:identity.value.simplicity
+  - urn:obds:search-card:design.logo.clear-zone
+  reasoningChapterIds: []
+  factElementIds:
+  - structure.brand
+  gapElementIds: []
+  activeGuidanceElementIds: []
+taskInput: What is the approved sonic logo duration?
+tokenBudget:
+  max: 1200

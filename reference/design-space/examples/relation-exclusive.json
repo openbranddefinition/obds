@@ -1,0 +1,7 @@
+{
+  "between": [
+    "design.layout.compact",
+    "design.layout.expanded"
+  ],
+  "relation": "exclusive"
+}

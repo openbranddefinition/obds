@@ -1,0 +1,26 @@
+[HARD_BOUNDARIES]
+rule.claims.require-approval [require/require_approval]: Unregistered performance claims require approval. | refs=claims.approved-register
+rule.logo.clear-zone [require/block]: Preserve the approved logo clear zone. | refs=design.logo.clear-zone
+
+[FACT_GROUNDING]
+design.logo.clear-zone [defined]: {"description":"Keep one logo-height clear around the logo.","name":"Logo Clear Zone"}
+structure.brand [defined]: {"name":"Example Assembly Brand"}
+
+[STATE_MAP]
+claims.approved-register [unknown]:
+
+[GUIDANCE_CONTEXT]
+[ACTIVE_GUIDANCE]
+identity.value.simplicity [defined]: {"description":"Make the relevant idea easy to understand and use.","name":"Simplicity"}
+
+[REASONING_CHAPTERS]
+Generated relationship context. Exact elements already present in other slots are omitted here. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.
+
+chapter.brand-expression: ## identity.value.innovation [identity/core-value/defined]
+{"description":"Find useful new ways to solve real customer problems.","name":"Innovation"}
+
+## identity.value.reliability [identity/core-value/defined]
+{"description":"Use precise information and avoid unsupported certainty.","name":"Reliability"}
+
+[TASK_INPUT]
+Create a concise product-launch headline.

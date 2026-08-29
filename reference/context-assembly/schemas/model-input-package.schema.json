@@ -1,0 +1,275 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/model-input-package.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicationMode": {
+      "enum": [
+        "create",
+        "review",
+        "compliance"
+      ]
+    },
+    "assembledAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "assemblyHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "deliveryMode": {
+      "enum": [
+        "lookup",
+        "reasoning",
+        "full"
+      ]
+    },
+    "id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-model-input-package"
+    },
+    "manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "contentHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "type": "object"
+    },
+    "modelInputHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "retrieval": {
+      "additionalProperties": false,
+      "properties": {
+        "resolution": {
+          "enum": [
+            "direct",
+            "widened",
+            "manifest_checked",
+            "unresolved"
+          ]
+        },
+        "status": {
+          "enum": [
+            "hit",
+            "partial",
+            "no_match",
+            "low_confidence",
+            "access_filtered"
+          ]
+        },
+        "truthOutcome": {
+          "enum": [
+            "defined",
+            "unknown",
+            "not_defined",
+            "not_applicable",
+            "prohibited",
+            "not_covered",
+            "access_limited",
+            "mixed",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "resolution",
+        "truthOutcome"
+      ],
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "selection": {
+      "additionalProperties": false,
+      "properties": {
+        "activeGuidanceElementIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "factElementIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "gapElementIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "hardBoundaryElementIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "reasoningChapterIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "searchCardIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "searchCardIds",
+        "reasoningChapterIds",
+        "hardBoundaryElementIds",
+        "factElementIds",
+        "gapElementIds",
+        "activeGuidanceElementIds"
+      ],
+      "type": "object"
+    },
+    "slots": {
+      "additionalProperties": false,
+      "properties": {
+        "factGrounding": {
+          "type": "string"
+        },
+        "guidanceContext": {
+          "type": "string"
+        },
+        "hardBoundaries": {
+          "type": "string"
+        },
+        "stateMap": {
+          "type": "string"
+        },
+        "taskInput": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "hardBoundaries",
+        "factGrounding",
+        "stateMap",
+        "guidanceContext",
+        "taskInput"
+      ],
+      "type": "object"
+    },
+    "sources": {
+      "additionalProperties": false,
+      "properties": {
+        "chapterSetHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "compiledContextHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "searchIndexHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "compiledContextHash",
+        "searchIndexHash",
+        "chapterSetHash"
+      ],
+      "type": "object"
+    },
+    "targetId": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "tokenBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "actual": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "max": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "tokenizerId": {
+          "type": "string"
+        },
+        "tokenizerVersion": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "tokenizerId",
+        "tokenizerVersion",
+        "max",
+        "actual"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "id",
+    "assembledAt",
+    "targetId",
+    "deliveryMode",
+    "applicationMode",
+    "manifest",
+    "sources",
+    "retrieval",
+    "selection",
+    "slots",
+    "tokenBudget",
+    "modelInputHash",
+    "assemblyHash"
+  ],
+  "title": "OBDS Model Input Package 1.0.0",
+  "type": "object"
+}

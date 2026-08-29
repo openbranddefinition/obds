@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openbranddefinition.org/release-schemas/1.0.0/release-audit.schema.json",
+  "title": "OBDS release audit",
+  "description": "Package-level release audit metadata. Not an OBDS Brand Truth contract and not part of the public OBDS schema surface.",
+  "type": "object",
+  "required": [
+    "kind",
+    "schemaVersion",
+    "release",
+    "status",
+    "testsPassed",
+    "testsFailed",
+    "suiteCounts",
+    "testOutputHash",
+    "publicSchemaCount",
+    "publicValueSchemaCount",
+    "packageJunkFiles"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": { "const": "obds-release-audit" },
+    "schemaVersion": { "$ref": "#/$defs/semver" },
+    "release": { "$ref": "#/$defs/semver" },
+    "status": { "enum": ["stable"] },
+    "testsPassed": { "type": "integer", "minimum": 0 },
+    "testsFailed": { "type": "integer", "minimum": 0, "maximum": 0 },
+    "testsSkipped": { "type": "integer", "minimum": 0, "maximum": 0 },
+    "suiteCounts": {
+      "$ref": "https://openbranddefinition.org/release-schemas/1.0.0/release-test-result.schema.json#/$defs/suiteCounts"
+    },
+    "testOutputHash": { "$ref": "#/$defs/sha256" },
+    "publicSchemaCount": { "type": "integer", "minimum": 1 },
+    "publicValueSchemaCount": { "type": "integer", "minimum": 1 },
+    "packageJunkFiles": { "type": "integer", "minimum": 0, "maximum": 0 },
+    "packageFileCount": { "type": "integer", "minimum": 1 },
+    "canonicalCopiesIdentical": { "const": true },
+    "schemaSurfaceUnchangedSince": { "$ref": "#/$defs/semver" },
+    "schemaSurfaceFingerprint": { "$ref": "#/$defs/sha256" },
+    "unsupportedTokenizerFailsClosed": { "const": true },
+    "legacyColourHexPublic": { "const": false },
+    "stablePromotionRetested": { "type": "boolean" },
+    "nodeRequiredForInteropTests": { "type": "boolean" },
+    "modelInputExampleBytesBefore": { "type": "integer", "minimum": 0 },
+    "modelInputExampleBytesAfter": { "type": "integer", "minimum": 0 },
+    "modelInputExampleReductionPercent": { "type": "number", "minimum": 0, "maximum": 100 }
+  },
+  "$defs": {
+    "semver": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

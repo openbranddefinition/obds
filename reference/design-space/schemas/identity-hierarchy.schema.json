@@ -1,0 +1,25 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/1.0.0/identity-hierarchy.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "tiers": {
+      "items": {
+        "items": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "minItems": 1,
+        "type": "array",
+        "uniqueItems": true
+      },
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "tiers"
+  ],
+  "title": "OBDS Identity Hierarchy",
+  "type": "object"
+}

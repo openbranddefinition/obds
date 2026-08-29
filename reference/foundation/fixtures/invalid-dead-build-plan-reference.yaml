@@ -1,0 +1,32 @@
+id: urn:obds:build-plan:example-simple
+kind: obds-build-plan
+schemaVersion: 1.0.0
+manifestRef:
+  id: urn:obds:brand:example-simple
+  version: 1.0.0
+  contentHash: sha256:f8f39d73f4c12a5b4215e561fca95f8516032406e28dc5a508fc77634c6fd072
+compiler:
+  id: org.openbranddefinition.reference-compiler
+  version: 1.0.0
+tokenizer:
+  id: obds:whitespace-v1
+  version: 1.0.0
+targets:
+- id: brand-query-global-en
+  scope:
+    locales:
+    - en
+    outputTypes:
+    - brand-query
+  requiresDefined:
+  - structure.brand
+  - claims.phantom
+  styleTexture:
+    mode: all
+    elementIds: []
+  stateMap:
+    mode: all_applicable
+    kinds: []
+  releasePolicy: build_only
+  maxTokens: 500
+asOf: '2026-08-27T00:00:00Z'

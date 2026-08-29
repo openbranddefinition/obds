@@ -1,0 +1,54 @@
+{
+  "artifactHash": "sha256:0729d352075f3e7d16f29814a732774bef4b938b4f358bd6100512ba5566da5b",
+  "build": {
+    "compilerId": "org.openbranddefinition.reference-compiler",
+    "compilerVersion": "1.0.0",
+    "planHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "planId": "urn:obds:plan:fixture"
+  },
+  "checkRegistryVersion": 1,
+  "compiledChecks": [
+    {
+      "enforcement": "block",
+      "params": {
+        "appliesTo": "task_input",
+        "match": "word_boundary_ci",
+        "terms": [
+          "secret"
+        ]
+      },
+      "phase": "preflight",
+      "primitive": "term_prohibited",
+      "ruleElementId": "rule.block-secret"
+    }
+  ],
+  "id": "urn:obds:context:preflight-block",
+  "includedElementIds": [
+    "rule.block-secret"
+  ],
+  "kind": "obds-compiled-brand-context",
+  "manifest": {
+    "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "id": "urn:obds:brand:fixture",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "1.0.0",
+  "scope": {},
+  "slots": {
+    "factGrounding": "",
+    "hardBoundaries": "",
+    "stateMap": "",
+    "styleTexture": ""
+  },
+  "stateMapCoverage": "none",
+  "stateMapEntryCount": 0,
+  "targetId": "preflight-block",
+  "tokenBudget": {
+    "actual": 0,
+    "max": 100,
+    "tokenizerId": "obds:whitespace-v1",
+    "tokenizerVersion": "1.0.0"
+  },
+  "validFrom": null,
+  "validTo": null
+}

@@ -1,0 +1,59 @@
+{
+  "$id": "https://openbranddefinition.org/value-schemas/1.0.0/semantic-boundary.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "is": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "isNot": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "quality": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "subject": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "tieBreaker": {
+      "additionalProperties": false,
+      "properties": {
+        "over": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "prefer": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "prefer",
+        "over"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "subject",
+    "quality",
+    "is",
+    "isNot"
+  ],
+  "title": "OBDS Semantic Boundary Value 1.0.0",
+  "type": "object"
+}

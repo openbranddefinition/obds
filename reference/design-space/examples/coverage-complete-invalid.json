@@ -1,0 +1,9 @@
+{
+  "coverage": "complete",
+  "modalities": {
+    "figures": "not_assessed",
+    "metadata": "complete",
+    "tables": "complete",
+    "text": "complete"
+  }
+}
