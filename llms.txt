@@ -2,7 +2,7 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 1.0.2 (stable, 28 August 2026)
+Current release: 1.0.3 (stable, 29 August 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
@@ -74,21 +74,22 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2.md
+https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3.md
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2-CHANGELOG.md
+Complete package: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-CHANGELOG.md
 Publication record: https://openbranddefinition.org/publication-record.json
+Source repository: https://github.com/openbranddefinition/obds
 
 ## Licensing
 
@@ -124,12 +125,18 @@ https://openbranddefinition.org/examples/README.md
 
 Published as released, not modified, historical.
 
+OBDS 1.0.2  https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2.md
 OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 1.0.2 is
-the operative one.
+the licensing wording that was current at the time. Section 32.1 of 1.0.3 is
+the operative one, unchanged from 1.0.2.
+
+1.0.3 is a documentation, packaging and developer-experience release. No
+normative contract changed. The public schema surface is byte-identical to
+1.0.0, 1.0.1 and 1.0.2, every schema $id still resolves under
+/schemas/1.0.0/ and /value-schemas/1.0.0/, and schemaVersion remains 1.0.0.
 
 ## Note
 
