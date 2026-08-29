@@ -1,11 +1,19 @@
 {
   "artefact": {
-    "expectedArtifactHash": "sha256:505b3f103af46bcc9c96478a6768148647977fae922cbc3f7d585962de2677a1",
+    "expectedArtifactHash": "sha256:c73a85c5aa7ecbaa3da4d385bb068120e4ae8bc5be89f8d7d56206537e6ac618",
     "input": {
+      "artifactHash": "sha256:c73a85c5aa7ecbaa3da4d385bb068120e4ae8bc5be89f8d7d56206537e6ac618",
+      "availableElementIds": [
+        "design.primary-colour",
+        "identity.voice",
+        "rule.no-best",
+        "structure.brand"
+      ],
       "build": {
+        "asOf": "2026-08-27T00:00:00Z",
         "compilerId": "org.openbranddefinition.reference-compiler",
         "compilerVersion": "1.0.0",
-        "planHash": "sha256:9cf7cf1a2477288eef4342118a84256e2aeacb03642d99248e99832a757eb23c",
+        "planHash": "sha256:b9642ce499a8163dfc5edef347325cd1b405fe85dd5db93c20c2c9e03ffcea6c",
         "planId": "urn:obds:build-plan:example-simple"
       },
       "checkRegistryVersion": 1,
@@ -24,70 +32,8 @@
           "ruleElementId": "rule.no-best"
         }
       ],
-      "id": "urn:obds:brand:example-simple:context:brand-query-global-en",
-      "includedElementIds": [
-        "design.primary-colour",
-        "identity.voice",
-        "rule.no-best",
-        "structure.brand"
-      ],
-      "kind": "obds-compiled-brand-context",
-      "manifest": {
-        "contentHash": "sha256:4c464af9811c3f6f927e4a2eab4586b50f6f94183ba36d543bd4825684f4a73a",
-        "id": "urn:obds:brand:example-simple",
-        "version": "1.0.0"
-      },
-      "schemaVersion": "1.0.0",
-      "scope": {
-        "locales": [
-          "en"
-        ],
-        "outputTypes": [
-          "brand-query"
-        ]
-      },
-      "slots": {
-        "factGrounding": "- `design.primary-colour` — {\"hex\":\"#246BFD\",\"name\":\"Primary\",\"rgb\":[36,107,253]}\n- `structure.brand` — {\"name\":\"Example Simple Brand\"}",
-        "hardBoundaries": "- `rule.no-best` — Do not describe the brand as the best. [deterministic, block]",
-        "stateMap": "",
-        "styleTexture": "`identity.voice`\n\nClear, direct and useful. Avoid hype."
-      },
-      "stateMapCoverage": "complete",
-      "stateMapEntryCount": 0,
-      "targetId": "brand-query-global-en",
-      "tokenBudget": {
-        "actual": 30,
-        "max": 500,
-        "tokenizerId": "obds:whitespace-v1",
-        "tokenizerVersion": "1.0.0"
-      },
-      "validFrom": null,
-      "validTo": null
-    }
-  },
-  "kind": "obds-canonical-hash-vectors",
-  "manifest": {
-    "expectedContentHash": "sha256:4c464af9811c3f6f927e4a2eab4586b50f6f94183ba36d543bd4825684f4a73a",
-    "input": {
-      "createdAt": "2026-07-21T12:00:00+02:00",
-      "elements": [
-        {
-          "annotations": [],
-          "family": "structure",
-          "id": "structure.brand",
-          "kind": "brand-identity",
-          "nature": "fact",
-          "scope": {},
-          "sourceRefs": [],
-          "state": "defined",
-          "validity": {
-            "from": null,
-            "to": null
-          },
-          "value": {
-            "name": "Example Simple Brand"
-          }
-        },
+      "contextAssembly": null,
+      "elementRecords": [
         {
           "annotations": [],
           "family": "design",
@@ -109,7 +55,8 @@
               107,
               253
             ]
-          }
+          },
+          "valueContractRef": "urn:obds:brand:example-simple#value-contract:design:colour:c78a1bc4"
         },
         {
           "annotations": [],
@@ -163,16 +110,217 @@
             "statement": "Do not describe the brand as the best.",
             "validationMode": "deterministic",
             "validatorRef": null
-          }
+          },
+          "valueContractRef": "urn:obds:brand:example-simple#value-contract:rules:rule:3fcc86f8"
+        },
+        {
+          "annotations": [],
+          "family": "structure",
+          "id": "structure.brand",
+          "kind": "brand-identity",
+          "nature": "fact",
+          "scope": {},
+          "sourceRefs": [],
+          "state": "defined",
+          "validity": {
+            "from": null,
+            "to": null
+          },
+          "value": {
+            "name": "Example Simple Brand"
+          },
+          "valueContractRef": "urn:obds:brand:example-simple#value-contract:structure:brand-identity:2b7196d8"
+        }
+      ],
+      "id": "urn:obds:brand:example-simple:context:brand-query-global-en",
+      "includedElementIds": [
+        "design.primary-colour",
+        "identity.voice",
+        "rule.no-best",
+        "structure.brand"
+      ],
+      "kind": "obds-compiled-brand-context",
+      "manifest": {
+        "contentHash": "sha256:f8f39d73f4c12a5b4215e561fca95f8516032406e28dc5a508fc77634c6fd072",
+        "id": "urn:obds:brand:example-simple",
+        "version": "1.0.0"
+      },
+      "schemaVersion": "1.0.0",
+      "scope": {
+        "locales": [
+          "en"
+        ],
+        "outputTypes": [
+          "brand-query"
+        ]
+      },
+      "slots": {
+        "factGrounding": "- `design.primary-colour` — {\"hex\":\"#246BFD\",\"name\":\"Primary\",\"rgb\":[36,107,253]}\n- `structure.brand` — {\"name\":\"Example Simple Brand\"}",
+        "hardBoundaries": "- `rule.no-best` — Do not describe the brand as the best. [deterministic, block]",
+        "stateMap": "",
+        "styleTexture": "`identity.voice`\n\nClear, direct and useful. Avoid hype."
+      },
+      "stateMapCoverage": "complete",
+      "stateMapEntryCount": 0,
+      "targetId": "brand-query-global-en",
+      "tokenBudget": {
+        "actual": 30,
+        "max": 500,
+        "tokenizerId": "obds:whitespace-v1",
+        "tokenizerVersion": "1.0.0"
+      },
+      "validFrom": null,
+      "validTo": null
+    }
+  },
+  "kind": "obds-canonical-hash-vectors",
+  "manifest": {
+    "expectedContentHash": "sha256:f8f39d73f4c12a5b4215e561fca95f8516032406e28dc5a508fc77634c6fd072",
+    "input": {
+      "approval": {
+        "approvedAt": "2026-07-21T12:00:00+02:00",
+        "approvedBy": "role:brand-owner",
+        "contentHash": "sha256:f8f39d73f4c12a5b4215e561fca95f8516032406e28dc5a508fc77634c6fd072"
+      },
+      "createdAt": "2026-07-21T12:00:00+02:00",
+      "elements": [
+        {
+          "annotations": [],
+          "family": "structure",
+          "id": "structure.brand",
+          "kind": "brand-identity",
+          "nature": "fact",
+          "scope": {},
+          "sourceRefs": [],
+          "state": "defined",
+          "validity": {
+            "from": null,
+            "to": null
+          },
+          "value": {
+            "name": "Example Simple Brand"
+          },
+          "valueContractRef": "urn:obds:brand:example-simple#value-contract:structure:brand-identity:2b7196d8"
+        },
+        {
+          "annotations": [],
+          "family": "design",
+          "id": "design.primary-colour",
+          "kind": "colour",
+          "nature": "fact",
+          "scope": {},
+          "sourceRefs": [],
+          "state": "defined",
+          "validity": {
+            "from": null,
+            "to": null
+          },
+          "value": {
+            "hex": "#246BFD",
+            "name": "Primary",
+            "rgb": [
+              36,
+              107,
+              253
+            ]
+          },
+          "valueContractRef": "urn:obds:brand:example-simple#value-contract:design:colour:c78a1bc4"
+        },
+        {
+          "annotations": [],
+          "family": "identity",
+          "id": "identity.voice",
+          "kind": "voice-system",
+          "nature": "knowledge",
+          "scope": {},
+          "sourceRefs": [],
+          "state": "defined",
+          "validity": {
+            "from": null,
+            "to": null
+          },
+          "value": "Clear, direct and useful. Avoid hype."
+        },
+        {
+          "annotations": [],
+          "family": "rules",
+          "id": "rule.no-best",
+          "kind": "rule",
+          "nature": "fact",
+          "scope": {},
+          "sourceRefs": [],
+          "state": "defined",
+          "validity": {
+            "from": null,
+            "to": null
+          },
+          "value": {
+            "checks": [
+              {
+                "params": {
+                  "appliesTo": "output",
+                  "match": "case_insensitive",
+                  "terms": [
+                    "the best"
+                  ]
+                },
+                "phase": "postflight",
+                "primitive": "term_prohibited"
+              }
+            ],
+            "condition": {},
+            "enforcement": "block",
+            "obligation": "prohibit",
+            "references": [
+              "identity.voice"
+            ],
+            "requirement": {},
+            "statement": "Do not describe the brand as the best.",
+            "validationMode": "deterministic",
+            "validatorRef": null
+          },
+          "valueContractRef": "urn:obds:brand:example-simple#value-contract:rules:rule:3fcc86f8"
         }
       ],
       "id": "urn:obds:brand:example-simple",
       "kind": "brand-manifest",
       "name": "Example Simple Brand",
       "owner": "Example Organisation",
+      "profiles": [
+        "obds-foundation"
+      ],
       "schemaVersion": "1.0.0",
       "status": "approved",
       "updatedAt": "2026-07-21T12:00:00+02:00",
+      "valueContracts": [
+        {
+          "family": "structure",
+          "id": "urn:obds:brand:example-simple#value-contract:structure:brand-identity:2b7196d8",
+          "kind": "brand-identity",
+          "schemaHash": "sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51",
+          "schemaRef": "https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json",
+          "shapeHash": "sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2",
+          "validatorRef": null
+        },
+        {
+          "family": "design",
+          "id": "urn:obds:brand:example-simple#value-contract:design:colour:c78a1bc4",
+          "kind": "colour",
+          "schemaHash": "sha256:2a037f40a4fe192a478482a07911fb0362a1f9a428ce1d438442fdf9d65dc592",
+          "schemaRef": "https://openbranddefinition.org/value-schemas/1.0.0/colour.schema.json",
+          "shapeHash": "sha256:c78a1bc4939bfd4014a885ea858d2361ed935379f57ab2af3af74fd7347949d9",
+          "validatorRef": "obds:validator:colour-consistency-v1"
+        },
+        {
+          "family": "rules",
+          "id": "urn:obds:brand:example-simple#value-contract:rules:rule:3fcc86f8",
+          "kind": "rule",
+          "schemaHash": "sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787",
+          "schemaRef": "https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json",
+          "shapeHash": "sha256:3fcc86f8b2cb441e271b40e01d66e63c3e6a99c685b60105f9721cfab29fc17c",
+          "validatorRef": null
+        }
+      ],
       "version": "1.0.0"
     }
   },
@@ -181,7 +329,10 @@
     "CRLF and CR inside strings become LF.",
     "Object keys are sorted lexicographically.",
     "Array order is preserved.",
-    "JSON is UTF-8 with no BOM and no insignificant whitespace."
+    "JSON is UTF-8 with no BOM and no insignificant whitespace.",
+    "The manifest and artefact inputs are the published examples/simple documents in their current 1.0.0 shape, so this vector cannot drift from the shipped example without failing.",
+    "expectedContentHash is independently pinned as manifestRef.contentHash in examples/simple/build-plan.yaml and as approval.contentHash in the manifest itself.",
+    "expectedArtifactHash is the artifactHash the compiler stamps into the artefact; artefact_hash() excludes that field, so the vector asserts the stamp is self-consistent."
   ],
   "schemaVersion": "1.0.0"
 }

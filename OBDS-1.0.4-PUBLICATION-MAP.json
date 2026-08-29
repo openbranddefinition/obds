@@ -269,11 +269,11 @@
       "releaseDirectory": "release-schemas/"
     }
   ],
-  "note": "One-to-one mapping from public $id to release file to intended public URL. OBDS 1.0.3 is a documentation, packaging and developer-experience release: the schema contract did not move, so every $id and every public path stays at 1.0.0 and every file is byte-identical to the 1.0.0, 1.0.1 and 1.0.2 releases.",
+  "note": "One-to-one mapping from public $id to release file to intended public URL. OBDS 1.0.4 is a hygiene release: the schema contract did not move, so every $id and every public path stays at 1.0.0 and every file is byte-identical to the 1.0.0, 1.0.1, 1.0.2 and 1.0.3 releases.",
   "origin": "https://openbranddefinition.org",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
-  "release": "1.0.3",
+  "release": "1.0.4",
   "schemaContractVersion": "1.0.0",
   "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaVersion": "1.0.0",

@@ -1,7 +1,15 @@
 # Examples
 
-Two minimal, runnable examples. Both are Foundation only, and both are verified
-against the reference implementation shipped in the release package.
+Two minimal, runnable examples, both verified against the reference
+implementation shipped in the release package.
+
+Both carry the smallest possible Foundation manifest and then exercise
+**Compiled Runtime** on top of it. The manifest, its element, the four Brand
+States and the value contract are Foundation, section 26.1. The build plan,
+`requiresDefined`, the produced or withheld Compiled Brand Context and the
+`build` command itself are Compiled Runtime, section 26.2. The directory is
+named `foundation-minimal` for the manifest it holds, not because `build` is a
+Foundation operation.
 
 Licensed under the Apache License 2.0. See [`../LICENSE.md`](../LICENSE.md).
 
@@ -33,12 +41,13 @@ the reference implementation fails the suite.
 
 ## `foundation-minimal/`
 
-The smallest runnable Foundation example: one manifest, one element, one target.
+The smallest runnable example: one manifest, one element, one target.
 
 One manifest declaring `obds-foundation` and nothing else. One element,
 `structure.brand`, a `brand-identity` fact in state `defined`, with its value
-contract pinning the shape hash, the schema reference and the schema hash. One
-build plan with one target that requires that element to be defined.
+contract pinning the shape hash, the schema reference and the schema hash. That
+much is Foundation. One build plan with one target that requires that element to
+be defined, which is Compiled Runtime.
 
 It compiles:
 
@@ -49,8 +58,9 @@ artifactHash       valid, and reproducible across runs
 requirements       structure.brand  defined  pass
 ```
 
-There is no Compiled Runtime configuration, no Context Delivery, no Context
-Assembly, no Composition and no Visual Operations. This is the whole minimum.
+The manifest is the whole Foundation minimum: one element and its value
+contract, nothing else. Beyond the single build target there is no Context
+Delivery, no Context Assembly, no Composition and no Visual Operations.
 
 ## `fail-closed/`
 
@@ -86,3 +96,9 @@ because a non-defined state must not carry one.
 This is what "fail closed" means in OBDS: the absence of required truth stops the
 process before generation, rather than producing fluent output from an assumption
 nobody approved.
+
+The guarantee belongs to Compiled Runtime. Section 26.2 is what requires "no
+artefact for a failed target" and "zero instrumented model calls after a failed
+build". Foundation supplies the truth this gate reads — the element, its state
+`unknown` and the rule that a non-defined state carries no value — but a
+Foundation-only implementation does not run the gate.

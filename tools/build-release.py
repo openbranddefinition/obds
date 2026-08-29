@@ -25,12 +25,16 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
+import io
 import json
 import shutil
 import subprocess
 import sys
 import zipfile
+from contextlib import redirect_stdout
 from pathlib import Path
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -62,6 +66,109 @@ SUITE_ORDER = (
     "integration",
     "golden",
     "adversarial",
+)
+
+# Section 26 requires a conformance result to identify the implementation, the
+# suite, the profile and the counts. These constants supply the first three;
+# the counts come from the run.
+IMPLEMENTATION = {
+    "name": "org.openbranddefinition.reference-compiler",
+    "version": "1.0.0",
+    "language": "Python",
+    "repository": "https://github.com/openbranddefinition/obds",
+}
+
+# Section 26 claims this release actually makes. Two, and no more.
+#
+# Phase A listed six. Four of them (context-delivery, context-assembly,
+# visual-operations, composition) were evidenced by modules that are not the
+# named implementation: reference/design-space/design_space_ref.py,
+# reference/context-assembly/assemble_context.py and
+# reference/context-delivery/build_views.py never import obds_ref. They were
+# removed in 1.0.4. Do not re-add a profile without a declared suite for it.
+FOUNDATION_PROFILE = {
+    "id": "obds-foundation",
+    "conformanceSection": "26.1",
+    "basis": (
+        "reference/foundation/conformance-suite.yaml declares `profile: foundation`. "
+        "It is the only artefact in this package that names a conformance profile. "
+        "Every declared case is executed by the release build and re-executed by "
+        "reference/release-gate.py; the result is published as "
+        "OBDS-<release>-FOUNDATION-CONFORMANCE.json."
+    ),
+    "declaredSuite": "reference/foundation/conformance-suite.yaml",
+}
+
+# Section 26.2 has no declared per-profile suite in this release, so the claim
+# rests on named executed cases, one per requirement in the section's own list.
+COMPILED_RUNTIME_PROFILE = {
+    "id": "compiled-runtime",
+    "conformanceSection": "26.2",
+    "basis": (
+        "No declared per-profile conformance suite exists for section 26.2 in "
+        "this release, so this is not a claim of the form 'passed the official "
+        "26.2 suite'. It is a claim that every requirement section 26.2 lists is "
+        "implemented by the named reference compiler and exercised by a named "
+        "executed case, enumerated in requirementsExercised. Defining a declared "
+        "26.2 suite is Phase B work."
+    ),
+    "requirementsExercised": [
+        {"requirement": "exact Build Plans", "case": "obds_ref.compiler.validate_plan, foundation and adversarial suites"},
+        {"requirement": "requiresDefined", "case": "test_required_unknown_fails_and_emits_no_artefact"},
+        {"requirement": "explicit context selection", "case": "styleTexture and stateMap modes, foundation and adversarial suites"},
+        {"requirement": "no artefact for a failed target", "case": "test_fail_closed_example_emits_no_context_and_calls_no_model"},
+        {"requirement": "canonical JSON artefacts", "case": "test_canonical_json_normalises_nfc_and_line_endings"},
+        {"requirement": "reproducible hashes", "case": "test_simple_target_builds_and_hash_is_reproducible"},
+        {"requirement": "Foundation Check Registry v1", "case": "obds_ref.checks.validate_check, foundation and adversarial suites"},
+        {"requirement": "exact target loading", "case": "test_invalid_hash_no_call"},
+        {"requirement": "Runtime Decision Records", "case": "test_runtime_record_ndjson, test_assembly_failed_runtime_record_is_schema_valid"},
+        {"requirement": "zero instrumented model calls after failed build or blocking preflight", "case": "test_failed_build_means_no_model_call, test_blocking_preflight_means_no_model_call"},
+        {"requirement": "withheld output after blocking postflight", "case": "test_blocking_postflight_withholds_output"},
+        {"requirement": "per-slot token reporting", "case": "build report tokenCounts per slot; overflow exercised by test_token_overflow_fails_without_artefact"},
+    ],
+}
+
+# Every suite the release executed, with no conformance claim attached. This is
+# where context-delivery, context-assembly and design-space are reported now.
+EXECUTED_SUITES_NOTE = (
+    "Suites executed by reference/run_all.py, reported as coverage only. No "
+    "conformance profile is claimed for context-delivery, context-assembly or "
+    "design-space: those suites exercise reference/context-delivery/build_views.py, "
+    "reference/context-assembly/assemble_context.py and "
+    "reference/design-space/design_space_ref.py, none of which is the "
+    "implementation named in `implementation`."
+)
+
+# The suite hash covers the published conformance suite: the runner, the seven
+# suite directories and their fixtures. It excludes reference/foundation/src/,
+# the implementation under test, which IMPLEMENTATION identifies instead. The
+# definition lives in reference/release-gate.py because the gate ships inside
+# the release archive and this script does not.
+
+FOUNDATION_CLAIM_SCOPE = (
+    "Result of the official OBDS Foundation Conformance Suite declared in "
+    "reference/foundation/conformance-suite.yaml, profile `foundation`, "
+    "executed against the reference implementation. Every declared case ran and "
+    "passed; none was skipped or changed. This run is deliberately not added to "
+    "the aggregate suiteCounts: 14 of its 15 cases exercise the same fixtures "
+    "and examples as the pytest suites, so aggregating both would double-count "
+    "the same coverage."
+)
+
+CLAIM_SCOPE = (
+    "Result of the OBDS conformance runs for the exact release and suite hash "
+    "named in this file, executed against the reference implementation named in "
+    "`implementation`. Every required case ran; none was skipped, changed or "
+    "expected to fail. `conformanceProfiles` lists only profiles this release "
+    "can defend: `obds-foundation` because a declared conformance suite names "
+    "that profile and every one of its cases passed, and `compiled-runtime` "
+    "because every requirement section 26.2 lists is exercised by a named "
+    "executed case, enumerated in `requirementsExercised`. No profile is claimed "
+    "for context-delivery, context-assembly, visual-operations or composition; "
+    "those suites are reported under `executedSuites` as coverage only, because "
+    "they exercise modules other than the named implementation. This file is a "
+    "suite result under section 26, not an independent certification and not a "
+    "statement about any other implementation."
 )
 
 
@@ -125,6 +232,77 @@ def run_tests(release: str) -> None:
     print(f"wrote OBDS-{release}-TEST-OUTPUT.txt")
 
 
+def run_official_foundation_conformance(release: str) -> dict:
+    """Execute the official declared Foundation conformance suite and publish it.
+
+    Section 26 clause 1 requires passing every required case in the official
+    Conformance Suite for the named profile. This run is deliberately NOT added
+    to `suiteCounts`: 14 of its 15 cases exercise the same fixtures and examples
+    as the pytest suites, so adding them would double-count the same coverage.
+    It is published as its own result with its own profile, counts and suite
+    hash.
+    """
+    print("running the official Foundation conformance suite")
+    src = ROOT / "reference" / "foundation" / "src"
+    if str(src) not in sys.path:
+        sys.path.insert(0, str(src))
+    from obds_ref.cli import command_conformance
+
+    path = ROOT / f"OBDS-{release}-FOUNDATION-CONFORMANCE.json"
+    args = SimpleNamespace(suite=str(ROOT / "reference/foundation/conformance-suite.yaml"),
+                           out=str(path))
+    buffer = io.StringIO()
+    with redirect_stdout(buffer):
+        command_conformance(args)
+    result = json.loads(path.read_text(encoding="utf-8"))
+    if result.get("failedCount") or not result.get("passed"):
+        failing = ", ".join(c["id"] for c in result.get("cases", []) if not c.get("passed"))
+        sys.exit(f"official Foundation conformance failed ({failing}); not building a release")
+    result["obdsRelease"] = release
+    result["claimScope"] = FOUNDATION_CLAIM_SCOPE
+    path.write_text(
+        json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+    print(f"wrote OBDS-{release}-FOUNDATION-CONFORMANCE.json "
+          f"({result['passedCount']} passed / {result['failedCount']} failed)")
+    return result
+
+
+def _gate():
+    """The release gate, which owns the suite-hash definition.
+
+    The gate ships inside the release archive and the build tooling does not, so
+    the definition lives there and is imported here. One definition, and anyone
+    with the package can recompute the suite identity without this script.
+    """
+    spec = importlib.util.spec_from_file_location(
+        "obds_release_gate", ROOT / "reference" / "release-gate.py"
+    )
+    if spec is None or spec.loader is None:
+        sys.exit("cannot load reference/release-gate.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def suite_identity() -> tuple[str, int]:
+    gate = _gate()
+    pairs = gate.suite_files()
+    if not pairs:
+        sys.exit("no conformance suite files found")
+    return gate.suite_hash(pairs), len(pairs)
+
+
+def conformance_profiles(foundation_result: dict) -> list[dict[str, object]]:
+    """Exactly the profiles this release can defend. See the constants above."""
+    foundation = dict(FOUNDATION_PROFILE)
+    foundation["passedCount"] = foundation_result["passedCount"]
+    foundation["failedCount"] = foundation_result["failedCount"]
+    foundation["declaredCaseCount"] = foundation_result["passedCount"] + foundation_result["failedCount"]
+    foundation["suiteHash"] = foundation_result["suiteHash"]
+    return [foundation, dict(COMPILED_RUNTIME_PROFILE)]
+
+
 def suite_counts(output: str) -> dict[str, int]:
     counts: dict[str, int] = {}
     current = None
@@ -140,12 +318,14 @@ def suite_counts(output: str) -> dict[str, int]:
     return counts
 
 
-def write_metadata(release: str, counts: dict[str, int], file_count: int) -> str:
+def write_metadata(release: str, counts: dict[str, int], file_count: int,
+                   foundation_result: dict) -> str:
     output_path = ROOT / f"OBDS-{release}-TEST-OUTPUT.txt"
     digest = sha256(output_path)
     total = sum(counts.values())
 
     result_path = ROOT / f"OBDS-{release}-TEST-RESULT.json"
+    declared_suite_hash, suite_file_count = suite_identity()
     result = json.loads(result_path.read_text(encoding="utf-8"))
     result.update(
         {
@@ -157,6 +337,15 @@ def write_metadata(release: str, counts: dict[str, int], file_count: int) -> str
             "passed": True,
             "suiteCounts": counts,
             "testOutputHash": digest,
+            # Section 26 identifiers.
+            "implementation": dict(IMPLEMENTATION),
+            "obdsVersion": release,
+            "suiteHash": declared_suite_hash,
+            "suiteFileCount": suite_file_count,
+            "conformanceProfiles": conformance_profiles(foundation_result),
+            "executedSuites": {"note": EXECUTED_SUITES_NOTE, "counts": counts},
+            "requiredCasesSkippedOrChanged": False,
+            "claimScope": CLAIM_SCOPE,
         }
     )
     result_path.write_text(
@@ -241,13 +430,14 @@ def main() -> int:
     print(f"OBDS release build, version {release}")
     if args.run_tests:
         run_tests(release)
+    foundation_result = run_official_foundation_conformance(release)
 
     output = (ROOT / f"OBDS-{release}-TEST-OUTPUT.txt").read_text(encoding="utf-8")
     counts = suite_counts(output)
 
     # The manifest hashes the metadata files, so the metadata has to settle first.
     pairs = package_files(release)
-    write_metadata(release, counts, len(pairs))
+    write_metadata(release, counts, len(pairs), foundation_result)
     pairs = package_files(release)
     write_manifest(release, pairs)
 

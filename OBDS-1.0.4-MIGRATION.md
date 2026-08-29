@@ -54,6 +54,30 @@ Before publishing 1.0:
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
 
+## 1.0.3 to 1.0.4
+
+No migration work. 1.0.4 changes release metadata and documentation only.
+
+- No schema, no `$id`, no `schemaVersion` and no capability semantic changed.
+- The public schema surface is byte-identical to 1.0.0, 1.0.1, 1.0.2 and 1.0.3.
+- An implementation that conforms to 1.0.3 conforms to 1.0.4 with no work.
+
+Two things are worth knowing.
+
+First, if you publish your own conformance result, section 26 requires it to
+identify the implementation by name and version, the suite by hash, the profile
+and the counts, and to state that no required case was skipped or changed.
+`OBDS-1.0.4-TEST-RESULT.json` is now a worked example of a result that meets
+that rule, and `release-schemas/release-test-result.schema.json` is the shape
+to validate against. A 1.0.3-era result that carried only counts should be
+reissued.
+
+Second, if your documentation repeated the OBDS pitch, check the same thing
+1.0.4 corrected. `requiresDefined`, a failed target producing no Compiled Brand
+Context and therefore no model call is Compiled Runtime, section 26.2. It is
+not Foundation-only behaviour. Foundation, section 26.1, governs Brand Truth.
+Nothing about the guarantee changed; only its label.
+
 ## 1.0.2 to 1.0.3
 
 No migration work. 1.0.3 changes documentation, packaging and developer

@@ -2,7 +2,7 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 1.0.3 (stable, 29 August 2026)
+Current release: 1.0.4 (stable, 29 August 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
@@ -25,8 +25,16 @@ It is not a brandbook format, a prompt library or a template system.
 
 OBDS Foundation. Nothing above it is required.
 
-Foundation covers Brand Elements, the four Brand States, Rules, Scope,
-Semantic Boundaries, provenance and Value Contracts.
+Foundation, section 26.1, covers Brand Elements, the four Brand States, Rules,
+Scope, Semantic Boundaries, provenance and Value Contracts. It governs Brand
+Truth and answers what is true and what the brand has explicitly declared it
+does not know.
+
+The fail-closed build gate is Compiled Runtime, section 26.2, not Foundation.
+Build Plans, requiresDefined, the rule that a failed target produces no
+Compiled Brand Context, reproducible artefact hashes and Runtime Decision
+Records all belong there. The guarantee is mechanically tested; it is simply
+not part of the mandatory minimum.
 
 ## Optional capabilities
 
@@ -74,20 +82,20 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3.md
+https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4.md
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3-CHANGELOG.md
+Complete package: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-CHANGELOG.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 
@@ -117,8 +125,10 @@ the underlying ideas, principles, methods and formats is not restricted.
 
 ## Examples
 
-Minimal Foundation example, and a fail-closed example in which required truth is
-unresolved, no compiled context is produced and no model is called:
+The smallest manifest, and a fail-closed example in which required truth is
+unresolved, no compiled context is produced and no model is called. Both carry a
+Foundation manifest and exercise Compiled Runtime: the build plan,
+requiresDefined and the withheld artefact are section 26.2, not Foundation:
 https://openbranddefinition.org/examples/README.md
 
 ## Previous releases
@@ -130,13 +140,21 @@ OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 1.0.3 is
+the licensing wording that was current at the time. Section 32.1 of 1.0.4 is
 the operative one, unchanged from 1.0.2.
 
-1.0.3 is a documentation, packaging and developer-experience release. No
-normative contract changed. The public schema surface is byte-identical to
-1.0.0, 1.0.1 and 1.0.2, every schema $id still resolves under
-/schemas/1.0.0/ and /value-schemas/1.0.0/, and schemaVersion remains 1.0.0.
+1.0.4 is a hygiene release. No normative contract changed. The public schema
+surface is byte-identical to 1.0.0, 1.0.1, 1.0.2 and 1.0.3, every schema $id
+still resolves under /schemas/1.0.0/ and /value-schemas/1.0.0/, and
+schemaVersion remains 1.0.0.
+
+1.0.4 corrects two things. The published conformance result now satisfies
+section 26 itself: it names the implementation and version, the suite hash,
+the profiles the executed cases are evidence for, and the passed, failed and
+skipped counts, and the release gate verifies all of them. And the capability
+boundary is now stated correctly: Foundation, section 26.1, governs Brand
+Truth; the build gate that refuses to produce a Compiled Brand Context, and
+therefore refuses the model call, is Compiled Runtime, section 26.2.
 
 ## Note
 

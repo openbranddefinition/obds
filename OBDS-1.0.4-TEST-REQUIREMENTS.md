@@ -1,4 +1,4 @@
-# OBDS 1.0.3 Test and Runtime Requirements
+# OBDS 1.0.4 Test and Runtime Requirements
 
 This file declares every dependency needed to reproduce the official 107/107 conformance run.
 It separates what a consumer of OBDS needs from what the reference conformance suite needs.
@@ -7,13 +7,13 @@ It separates what a consumer of OBDS needs from what the reference conformance s
 
 **None imposed by the specification.**
 
-OBDS 1.0.3 is a data and contract specification. A conforming implementation may be written in
+OBDS 1.0.4 is a data and contract specification. A conforming implementation may be written in
 any language. The normative artefacts are plain text:
 
-- `OBDS-1.0.3.md` (normative specification);
+- `OBDS-1.0.4.md` (normative specification);
 - `schemas/*.json` (21 public JSON Schemas, draft 2020-12);
 - `value-schemas/*.json` (6 public value-contract JSON Schemas, draft 2020-12);
-- `OBDS-1.0.3-SCHEMA-INDEX.json` and `OBDS-1.0.3-CAPABILITY-REGISTRY.json`.
+- `OBDS-1.0.4-SCHEMA-INDEX.json` and `OBDS-1.0.4-CAPABILITY-REGISTRY.json`.
 
 To consume OBDS you need a JSON Schema validator for your platform, a JSON reader and, if you
 accept governed YAML, a YAML 1.2 reader that rejects duplicate keys. Nothing in this package is
@@ -71,7 +71,7 @@ node --version                     # must succeed
 From an unpacked release archive the same two commands work unchanged:
 
 ```bash
-unzip OBDS-1.0.3-FINAL.zip && cd OBDS-1.0.3-FINAL
+unzip OBDS-1.0.4-FINAL.zip && cd OBDS-1.0.4-FINAL
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python reference/run_all.py
 .venv/bin/python reference/release-gate.py

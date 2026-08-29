@@ -16,11 +16,11 @@ def _schema_dir(root, name):
     return flat
 SCHEMAS=_schema_dir(ROOT,'schemas')
 VALUE_SCHEMAS=_schema_dir(ROOT,'value-schemas')
-SPEC=(ROOT/'OBDS-1.0.3.md').read_text(encoding='utf-8')
+SPEC=(ROOT/'OBDS-1.0.4.md').read_text(encoding='utf-8')
 
 
 def test_single_normative_spec_no_core_file():
-    assert (ROOT/'OBDS-1.0.3.md').exists()
+    assert (ROOT/'OBDS-1.0.4.md').exists()
     assert not (ROOT/'OBDS-CORE-1.0.0.md').exists()
 
 
@@ -85,8 +85,8 @@ def _canonical_hash(value):
 
 
 def test_schema_index_capabilities_and_files_are_synchronised():
-    registry=json.loads((ROOT/'OBDS-1.0.3-CAPABILITY-REGISTRY.json').read_text())
-    index=json.loads((ROOT/'OBDS-1.0.3-SCHEMA-INDEX.json').read_text())
+    registry=json.loads((ROOT/'OBDS-1.0.4-CAPABILITY-REGISTRY.json').read_text())
+    index=json.loads((ROOT/'OBDS-1.0.4-SCHEMA-INDEX.json').read_text())
     allowed={'foundation'}
     allowed.update(item['id'] for item in registry['runtimeCapabilities'])
     allowed.update(item['id'] for item in registry['brandProfiles'])
@@ -101,7 +101,7 @@ def test_schema_index_capabilities_and_files_are_synchronised():
 
 
 def test_schema_index_ids_and_value_schema_hashes_match_files():
-    index=json.loads((ROOT/'OBDS-1.0.3-SCHEMA-INDEX.json').read_text())
+    index=json.loads((ROOT/'OBDS-1.0.4-SCHEMA-INDEX.json').read_text())
     seen_ids=set()
     for item in index['schemas']:
         obj=json.loads((SCHEMAS/item['file']).read_text())
@@ -117,7 +117,7 @@ def test_schema_index_ids_and_value_schema_hashes_match_files():
 
 
 def test_foundation_standard_value_contract_registry_matches_public_value_schemas():
-    registry=json.loads((ROOT/'OBDS-1.0.3-CAPABILITY-REGISTRY.json').read_text())
+    registry=json.loads((ROOT/'OBDS-1.0.4-CAPABILITY-REGISTRY.json').read_text())
     declared=set(registry['foundation']['standardValueContracts'])
     public={path.name.removesuffix('.schema.json') for path in (VALUE_SCHEMAS).glob('*.json')}
     assert declared==public
@@ -133,7 +133,7 @@ def test_rc5_canonical_implementations_are_identical():
 
 
 def test_rc5_legacy_hex_fixture_is_not_public_schema_surface():
-    index=json.loads((ROOT/'OBDS-1.0.3-SCHEMA-INDEX.json').read_text())
+    index=json.loads((ROOT/'OBDS-1.0.4-SCHEMA-INDEX.json').read_text())
     assert all(x['file']!='colour-hex.schema.json' for x in index.get('valueSchemas',[]))
     helper=json.loads((ROOT/'reference'/'foundation'/'value-schemas'/'colour-hex.schema.json').read_text())
     assert '/reference/1.0.0/' in helper['$id']

@@ -22,7 +22,7 @@ What the publisher commits to instead:
 
 OBDS follows semantic versioning at the level of the normative contract.
 
-- **PATCH** (1.0.1, 1.0.2, 1.0.3): licensing, packaging, documentation, developer
+- **PATCH** (1.0.1, 1.0.2, 1.0.3, 1.0.4): licensing, packaging, documentation, developer
   experience and editorial
   changes. No normative contract changes. The public schema surface stays
   byte-identical, and every schema `$id` keeps resolving at the same address.

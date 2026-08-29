@@ -18,6 +18,6 @@ python reference/run_all.py
 ```
 
 Expected: 107 passed, 0 failed, 0 skipped. `release-gate.py` is a package
-check, not a suite; see `OBDS-1.0.3-TEST-REQUIREMENTS.md`.
+check, not a suite; see `OBDS-1.0.4-TEST-REQUIREMENTS.md`.
 
 The Golden suite exercises Manifest, Build Plan, Compiled Brand Context, Context Delivery, Context Assembly, Review and Runtime Decision in one chain.

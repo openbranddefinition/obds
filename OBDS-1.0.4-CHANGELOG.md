@@ -2,9 +2,123 @@
 
 ## Release
 
-**Version:** OBDS 1.0.3  
+**Version:** OBDS 1.0.4  
 **Status:** Stable  
 **Date:** 2026-08-29
+
+## 1.0.4
+
+**Hygiene release. No normative contract change.**
+
+An external research pass on 1.0.3 found two things that a sceptical evaluator
+reaches within minutes, and both were about the material around the
+specification rather than the specification itself. 1.0.4 closes exactly those
+two and nothing else.
+
+**The published conformance result now satisfies section 26 in its own right.**
+Section 26 lets an implementation claim conformance only when the result
+identifies implementation name and version, suite hash, profile and the passed
+and failed counts, and states that no required case was skipped or changed.
+`OBDS-1.0.3-TEST-RESULT.json` published the counts and none of the rest, and
+the missing identifiers appeared in no other release artefact either. So the
+project's own release did not meet the rule it places on every other
+implementer. `OBDS-1.0.4-TEST-RESULT.json` now carries:
+
+- `implementation`, with name, version, language and repository;
+- `obdsVersion`, the exact version the claim is made for;
+- `suiteHash`, a stable identity for the conformance suite that produced the
+  result. It covers the suite runner, the seven suite directories and their
+  fixtures, and deliberately excludes `reference/foundation/src/`, which is the
+  implementation under test and is identified separately;
+- `suiteFileCount`;
+- `conformanceProfiles`, naming only the profiles this release can defend:
+  `obds-foundation` on the declared suite that names it, and `compiled-runtime`
+  with a named executed case for every requirement section 26.2 lists. No
+  profile is claimed for Context Delivery, Context Assembly, Visual Operations
+  or Composition, because those suites exercise modules other than the named
+  reference compiler;
+- `executedSuites`, reporting every suite the release ran as coverage only,
+  with no conformance claim attached;
+- `requiredCasesSkippedOrChanged: false`, section 26 clause 4;
+- `claimScope`, stating plainly that this is a suite result and not an
+  independent certification.
+
+`release-schemas/release-test-result.schema.json` makes every one of these
+required, and `reference/release-gate.py` checks them, recomputes the suite
+hash from the suite on disk and verifies that the declared profiles account for
+every suite with the right case counts. The result cannot quietly fall short of
+section 26 again.
+
+**The public material no longer implies that fail-closed is Foundation
+behaviour.** The README stated that Foundation is the minimum and nothing
+beyond it is mandatory, placed Compiled Runtime in the optional tier, and then
+demonstrated `requiresDefined`, the failed target and the absent Compiled Brand
+Context under the heading "Foundation minimal". Every mechanism in that
+sequence is section 26.2, not 26.1. Section 4.2 of the specification was always
+correct; the surrounding material was not.
+
+Corrected in `README.md`, `examples/README.md`, the website and the release
+documents:
+
+- Foundation, section 26.1, governs Brand Truth: Brand Elements, the four Brand
+  States, semantic subjects, scope, validity, value contracts, reference
+  resolution, approved snapshots and canonical hashes;
+- Compiled Runtime, section 26.2, adds Build Plans, `requiresDefined`, explicit
+  context selection, the rule that a failed target produces no artefact,
+  reproducible artefact hashes and Runtime Decision Records;
+- both shipped examples carry a Foundation manifest and exercise Compiled
+  Runtime. The directory keeps the name `foundation-minimal` because it holds
+  the smallest manifest, not because `build` is a Foundation operation.
+
+The fail-closed guarantee itself is unchanged and still mechanically tested: a
+failed target writes no artefact, and the instrumented model records zero
+calls. Only the capability label was wrong.
+
+**The official Foundation conformance suite was failing, and nothing ran it.**
+Found while grounding the profile claim above. `reference/foundation/conformance-suite.yaml`
+declares `profile: foundation` and is the only artefact in the package that
+names a section 26 profile. It had one failing case, `canonical-hashes`, and the
+same failure reproduces from the published 1.0.3 archive. Nothing in the release
+path executed it: `run_all.py` runs seven pytest directories and never invokes
+`obds conformance`, and the fixture it uses is referenced from nowhere else.
+
+The cause was stale fixture data, not the canonicaliser. Both documents in
+`fixtures/canonical-hash-vectors.json` predated the 1.0.0 contract shape: the
+manifest was missing `profiles` and `valueContracts`, the artefact was missing
+`artifactHash`, `availableElementIds`, `elementRecords` and `contextAssembly`.
+Neither would validate against the published schemas, so their stored expected
+hashes could not match.
+
+The fixture is now derived from the published `examples/simple` documents in
+their current shape. Its expected manifest hash is independently pinned in two
+other places the 107-case run already verifies, `approval.contentHash` in the
+manifest and `manifestRef.contentHash` in the build plan, so the vector is
+cross-checked rather than self-confirming. Its expected artefact hash is the
+`artifactHash` the compiler stamps, which `artefact_hash()` excludes from its
+own input, so the vector asserts the stamp is self-consistent.
+
+The suite now passes 15 of 15. Three things stop it being omitted again:
+`tools/build-release.py` executes it and publishes
+`OBDS-1.0.4-FOUNDATION-CONFORMANCE.json`; `reference/release-gate.py`
+re-executes it directly and compares the fresh result against the published one
+case by case; and the gate's own suite hash covers the fixtures, which the
+declarative suite hash does not.
+
+**The two results are not added together.** Fourteen of the fifteen declared
+cases exercise the same examples and fixtures as the pytest suites, through the
+`obds conformance` harness instead of pytest, so aggregating them would
+double-count the same coverage. The 107 stays 107 and the Foundation result is
+published separately with its own profile, counts and suite hash. The one
+non-duplicated case is `canonical-hashes`.
+
+Unchanged in 1.0.4:
+
+- the normative specification text, apart from its version and filename;
+- all 27 public contracts, byte-identical to 1.0.0, 1.0.1, 1.0.2 and 1.0.3;
+- `schemaVersion`, which stays `1.0.0`;
+- the four Brand States, the capability set and every runtime semantic;
+- the 107-case suite and its per-suite counts;
+- `spec/1.0.0/`, `spec/1.0.1/`, `spec/1.0.2/` and `spec/1.0.3/`.
 
 ## 1.0.3
 

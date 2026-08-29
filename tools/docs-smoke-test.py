@@ -139,18 +139,37 @@ def check_counts(version: str) -> None:
     if sum(counts.values()) != expected:
         fail(f"release metadata is inconsistent: sum(suiteCounts) != passedCount ({expected})")
 
-    pattern = re.compile(r"(\d{2,4})\s*(?:passed|bestanden|tests passed|of\s+\d{2,4})")
+    # Since 1.0.4 there are two published conformance numbers: the aggregate
+    # pytest run and the official declared Foundation conformance suite, which
+    # is deliberately not aggregated into it. Both are allowed in prose, and both
+    # are pinned to the published results, so neither can drift silently.
+    foundation_path = ROOT / f"OBDS-{version}-FOUNDATION-CONFORMANCE.json"
+    if not foundation_path.is_file():
+        fail(f"OBDS-{version}-FOUNDATION-CONFORMANCE.json is missing; the official "
+             "Foundation conformance run was not published with this release")
+        foundation_expected = None
+    else:
+        foundation = json.loads(foundation_path.read_text(encoding="utf-8"))
+        if foundation.get("failedCount") or not foundation.get("passed"):
+            fail("official Foundation conformance is not green in the published result")
+        foundation_expected = str(foundation["passedCount"])
+        ok(f"official Foundation conformance published: profile "
+           f"{foundation.get('profile')}, {foundation_expected} passed / "
+           f"{foundation.get('failedCount')} failed")
+
+    allowed = {str(expected)} | ({foundation_expected} if foundation_expected else set())
+    pattern = re.compile(r"(\d{1,4})\s*(?:passed|bestanden|tests passed|of\s+\d{2,4})")
     for name in COUNT_DOCS:
         path = ROOT / name
         if not path.is_file():
             fail(f"{name} is missing")
             continue
         text = path.read_text(encoding="utf-8")
-        bad = sorted({m for m in pattern.findall(text) if m != str(expected)})
+        bad = sorted({m for m in pattern.findall(text) if m not in allowed})
         if bad:
             fail(f"{name} claims pass count(s) {bad}, released result is {expected}")
         else:
-            ok(f"{name} agrees with passedCount={expected}")
+            ok(f"{name} agrees with the published counts {sorted(allowed)}")
 
     output = (ROOT / f"OBDS-{version}-TEST-OUTPUT.txt").read_text(encoding="utf-8")
     for suite, count in sorted(counts.items()):

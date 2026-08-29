@@ -5,7 +5,7 @@
   "conformanceTestsSkipped": 0,
   "contact": "lets@killthedragon.com",
   "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
-  "currentRelease": "1.0.3",
+  "currentRelease": "1.0.4",
   "currentReleaseStatus": "stable",
   "examplesUrl": "https://openbranddefinition.org/examples/README.md",
   "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
     "trademarksReserved": true
   },
   "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
-  "packageZipSha256": "sha256:30b7da28123b76f522849044d7088841bc1ab84ee7b6bc1a81bb72cd03d903a3",
-  "previousRelease": "1.0.2",
+  "packageZipSha256": "sha256:18c4c29de21b99233597f32ef92834935f8d3da701c59d26f414695394ea4560",
+  "previousRelease": "1.0.3",
   "project": "Open Brand Definition",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
@@ -81,6 +81,14 @@
       "packageZipSha256": "sha256:30b7da28123b76f522849044d7088841bc1ab84ee7b6bc1a81bb72cd03d903a3",
       "status": "stable",
       "testOutputHash": "sha256:95e2296a06fa5bea78dfaf38e46df873d156e487e1e16096d2f9619781731392"
+    },
+    "1.0.4": {
+      "baseUrl": "https://openbranddefinition.org/spec/1.0.4/",
+      "date": "2026-08-29",
+      "note": "hygiene release; no normative contract change; contract fingerprints identical to 1.0.3; conformance result satisfies section 26; official Foundation conformance suite repaired and now executed by the release gate; Foundation and Compiled Runtime boundary corrected in the public material",
+      "packageZipSha256": "sha256:18c4c29de21b99233597f32ef92834935f8d3da701c59d26f414695394ea4560",
+      "status": "stable",
+      "testOutputHash": "sha256:4535adbdb48a65f59224c2cc8f9b8a8bc8123e226461841e737e427f05145f68"
     }
   },
   "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -89,7 +97,7 @@
   "schemaVersion": "1.0",
   "sourceRepository": "https://github.com/openbranddefinition/obds",
   "specification": "OBDS",
-  "specificationBaseUrl": "https://openbranddefinition.org/spec/1.0.3/",
+  "specificationBaseUrl": "https://openbranddefinition.org/spec/1.0.4/",
   "specificationFilesPublished": true,
   "specificationPublishedAt": "2026-08-29",
   "stableReleaseDate": "2026-08-29",

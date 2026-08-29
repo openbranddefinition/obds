@@ -1,4 +1,4 @@
-# OBDS 1.0.3 Implementer Quickstart
+# OBDS 1.0.4 Implementer Quickstart
 
 ## Start with five concepts
 
@@ -10,16 +10,32 @@
 
 ## Smallest implementation
 
-Support `obds-foundation`:
+Support `obds-foundation`, section 26.1:
 
 - parse the manifest;
 - validate IDs, effective subjects, states, string-only scope and references;
 - resolve every required `valueContractRef`;
 - verify `shapeHash`, `schemaRef`, `schemaHash` and any declared value-contract validator;
-- reject unresolved required truth; and
+- reject an element whose own contract does not resolve; and
 - preserve canonical hashes.
 
 Brand States describe knowledge only: `defined`, `unknown`, `not_defined`, `not_applicable`. A prohibition is always an explicit RULE with `obligation: prohibit`.
+
+That much answers *what is true, and what the brand has explicitly declared it
+does not know*. It does not yet refuse to produce anything.
+
+Add `compiled-runtime`, section 26.2, when the build must refuse:
+
+- read a Build Plan with an explicit `asOf`;
+- resolve `requiresDefined` against the applicable elements;
+- fail the target when required truth is missing, `unknown`, `not_defined`, out
+  of scope, expired or conflicting;
+- write **no** Compiled Brand Context for a failed target, so nothing downstream
+  has anything to assemble a model input from; and
+- record the outcome in a Runtime Decision Record.
+
+This is where the fail-closed guarantee lives. A Foundation-only implementation
+holds governed truth with explicit unknowns; it does not run this gate.
 
 Add Context Delivery, Context Assembly, Composition, Visual Operations, Claims or Localisation only when the product needs them.
 

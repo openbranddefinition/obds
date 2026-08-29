@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.0.3 release gate.
+"""OBDS 1.0.4 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -33,9 +33,12 @@ and any generated cache that has found its way into ``PACKAGE-MANIFEST.json``.
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import re
 import sys
+from contextlib import redirect_stdout
+from types import SimpleNamespace
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,21 +55,23 @@ EXPECTED_SUITE_COUNTS = {
     "adversarial": 23,
 }
 EXPECTED_TOTAL = 107
-EXPECTED_RELEASE = "1.0.3"
+EXPECTED_RELEASE = "1.0.4"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
 
-# OBDS 1.0.3 is a documentation, packaging and developer-experience release. The
-# public schema surface must stay byte-identical to the frozen 1.0.0 surface,
-# which 1.0.1 and 1.0.2 also carried unchanged. This fingerprint is sha256 over
+# OBDS 1.0.4 is a hygiene release. The public schema surface must stay
+# byte-identical to the frozen 1.0.0 surface, which 1.0.1, 1.0.2 and 1.0.3 also
+# carried unchanged. This fingerprint is sha256 over
 # the sorted "dir/file:sha256" lines of all 27 public contracts, taken from 1.0.0.
 FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469"
 
 # Normative contract identity against the immediately preceding release. Every
-# entry is sha256 of the contract as published in spec/1.0.2/, and unchanged
-# from 1.0.1 and 1.0.0 before it. A maintenance release must not move any of them.
-PRIOR_RELEASE = "1.0.2"
+# entry is sha256 of the contract as published in spec/1.0.3/, and unchanged from
+# 1.0.2, 1.0.1 and 1.0.0 before it. The fingerprint excludes `release` and
+# `releaseModel.normativeSpecification`, which are packaging, so a version bump
+# alone never moves it. A maintenance release must not move any of them.
+PRIOR_RELEASE = "1.0.3"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -127,6 +132,12 @@ GENERATED_CACHE_SUFFIXES = (".pyc", ".pyo", ".egg-info")
 JUNK_DIRS = {"__MACOSX", ".ipynb_checkpoints"}
 JUNK_NAMES = {".DS_Store", "Thumbs.db", "desktop.ini"}
 JUNK_SUFFIXES = (".swp", ".swo", ".orig", ".rej", ".bak", ".tmp", "~")
+
+# The conformance suite, for the section 26 suite hash. The runner plus the seven
+# suite directories; the implementation under test is excluded and identified
+# separately in the result.
+SUITE_RUNNER = "reference/run_all.py"
+SUITE_EXCLUDED_PREFIX = "reference/foundation/src/"
 
 failures: list[str] = []
 
@@ -197,6 +208,109 @@ def find_junk() -> list[str]:
         elif path.name in JUNK_NAMES or path.name.endswith(JUNK_SUFFIXES):
             found.append(rel)
     return sorted(set(found))
+
+
+def run_official_foundation_conformance() -> dict | None:
+    """Execute the official declared Foundation conformance suite.
+
+    Section 26 clause 1 permits a conformance claim only when the implementation
+    passes every required case in the official Conformance Suite for the named
+    profile. The only artefact in this package that names a profile is
+    ``reference/foundation/conformance-suite.yaml``.
+
+    Until 1.0.4 nothing in the release path executed it. It had been failing on
+    a stale fixture since before 1.0.3 shipped, and neither the 107-case run nor
+    this gate could see it. The gate now runs it directly, so omitting it is not
+    possible and a stale fixture cannot pass silently.
+    """
+    suite_path = ROOT / "reference" / "foundation" / "conformance-suite.yaml"
+    if not suite_path.is_file():
+        failures.append("missing reference/foundation/conformance-suite.yaml")
+        return None
+    src = ROOT / "reference" / "foundation" / "src"
+    if str(src) not in sys.path:
+        sys.path.insert(0, str(src))
+    try:
+        from obds_ref.cli import command_conformance
+    except ImportError as exc:  # pragma: no cover
+        failures.append(f"cannot execute official Foundation conformance: {exc}")
+        return None
+
+    out = ROOT / ".gate-foundation-conformance.json"
+    args = SimpleNamespace(suite=str(suite_path), out=str(out))
+    stdout = io.StringIO()
+    try:
+        with redirect_stdout(stdout):
+            command_conformance(args)
+        result = json.loads(out.read_text(encoding="utf-8"))
+    except Exception as exc:  # pragma: no cover
+        failures.append(f"official Foundation conformance did not execute: {exc}")
+        return None
+    finally:
+        out.unlink(missing_ok=True)
+    return result
+
+
+def check_official_foundation_conformance(declared_cases: int) -> dict | None:
+    result = run_official_foundation_conformance()
+    if result is None:
+        return None
+    check(
+        result.get("profile") == "foundation",
+        f"official conformance result profile is {result.get('profile')!r}, expected 'foundation'",
+    )
+    check(
+        result.get("failedCount") == 0,
+        f"official Foundation conformance has {result.get('failedCount')} failing case(s): "
+        + ", ".join(c["id"] for c in result.get("cases", []) if not c.get("passed")),
+    )
+    check(result.get("passed") is True, "official Foundation conformance did not pass")
+    check(
+        result.get("passedCount") == declared_cases,
+        f"official Foundation conformance ran {result.get('passedCount')} of "
+        f"{declared_cases} declared cases; no required case may be skipped or changed",
+    )
+    return result
+
+
+def suite_files() -> list[tuple[str, Path]]:
+    """(package-relative path, source) for every file in the published suite.
+
+    Section 26 requires a conformance result to name the suite it ran. The suite
+    is the runner plus the seven suite directories and their fixtures. It
+    excludes ``reference/foundation/src/``, which is the implementation under
+    test and is identified separately by the result's ``implementation`` field.
+
+    This definition lives in the gate because the gate ships inside the release
+    archive: anyone with the package can recompute the suite identity.
+    """
+    pairs: list[tuple[str, Path]] = []
+    runner = ROOT / SUITE_RUNNER
+    if runner.is_file():
+        pairs.append((SUITE_RUNNER, runner))
+    for suite in EXPECTED_SUITE_COUNTS:
+        base = ROOT / "reference" / suite
+        if not base.is_dir():
+            continue
+        for source in sorted(base.rglob("*")):
+            if not source.is_file() or is_generated_cache(source):
+                continue
+            rel = source.relative_to(ROOT).as_posix()
+            if rel.startswith(SUITE_EXCLUDED_PREFIX):
+                continue
+            pairs.append((rel, source))
+    return sorted(pairs)
+
+
+def suite_hash(pairs: list[tuple[str, Path]]) -> str:
+    """Stable identity for the suite: sorted paths with their content hashes."""
+    payload = json.dumps(
+        [[rel, sha256_file(source)] for rel, source in pairs],
+        ensure_ascii=False,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
 
 
 def validate_schemas(test_result, audit) -> None:
@@ -327,6 +441,115 @@ def main() -> int:
             f"test output missing suite header {suite}",
         )
         check(f"{count} passed in " in output, f"test output missing '{count} passed' for {suite}")
+
+    # 4b. section 26 conformance-result identifiers.
+    #
+    # Section 26 lets an implementation claim conformance only when the result
+    # identifies implementation name and version, suite hash, profile and the
+    # counts, and no required case was skipped or changed. Before 1.0.4 the
+    # published result carried the counts and nothing else, so the project's own
+    # release did not satisfy the rule it imposes on every other implementer.
+    # These checks exist so that cannot happen again.
+    implementation = test_result.get("implementation") or {}
+    check(bool(implementation.get("name")), "TEST-RESULT: section 26 requires implementation.name")
+    check(bool(implementation.get("version")), "TEST-RESULT: section 26 requires implementation.version")
+    check(
+        test_result.get("obdsVersion") == EXPECTED_RELEASE,
+        f"TEST-RESULT: obdsVersion != {EXPECTED_RELEASE}",
+    )
+    check(
+        test_result.get("requiredCasesSkippedOrChanged") is False,
+        "TEST-RESULT: section 26 clause 4 requires requiredCasesSkippedOrChanged false",
+    )
+    check(test_result.get("skippedCount") == 0, "TEST-RESULT: skippedCount is not zero")
+    check(bool(test_result.get("claimScope")), "TEST-RESULT: section 26 requires the scope of the claim")
+
+    profiles = test_result.get("conformanceProfiles") or []
+    check(bool(profiles), "TEST-RESULT: section 26 requires at least one named profile")
+    ids = {p.get("id") for p in profiles}
+    check(
+        ids <= {"obds-foundation", "compiled-runtime"},
+        f"TEST-RESULT: undefensible conformance profile(s) {sorted(ids - {'obds-foundation', 'compiled-runtime'})}; "
+        "a profile needs a declared suite or a per-requirement evidence list",
+    )
+    check("obds-foundation" in ids, "TEST-RESULT: obds-foundation must be claimed")
+    for entry in profiles:
+        check(len(entry.get("basis") or "") >= 40,
+              f"TEST-RESULT: profile {entry.get('id')} has no basis statement")
+        if entry.get("id") == "compiled-runtime":
+            check(len(entry.get("requirementsExercised") or []) >= 12,
+                  "TEST-RESULT: compiled-runtime must name an executed case for every "
+                  "requirement section 26.2 lists")
+
+    executed = test_result.get("executedSuites") or {}
+    check(
+        (executed.get("counts") or {}) == EXPECTED_SUITE_COUNTS,
+        "TEST-RESULT: executedSuites.counts != the verified run",
+    )
+    check(len(executed.get("note") or "") >= 40,
+          "TEST-RESULT: executedSuites needs a note stating it carries no conformance claim")
+
+    # The declared suite hash must be the hash of the suite actually on disk.
+    # suite_files() and suite_hash() live in this file, which ships inside the
+    # release archive, so anyone who downloads the package can recompute the
+    # suite identity without the build tooling.
+    suite_pairs = suite_files()
+    actual_suite_hash = suite_hash(suite_pairs)
+    check(
+        test_result.get("suiteHash") == actual_suite_hash,
+        f"TEST-RESULT: suiteHash != sha256 of the suite on disk {actual_suite_hash}",
+    )
+    check(
+        test_result.get("suiteFileCount") == len(suite_pairs),
+        f"TEST-RESULT: suiteFileCount {test_result.get('suiteFileCount')} "
+        f"!= {len(suite_pairs)} suite files on disk",
+    )
+
+    # 4c. the official declared Foundation conformance suite must be green.
+    #
+    # This is separate from the 107-case run and must not be added to it: 14 of
+    # its 15 cases exercise the same fixtures and examples as the pytest suites,
+    # so counting both would double-count the same coverage. The decision and its
+    # evidence are recorded in answers/1.0.4-1.1/FOUNDATION-CONFORMANCE-REPAIR.md.
+    suite_doc = None
+    suite_yaml = ROOT / "reference" / "foundation" / "conformance-suite.yaml"
+    declared_cases = 0
+    if suite_yaml.is_file():
+        try:
+            import yaml as _yaml
+
+            suite_doc = _yaml.safe_load(suite_yaml.read_text(encoding="utf-8"))
+            declared_cases = len(suite_doc.get("cases", []))
+        except Exception as exc:  # pragma: no cover
+            failures.append(f"cannot read the declared conformance suite: {exc}")
+    check(declared_cases > 0, "the declared conformance suite has no cases")
+    foundation_conformance = check_official_foundation_conformance(declared_cases)
+
+    # The published Foundation conformance result must match what just ran.
+    fc_path = ROOT / f"OBDS-{EXPECTED_RELEASE}-FOUNDATION-CONFORMANCE.json"
+    if not fc_path.is_file():
+        failures.append(
+            f"missing OBDS-{EXPECTED_RELEASE}-FOUNDATION-CONFORMANCE.json; the official "
+            "Foundation conformance run was not published with this release"
+        )
+    elif foundation_conformance is not None:
+        published = load(fc_path)
+        for key in ("profile", "passedCount", "failedCount", "passed", "suiteHash"):
+            check(
+                published.get(key) == foundation_conformance.get(key),
+                f"published Foundation conformance {key} "
+                f"{published.get(key)!r} != freshly executed {foundation_conformance.get(key)!r}",
+            )
+        check(
+            published.get("obdsRelease") == EXPECTED_RELEASE,
+            f"published Foundation conformance obdsRelease != {EXPECTED_RELEASE}",
+        )
+        published_ids = sorted(c["id"] for c in published.get("cases", []))
+        declared_ids = sorted(c["id"] for c in (suite_doc or {}).get("cases", []))
+        check(
+            published_ids == declared_ids,
+            "published Foundation conformance does not cover exactly the declared cases",
+        )
 
     # 5. public schema surface.
     schemas = sorted(p.name for p in SCHEMAS_DIR.glob("*.json"))
@@ -467,6 +690,17 @@ def main() -> int:
     print(f"  contract identity  unchanged vs {PRIOR_RELEASE} (registry, schema index, publication map)")
     print(f"  licence texts      unmodified CC BY 4.0 and Apache 2.0")
     print(f"  testOutputHash     {actual}")
+    print(
+        f"  section 26 result  {implementation.get('name')} {implementation.get('version')}, "
+        f"{len(profiles)} profiles, 0 skipped or changed"
+    )
+    print(f"  suiteHash          {test_result.get('suiteHash')} ({test_result.get('suiteFileCount')} files)")
+    if foundation_conformance:
+        print(
+            f"  foundation suite   profile {foundation_conformance.get('profile')}, "
+            f"{foundation_conformance.get('passedCount')} passed / "
+            f"{foundation_conformance.get('failedCount')} failed, executed by this gate"
+        )
     return 0
 
 

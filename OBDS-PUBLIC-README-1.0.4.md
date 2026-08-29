@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 1.0.3** is the stable Open Brand Definition Specification.
+**OBDS 1.0.4** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,11 +21,15 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 1.0.3. Stable. 2026-08-29.**
+**OBDS 1.0.4. Stable. 2026-08-29.**
 
-1.0.3 is a documentation, packaging and developer-experience release. No normative contract changed, and the public schema surface is byte-identical to 1.0.0, 1.0.1 and 1.0.2.
+1.0.4 is a hygiene release. No normative contract changed, and the public schema surface is byte-identical to 1.0.0, 1.0.1, 1.0.2 and 1.0.3.
 
-The release carries the final hardening baseline: one canonical cross-language serialisation contract, fail-closed tokenizer support and a compact hashed model projection.
+It corrects two things the specification itself already had right and the surrounding material did not.
+
+The published conformance result now satisfies section 26 in its own right: it identifies the implementation by name and version, the conformance suite by hash, the profiles the executed cases provide evidence for, and the passed, failed and skipped counts, and it states that no required case was skipped or changed. The release gate verifies every one of those and recomputes the suite hash, so the result cannot silently fall short of the rule the specification places on every implementer.
+
+The public material no longer implies that the fail-closed build gate is Foundation behaviour. Foundation, section 26.1, governs Brand Truth. Compiled Runtime, section 26.2, adds Build Plans, `requiresDefined`, the rule that a failed target produces no artefact, and Runtime Decision Records. The guarantee is unchanged and still mechanically tested; only its capability label is now correct.
 
 ## Use and licensing
 

@@ -310,7 +310,7 @@ def test_rc5_unsupported_tokenizer_fails_closed():
 def test_rc5_legacy_colour_hex_schema_is_reference_internal():
     schema=json.loads((ROOT/"foundation"/"value-schemas"/"colour-hex.schema.json").read_text())
     assert "/reference/1.0.0/" in schema["$id"]
-    index=json.loads((PACKAGE_ROOT/"OBDS-1.0.3-SCHEMA-INDEX.json").read_text())
+    index=json.loads((PACKAGE_ROOT/"OBDS-1.0.4-SCHEMA-INDEX.json").read_text())
     assert all(item["file"]!="colour-hex.schema.json" for item in index.get("valueSchemas",[]))
 
 
