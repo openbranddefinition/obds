@@ -226,6 +226,14 @@ This is a conformance suite, not a certification programme. The published
 implementations may run the applicable official suite to support their own OBDS
 conformance claim under section 26.
 
+## Acknowledgements
+
+OBDS was developed through human-led design and AI-assisted architecture, implementation and review.
+
+- **Max Jürschik** — Creator and specification lead
+- **ChatGPT (GPT-5.6 Sol, OpenAI)** — Co-Architect
+- **Claude Code (Anthropic)** — Implementation and engineering
+
 ## Licensing
 
 - Specification and documentation: **CC BY 4.0**
