@@ -1,0 +1,53 @@
+{
+  "kind": "obds-1.1-fixture",
+  "note": "Section 13.1: requiresDefined is an element-ID requirement, not a subject requirement. The listed element must itself be the defined winner of its semantic subject. An override that wins the subject does NOT satisfy a requirement naming the element it displaced.",
+  "cases": [
+    {
+      "id": "listed-element-wins-its-subject",
+      "description": "Only the listed element governs the subject. The requirement is satisfied.",
+      "elements": [
+        {"id": "structure.brand", "subject": "structure.brand", "scope": {}, "state": "defined"}
+      ],
+      "targetScope": {"locales": ["en"], "outputTypes": ["brand-query"]},
+      "requiresDefined": ["structure.brand"],
+      "expectedStatus": "ready",
+      "expectedCode": null
+    },
+    {
+      "id": "listed-element-loses-its-subject-to-a-more-specific-override",
+      "description": "A locale-scoped override wins the subject. The requirement names the displaced element and is NOT satisfied, even though the winner is defined.",
+      "elements": [
+        {"id": "structure.brand", "subject": "structure.brand", "scope": {}, "state": "defined"},
+        {"id": "structure.brand.en", "subject": "structure.brand", "scope": {"locales": ["en"]}, "state": "defined"}
+      ],
+      "targetScope": {"locales": ["en"], "outputTypes": ["brand-query"]},
+      "requiresDefined": ["structure.brand"],
+      "expectedStatus": "failed",
+      "expectedCode": "OBDS-BUILD-REQUIRED-NOT-DEFINED"
+    },
+    {
+      "id": "requirement-naming-the-winning-override-is-satisfied",
+      "description": "The same manifest, with the requirement naming the element that actually wins. This is how a Build Plan asks for an override under OBDS 1.1.",
+      "elements": [
+        {"id": "structure.brand", "subject": "structure.brand", "scope": {}, "state": "defined"},
+        {"id": "structure.brand.en", "subject": "structure.brand", "scope": {"locales": ["en"]}, "state": "defined"}
+      ],
+      "targetScope": {"locales": ["en"], "outputTypes": ["brand-query"]},
+      "requiresDefined": ["structure.brand.en"],
+      "expectedStatus": "ready",
+      "expectedCode": null
+    },
+    {
+      "id": "override-out-of-target-scope-leaves-the-broad-element-winning",
+      "description": "The override does not apply to this target, so the listed broad element still wins its subject and the requirement is satisfied.",
+      "elements": [
+        {"id": "structure.brand", "subject": "structure.brand", "scope": {}, "state": "defined"},
+        {"id": "structure.brand.de", "subject": "structure.brand", "scope": {"locales": ["de"]}, "state": "defined"}
+      ],
+      "targetScope": {"locales": ["en"], "outputTypes": ["brand-query"]},
+      "requiresDefined": ["structure.brand"],
+      "expectedStatus": "ready",
+      "expectedCode": null
+    }
+  ]
+}

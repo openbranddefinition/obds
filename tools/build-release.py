@@ -28,6 +28,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -123,6 +124,8 @@ COMPILED_RUNTIME_PROFILE = {
     "requirementsExercised": [
         {"requirement": "exact Build Plans", "case": "obds_ref.compiler.validate_plan, foundation and adversarial suites"},
         {"requirement": "requiresDefined", "case": "test_required_unknown_fails_and_emits_no_artefact"},
+        {"requirement": "every required element present in the produced context", "case": "test_required_knowledge_element_reaches_the_artefact"},
+        {"requirement": "a governedResultHash that matches section 14.3a for the same manifest and Build Plan", "case": "test_governed_result_hash_matches_the_fixture, test_compiled_context_carries_the_governed_result_hash"},
         {"requirement": "explicit context selection", "case": "styleTexture and stateMap modes, foundation and adversarial suites"},
         {"requirement": "no artefact for a failed target", "case": "test_fail_closed_example_emits_no_context_and_calls_no_model"},
         {"requirement": "canonical JSON artefacts", "case": "test_canonical_json_normalises_nfc_and_line_endings"},
@@ -171,13 +174,55 @@ CLAIM_SCOPE = (
     "can defend: `obds-foundation` because a declared conformance suite names "
     "that profile and every one of its cases passed, and `compiled-runtime` "
     "because every requirement section 26.2 lists is exercised by a named "
-    "executed case, enumerated in `requirementsExercised`. No profile is claimed "
+    "executed case, enumerated in the `requirementsExercised` array of the "
+    "`compiled-runtime` entry in `conformanceProfiles`. No profile is claimed "
     "for context-delivery, context-assembly, visual-operations or composition; "
     "those suites are reported under `executedSuites` as coverage only, because "
     "they exercise modules other than the named implementation. This file is a "
     "suite result under section 26, not an independent certification and not a "
     "statement about any other implementation."
 )
+
+
+PRIOR_RELEASE = "1.1.0"
+
+
+def release_notes(release: str, counts: dict[str, int]) -> list[str]:
+    """The TEST-RESULT notes, generated for this release rather than carried.
+
+    OBDS 1.1.0 shipped notes copied from 1.0.4: they described a hygiene release
+    with no normative contract change, claimed byte-identity only through 1.0.3,
+    reported a case count the same file contradicted, and named a file that did
+    not exist. Nothing checked them because nothing generated them.
+    """
+    total = sum(counts.values())
+    return [
+        f"OBDS {release} is a maintenance release. No normative contract change: "
+        "the 27 public OBDS 1.0.0 contracts and the one versioned contract "
+        "published beside them are unchanged.",
+        "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, "
+        "1.0.2, 1.0.3, 1.0.4 and 1.1.0.",
+        "The specification and the documentation are licensed under CC BY 4.0. "
+        "The schemas, release metadata, reference implementation, conformance "
+        "suite and examples are licensed under the Apache License 2.0.",
+        "This file carries the section 26 identifiers: implementation, "
+        "obdsVersion, suiteHash, conformanceProfiles, the counts and "
+        "requiredCasesSkippedOrChanged.",
+        "suiteHash covers the suite runner and the seven suite directories with "
+        "their fixtures. It excludes reference/foundation/src/, which is the "
+        "implementation under test and is identified by the implementation field.",
+        "A profile is listed under conformanceProfiles because the executed "
+        "suite contains cases for that conformance section. It is evidence for "
+        "the section, not an independent certification.",
+        f"This release runs {total} cases, "
+        + ", ".join(f"{name} {count}" for name, count in sorted(counts.items()))
+        + ".",
+        "The result is reproducible in two layouts: the repository, where the "
+        "public schemas sit at schemas/1.0.0/, and an unpacked release archive, "
+        "where they are flat.",
+        "Node.js is required to execute the cross-language canonicalisation "
+        f"tests. See OBDS-{release}-TEST-REQUIREMENTS.md.",
+    ]
 
 
 def version() -> str:
@@ -338,7 +383,8 @@ def write_metadata(release: str, counts: dict[str, int], file_count: int,
     result.update(
         {
             "release": release,
-            "promotedFrom": result.get("promotedFrom", "1.0.2"),
+            "promotedFrom": PRIOR_RELEASE,
+            "notes": release_notes(release, counts),
             "passedCount": total,
             "failedCount": 0,
             "skippedCount": 0,
@@ -428,6 +474,54 @@ def write_archive(release: str, pairs: list[tuple[str, Path]]) -> Path:
     return archive_path
 
 
+def sync_publication_surface(release: str, counts: dict[str, int], archive: Path | None) -> None:
+    """Write the built values into the publication record and the website.
+
+    These three numbers, `testOutputHash`, `packageZipSha256` and
+    `websiteIndexSha256`, were hand-copied through 1.1.0 and drifted every time.
+    Generating them here means the release gate's cross-check in step 12 can
+    never be satisfied by a stale copy, because there is no copy step left.
+    """
+    result = json.loads(
+        (ROOT / f"OBDS-{release}-TEST-RESULT.json").read_text(encoding="utf-8")
+    )
+    record_path = ROOT / "publication-record.json"
+    if not record_path.is_file():
+        return
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+
+    record["currentRelease"] = release
+    record["conformanceTestsPassed"] = result["passedCount"]
+    record["conformanceTestsFailed"] = result["failedCount"]
+    record["conformanceTestsSkipped"] = result["skippedCount"]
+    record["testOutputHash"] = result["testOutputHash"]
+    entry = record.setdefault("releases", {}).setdefault(release, {})
+    entry["testOutputHash"] = result["testOutputHash"]
+    if archive is not None and archive.is_file():
+        digest = sha256(archive)
+        record["packageZipSha256"] = digest
+        entry["packageZipSha256"] = digest
+
+    index_html = ROOT / "index.html"
+    if index_html.is_file():
+        site = index_html.read_text(encoding="utf-8")
+        site = re.sub(
+            r"sha256:[0-9a-f]{64}",
+            lambda m: result["testOutputHash"]
+            if m.group(0) != record.get("schemaSurfaceFingerprint")
+            else m.group(0),
+            site,
+        )
+        index_html.write_text(site, encoding="utf-8")
+        record["websiteIndexSha256"] = sha256(index_html)
+
+    record_path.write_text(
+        json.dumps(record, indent=1, sort_keys=True, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    print("synced publication-record.json and index.html to the built artefacts")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build the OBDS release package")
     parser.add_argument("--run-tests", action="store_true", help="regenerate the test output first")
@@ -449,8 +543,10 @@ def main() -> int:
     pairs = package_files(release)
     write_manifest(release, pairs)
 
+    archive = None
     if not args.manifest_only:
-        write_archive(release, pairs)
+        archive = write_archive(release, pairs)
+    sync_publication_surface(release, counts, archive)
     return 0
 
 

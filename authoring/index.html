@@ -396,16 +396,20 @@ family: design
 kind: colour
 nature: fact
 state: defined
+scope: {}
+validity:
+  from: null
+  to: null
+annotations: []
 valueContractRef: urn:obds:brand:example#value-contract:design:colour:v1
 value:
+  name: Primary
   hex: "#0F1E3D"
   pantone: "289 C"
 sourceRefs:
-  - id: brand-guidelines-v3
-    locator: "page 22, Primary Palette"
-    snapshotHash: sha256:...</pre>
+  - "brand-guidelines-v3 p.22 Primary Palette sha256:9f2c..."</pre>
         </div>
-        <p class="code-caption"><code>sourceRefs[]</code> records where the value came from (section 8.5). It is provenance, not payload &mdash; it does not itself make the value true, and it is not an internal element reference.</p>
+        <p class="code-caption"><code>sourceRefs[]</code> records where the value came from (section 8.5). Each entry is a single string: the manifest contract carries provenance as free text, and the structured source unit, its locator and its snapshot hash live in the curation report that <code>reportRef</code> points at. It is provenance, not payload &mdash; it does not itself make the value true, and it is not an internal element reference. <code>value.name</code> is required by the published colour value schema; a colour without a name is not a governed colour.</p>
 
         <div class="state-list">
           <div class="state-row"><div><span class="state-name">complete</span></div><div>Claimable only once the curation report reconciles every declared source unit and every relevant modality.</div></div>
@@ -510,15 +514,15 @@ sourceRefs:
         <p class="pull">OBDS proves that approved truth reached the build unaltered. It cannot prove the truth was right, or that a target asked for everything it should have.</p>
 
         <div class="actions">
-          <a href="/spec/1.1.0/OBDS-1.1.0.md#7-brand-manifest">
+          <a href="/spec/1.1.1/OBDS-1.1.1.md#7-brand-manifest">
             <span class="action-name">Section 7</span>
             <span class="action-note">Brand Manifest, approval and source coverage.</span>
           </a>
-          <a href="/spec/1.1.0/OBDS-1.1.0.md#24-selective-extraction-and-curation">
+          <a href="/spec/1.1.1/OBDS-1.1.1.md#24-selective-extraction-and-curation">
             <span class="action-name">Section 24</span>
             <span class="action-note">Selective extraction and curation.</span>
           </a>
-          <a href="/spec/1.1.0/OBDS-1.1.0.md#26-conformance-claims">
+          <a href="/spec/1.1.1/OBDS-1.1.1.md#26-conformance-claims">
             <span class="action-name">Section 26</span>
             <span class="action-note">Conformance claims, including 26.1 Foundation.</span>
           </a>

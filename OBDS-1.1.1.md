@@ -1085,17 +1085,31 @@ A Compiled Brand Context carries the exact `asOf` and a selection-stability vali
 
 ### 13.1 Target requirements
 
-`requiresDefined` is a list of exact Brand Element IDs.
+`requiresDefined` is a list of exact Brand Element IDs. It is an **element-ID
+requirement, not a subject requirement**, and the two MUST NOT be conflated.
 
-For each listed ID, the compiler MUST find one applicable element whose state is `defined`.
+For each listed ID, the compiler MUST find that exact element, and that exact
+element MUST be the applicable winner for its semantic subject with state
+`defined`. If another element wins the subject under section 10 precedence, the
+requirement is **not** satisfied, even when the winning element is itself
+`defined` and even when it is a more specific override of the listed one. An
+implementation MUST NOT silently reinterpret a listed ID as a requirement on
+that element's subject.
 
-The target fails when the element:
+The target fails when the listed element:
 
 - does not exist;
 - does not apply to the target scope;
 - is expired;
-- is conflicting; or
-- has any state other than `defined`.
+- is conflicting;
+- has any state other than `defined`; or
+- lost its semantic subject to a more specific applicable element.
+
+The rule is deliberately strict. A Build Plan that means "whatever governs this
+subject" is asking for something OBDS 1.1 does not offer: reusable
+subject-level requirements are deferred target-governance research, and until
+they exist a plan that wants an override to satisfy a requirement MUST name the
+overriding element.
 
 The Build Report MUST name the failed element, expected state and actual result.
 
@@ -1114,7 +1128,7 @@ not.
 | `OBDS-BUILD-REQUIRED-NOT-FOUND` | a `requiresDefined` ID does not exist in the manifest |
 | `OBDS-BUILD-REQUIRED-OUT-OF-SCOPE` | the element exists but does not apply to the target scope |
 | `OBDS-BUILD-REQUIRED-EXPIRED` | the element exists and is in scope but is not valid at `asOf` |
-| `OBDS-BUILD-REQUIRED-NOT-DEFINED` | the element applies but its state is not `defined`, including when a more specific element won its subject |
+| `OBDS-BUILD-REQUIRED-NOT-DEFINED` | the listed element applies but is not the `defined` winner of its semantic subject, whether because its own state is not `defined` or because a more specific applicable element won that subject |
 | `OBDS-BUILD-SUBJECT-CONFLICT` | two incomparable maximal elements share one semantic subject |
 | `OBDS-BUILD-MANIFEST-HASH` | the manifest content hash does not match the Build Plan reference |
 | `OBDS-BUILD-STYLE-SELECTION` | a selected style element is not an applicable defined KNOWLEDGE element |
@@ -1303,8 +1317,8 @@ The normative artefact is JSON. A Markdown view MAY be generated for people and 
 ```json
 {
   "kind": "obds-compiled-brand-context",
-  "schemaVersion": "1.0.0",
-  "id": "urn:obds:context:example:brand-assistant-de-at",
+  "schemaVersion": "1.1.0",
+  "id": "urn:obds:brand:example:context:brand-assistant-de-at",
   "targetId": "brand-assistant-de-at",
   "manifest": {
     "id": "urn:obds:brand:example",
@@ -1345,9 +1359,22 @@ The normative artefact is JSON. A Markdown view MAY be generated for people and 
     "stateMap": "...",
     "styleTexture": "..."
   },
+  "governedResultHash": "sha256:...",
   "artifactHash": "sha256:..."
 }
 ```
+
+The compiled context `id` is constructed, not chosen: it is the manifest `id`,
+the literal segment `:context:` and the target `id`, concatenated in that order
+and otherwise unaltered.
+
+```text
+{manifest.id}:context:{targetId}
+```
+
+Neither part is escaped, trimmed or case-folded, and a target `id` that itself
+contains a colon is carried through unchanged. Two implementations given the
+same manifest and Build Plan therefore produce the same context `id`.
 
 ### 14.0 Artefact validity
 
@@ -1393,7 +1420,7 @@ The payload is the complete Compiled Brand Context except `artifactHash`.
 Canonicalisation is:
 
 1. recursively normalise every string and object key to Unicode NFC;
-2. convert line endings inside strings to LF;
+2. convert line endings inside every string and object key to LF, CRLF first and then any remaining CR;
 3. after normalisation, sort object keys by UTF-16 code-unit order, matching RFC 8785 / ECMAScript property sorting;
 4. preserve array order;
 5. serialise JSON as UTF-8 without a byte-order mark;
@@ -1402,11 +1429,11 @@ Canonicalisation is:
 8. serialise numbers using the ECMAScript-compatible shortest round-trippable IEEE-754 binary64 representation used by RFC 8785, with positive and negative zero both written as `0`; and
 9. compute SHA-256 over those bytes.
 
-A conforming implementation MUST reproduce the same hash for the same payload. Cross-language conformance vectors are part of the release suite and include notation thresholds, Unicode normalisation and non-BMP object keys.
+A conforming implementation MUST reproduce the same hash for the same payload. Cross-language conformance vectors are part of the release suite and include notation thresholds, Unicode normalisation, non-BMP object keys, and CR and CRLF in both string values and object keys.
 
 **OBDS numeric domain:** governed numbers are finite IEEE-754 binary64 values. Parsers with wider integer types MUST reject integer values that cannot be converted to binary64 without changing the integer value. NaN, positive infinity and negative infinity are invalid. Thus JSON numbers `1` and `1.0` canonicalise identically, while a wider integer such as `9007199254740993` is rejected rather than silently rounded.
 
-Governed JSON and YAML inputs MUST reject duplicate mapping keys, including keys that become equal after NFC normalisation. YAML authoring uses YAML 1.2 boolean semantics: only `true` and `false` are booleans. Scope array values are strings only.
+Governed JSON and YAML inputs MUST reject duplicate mapping keys, including keys that become equal after the normalisation in steps 1 and 2. Two keys that differ only in line endings, such as `a\rb` and `a\nb`, collide after step 2 and MUST be rejected rather than silently collapsed. YAML authoring uses YAML 1.2 boolean semantics: only `true` and `false` are booleans. Scope array values are strings only.
 
 A canonical hash proves byte identity after canonicalisation. It does **not** prove that a value still has the structure a consumer expects. Value-contract and shape validation are independent gates and MUST run before an approved manifest or compiled artefact is accepted.
 
@@ -1449,6 +1476,13 @@ Rules:
   implementation MUST NOT insert its defaults before hashing, because two
   implementations with different defaults would then disagree.
 - `maxTokens` is capacity, which is implementation-facing.
+- `asOf` is the timezone-aware ISO 8601 string **exactly as the validated Build
+  Plan carries it**. An implementation MUST NOT parse and re-serialise it for
+  this payload, MUST NOT convert its offset and MUST NOT normalise `Z` to
+  `+00:00` or the reverse. Two Build Plans that express the same instant with
+  different offsets are different documents and produce different
+  `governedResultHash` values; making them agree is a Build Plan authoring
+  decision, not a compiler one.
 - `selection` contains one entry per applicable element for the target, after
   scope matching, validity at `asOf` and subject precedence, sorted by
   `elementId` in UTF-16 code-unit order.
@@ -2648,7 +2682,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.1.0.md`;
+1. one normative specification: `OBDS-1.1.1.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

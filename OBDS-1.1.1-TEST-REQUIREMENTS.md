@@ -1,19 +1,19 @@
-# OBDS 1.0.4 Test and Runtime Requirements
+# OBDS 1.1.1 Test and Runtime Requirements
 
-This file declares every dependency needed to reproduce the official 107/107 conformance run.
+This file declares every dependency needed to reproduce the official 139/139 conformance run.
 It separates what a consumer of OBDS needs from what the reference conformance suite needs.
 
 ## 1. OBDS consumer requirements
 
 **None imposed by the specification.**
 
-OBDS 1.0.4 is a data and contract specification. A conforming implementation may be written in
+OBDS 1.1.1 is a data and contract specification. A conforming implementation may be written in
 any language. The normative artefacts are plain text:
 
-- `OBDS-1.0.4.md` (normative specification);
+- `OBDS-1.1.1.md` (normative specification);
 - `schemas/*.json` (21 public JSON Schemas, draft 2020-12);
 - `value-schemas/*.json` (6 public value-contract JSON Schemas, draft 2020-12);
-- `OBDS-1.0.4-SCHEMA-INDEX.json` and `OBDS-1.0.4-CAPABILITY-REGISTRY.json`.
+- `OBDS-1.1.1-SCHEMA-INDEX.json` and `OBDS-1.1.1-CAPABILITY-REGISTRY.json`.
 
 To consume OBDS you need a JSON Schema validator for your platform, a JSON reader and, if you
 accept governed YAML, a YAML 1.2 reader that rejects duplicate keys. Nothing in this package is
@@ -71,7 +71,7 @@ node --version                     # must succeed
 From an unpacked release archive the same two commands work unchanged:
 
 ```bash
-unzip OBDS-1.0.4-FINAL.zip && cd OBDS-1.0.4-FINAL
+unzip OBDS-1.1.1-FINAL.zip && cd OBDS-1.1.1-FINAL
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python reference/run_all.py
 .venv/bin/python reference/release-gate.py
@@ -80,7 +80,7 @@ python -m venv .venv && .venv/bin/pip install -r requirements.txt
 Expected outcome:
 
 ```text
-107 passed, 0 failed, 0 skipped
+139 passed, 0 failed, 0 skipped
 ```
 
 The suite contains no `skipif`, no `pytest.skip` and no `xfail`. Every case runs on every
@@ -115,7 +115,7 @@ gate is junk that would actually be shipped: `.DS_Store`, `Thumbs.db`, editor ba
 declared passed count, proves the public schema surface and the normative contract fingerprints
 have not moved, verifies every file listed in `PACKAGE-MANIFEST.json` against its recorded
 sha256, and proves the package ships no junk. It is a package check, not an OBDS capability and
-not part of the 107-case conformance suite.
+not part of the 139-case conformance suite.
 
 ```bash
 python reference/release-gate.py
@@ -125,15 +125,18 @@ python reference/release-gate.py
 
 | Suite | Cases |
 |---|---:|
-| foundation | 27 |
+| foundation | 49 |
 | context-delivery | 3 |
 | context-assembly | 15 |
 | design-space | 18 |
 | integration | 15 |
 | golden | 6 |
-| adversarial | 23 |
-| **Total** | **107** |
+| adversarial | 33 |
+| **Total** | **139** |
 
-The foundation suite has carried 27 cases since 1.0.2, when two cases were added to verify the
-published examples in `examples/`. Releases up to and including 1.0.1 ran 105 cases with 25 in
-foundation; those historical results stand as published in `spec/1.0.0/` and `spec/1.0.1/`.
+The foundation suite grew from 27 to 43 in OBDS 1.1, which added the normative 1.1 cases, and to 49
+in 1.1.1, which added the `requiresDefined` precedence cases, the `asOf` verbatim case and the
+section 14 example check. The adversarial suite grew from 23 to 33 with the line-ending vectors. It carried
+27 cases from 1.0.2, when two cases were added to verify the published examples in `examples/`.
+Releases up to and including 1.0.1 ran 105 cases with 25 in foundation; those historical results
+stand as published in `spec/1.0.0/` and `spec/1.0.1/`.

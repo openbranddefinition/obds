@@ -33,7 +33,7 @@ Section 10.2 precedence is now stated once and decidably. The scope vocabulary i
 
 The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3 and 1.0.4. OBDS 1.1 adds one versioned contract beside it, `schemas/1.1.0/compiled-context.schema.json`, and changes none of them.
 
-122 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 15 of 15 and is reported separately.
+139 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 15 of 15 and is reported separately.
 
 ## Use and licensing
 

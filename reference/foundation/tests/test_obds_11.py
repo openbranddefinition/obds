@@ -275,3 +275,134 @@ def test_compiler_identity_is_the_compiler_that_ran():
     assert result.status == "ready", [e.code for e in result.errors]
     assert result.artefact["build"]["compilerId"] == COMPILER_ID
     assert result.artefact["build"]["compilerVersion"] == COMPILER_VERSION
+
+
+# --- 1.1.1 B5: requiresDefined is an element-ID requirement ------------------
+
+def _manifest_from_case(base_manifest, case):
+    """Build a manifest whose elements match a requires-defined-precedence case."""
+    from obds_ref.canonical import manifest_content_hash
+
+    manifest = copy.deepcopy(base_manifest)
+    template = copy.deepcopy(manifest["elements"][0])
+    elements = []
+    for spec in case["elements"]:
+        element = copy.deepcopy(template)
+        element["id"] = spec["id"]
+        element["subject"] = spec["subject"]
+        element["scope"] = copy.deepcopy(spec["scope"])
+        element["state"] = spec["state"]
+        element["value"] = {"name": f"Example Minimal Brand {spec['id']}"}
+        elements.append(element)
+    manifest["elements"] = elements
+    manifest["approval"].pop("contentHash", None)
+    manifest["approval"]["contentHash"] = manifest_content_hash(manifest)
+    return manifest
+
+
+@pytest.mark.parametrize("case", fixture("requires-defined-precedence.json")["cases"],
+                         ids=lambda c: c["id"])
+def test_requires_defined_is_an_element_id_requirement(case):
+    """Section 13.1: the listed element must itself win its semantic subject.
+
+    An override that displaces the listed element does not satisfy a
+    requirement naming the displaced one, even when the override is `defined`.
+    Reinterpreting an id requirement as a subject requirement is exactly the
+    reading 1.1.1 forbids.
+    """
+    base_manifest, base_plan = example("foundation-minimal")
+    manifest = _manifest_from_case(base_manifest, case)
+    plan = copy.deepcopy(base_plan)
+    plan["manifestRef"]["contentHash"] = manifest["approval"]["contentHash"]
+    plan["targets"][0]["scope"] = copy.deepcopy(case["targetScope"])
+    plan["targets"][0]["requiresDefined"] = list(case["requiresDefined"])
+
+    result = build_target(manifest, plan, plan["targets"][0])
+
+    assert result.status == case["expectedStatus"], (
+        f"{case['id']}: {case['description']}"
+    )
+    codes = [e.code for e in result.errors]
+    if case["expectedCode"] is None:
+        assert codes == []
+    else:
+        assert case["expectedCode"] in codes, codes
+
+
+# --- 1.1.1 B4: asOf is carried verbatim into the governed payload ------------
+
+def test_governed_payload_carries_as_of_verbatim():
+    """Section 14.3a: `asOf` is the Build Plan string, not a re-serialisation.
+
+    Two plans naming the same instant with different offsets are different
+    documents and must produce different governed result hashes. A compiler that
+    normalised `Z` to `+00:00` would silently make them agree, which is a
+    different contract from the one 1.1.1 states.
+    """
+    manifest, plan = example("foundation-minimal")
+    target = plan["targets"][0]
+    elements = list(manifest["elements"])
+
+    for literal in ("2026-08-28T00:00:00Z", "2026-08-28T00:00:00+00:00",
+                    "2026-08-28T02:00:00+02:00"):
+        payload = governed_result_payload(manifest, target, literal, elements)
+        assert payload["asOf"] == literal, "asOf was reformatted"
+
+    same_instant = [
+        sha256_id(governed_result_payload(manifest, target, literal, elements))
+        for literal in ("2026-08-28T00:00:00Z", "2026-08-28T00:00:00+00:00")
+    ]
+    assert same_instant[0] != same_instant[1], (
+        "two spellings of one instant collapsed to one hash; section 14.3a says "
+        "they are different documents"
+    )
+
+    # And the artefact produced by a full build carries the plan's own spelling.
+    variant = copy.deepcopy(plan)
+    variant["asOf"] = "2026-08-28T02:00:00+02:00"
+    artefact = build_target(manifest, variant, variant["targets"][0]).artefact
+    assert artefact["build"]["asOf"] == "2026-08-28T02:00:00+02:00"
+
+
+# --- 1.1.1 B2: the normative section 14 example is a valid 1.1 artefact ------
+
+def test_section_14_example_validates_against_the_published_contract():
+    """The spec's own Compiled Brand Context example must pass the 1.1 schema.
+
+    In 1.1.0 it carried `schemaVersion: 1.0.0` and no `governedResultHash`, so
+    an implementer who followed the normative example emitted an artefact the
+    release's own contract rejected.
+    """
+    import re
+
+    import jsonschema
+
+    spec_path = next(PACKAGE_ROOT.glob("OBDS-1.1.*.md"))
+    text = spec_path.read_text(encoding="utf-8")
+    section = text.split("## 14. Compiled Brand Context", 1)[1].split("### 14.0", 1)[0]
+    block = re.search(r"```json\n(.*?)\n```", section, re.S).group(1)
+    example_artefact = json.loads(block)
+
+    assert example_artefact["schemaVersion"] == "1.1.0"
+    assert "governedResultHash" in example_artefact
+    assert example_artefact["id"] == (
+        f"{example_artefact['manifest']['id']}:context:{example_artefact['targetId']}"
+    )
+
+    # Both layouts keep the versioned contract in its own directory.
+    schema_path = PACKAGE_ROOT / "schemas" / "1.1.0" / "compiled-context.schema.json"
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+
+    # The example uses "sha256:..." placeholders for hashes; substitute a
+    # well-formed digest so the structural contract is what is under test.
+    placeholder = "sha256:" + "0" * 64
+    def fill(node):
+        if isinstance(node, dict):
+            return {k: fill(v) for k, v in node.items()}
+        if isinstance(node, list):
+            return [fill(v) for v in node]
+        if node == "sha256:...":
+            return placeholder
+        return node
+
+    jsonschema.Draft202012Validator(schema).validate(fill(example_artefact))

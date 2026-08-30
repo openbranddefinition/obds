@@ -2,9 +2,91 @@
 
 ## Release
 
-**Version:** OBDS 1.1.0  
+**Version:** OBDS 1.1.1  
 **Status:** Stable  
 **Date:** 2026-08-30
+
+## 1.1.1
+
+**Maintenance release. PATCH. No breaking change, no new capability.**
+
+Every change here fixes a defect an external reader found in 1.1.0. Nothing was
+added, nothing was designed, and no normative contract moved.
+
+**Canonicalisation, the one that mattered.** Section 14.3 step 1 said "every
+string and object key"; step 2 said only "inside strings". The two
+canonicalisers shipped in 1.1.0 read the asymmetry differently: the Python
+reference normalised CR inside object keys, `canonical_js.mjs` did not. The same
+manifest therefore produced two different `governedResultHash` values, which is
+exactly what section 14.3a says MUST NOT happen. Step 2 now reads "inside every
+string and object key to LF, CRLF first and then any remaining CR", the
+JavaScript canonicaliser uses one normalisation function for keys and values,
+and six cross-language vectors cover CR and CRLF in values, in keys, mixed and
+nested. A key collision created by the normalisation, such as `a\rb` beside
+`a\nb`, must be rejected rather than silently collapsed, and both
+implementations now are tested to reject it. No published hash moved: no
+governed payload in any published example or fixture contains a carriage return.
+
+**The section 14 example.** The normative Compiled Brand Context example still
+carried `schemaVersion: 1.0.0` and no `governedResultHash`, so an implementer
+who followed it emitted an artefact the release's own contract rejected. It is
+now a valid 1.1 artefact, and the release gate validates it against
+`schemas/1.1.0/compiled-context.schema.json` on every run.
+
+**The context id rule.** `context-id.json` asserted a rule and cited section 14
+for it; section 14 did not contain the rule, and its example contradicted the
+fixture. Section 14 now states it: `{manifest.id}:context:{targetId}`, neither
+part escaped, trimmed or case-folded. The example follows it.
+
+**The `asOf` representation.** Section 14.3a pinned `target` as verbatim and
+said nothing about `asOf` beside it. It now says `asOf` is the timezone-aware
+ISO 8601 string exactly as the validated Build Plan carries it, never parsed and
+re-serialised. Two spellings of one instant are two documents.
+
+**`requiresDefined`.** The `OBDS-BUILD-REQUIRED-NOT-DEFINED` description was
+two-valued about an element that lost its subject to a more specific override,
+and the two readings disagreed about whether the build succeeds. Section 13.1
+now states one: `requiresDefined` is an element-ID requirement, the listed
+element must itself be the `defined` winner of its subject, and an override does
+not satisfy a requirement naming the element it displaced. This is the behaviour
+the reference already had. Subject-level reusable requirements stay deferred
+target-governance research. Four fixture cases pin it.
+
+**Release metadata drift.** 1.1.0 stated three different conformance numbers
+across its own documents, shipped a `TEST-REQUIREMENTS.md` that was a verbatim
+1.0.4 file, and omitted its only new contract from both the schema index and the
+publication map. All corrected. `TEST-RESULT.json` notes and `promotedFrom` are
+now generated rather than carried forward, and `requirementsExercised` enumerates
+all fourteen section 26.2 requirements rather than twelve.
+
+**The release gate now fails on this class.** Six new checks: documents that
+disagree on the case counts; a release document that names another release;
+`TEST-RESULT.json` contradicting itself or promising a field it does not carry;
+a served contract missing from the index or the map, or a mapped contract the
+release does not serve; `publication-record.json` or the website disagreeing
+with the built artefacts; and a normative or published example that fails its
+own published schema. Every one exists because a human reader found the defect
+and no mechanical check did.
+
+**Authoring page.** Its only worked example failed two published schemas:
+`sourceRefs` was an array of objects against `items: {type: string}`, and the
+colour value omitted the required `name`. Both fixed, and the gate now validates
+every published structured example.
+
+**Conformance.** 139 cases pass, 0 fail, 0 skip. The foundation suite grew to 49
+with the `requiresDefined` precedence cases, the `asOf` case and the section 14
+example check; adversarial grew to 33 with the line-ending vectors.
+
+**Section 27.1 classification.** Every change above is a clarification or a
+defect fix in a document, an example, a test or the gate. `schemas/1.1.0/` and
+the 27 public 1.0.0 contracts are byte-identical to 1.1.0. No published hash of
+any published example moved. PATCH.
+
+**Known and deliberately not fixed.** The `title` of
+`schemas/1.1.0/compiled-context.schema.json` reads "OBDS Compiled Brand Context
+1.0.0 1.1.0". Correcting it would change the bytes of a contract already
+published at a versioned URL, which is the one thing this project's own rules
+forbid, so it stands until the next contract version.
 
 ## 1.1.0
 
@@ -101,7 +183,7 @@ and replaced by: the OBDS 1.0.0 contract surface remains frozen and
 byte-identical across 1.0.0 through 1.0.4, and OBDS 1.1 adds one versioned
 contract beside it and changes none of them.
 
-**Conformance.** 122 cases pass, 0 fail, 0 skip. Foundation grew from 27 to 42
+**Conformance.** 139 cases pass, 0 fail, 0 skip. Foundation grew from 27 to 49
 with the 1.1 normative cases. The official declared Foundation conformance suite
 remains 15 of 15 and is still not aggregated into that total.
 

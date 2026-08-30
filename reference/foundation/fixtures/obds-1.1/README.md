@@ -19,9 +19,23 @@ from the implementation under test drifted and went unnoticed for two releases.
 | `governed-result-hash.json` | the section 14.3a payload and its hash for both published examples |
 | `governed-result-invariance.json` | different prose, compiler identity and token counts, identical `governedResultHash`, different `artifactHash` |
 | `governed-result-neutrality.json` | a section 27.2 governance-neutral PATCH leaves `governedResultHash` unchanged |
-| `precedence-vectors.json` | the subset precedence rule, including both conflict outcomes |
-| `absent-dimension.json` | an element restricting a dimension the target does not declare is not applicable |
-| `scope-nfc.json` | scope values compare as NFC-normalised sets |
 | `whitespace-v1.json` | the exact separator set, including U+001C to U+001F |
-| `build-error-codes.json` | one vector per build-failure code |
-| `context-id.json` | the context identifier construction rule |
+| `context-id.json` | the context identifier construction rule, now stated normatively in section 14 |
+| `requires-defined-precedence.json` | section 13.1: `requiresDefined` is an element-ID requirement, and an override that wins the subject does not satisfy a requirement naming the element it displaced |
+
+Six files, and this table lists exactly what the directory contains. OBDS 1.1.0
+shipped a table naming nine, of which five existed: an independent implementer
+looked for the four that were not there and reported it. The inventory is now
+part of what the release gate checks.
+
+Cross-language canonicalisation vectors, including CR and CRLF in both string
+values and object keys, live beside the implementation that consumes them in
+`reference/adversarial/canonical-vectors.json`.
+
+Four fixtures named in the OBDS 1.1 design gate are **not yet published**:
+`precedence-vectors.json`, `absent-dimension.json`, `scope-nfc.json` and
+`build-error-codes.json`. The behaviours they would pin are covered by cases in
+`reference/foundation/tests/test_obds_11.py`, but as tests of this
+implementation rather than as cross-language vectors with independently derived
+values. Promoting them is the next fixture work, and naming them here is
+deliberate: an implementer should know what the package does not yet prove.

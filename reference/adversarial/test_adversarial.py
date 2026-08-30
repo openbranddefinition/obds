@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -310,7 +311,7 @@ def test_rc5_unsupported_tokenizer_fails_closed():
 def test_rc5_legacy_colour_hex_schema_is_reference_internal():
     schema=json.loads((ROOT/"foundation"/"value-schemas"/"colour-hex.schema.json").read_text())
     assert "/reference/1.0.0/" in schema["$id"]
-    index=json.loads((PACKAGE_ROOT/"OBDS-1.1.0-SCHEMA-INDEX.json").read_text())
+    index=json.loads((PACKAGE_ROOT/"OBDS-1.1.1-SCHEMA-INDEX.json").read_text())
     assert all(item["file"]!="colour-hex.schema.json" for item in index.get("valueSchemas",[]))
 
 
@@ -332,3 +333,89 @@ def test_rc5_cross_language_canonical_fuzz_256_binary64_values(tmp_path):
         text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True,
     )
     assert py==proc.stdout.strip().splitlines()
+
+
+# --- OBDS 1.1.1 B1: line-ending normalisation applies to values AND object keys ---
+#
+# 1.1.0 shipped two canonicalisers that disagreed here: the Python reference
+# normalised CR inside object keys, canonical_js.mjs did not. Section 14.3 now
+# says both, so the two implementations must agree on every one of these.
+
+CR_VECTORS = [
+    ({"v": "a\rb"}, '{"v":"a\\nb"}'),
+    ({"v": "a\r\nb"}, '{"v":"a\\nb"}'),
+    ({"a\rb": 1}, '{"a\\nb":1}'),
+    ({"a\r\nb": 1}, '{"a\\nb":1}'),
+    ({"k\r": "v\r", "x\r\ny": "z\r\nw"}, '{"k\\n":"v\\n","x\\ny":"z\\nw"}'),
+    ({"a\rb": {"c\r\nd": ["e\rf"]}}, '{"a\\nb":{"c\\nd":["e\\nf"]}}'),
+]
+
+
+@pytest.mark.parametrize("payload,expected", CR_VECTORS)
+def test_b1_python_normalises_line_endings_in_values_and_keys(payload, expected):
+    assert canonical_json_bytes(payload).decode() == expected
+
+
+def test_b1_javascript_matches_python_on_every_line_ending_vector(tmp_path):
+    raws = [json.dumps(payload, ensure_ascii=False) for payload, _ in CR_VECTORS]
+    vector_path = tmp_path / "cr-vectors.json"
+    vector_path.write_text(json.dumps(raws, ensure_ascii=False), encoding="utf-8")
+    py = [canonical_json_bytes(json.loads(raw)).decode() for raw in raws]
+    proc = subprocess.run(
+        ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    )
+    assert py == proc.stdout.strip().splitlines()
+    assert py == [expected for _, expected in CR_VECTORS]
+
+
+def test_b1_key_collision_created_by_normalisation_is_rejected_by_python():
+    # "a\rb" and "a\nb" are distinct JSON keys that become one key after
+    # step 2. Canonicalisation must fail closed rather than silently drop one.
+    with pytest.raises(ValueError, match="duplicate object key"):
+        canonical_json_bytes({"a\rb": 1, "a\nb": 2})
+    with pytest.raises(ValueError, match="duplicate object key"):
+        canonical_json_bytes({"a\r\nb": 1, "a\nb": 2})
+
+
+def test_b1_key_collision_created_by_normalisation_is_rejected_by_javascript(tmp_path):
+    raws = [
+        json.dumps({"a\rb": 1, "a\nb": 2}, ensure_ascii=False),
+        json.dumps({"a\r\nb": 1, "a\nb": 2}, ensure_ascii=False),
+    ]
+    for raw in raws:
+        vector_path = tmp_path / "collide.json"
+        vector_path.write_text(json.dumps([raw], ensure_ascii=False), encoding="utf-8")
+        proc = subprocess.run(
+            ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
+            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        assert proc.returncode != 0, f"JavaScript accepted a colliding key set: {raw}"
+        assert "duplicate key" in proc.stderr
+
+
+def test_b1_governed_result_hash_agrees_across_languages_on_cr_payloads(tmp_path):
+    # The end-to-end point of B1: a CR anywhere in the governed payload must not
+    # split the two implementations' hashes.
+    payloads = [
+        {"kind": "obds-governed-result", "schemaVersion": "1.1.0",
+         "manifest": {"id": "urn:obds:brand:x"}, "target": {"note": "a\rb"},
+         "asOf": "2026-08-30T00:00:00Z", "selection": []},
+        {"kind": "obds-governed-result", "schemaVersion": "1.1.0",
+         "manifest": {"id": "urn:obds:brand:x"}, "target": {"a\rb": 1},
+         "asOf": "2026-08-30T00:00:00Z", "selection": []},
+    ]
+    raws = [json.dumps(p, ensure_ascii=False) for p in payloads]
+    vector_path = tmp_path / "governed-cr.json"
+    vector_path.write_text(json.dumps(raws, ensure_ascii=False), encoding="utf-8")
+    proc = subprocess.run(
+        ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    )
+    js_lines = proc.stdout.strip().splitlines()
+    for payload, js_text in zip(payloads, js_lines):
+        py_bytes = canonical_json_bytes(payload)
+        assert py_bytes.decode() == js_text
+        py_hash = hashlib.sha256(py_bytes).hexdigest()
+        js_hash = hashlib.sha256(js_text.encode("utf-8")).hexdigest()
+        assert py_hash == js_hash

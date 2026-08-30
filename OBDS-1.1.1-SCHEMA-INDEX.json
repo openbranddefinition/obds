@@ -1,5 +1,8 @@
 {
   "kind": "obds-schema-index",
+  "note": "`schemas` and `valueSchemas` are the frozen OBDS 1.0.0 contract surface, unchanged since 1.0.0. `versionedSchemas` carries the contracts published beside it at their own version.",
+  "release": "1.1.1",
+  "schemaContractVersion": "1.0.0",
   "schemaVersion": "1.0.0",
   "schemas": [
     {
@@ -145,6 +148,14 @@
       "file": "semantic-boundary.schema.json",
       "id": "https://openbranddefinition.org/value-schemas/1.0.0/semantic-boundary.schema.json",
       "schemaHash": "sha256:b4eb01d3f91577f5e1f1722bcc80dff64af24f6e78d888ffb72bc92d1bf60ec0"
+    }
+  ],
+  "versionedSchemas": [
+    {
+      "capability": "compiled-runtime",
+      "file": "1.1.0/compiled-context.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.1.0/compiled-context.schema.json",
+      "schemaHash": "sha256:8ac36e921e7e03532fbebe6a0ce0e584adc55a6c72a794c862681a29d4a5ef99"
     }
   ]
 }

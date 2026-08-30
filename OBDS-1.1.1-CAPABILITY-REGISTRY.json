@@ -48,7 +48,7 @@
   "kind": "obds-capability-registry",
   "releaseModel": {
     "foundationRequired": true,
-    "normativeSpecification": "OBDS-1.1.0.md",
+    "normativeSpecification": "OBDS-1.1.1.md",
     "optionalBrandProfiles": true,
     "optionalRuntimeCapabilities": true
   },

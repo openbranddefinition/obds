@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.1.0 release gate.
+"""OBDS 1.1.1 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -36,6 +36,7 @@ import hashlib
 import io
 import json
 import re
+import textwrap
 import sys
 from contextlib import redirect_stdout
 from types import SimpleNamespace
@@ -46,16 +47,16 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 43,
+    "foundation": 49,
     "context-delivery": 3,
     "context-assembly": 15,
     "design-space": 18,
     "integration": 15,
     "golden": 6,
-    "adversarial": 23,
+    "adversarial": 33,
 }
-EXPECTED_TOTAL = 123
-EXPECTED_RELEASE = "1.1.0"
+EXPECTED_TOTAL = 139
+EXPECTED_RELEASE = "1.1.1"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -71,10 +72,15 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 
 # Normative contract identity against the immediately preceding release. Every
 # entry is sha256 of the contract as published in spec/1.0.4/, and unchanged from
-# 1.0.3, 1.0.2, 1.0.1 and 1.0.0 before it. The fingerprint excludes `release` and
-# `releaseModel.normativeSpecification`, which are packaging, so a version bump
-# alone never moves it. A maintenance release must not move any of them.
-PRIOR_RELEASE = "1.0.4"
+# 1.0.3, 1.0.2, 1.0.1 and 1.0.0 before it, and from 1.1.0 after it. The
+# fingerprint excludes `release` and `releaseModel.normativeSpecification`, which
+# are packaging, so a version bump alone never moves it. It is computed over the
+# frozen OBDS 1.0.0 surface only: a contract published beside that surface at its
+# own version, such as schemas/1.1.0/compiled-context.schema.json, is listed in
+# the index and the map but excluded here, because including it would make the
+# frozen-surface proof impossible to state. A maintenance release must not move
+# any of them.
+PRIOR_RELEASE = "1.1.0"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -344,6 +350,35 @@ def validate_schemas(test_result, audit) -> None:
             failures.append(f"{label}: {location}: {error.message}")
 
 
+def published_yaml_elements(html: str) -> list[dict]:
+    """Every Brand Element example embedded in a published HTML page.
+
+    A published page teaches by example, so its examples must satisfy the same
+    contracts as real data. 1.1.0 shipped an authoring page whose only worked
+    example failed two of them. Blocks are found by their `id:` and `state:`
+    keys rather than by a class name, so restyling the page cannot silently
+    remove the check.
+    """
+    import html as html_mod
+
+    import yaml as yaml_mod
+
+    elements: list[dict] = []
+    for block in re.findall(r"<pre[^>]*>(.*?)</pre>|<code[^>]*>(.*?)</code>", html, re.S):
+        text = next((b for b in block if b), "")
+        text = re.sub(r"<[^>]+>", "", text)
+        text = html_mod.unescape(text)
+        if not re.search(r"^\s*id:\s*\S", text, re.M) or "state:" not in text:
+            continue
+        try:
+            payload = yaml_mod.safe_load(textwrap.dedent(text))
+        except yaml_mod.YAMLError:
+            continue
+        if isinstance(payload, dict) and "id" in payload and "state" in payload:
+            elements.append(payload)
+    return elements
+
+
 def manifest_path(rel: str) -> Path:
     """Map a manifest path onto the current layout.
 
@@ -600,8 +635,15 @@ def main() -> int:
     index = load(ROOT / f"OBDS-{EXPECTED_RELEASE}-SCHEMA-INDEX.json")
     check(sorted(i["file"] for i in index["schemas"]) == schemas, "schema index does not match schemas/")
     check(sorted(i["file"] for i in index["valueSchemas"]) == value_schemas, "schema index does not match value-schemas/")
-    ids = [i["id"] for i in index["schemas"]] + [i["id"] for i in index["valueSchemas"]]
+    versioned_index = index.get("versionedSchemas", [])
+    ids = ([i["id"] for i in index["schemas"]]
+           + [i["id"] for i in index["valueSchemas"]]
+           + [i["id"] for i in versioned_index])
     check(len(ids) == len(set(ids)), "duplicate $id in schema index")
+    check(
+        index.get("release") == EXPECTED_RELEASE,
+        f"schema index release is {index.get('release')!r}, expected {EXPECTED_RELEASE!r}",
+    )
 
     # 5b. no normative contract change: the public schema surface must equal 1.0.0.
     lines = []
@@ -635,12 +677,22 @@ def main() -> int:
     _release_model.pop("normativeSpecification", None)  # release filename is packaging
     registry["releaseModel"] = _release_model
     pubmap = load(ROOT / f"OBDS-{EXPECTED_RELEASE}-PUBLICATION-MAP.json")
+    # The identity fingerprint covers the frozen OBDS 1.0.0 surface only.
+    # Contracts published beside it at their own version are checked separately,
+    # in 5e, so that adding one can never be mistaken for moving the 27.
+    def _frozen_only(entries):
+        return [
+            e for e in entries
+            if e["id"].startswith("https://openbranddefinition.org/schemas/1.0.0/")
+            or e["id"].startswith("https://openbranddefinition.org/value-schemas/1.0.0/")
+        ]
+
     actual_contract = {
         "capability-registry": _canon_fingerprint(registry),
         "schema-index": _canon_fingerprint(
             {"schemas": index["schemas"], "valueSchemas": index["valueSchemas"]}
         ),
-        "publication-map-contracts": _canon_fingerprint(pubmap["contracts"]),
+        "publication-map-contracts": _canon_fingerprint(_frozen_only(pubmap["contracts"])),
     }
     for key, expected in PRIOR_CONTRACT_FINGERPRINTS.items():
         check(
@@ -706,6 +758,340 @@ def main() -> int:
             continue
         if re.search(pattern, text, re.I):
             failures.append(f"pre-release status wording in {path.relative_to(ROOT).as_posix()}")
+
+    # ------------------------------------------------------------------
+    # 8 to 13 were added in 1.1.1. Every one of them exists because a human
+    # reader found the defect and no mechanical check did. The class is always
+    # the same: a value that had to be copied by hand from one document into
+    # another, and drifted.
+    # ------------------------------------------------------------------
+
+    # 8. every document that states the conformance numbers must state the same
+    #    ones. 1.1.0 published 123, 122 and 107 across its own documents.
+    # A number is only checked when the sentence is about THIS release. Lines
+    # that describe an earlier release are history, not drift, so they are
+    # skipped by name rather than by loosening the check.
+    historical_line = re.compile(
+        r"since\s+\d|before\s+\d|up to and including|Releases? up to|grew from|"
+        r"historical|previously|earlier release|1\.0\.[0-4]|1\.1\.0",
+        re.I,
+    )
+    aggregate_re = re.compile(
+        r"\b(\d{2,4})\s+(?:conformance\s+)?(?:cases?|passed)\b|\b(\d{2,4})/(?:\d{2,4})\b",
+        re.I,
+    )
+    # The foundation count is only claimed in a suite-composition context.
+    foundation_re = re.compile(
+        r"foundation\s*\|\s*(\d{1,4})\s*\||foundation\s+(\d{1,4})\b", re.I
+    )
+    for rel in (
+        "README.md",
+        f"OBDS-{EXPECTED_RELEASE}-CHANGELOG.md",
+        f"OBDS-PUBLIC-README-{EXPECTED_RELEASE}.md",
+        f"OBDS-{EXPECTED_RELEASE}-TEST-REQUIREMENTS.md",
+    ):
+        path = ROOT / rel
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8")
+        if "CHANGELOG" in rel:
+            # A changelog is history by construction. Only the section for this
+            # release makes a claim about this release.
+            heading = f"\n## {EXPECTED_RELEASE}\n"
+            if heading not in text:
+                failures.append(f"{rel} has no section for {EXPECTED_RELEASE}")
+                continue
+            body = text.split(heading, 1)[1]
+            text = body.split("\n## ", 1)[0]
+        for line in text.splitlines():
+            if historical_line.search(line):
+                continue
+            totals = {
+                int(g) for match in aggregate_re.findall(line) for g in match
+                if g and 50 <= int(g) <= 9999
+            }
+            wrong_total = sorted(t for t in totals if t != EXPECTED_TOTAL)
+            check(
+                not wrong_total,
+                f"{rel} states conformance total {wrong_total} on a line about this "
+                f"release, but this release is {EXPECTED_TOTAL}: {line.strip()[:70]}",
+            )
+            founds = {
+                int(g) for match in foundation_re.findall(line) for g in match if g
+            }
+            wrong_found = sorted(
+                f for f in founds if f != EXPECTED_SUITE_COUNTS["foundation"]
+            )
+            check(
+                not wrong_found,
+                f"{rel} states foundation count {wrong_found}, but this release is "
+                f"{EXPECTED_SUITE_COUNTS['foundation']}: {line.strip()[:70]}",
+            )
+
+    # 9. no release document may name another release. A whole stale document
+    #    survived into 1.1.0 because nothing checked the version in its own text.
+    other_release = re.compile(r"OBDS-(\d+\.\d+\.\d+)(?:-[A-Za-z-]+)?\.(?:md|json|zip|txt)")
+    historical_ok = re.compile(r"spec/\d+\.\d+\.\d+/|/spec/|CHANGELOG|MIGRATION|Previous|previous|historical")
+    for rel in (
+        f"OBDS-{EXPECTED_RELEASE}-TEST-REQUIREMENTS.md",
+        f"OBDS-{EXPECTED_RELEASE}-IMPLEMENTER-QUICKSTART.md",
+    ):
+        path = ROOT / rel
+        if not path.is_file():
+            continue
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if historical_ok.search(line):
+                continue
+            for found in other_release.findall(line):
+                check(
+                    found == EXPECTED_RELEASE,
+                    f"{rel} references release {found}: {line.strip()[:90]}",
+                )
+        first_line = path.read_text(encoding="utf-8").splitlines()[0]
+        check(
+            EXPECTED_RELEASE in first_line or not re.search(r"\d+\.\d+(\.\d+)?", first_line),
+            f"{rel} title names another release: {first_line.strip()[:90]}",
+        )
+
+    # 10. the conformance result must not contradict itself. 1.1.0 shipped a
+    #     TEST-RESULT.json whose notes described a different release, whose
+    #     promotedFrom disagreed with the publication record, and whose
+    #     claimScope promised an enumeration the file did not contain.
+    check(
+        test_result.get("release") == EXPECTED_RELEASE,
+        f"TEST-RESULT release is {test_result.get('release')!r}",
+    )
+    check(
+        test_result.get("obdsVersion") == EXPECTED_RELEASE,
+        f"TEST-RESULT obdsVersion is {test_result.get('obdsVersion')!r}",
+    )
+    check(
+        test_result.get("promotedFrom") == PRIOR_RELEASE,
+        f"TEST-RESULT promotedFrom is {test_result.get('promotedFrom')!r}, "
+        f"expected {PRIOR_RELEASE!r}",
+    )
+    notes_text = " ".join(test_result.get("notes", []))
+    # Only a note that describes *this* release is checked; a note that
+    # enumerates the releases a contract has been identical across is history.
+    for stale in re.findall(r"OBDS (\d+\.\d+\.\d+) is\b", notes_text):
+        check(
+            stale == EXPECTED_RELEASE,
+            f"TEST-RESULT notes describe OBDS {stale}, not {EXPECTED_RELEASE}",
+        )
+    for stale_total in {int(m) for m in re.findall(r"\b(\d{3})\s+cases\b", notes_text)}:
+        check(
+            stale_total == EXPECTED_TOTAL,
+            f"TEST-RESULT notes state {stale_total} cases, not {EXPECTED_TOTAL}",
+        )
+    claim = test_result.get("claimScope", "")
+
+    def _contains_key(node, key: str) -> bool:
+        if isinstance(node, dict):
+            return key in node or any(_contains_key(v, key) for v in node.values())
+        if isinstance(node, list):
+            return any(_contains_key(v, key) for v in node)
+        return False
+
+    for promised in re.findall(r"`([A-Za-z][A-Za-z0-9]*)`", claim):
+        check(
+            _contains_key(test_result, promised),
+            f"TEST-RESULT claimScope names `{promised}`, which the file does not contain",
+        )
+
+    # 11. every contract this release serves must be indexed and mapped, and
+    #     every indexed or mapped contract must be served. 1.1.0 served
+    #     schemas/1.1.0/compiled-context.schema.json and listed it in neither.
+    served: dict[str, Path] = {}
+    for path in sorted(SCHEMAS_DIR.glob("*.json")):
+        served[f"https://openbranddefinition.org/schemas/1.0.0/{path.name}"] = path
+    for path in sorted(VALUE_SCHEMAS_DIR.glob("*.json")):
+        served[f"https://openbranddefinition.org/value-schemas/1.0.0/{path.name}"] = path
+    for path in sorted((ROOT / "schemas" / "1.1.0").glob("*.json")):
+        served[f"https://openbranddefinition.org/schemas/1.1.0/{path.name}"] = path
+
+    indexed = {i["id"] for i in index["schemas"]} | {i["id"] for i in index["valueSchemas"]}
+    indexed |= {i["id"] for i in versioned_index}
+    mapped = {c["id"] for c in pubmap["contracts"]}
+
+    for missing in sorted(set(served) - indexed):
+        failures.append(f"served contract missing from the schema index: {missing}")
+    for missing in sorted(set(served) - mapped):
+        failures.append(f"served contract missing from the publication map: {missing}")
+    for extra in sorted(indexed - set(served)):
+        failures.append(f"schema index lists a contract this release does not serve: {extra}")
+    for extra in sorted(mapped - set(served)):
+        failures.append(f"publication map lists a contract this release does not serve: {extra}")
+    check(
+        pubmap.get("totalPublicContracts") == len(served),
+        f"publication map totalPublicContracts={pubmap.get('totalPublicContracts')} "
+        f"but this release serves {len(served)}",
+    )
+    for contract in pubmap["contracts"]:
+        path = served.get(contract["id"])
+        if path is None:
+            continue
+        digest = sha256_file(path)
+        check(
+            contract.get("sha256") == digest,
+            f"publication map sha256 for {contract['id']} does not match the served bytes",
+        )
+
+    # 12. the publication record and the website must agree with what was built.
+    #     Both are hand-maintained and both drifted in 1.1.0.
+    record_path = ROOT / "publication-record.json"
+    if record_path.is_file():
+        record = load(record_path)
+        check(
+            record.get("currentRelease") == EXPECTED_RELEASE,
+            f"publication-record currentRelease is {record.get('currentRelease')!r}",
+        )
+        check(
+            record.get("testOutputHash") == test_result.get("testOutputHash"),
+            "publication-record testOutputHash differs from the built TEST-RESULT",
+        )
+        check(
+            record.get("conformanceTestsPassed") == EXPECTED_TOTAL,
+            f"publication-record conformanceTestsPassed="
+            f"{record.get('conformanceTestsPassed')}, expected {EXPECTED_TOTAL}",
+        )
+        release_entry = (record.get("releases") or {}).get(EXPECTED_RELEASE, {})
+        check(
+            release_entry.get("testOutputHash") == test_result.get("testOutputHash"),
+            f"publication-record releases[{EXPECTED_RELEASE}].testOutputHash "
+            "differs from the built TEST-RESULT",
+        )
+        zip_path = ROOT / "spec" / EXPECTED_RELEASE / f"OBDS-{EXPECTED_RELEASE}-FINAL.zip"
+        if zip_path.is_file():
+            zip_digest = sha256_file(zip_path)
+            check(
+                record.get("packageZipSha256") == zip_digest,
+                "publication-record packageZipSha256 differs from the built archive",
+            )
+            check(
+                release_entry.get("packageZipSha256") == zip_digest,
+                f"publication-record releases[{EXPECTED_RELEASE}].packageZipSha256 "
+                "differs from the built archive",
+            )
+        index_html = ROOT / "index.html"
+        if index_html.is_file():
+            site = index_html.read_text(encoding="utf-8")
+            check(
+                record.get("websiteIndexSha256") == sha256_file(index_html),
+                "publication-record websiteIndexSha256 differs from index.html",
+            )
+            check(
+                test_result.get("testOutputHash") in site,
+                "the website does not carry this release's testOutputHash",
+            )
+            check(
+                f"{EXPECTED_TOTAL} passed" in site,
+                f"the website does not state {EXPECTED_TOTAL} passed",
+            )
+            check(
+                f"OBDS / {EXPECTED_RELEASE} " in site or f">OBDS {EXPECTED_RELEASE}<" in site,
+                f"the website does not present {EXPECTED_RELEASE} as the current release",
+            )
+            for suite_name, suite_count in EXPECTED_SUITE_COUNTS.items():
+                marker = (f'<span class="state-name">{suite_name}</span></div>'
+                          f'<div class="publication-value">')
+                if marker in site:
+                    stated = site.split(marker, 1)[1].split("<", 1)[0].strip()
+                    check(
+                        stated == str(suite_count),
+                        f"the website states {suite_name} {stated}, expected {suite_count}",
+                    )
+            check(
+                f"{len(served)} schemas" in site or f"{len(served)} public contracts" in site,
+                f"the website does not state the {len(served)} public contracts it ships",
+            )
+
+    # 13. normative and published examples must satisfy the published contracts.
+    #     The 1.1.0 section 14 artefact example and the authoring page's only
+    #     worked example both failed the schemas shipped beside them.
+    try:
+        import jsonschema as _jsonschema
+    except ImportError:
+        _jsonschema = None
+    if _jsonschema is not None:
+        spec_candidates = sorted(ROOT.glob(f"OBDS-{EXPECTED_RELEASE}.md"))
+        v11_schema_path = ROOT / "schemas" / "1.1.0" / "compiled-context.schema.json"
+        if spec_candidates and v11_schema_path.is_file():
+            text = spec_candidates[0].read_text(encoding="utf-8")
+            if "## 14. Compiled Brand Context" in text:
+                section = text.split("## 14. Compiled Brand Context", 1)[1].split("### 14.0", 1)[0]
+                block = re.search(r"```json\n(.*?)\n```", section, re.S)
+                if block:
+                    example = json.loads(block.group(1))
+                    placeholder = "sha256:" + "0" * 64
+
+                    def _fill(node):
+                        if isinstance(node, dict):
+                            return {k: _fill(v) for k, v in node.items()}
+                        if isinstance(node, list):
+                            return [_fill(v) for v in node]
+                        return placeholder if node == "sha256:..." else node
+
+                    errors = sorted(
+                        _jsonschema.Draft202012Validator(
+                            load(v11_schema_path)
+                        ).iter_errors(_fill(example)),
+                        key=lambda e: list(e.path),
+                    )
+                    for err in errors[:5]:
+                        failures.append(
+                            "the section 14 normative example fails "
+                            f"schemas/1.1.0/compiled-context.schema.json: "
+                            f"{list(err.path)} {err.message[:110]}"
+                        )
+                    expected_id = f"{example['manifest']['id']}:context:{example['targetId']}"
+                    check(
+                        example.get("id") == expected_id,
+                        "the section 14 example id does not follow "
+                        "{manifest.id}:context:{targetId}",
+                    )
+
+        # Published structured examples outside the specification. The
+        # authoring page's worked example is the one a curator copies first, so
+        # it must satisfy the same contracts as a real manifest element.
+        manifest_schema = ROOT / "schemas" / "brand-manifest.schema.json"
+        if not manifest_schema.is_file():
+            manifest_schema = ROOT / "schemas" / "1.0.0" / "brand-manifest.schema.json"
+        colour_schema = ROOT / "value-schemas" / "colour.schema.json"
+        if not colour_schema.is_file():
+            colour_schema = ROOT / "value-schemas" / "1.0.0" / "colour.schema.json"
+
+        for rel in ("authoring/index.html",):
+            path = ROOT / rel
+            if not path.is_file() or not manifest_schema.is_file():
+                continue
+            for element in published_yaml_elements(path.read_text(encoding="utf-8")):
+                manifest_doc = load(manifest_schema)
+                # The element subschema uses internal $refs, so it must be
+                # validated with the document's own $defs as the resolution root.
+                element_schema = {
+                    "$ref": "#/$defs/element",
+                    "$defs": manifest_doc["$defs"],
+                }
+                for err in sorted(
+                    _jsonschema.Draft202012Validator(element_schema).iter_errors(element),
+                    key=lambda e: list(e.path),
+                )[:5]:
+                    failures.append(
+                        f"{rel}: published element example fails "
+                        f"{manifest_schema.name}#/$defs/element: "
+                        f"{list(err.path)} {err.message[:110]}"
+                    )
+                if element.get("kind") == "colour" and colour_schema.is_file():
+                    for err in sorted(
+                        _jsonschema.Draft202012Validator(
+                            load(colour_schema)
+                        ).iter_errors(element.get("value", {})),
+                        key=lambda e: list(e.path),
+                    )[:5]:
+                        failures.append(
+                            f"{rel}: published colour value fails "
+                            f"{colour_schema.name}: {list(err.path)} {err.message[:110]}"
+                        )
 
     if failures:
         print("RELEASE GATE: FAIL")

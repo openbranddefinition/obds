@@ -190,6 +190,15 @@
       "sha256": "sha256:6171fdef63637877958b8d5558f75e9ece8a13011e27f1e395c3add69b30fafa"
     },
     {
+      "capability": "compiled-runtime",
+      "id": "https://openbranddefinition.org/schemas/1.1.0/compiled-context.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/1.1.0/compiled-context.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/1.1.0/compiled-context.schema.json",
+      "releaseFile": "schemas/1.1.0/compiled-context.schema.json",
+      "sha256": "sha256:3b250092db0f5b7d2bf5bb7a422b9105ce91866367b03a7d56bde7e8cf5e789d"
+    },
+    {
       "capability": "foundation",
       "id": "https://openbranddefinition.org/value-schemas/1.0.0/brand-group.schema.json",
       "kind": "value-schema",
@@ -251,6 +260,11 @@
       "releaseDirectory": "schemas/"
     },
     {
+      "count": 1,
+      "publicPrefix": "/schemas/1.1.0/",
+      "releaseDirectory": "schemas/1.1.0/"
+    },
+    {
       "count": 6,
       "publicPrefix": "/value-schemas/1.0.0/",
       "releaseDirectory": "value-schemas/"
@@ -269,14 +283,15 @@
       "releaseDirectory": "release-schemas/"
     }
   ],
-  "note": "One-to-one mapping from public $id to release file to intended public URL. OBDS 1.0.4 is a hygiene release: the schema contract did not move, so every $id and every public path stays at 1.0.0 and every file is byte-identical to the 1.0.0, 1.0.1, 1.0.2 and 1.0.3 releases.",
+  "note": "One-to-one mapping from public $id to release file to intended public URL. The 27 OBDS 1.0.0 contracts are frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0 and 1.1.1. OBDS 1.1 publishes one additional versioned contract beside them, schemas/1.1.0/compiled-context.schema.json, and changes none of the 27. Every contract this release serves appears in `contracts`; the release gate fails if a served contract is missing here or a mapped contract is missing from the release.",
   "origin": "https://openbranddefinition.org",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
-  "release": "1.0.4",
+  "release": "1.1.1",
   "schemaContractVersion": "1.0.0",
   "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaVersion": "1.0.0",
   "status": "stable",
-  "totalPublicContracts": 27
+  "totalPublicContracts": 28,
+  "versionedSchemaCount": 1
 }

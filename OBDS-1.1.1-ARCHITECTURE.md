@@ -1,4 +1,4 @@
-# OBDS 1.0 Architecture
+# OBDS 1.1 Architecture
 
 ```text
 SOURCES
@@ -39,6 +39,15 @@ Localisation / Operations             |
               RUNTIME DECISION
 ```
 
+
+OBDS 1.1 adds one value to the runtime artefact: `governedResultHash`, defined in
+section 14.3a. `artifactHash` identifies the exact artefact, including its rendered
+slots, token counts and compiler provenance, so two implementations that render
+governed truth differently produce different artefacts and different hashes.
+`governedResultHash` identifies the governance decision underneath: which manifest,
+which target, which approved truth applied, in which states. It is the value two
+independent implementations must agree on for the same manifest and Build Plan, and
+the only architectural addition in the 1.1 line.
 ## Semantic control
 
 FACTS say what is true. RULES say what is required or prohibited. STANCE semantic boundaries say how the brand is and how it is not. Brand States say whether the relevant knowledge is defined.
