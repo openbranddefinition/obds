@@ -1,11 +1,11 @@
 {
   "canonicalUrl": "https://openbranddefinition.org/",
   "conformanceTestsFailed": 0,
-  "conformanceTestsPassed": 107,
+  "conformanceTestsPassed": 123,
   "conformanceTestsSkipped": 0,
   "contact": "lets@killthedragon.com",
   "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
-  "currentRelease": "1.0.4",
+  "currentRelease": "1.1.0",
   "currentReleaseStatus": "stable",
   "examplesUrl": "https://openbranddefinition.org/examples/README.md",
   "fullName": "Open Brand Definition Specification",
@@ -43,7 +43,7 @@
   },
   "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
   "packageZipSha256": "sha256:18c4c29de21b99233597f32ef92834935f8d3da701c59d26f414695394ea4560",
-  "previousRelease": "1.0.3",
+  "previousRelease": "1.0.4",
   "project": "Open Brand Definition",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
@@ -89,6 +89,14 @@
       "packageZipSha256": "sha256:18c4c29de21b99233597f32ef92834935f8d3da701c59d26f414695394ea4560",
       "status": "stable",
       "testOutputHash": "sha256:4535adbdb48a65f59224c2cc8f9b8a8bc8123e226461841e737e427f05145f68"
+    },
+    "1.1.0": {
+      "baseUrl": "https://openbranddefinition.org/spec/1.1.0/",
+      "date": "2026-08-30",
+      "note": "independent-implementability release; adds governedResultHash and schemas/1.1.0/compiled-context.schema.json; artifactHash meaning unchanged; the 1.0.0 contract surface stays frozen and byte-identical across 1.0.0 to 1.1.0",
+      "packageZipSha256": "sha256:d27d509d49c0135de37d7f66ef41fae0b3e9115109b8a7503c6cec58e2ae4794",
+      "status": "stable",
+      "testOutputHash": "sha256:5bd68cef150fc70a48fd7eb64dec183c14c456c142dd044fd9d1284c15b1bdb3"
     }
   },
   "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -97,11 +105,11 @@
   "schemaVersion": "1.0",
   "sourceRepository": "https://github.com/openbranddefinition/obds",
   "specification": "OBDS",
-  "specificationBaseUrl": "https://openbranddefinition.org/spec/1.0.4/",
+  "specificationBaseUrl": "https://openbranddefinition.org/spec/1.1.0/",
   "specificationFilesPublished": true,
-  "specificationPublishedAt": "2026-08-29",
-  "stableReleaseDate": "2026-08-29",
-  "testOutputHash": "sha256:95e2296a06fa5bea78dfaf38e46df873d156e487e1e16096d2f9619781731392",
+  "specificationPublishedAt": "2026-08-30",
+  "stableReleaseDate": "2026-08-30",
+  "testOutputHash": "sha256:5bd68cef150fc70a48fd7eb64dec183c14c456c142dd044fd9d1284c15b1bdb3",
   "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
-  "websiteIndexSha256": "sha256:3967e3d9a966ceefd11d5c75cb940e0b91ccaae4e34223ce8cd35933940138bb"
+  "websiteIndexSha256": "sha256:5d6e1569ec4744434b3fef7f1c1cb63f8a48a8e8140a70fe8b0164a1a9a9b047"
 }

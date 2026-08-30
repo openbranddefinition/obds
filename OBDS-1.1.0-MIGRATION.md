@@ -54,6 +54,32 @@ Before publishing 1.0:
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
 
+## 1.0.4 to 1.1
+
+No migration work for a manifest. Manifests stay at `schemaVersion: 1.0.0` and no
+element contract changed.
+
+For an implementation, four things:
+
+1. **Emit `governedResultHash`** per section 14.3a and declare
+   `schemaVersion: 1.1.0` on the Compiled Brand Context. Validate it against
+   `schemas/1.1.0/compiled-context.schema.json`. The 1.0.0 contract is unchanged
+   and 1.0 artefacts remain valid 1.0 artefacts.
+2. **Check your precedence reading.** Section 10.2 now states the rule as strict
+   subset inclusion on matched targets. If you read the old wording as
+   "restricts more dimensions" you resolved some manifests as hard conflicts that
+   1.1 resolves to a winner. Run `precedence-vectors` before assuming you agree.
+3. **Check that required truth reaches your artefact.** If your context
+   selection could drop an element named in `requiresDefined`, it was producing
+   an incomplete context. Section 13.2 now says so explicitly.
+4. **Adopt the four required-truth error codes** from section 13.1a if you
+   report build failures.
+
+`artifactHash` for an unchanged manifest and plan will move, because the artefact
+gained a field and a schema version. That is expected across a version change.
+Section 16.1 approvals bind the artefacts they were issued against; a rebuild
+under 1.1 is a new artefact and needs its own approval.
+
 ## 1.0.3 to 1.0.4
 
 No migration work. 1.0.4 changes release metadata and documentation only.

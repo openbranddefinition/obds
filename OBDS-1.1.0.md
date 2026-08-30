@@ -1,10 +1,10 @@
 # Open Brand Definition Specification (OBDS)
 
-## OBDS 1.0: Stable Specification
+## OBDS 1.1: Stable Specification
 
-**Version:** 1.0.4  
+**Version:** 1.1.0  
 **Status:** Stable  
-**Date:** 2026-08-29  
+**Date:** 2026-08-30  
 **Project home:** https://openbranddefinition.org  
 
 ---
@@ -525,6 +525,12 @@ Rules:
 
 The `subject` inside a `semantic-boundary` value is descriptive qualitative content. The top-level element `subject` is the machine key used for precedence.
 
+Elements MAY carry an optional `classification`: an opaque identifier string.
+OBDS assigns it no meaning, defines no vocabulary for it and enforces no policy
+from it. It is governed metadata: section 13.6 change reports track it and
+section 27.2 forbids changing it in a PATCH release. A runtime MAY consume it for
+access policy, which OBDS does not define.
+
 ### 8.1 What each state means
 
 | State | Meaning | `value` | Production behaviour |
@@ -669,6 +675,7 @@ These rules remove phantom records and contradictory copied values before runtim
 
 ```yaml
 scope:
+  brands: [example-group]
   markets: [AT]
   locales: [de-AT]
   jurisdictions: [AT]
@@ -679,9 +686,19 @@ scope:
   contentPurposes: [awareness]
 ```
 
+The scope vocabulary is closed. Exactly these nine dimensions exist:
+`brands`, `markets`, `locales`, `jurisdictions`, `channels`, `audiences`,
+`productFamilies`, `outputTypes`, `contentPurposes`. An unknown dimension is
+invalid and MUST fail validation.
+
 Rules:
 
 - Omitted dimensions mean unrestricted by that element.
+- Scope values are compared as sets after Unicode NFC normalisation. Order is not
+  significant and duplicates after normalisation are invalid.
+- An element that restricts a dimension the build target does not declare is
+  **not applicable** to that target. Truth is never widened to a dimension the
+  task did not state.
 - Empty arrays are invalid.
 - Scope values are non-empty strings. Boolean and numeric scope scalars are invalid.
 - Market, locale and jurisdiction are independent.
@@ -702,9 +719,26 @@ The Build Plan MUST declare `asOf` as a timezone-aware ISO 8601 timestamp. Compi
 
 ### 10.2 When more than one element applies
 
-For the same semantic subject:
+For the same semantic subject, precedence is set inclusion on matched targets.
 
-- a matching element with a strict superset of scope restrictions is more specific;
+**An element A is more specific than an element B when the set of build targets A
+matches is a strict subset of the set of build targets B matches.**
+
+Section 9 already supplies the semantics: an omitted dimension means unrestricted,
+so every scope is already a set of matching targets. Operationally, with `dim(X)`
+the dimensions X restricts and `vals(X, d)` its allowed values in dimension `d`:
+
+- A is more specific than B when `vals(A, d)` is a subset of `vals(B, d)` for
+  every `d` in `dim(B)`, and A's matched-target set is strictly smaller, which
+  holds when A restricts more dimensions or narrows at least one shared
+  dimension;
+- otherwise A and B are incomparable.
+
+This relation is a strict partial order: irreflexive, antisymmetric and
+transitive, all inherited from strict subset inclusion.
+
+Then:
+
 - the more specific element wins only inside its declared scope;
 - array order, timestamps and file order are never precedence;
 - two incomparable maximal elements are a hard conflict;
@@ -816,6 +850,30 @@ Rules:
 - Every defined element in the RULES family MUST validate against a rule value contract regardless of its `nature`.
 Canonical Rule values retain explicit empty structural fields such as `checks`, `condition`, `requirement` and `references` in 1.0 so one rule contract has a stable machine shape. Runtime model projections MAY omit empty validator plumbing.
 
+### 11.5a Foundation Validator Registry v1
+
+`validatorRef` names a deterministic invariant that JSON Schema alone cannot
+prove. The registry is closed, like the Foundation Check Registry, and contains
+one entry in OBDS 1.1.
+
+| Validator | Applies to | Rule |
+|---|---|---|
+| `obds:validator:colour-consistency-v1` | value contracts of kind `colour` | when an sRGB expression carries both `hex` and `rgb`, both MUST describe the same channel values (section 12.1) |
+
+Resolution rules:
+
+- a `validatorRef` in the `obds:validator:` namespace MUST resolve against this
+  registry for the declared OBDS version;
+- a reference in any other namespace is implementation-defined, and an
+  implementation that does not support it MUST fail closed, as section 8.3
+  already requires; and
+- the validator's input is the element value, canonically serialised per section
+  14.3, and its outcome is pass or fail with a message.
+
+Section 26.1 requires execution of registry validators. It does not require
+execution of validators outside this registry, which by definition have no
+published resolution.
+
 ### 11.6 CONTEXT
 
 Approved knowledge about audiences, competitors, market context, history and durable learnings.
@@ -866,6 +924,8 @@ The standard semantic-boundary schema is part of the 1.0 Foundation value-contra
 
 ### 11.8 DECISIONS
 
+DECISIONS is a record kind, not an element `family`. `decisions` is not a valid value for the element `family` field; the valid families are the six named in sections 11.1 to 11.7.
+
 An optional append-only log explaining significant brand changes. The manifest is current truth; decisions explain how it changed.
 
 ---
@@ -878,6 +938,8 @@ The Foundation keeps contracts deliberately small. Capability Profiles MAY add r
 
 ```yaml
 name: Brand Orange
+hex: "#FF6600"
+rgb: [255, 102, 0]
 expressions:
   screen:
     colourSpace: srgb
@@ -893,6 +955,8 @@ expressions:
 roles:
   - role: accent
 ```
+
+The top-level `name` and `hex` are the Foundation colour contract and are required by `colour.schema.json`; the sRGB expression repeats them inside `expressions` for readers that consume expressions directly. Both MUST describe the same value.
 
 One colour MAY remain one governed aggregate. An expression becomes independent only when scope, source, validity or governance differs.
 
@@ -1039,11 +1103,35 @@ A target name or description MUST NOT imply a capability that its declared requi
 
 This small rule makes production prerequisites visible in the Build Plan instead of hiding them in compiler code or prompts.
 
+### 13.1a Build failure codes
+
+A Build Report reports a failure with an exact code. Codes are normative because
+Build Reports are interchange artefacts; message text and process exit codes are
+not.
+
+| Code | Condition |
+|---|---|
+| `OBDS-BUILD-REQUIRED-NOT-FOUND` | a `requiresDefined` ID does not exist in the manifest |
+| `OBDS-BUILD-REQUIRED-OUT-OF-SCOPE` | the element exists but does not apply to the target scope |
+| `OBDS-BUILD-REQUIRED-EXPIRED` | the element exists and is in scope but is not valid at `asOf` |
+| `OBDS-BUILD-REQUIRED-NOT-DEFINED` | the element applies but its state is not `defined`, including when a more specific element won its subject |
+| `OBDS-BUILD-SUBJECT-CONFLICT` | two incomparable maximal elements share one semantic subject |
+| `OBDS-BUILD-MANIFEST-HASH` | the manifest content hash does not match the Build Plan reference |
+| `OBDS-BUILD-STYLE-SELECTION` | a selected style element is not an applicable defined KNOWLEDGE element |
+| `OBDS-BUILD-TOKEN-OVERFLOW` | the compiled context exceeds the declared token budget |
+
+The first four exist as separate codes because they need different human
+responses: curate the truth, correct the target scope, renew the fact, or resolve
+the state. Before OBDS 1.1 all four surfaced identically and an operator could not
+tell them apart.
+
 ### 13.2 Context selection
 
 OBDS Foundation does not use an opaque `selectionProfile` string.
 
 HARD_BOUNDARIES and FACT_GROUNDING always include every applicable element required by the target.
+
+Every element named in `requiresDefined` MUST reach the Compiled Brand Context. Context selection governs additional content only: `styleTexture` and `stateMap` MUST NOT remove a required element. A build that verifies required truth as `defined` and then produces a context without it is invalid.
 
 `styleTexture` controls only KNOWLEDGE and STANCE:
 
@@ -1324,11 +1412,92 @@ A canonical hash proves byte identity after canonicalisation. It does **not** pr
 
 Volatile build data is not part of the artefact.
 
+### 14.3a Governed result hash
+
+`artifactHash` identifies this exact artefact, including its rendered slots and
+its compiler provenance. Two implementations that render governed truth
+differently produce different artefacts and therefore different hashes, and that
+is correct.
+
+`governedResultHash` identifies the **governance decision** instead, and is the
+value two independent implementations MUST agree on.
+
+It is SHA-256 over the section 14.3 canonical JSON of this payload:
+
+```json
+{
+  "kind": "obds-governed-result",
+  "schemaVersion": "1.1.0",
+  "manifest": { "id": "urn:obds:brand:example" },
+  "target": {},
+  "asOf": "2026-08-27T00:00:00Z",
+  "selection": [
+    { "elementId": "structure.brand",
+      "subject": "structure.brand",
+      "state": "defined",
+      "valueHash": "sha256:..." }
+  ]
+}
+```
+
+Rules:
+
+- `manifest` carries the manifest `id` only. The manifest `version` is excluded:
+  a version bump that changes no element value MUST NOT move the hash.
+- `target` is the Build Plan target object **verbatim, as the document carries
+  it**, with `maxTokens` removed. Absent optional fields stay absent; an
+  implementation MUST NOT insert its defaults before hashing, because two
+  implementations with different defaults would then disagree.
+- `maxTokens` is capacity, which is implementation-facing.
+- `selection` contains one entry per applicable element for the target, after
+  scope matching, validity at `asOf` and subject precedence, sorted by
+  `elementId` in UTF-16 code-unit order.
+- `subject` is the effective semantic subject, defaulting to the element `id`.
+- `valueHash` is SHA-256 over the section 14.3 canonical JSON of the element
+  `value`, and is `null` for any state other than `defined`. Content integrity
+  comes from these hashes, so the payload does not depend on how the manifest
+  document was serialised.
+- Excluded from the payload: `sourceRefs`, `annotations`, `compiledChecks`,
+  `validFrom`, `validTo`, compiler identity, tokenizer identity, slots, token
+  counts and `artifactHash`.
+
+A subject in hard conflict contributes no entry, and cannot silently collapse
+with a subject that has no element: section 10.2 makes an unresolved conflict a
+target failure, and section 13.5 produces no artefact for a failed target, so no
+`governedResultHash` exists for such a build at all.
+
+The exclusions are the contract. A section 27.2 governance-neutral PATCH, which
+rotates source references or corrects annotations without changing Brand Truth,
+MUST NOT move `governedResultHash`. A change to any selected element value MUST
+move it.
+
+`governedResultHash` is present in the Compiled Brand Context and is inside the
+`artifactHash` payload, like every other artefact field. It does not replace
+`artifactHash` and does not change its meaning.
+
 ### 14.4 Token budget
 
 Token guarantees apply only to the declared tokenizer and version.
 
 - An implementation MUST fail closed when the Build Plan declares a tokenizer ID or version that it does not actually execute. It MUST NOT count with one tokenizer and stamp another tokenizer identity into the artefact.
+- `obds:whitespace-v1@1.0.0` is defined as: normalise to Unicode NFC, then count
+  maximal runs of non-separator characters, where the separator set is the
+  Unicode `White_Space` property together with U+001C, U+001D, U+001E and
+  U+001F. Those four are not `White_Space` and are separators here.
+- An implementation MUST record its **own** compiler identity and version in the
+  artefact. It MUST NOT stamp an identity it did not execute, and in particular
+  MUST NOT copy the identity the Build Plan declares when that is not the
+  compiler that ran. The Build Plan's `compiler` block states the compiler the
+  plan author used or expected; it is provenance, not a precondition, and an
+  implementation does not fail closed merely because it is not that compiler.
+
+  This differs deliberately from the tokenizer rule above. A tokenizer is a
+  specified algorithm that any implementation can execute, so declaring one is a
+  requirement any implementation can meet or refuse. A compiler identity is a
+  product name, not an algorithm. A fail-closed rule on it would mean every
+  independent implementation had to refuse the published examples, which would
+  make the section 14.3a vectors unreachable to exactly the implementations they
+  exist to prove agreement between.
 - The reference implementation supports `obds:whitespace-v1@1.0.0` only. It is a deterministic budget estimator, not a claim of equivalence to any deployed model tokenizer. Production budgets SHOULD include headroom or use an implementation that supports the deployed model tokenizer exactly.
 - HARD_BOUNDARIES and FACT_GROUNDING are never removed to fit a budget.
 - STATE_MAP follows the declared target policy.
@@ -2262,13 +2431,13 @@ A tool MAY say “uses OBDS concepts” without conformance. It MUST NOT say “
 
 ### 26.1 OBDS Foundation
 
-Requires unique element IDs, exact internal reference resolution, explicit `valueContractRef` resolution, value-shape hash verification, exact schema hash verification, semantic schema validation, declared value-contract validator execution, deterministic shape-aware manifest change reports, immutable approved snapshots, canonical hashes, governed units and honest curation declarations where used.
+Requires unique element IDs, exact internal reference resolution, explicit `valueContractRef` resolution, Foundation Validator Registry execution, value-shape hash verification, exact schema hash verification, semantic schema validation, declared value-contract validator execution, deterministic shape-aware manifest change reports, immutable approved snapshots, canonical hashes, governed units and honest curation declarations where used.
 
 When an implementation claims source-to-manifest curation support, it also retains a source-to-disposition report and demonstrates the Ground Rules in §5 through the published Curation Review Fixtures. Semantic curation judgement is not represented as fully parser-proven.
 
 ### 26.2 OBDS Compiled Runtime
 
-Additionally requires exact Build Plans, `requiresDefined`, explicit context selection, no artefact for a failed target, canonical JSON artefacts, reproducible hashes, Foundation Check Registry v1, exact target loading, Runtime Decision Records, zero instrumented model calls after failed build or blocking preflight, withheld output after blocking postflight and per-slot token reporting.
+Additionally requires exact Build Plans, `requiresDefined`, every required element present in the produced context, explicit context selection, no artefact for a failed target, canonical JSON artefacts, reproducible hashes, a `governedResultHash` that matches section 14.3a for the same manifest and Build Plan, Foundation Check Registry v1, exact target loading, Runtime Decision Records, zero instrumented model calls after failed build or blocking preflight, withheld output after blocking postflight and per-slot token reporting.
 
 An implementation claiming OBDS Context Delivery additionally verifies generated Search Cards and Reasoning Chapters, keeps them non-authoritative and demonstrates that final answers use full selected elements rather than Search Card summaries alone.
 
@@ -2479,7 +2648,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.0.4.md`;
+1. one normative specification: `OBDS-1.1.0.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

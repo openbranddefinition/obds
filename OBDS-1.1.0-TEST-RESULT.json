@@ -73,7 +73,7 @@
       "context-assembly": 15,
       "context-delivery": 3,
       "design-space": 18,
-      "foundation": 27,
+      "foundation": 43,
       "golden": 6,
       "integration": 15
     },
@@ -98,11 +98,11 @@
     "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
     "Node.js is required to execute the three cross-language canonicalisation tests. See OBDS-1.0.4-TEST-REQUIREMENTS.md."
   ],
-  "obdsVersion": "1.0.4",
+  "obdsVersion": "1.1.0",
   "passed": true,
-  "passedCount": 107,
+  "passedCount": 123,
   "promotedFrom": "1.0.3",
-  "release": "1.0.4",
+  "release": "1.1.0",
   "requiredCasesSkippedOrChanged": false,
   "schemaVersion": "1.0.0",
   "skippedCount": 0,
@@ -112,11 +112,11 @@
     "context-assembly": 15,
     "context-delivery": 3,
     "design-space": 18,
-    "foundation": 27,
+    "foundation": 43,
     "golden": 6,
     "integration": 15
   },
-  "suiteFileCount": 108,
-  "suiteHash": "sha256:30bb8b89676fdd4fd8d6f2899891cffa8a31b5dd8d49b99cab6d66218c4b3cc9",
-  "testOutputHash": "sha256:3e75be9e9127b0d728599a61c9add2a549a413cd8aec57e0c4a72c0b9fad7306"
+  "suiteFileCount": 115,
+  "suiteHash": "sha256:11047c22e69d307a431dfdceddcddafedd388da40150d65f4dfbf6fc64fd9c4d",
+  "testOutputHash": "sha256:5bd68cef150fc70a48fd7eb64dec183c14c456c142dd044fd9d1284c15b1bdb3"
 }

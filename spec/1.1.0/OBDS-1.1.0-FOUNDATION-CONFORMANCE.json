@@ -1,0 +1,140 @@
+{
+  "cases": [
+    {
+      "artifactHash": true,
+      "id": "canonical-hashes",
+      "manifestHash": true,
+      "passed": true,
+      "type": "canonical"
+    },
+    {
+      "actualTargets": {
+        "brand-query-global-en": "ready"
+      },
+      "id": "simple-ready",
+      "passed": true,
+      "type": "build"
+    },
+    {
+      "actualTargets": {
+        "brand-query-global-en": "ready",
+        "social-copy-gb-en": "failed"
+      },
+      "id": "scoped-fail-closed",
+      "passed": true,
+      "type": "build"
+    },
+    {
+      "actualTargets": {
+        "alpha-query": "ready",
+        "beta-query": "ready"
+      },
+      "id": "group-isolation",
+      "passed": true,
+      "type": "build"
+    },
+    {
+      "errors": [
+        "rule.no-best: internal element reference not found at value.references[0]: identity.phantom"
+      ],
+      "id": "dead-rule-reference",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "errors": [
+        "rule.no-best: compiled literal_required needs a non-empty literal",
+        "rule.no-best: internal element reference not found at value.checks[0].params.elementValueRef.elementId: identity.phantom"
+      ],
+      "id": "dead-check-reference",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "errors": [
+        "design.primary-colour: value.hex and value.rgb describe different sRGB values"
+      ],
+      "id": "colour-consistency",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "errors": [
+        "structure.brand: supersedes is not part of OBDS Foundation 1.0.0; use the Lineage Profile"
+      ],
+      "id": "foundation-supersedes-rejected",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "errors": [
+        "brand-query-global-en: requiresDefined reference not found: claims.phantom"
+      ],
+      "id": "dead-build-plan-reference",
+      "passed": true,
+      "type": "build"
+    },
+    {
+      "counts": {
+        "added": 1,
+        "changed": 1,
+        "removed": 1
+      },
+      "id": "manifest-diff",
+      "passed": true,
+      "reportHash": "sha256:5a95a368bf3c412b2845d1855f164550e5b6103e58154ac3d2ccdcdc5d5afeed",
+      "type": "diff"
+    },
+    {
+      "decision": "build_failed",
+      "id": "build-failure-no-call",
+      "modelCalls": 0,
+      "passed": true,
+      "type": "runtime"
+    },
+    {
+      "decision": "preflight_blocked",
+      "id": "preflight-no-call",
+      "modelCalls": 0,
+      "passed": true,
+      "type": "runtime"
+    },
+    {
+      "errors": [
+        "duplicate element id: structure.brand"
+      ],
+      "id": "duplicate-element-id",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "actualTargets": {
+        "overflow-target": "failed"
+      },
+      "id": "token-overflow",
+      "passed": true,
+      "type": "build"
+    },
+    {
+      "decision": "postflight_blocked",
+      "id": "postflight-withholds-output",
+      "modelCalls": 1,
+      "passed": true,
+      "type": "runtime"
+    }
+  ],
+  "claimScope": "Result of the official OBDS Foundation Conformance Suite declared in reference/foundation/conformance-suite.yaml, profile `foundation`, executed against the reference implementation. Every declared case ran and passed; none was skipped or changed. This run is deliberately not added to the aggregate suiteCounts: 14 of its 15 cases exercise the same fixtures and examples as the pytest suites, so aggregating both would double-count the same coverage.",
+  "executedAt": "2026-08-30T11:47:28.660451+00:00",
+  "failedCount": 0,
+  "implementation": {
+    "name": "obds-reference",
+    "version": "1.0.0"
+  },
+  "kind": "obds-conformance-result",
+  "obdsRelease": "1.1.0",
+  "passed": true,
+  "passedCount": 15,
+  "profile": "foundation",
+  "schemaVersion": "1.0.0",
+  "suiteHash": "sha256:b2d8c17ebcd73b7802b4167ab610365c2e6fd017b6135e58c41396b0a06b170c"
+}

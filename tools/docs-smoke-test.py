@@ -64,7 +64,7 @@ DOC_PYTHON = ".venv/bin/python"
 
 # (doc file, command with {py}, expected exit code, substring expected on stdout)
 CASES = [
-    (DOC_README, "{py} reference/run_all.py", 0, "TOTAL: 107 passed"),
+    (DOC_README, "{py} reference/run_all.py", 0, "TOTAL: {total} passed"),
     (DOC_README, "{py} reference/release-gate.py", 0, "RELEASE GATE: PASS"),
     (
         DOC_README,
@@ -86,7 +86,7 @@ CASES = [
         2,
         "OBDS-BUILD-REQUIRED-NOT-DEFINED",
     ),
-    (DOC_CONTRIBUTING, "{py} reference/run_all.py", 0, "TOTAL: 107 passed"),
+    (DOC_CONTRIBUTING, "{py} reference/run_all.py", 0, "TOTAL: {total} passed"),
     (DOC_CONTRIBUTING, "{py} reference/release-gate.py", 0, "RELEASE GATE: PASS"),
     (
         DOC_EXAMPLES,
@@ -206,13 +206,20 @@ def rank(case: tuple) -> int:
     return EXECUTION_ORDER.index(script) if script in EXECUTION_ORDER else len(EXECUTION_ORDER)
 
 
-def run_cases(package: Path, python: str, label: str, step: str) -> None:
+def run_cases(package: Path, python: str, label: str, step: str, version: str) -> None:
     print(f"\n{step} documented commands execute: {label}")
     env = dict(os.environ)
     env["PYTHONPATH"] = str(package / "reference" / "foundation" / "src")
 
+    # The declared total lives in the release metadata, not in this script, so a
+    # suite that grows does not need this file edited.
+    total = json.loads(
+        (package / f"OBDS-{version}-TEST-RESULT.json").read_text(encoding="utf-8")
+    )["passedCount"]
+
     already_run: set[str] = set()
     for _doc, command, code, needle in sorted(CASES, key=rank):
+        needle = needle.format(total=total)
         argv = command.format(py="").split()
         key = " ".join(argv)
         if key in already_run:
@@ -269,7 +276,7 @@ def main() -> int:
         workdir = Path(tmp)
         python = build_python(workdir, args.python)
 
-        run_cases(ROOT, python, "repository layout (schemas/1.0.0/)", "[3/4]")
+        run_cases(ROOT, python, "repository layout (schemas/1.0.0/)", "[3/4]", version)
 
         with zipfile.ZipFile(zip_path) as archive:
             archive.extractall(workdir / "unpacked")
@@ -277,7 +284,7 @@ def main() -> int:
         if not package.is_dir():
             fail(f"unexpected archive layout in {zip_path.name}")
         else:
-            run_cases(package, python, "release archive layout (schemas/)", "[4/4]")
+            run_cases(package, python, "release archive layout (schemas/)", "[4/4]", version)
 
     print()
     if failures:

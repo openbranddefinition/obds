@@ -1,0 +1,546 @@
+<!--
+  English only, deliberately, for OBDS 1.1.0.
+
+  The main site (index.html) carries parallel EN/DE copy on a shared DOM using
+  [data-copy="en"|"de"] pairs plus a language toggle that sets html[data-lang].
+  This page does not implement that pattern: it has no German copy and no
+  toggle, and it says so to the reader in the topbar and in the closing note.
+
+  German copy is deferred past 1.1.0 rather than blocking it. Adding it later
+  means writing a data-copy="de" sibling for every text node below and adding
+  the topbar language switcher (markup + script) from index.html.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Who curates Brand Truth in OBDS, what evidence a manifest is built from, who approves it, what extraction may and may not do, and what OBDS cannot guarantee.">
+<title>Authoring and Curation | OBDS 1.1.0</title>
+<style>
+  :root {
+    --paper: #fff;
+    --ink: #000;
+    --line: #000;
+    --pad: clamp(18px, 2.6vw, 42px);
+    --max: 1680px;
+    --step: clamp(14px, 1.05vw, 18px);
+    --display: clamp(46px, 8.6vw, 148px);
+    --headline: clamp(34px, 5.5vw, 92px);
+    --subhead: clamp(22px, 2.7vw, 42px);
+    --body: clamp(17px, 1.35vw, 23px);
+    --small: clamp(12px, .82vw, 15px);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: var(--body);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .16em; }
+  a:hover { text-decoration-thickness: 3px; }
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-110%);
+  }
+  .skip-link:focus { transform: translateY(0); }
+
+  .site {
+    width: min(100%, var(--max));
+    margin: 0 auto;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    min-height: 64px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+  .mark, .status, .back {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--pad);
+    white-space: nowrap;
+  }
+  .mark { font-weight: 700; text-transform: uppercase; letter-spacing: -.04em; }
+  .status, .back { border-left: 1px solid var(--line); font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+  a:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+
+  .hero {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-main {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-content: space-between;
+    gap: 0;
+    padding: var(--pad);
+  }
+  .eyebrow {
+    grid-column: 1 / 13;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .11em;
+  }
+  .hero-title {
+    grid-column: 1 / 13;
+    margin: clamp(40px, 8vh, 96px) 0 0;
+    font-size: var(--display);
+    line-height: .8;
+    letter-spacing: -.075em;
+    text-transform: uppercase;
+    font-weight: 700;
+    max-width: 15ch;
+  }
+  .hero-title .outline {
+    color: var(--paper);
+    -webkit-text-stroke: max(1px, .012em) var(--ink);
+    text-stroke: max(1px, .012em) var(--ink);
+  }
+  .hero-statement {
+    grid-column: 1 / 13;
+    align-self: end;
+    margin: clamp(40px, 8vh, 100px) 0 0;
+    font-size: var(--subhead);
+    line-height: 1.06;
+    letter-spacing: -.045em;
+    max-width: 44ch;
+  }
+  .hero-foot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .hero-foot > div {
+    min-height: 112px;
+    padding: 18px var(--pad);
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-foot > div:first-child { border-left: 0; }
+  .label { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+  .value { font-size: clamp(18px, 1.9vw, 28px); letter-spacing: -.04em; }
+
+  .section {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+  .section-number {
+    grid-column: 1 / 3;
+    padding: var(--pad);
+    border-right: 1px solid var(--line);
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+  .section-content { grid-column: 3 / 13; padding: var(--pad); }
+  .section h2 {
+    margin: 0 0 clamp(40px, 7vw, 110px);
+    font-size: var(--headline);
+    line-height: .93;
+    letter-spacing: -.07em;
+    font-weight: 700;
+    max-width: 14ch;
+  }
+  .lead { margin: 0; font-size: var(--subhead); line-height: 1.08; letter-spacing: -.045em; max-width: 30ch; }
+  .inverse { background: var(--ink); color: var(--paper); --line: var(--paper); }
+
+  .pull {
+    margin: clamp(46px, 6vw, 90px) 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: clamp(22px, 2.5vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -.05em;
+    max-width: 30ch;
+  }
+  .micro-note { margin-top: 28px; max-width: 74ch; font-size: var(--small); line-height: 1.45; }
+
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .9em;
+    overflow-wrap: anywhere;
+  }
+
+  /* callout */
+  .callout { margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); display: grid; grid-template-columns: minmax(180px, .5fr) 1.5fr; }
+  .callout > div { padding: 20px; }
+  .callout > div + div { border-left: 1px solid var(--line); }
+  .callout .callout-key { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(15px, 1.3vw, 21px); font-weight: 700; }
+  .callout p { margin: 0; max-width: 58ch; }
+
+  /* chain */
+  .chain { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .chain > div { position: relative; padding: 18px 14px 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
+  .chain-step { font-size: clamp(16px, 1.5vw, 24px); letter-spacing: -.03em; text-transform: uppercase; font-weight: 700; }
+  .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 22ch; opacity: .72; }
+  .chain-index { font-size: var(--small); letter-spacing: .1em; }
+  .inverse .chain { border-color: var(--line); }
+
+  /* code block */
+  .code-block { margin-top: clamp(30px, 4vw, 50px); border: 1px solid var(--line); padding: 20px; overflow-x: auto; }
+  .code-block pre { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(12.5px, 1.05vw, 15.5px); line-height: 1.55; white-space: pre; }
+  .code-caption { margin-top: 10px; font-size: var(--small); opacity: .72; max-width: 60ch; }
+
+  /* state list */
+  .state-list { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .state-row { display: grid; grid-template-columns: minmax(170px, .55fr) 1.45fr; border-bottom: 1px solid var(--line); }
+  .state-row > div { padding: 18px 0; }
+  .state-row > div:not(:first-child) { border-left: 1px solid var(--line); padding-left: 28px; }
+  .state-name { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(16px, 1.4vw, 22px); font-weight: 700; }
+
+  /* boundary (is / is not) */
+  .boundary { margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .boundary-head { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+  .boundary-head > div { padding: 18px 20px; }
+  .boundary-head > div + div { border-left: 1px solid var(--line); }
+  .boundary-term { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(20px, 2.2vw, 36px); font-weight: 700; letter-spacing: -.03em; margin-top: 8px; }
+  .boundary-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .boundary-body > div { padding: 20px; min-height: 180px; }
+  .boundary-body > div + div { border-left: 1px solid var(--line); }
+  .boundary-body ul { margin: 18px 0 0; padding: 0; list-style: none; }
+  .boundary-body li { padding: 7px 0; border-top: 1px solid var(--line); font-size: clamp(17px, 1.6vw, 26px); letter-spacing: -.04em; }
+  .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; max-width: 84ch; }
+
+  /* proof chain */
+  .proof-chain { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .proof-row { display: grid; grid-template-columns: 1fr 58px 1fr; align-items: center; border-bottom: 1px solid var(--line); }
+  .proof-row > * { padding: 16px 0; }
+  .proof-a { font-size: clamp(20px, 2.2vw, 36px); letter-spacing: -.05em; text-transform: uppercase; }
+  .proof-arrow { text-align: center; }
+  .proof-b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(13px, 1.1vw, 17px); letter-spacing: .02em; border-left: 1px solid var(--line); padding-left: 22px; }
+
+  /* integrity list (numbered) */
+  .integrity-list { margin-top: clamp(46px, 6vw, 90px); counter-reset: integrity; border-top: 1px solid var(--line); }
+  .integrity-item { counter-increment: integrity; display: grid; grid-template-columns: 74px 1fr; border-bottom: 1px solid var(--line); }
+  .integrity-item::before { content: counter(integrity, decimal-leading-zero); padding: 22px 18px; font-size: var(--small); letter-spacing: .1em; border-right: 1px solid var(--line); }
+  .integrity-item > div { padding: 22px 28px; }
+  .integrity-item h3 { margin: 0 0 8px; font-size: clamp(21px, 2.1vw, 34px); letter-spacing: -.045em; }
+  .integrity-item p { margin: 0; max-width: 64ch; }
+
+  /* actions */
+  .actions { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .actions > a { padding: 22px 20px 26px; min-height: 170px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+  .actions > a + a { border-left: 1px solid var(--line); }
+  .actions > a:hover { background: var(--ink); color: var(--paper); }
+  .action-name { font-size: clamp(23px, 2.3vw, 38px); line-height: .96; letter-spacing: -.05em; text-transform: uppercase; font-weight: 700; }
+  .action-note { font-size: var(--small); line-height: 1.4; max-width: 26ch; }
+
+  .contact-line { margin-top: clamp(56px, 8vw, 130px); padding-top: 22px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+  .contact-line a { font-size: clamp(26px, 4vw, 62px); line-height: .9; letter-spacing: -.06em; overflow-wrap: anywhere; }
+
+  footer { display: grid; grid-template-columns: 1fr auto; gap: 30px; padding: 20px var(--pad); font-size: var(--small); text-transform: uppercase; letter-spacing: .07em; }
+
+  @media (max-width: 900px) {
+    .site { border-left: 0; border-right: 0; }
+    .topbar { grid-template-columns: 1fr auto; min-height: 58px; }
+    .status { display: none; }
+    .mark { padding: 0 16px; }
+    .hero-main { padding: 20px 16px 34px; }
+    .hero-title { font-size: clamp(46px, 15vw, 90px); }
+    .hero-statement { margin-top: 60px; font-size: clamp(24px, 6.5vw, 34px); }
+    .hero-foot { grid-template-columns: 1fr; }
+    .hero-foot > div { min-height: 90px; padding: 14px 16px; border-left: 0; border-top: 1px solid var(--line); }
+    .hero-foot > div:first-child { border-top: 0; }
+    .section { grid-template-columns: 1fr; }
+    .section-number { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+    .section-content { grid-column: 1; padding: 44px 16px 60px; }
+    .section h2 { margin-bottom: 56px; font-size: clamp(38px, 11vw, 64px); }
+    .callout { grid-template-columns: 1fr; }
+    .callout > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .chain { grid-template-columns: repeat(2, 1fr); }
+    .chain > div { min-height: 130px; }
+    .state-row { grid-template-columns: 1fr; }
+    .state-row > div:not(:first-child) { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+    .boundary-head, .boundary-body { grid-template-columns: 1fr; }
+    .boundary-head > div + div, .boundary-body > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .boundary-body > div { min-height: 0; }
+    .proof-row { grid-template-columns: 1fr 40px 1fr; }
+    .proof-b { padding-left: 14px; }
+    .actions { grid-template-columns: 1fr; }
+    .actions > a + a { border-left: 0; border-top: 1px solid var(--line); }
+    .actions > a { min-height: 140px; }
+    .contact-line { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #000; --ink: #fff; --line: #fff; }
+    .topbar { background: color-mix(in srgb, var(--paper) 94%, transparent); }
+  }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  @media print {
+    .topbar { display: none; }
+    .site { border: 0; }
+    .section { break-inside: avoid; }
+  }
+
+  .lang-note {
+    font-size: var(--small);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-left: auto;
+    margin-right: 1.5rem;
+    white-space: nowrap;
+  }
+
+  .lang-disclosure {
+    margin-top: 40px;
+    max-width: 60ch;
+    font-size: var(--small);
+    line-height: 1.6;
+    opacity: .6;
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="site">
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
+    <div class="status">OBDS / 1.1.0 stable</div>
+    <div class="lang-note" lang="en">English only</div>
+    <a class="back" href="/">&larr; Back</a>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-main">
+        <div class="eyebrow">
+          <span>Authoring and Curation</span>
+          <span>Companion to OBDS 1.1.0</span>
+        </div>
+        <h1 class="hero-title">Brand truth<br>has an<br><span class="outline">author</span></h1>
+        <p class="hero-statement">If a curator approves a wrong value, OBDS ships it faithfully and every hash stays valid. OBDS governs whether a value applies &mdash; not whether it is true.</p>
+      </div>
+      <div class="hero-foot">
+        <div><span class="label">Curates</span><span class="value">A named human role. Never a tool, never a model.</span></div>
+        <div><span class="label">Boundary</span><span class="value">Starts at an approved manifest. Ends at a decision record.</span></div>
+        <div><span class="label">Guarantee</span><span class="value">OBDS cannot detect a wrong approval or an under-declared target.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="curator">
+      <div class="section-number">01 / Curator</div>
+      <div class="section-content">
+        <h2>A person is accountable. Not a tool.</h2>
+        <p class="lead">OBDS does not mandate a job title. It mandates that one person is named, and that the name is recorded on the manifest they approved.</p>
+
+        <div class="callout">
+          <div><span class="callout-key">approvedBy: person-or-role-id</span></div>
+          <div>
+            <p>Every approved manifest carries who approved it. Section 7.2 draws the line precisely: an approved or official source does not automatically approve its OBDS mapping; an importer or test team may verify technical validity and coverage; only an authorised brand role may approve the resulting Brand Manifest as brand truth. In practice that is a brand lead, a brand governance function, or &mdash; for claims that carry legal exposure &mdash; legal counsel. Whichever role an organisation designates, OBDS records who it was, not what it was called.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section inverse" id="evidence">
+      <div class="section-number">02 / Evidence</div>
+      <div class="section-content">
+        <h2>One path, from a source to a Brand Element.</h2>
+        <p class="lead">Brandbooks, PIM, DAM, legal opinions, approved decisions, test reports, certifications. Section 7.2 defines a source coverage declaration so a manifest can say, honestly, how much of that material has actually been reconciled.</p>
+
+        <div class="chain" role="group" aria-label="From source document to approved Brand Element">
+          <div><span class="chain-index">01</span><span class="chain-step">Source</span><span class="chain-note">brand-guidelines-v3.pdf, page 22, &ldquo;Primary Palette&rdquo;.</span></div>
+          <div><span class="chain-index">02</span><span class="chain-step">Extract</span><span class="chain-note">A candidate is drafted. Nothing here is brand truth yet.</span></div>
+          <div><span class="chain-index">03</span><span class="chain-step">Approve</span><span class="chain-note">A named curator signs the element, not the source.</span></div>
+          <div><span class="chain-index">04</span><span class="chain-step">Truth</span><span class="chain-note">design.primary-colour, state: defined, with its sourceRefs.</span></div>
+        </div>
+
+        <div class="code-block">
+<pre>id: design.primary-colour
+subject: design.primary-colour
+family: design
+kind: colour
+nature: fact
+state: defined
+valueContractRef: urn:obds:brand:example#value-contract:design:colour:v1
+value:
+  hex: "#0F1E3D"
+  pantone: "289 C"
+sourceRefs:
+  - id: brand-guidelines-v3
+    locator: "page 22, Primary Palette"
+    snapshotHash: sha256:...</pre>
+        </div>
+        <p class="code-caption"><code>sourceRefs[]</code> records where the value came from (section 8.5). It is provenance, not payload &mdash; it does not itself make the value true, and it is not an internal element reference.</p>
+
+        <div class="state-list">
+          <div class="state-row"><div><span class="state-name">complete</span></div><div>Claimable only once the curation report reconciles every declared source unit and every relevant modality.</div></div>
+          <div class="state-row"><div><span class="state-name">partial</span></div><div>Known material remains unresolved, excluded or outside the manifest &mdash; the honest default for most real manifests.</div></div>
+          <div class="state-row"><div><span class="state-name">unknown</span></div><div>Coverage has not been assessed. Absence of the declaration makes no completeness claim at all.</div></div>
+        </div>
+        <p class="micro-note">A multi-modal source must not claim <code>complete</code> while one relevant modality &mdash; text, figures, tables, metadata &mdash; sits at <code>partial</code> or <code>not_assessed</code>. The report does not force all source content into OBDS. It makes every disposition visible.</p>
+      </div>
+    </section>
+
+    <section class="section" id="approval">
+      <div class="section-number">03 / Approval</div>
+      <div class="section-content">
+        <h2>Approval is the default. Not the exception.</h2>
+        <p class="lead">Section 7.1: teams usually approve a guideline or brand release, not hundreds of tiny values separately. So OBDS Foundation assumes one responsible person approves a complete Brand Manifest release.</p>
+
+        <div class="proof-chain" role="group" aria-label="What an approved manifest carries">
+          <div class="proof-row"><span class="proof-a">approvedBy</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">the named person or role</span></div>
+          <div class="proof-row"><span class="proof-a">approvedAt</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">when the approval was made</span></div>
+          <div class="proof-row"><span class="proof-a">contentHash</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b">canonical hash of the exact approved manifest</span></div>
+        </div>
+
+        <p class="pull">A manifest with <code>status: draft</code> can be validated, reviewed, argued over. It cannot be built from.</p>
+        <p class="micro-note">Section 22.3 is one of the five things validation checks: manifest approval, and any activated record-level profile. Approval confirms a pre-existing snapshot; it must not rewrite any element.</p>
+      </div>
+    </section>
+
+    <section class="section" id="extraction">
+      <div class="section-number">04 / Extraction</div>
+      <div class="section-content">
+        <h2>Extraction may locate evidence. It may not manufacture brand truth.</h2>
+        <p class="lead">Section 24, verbatim. An AI system may draft a candidate Brand Element from a source document. A human approves it. The approval &mdash; not the draft &mdash; is what makes it truth.</p>
+
+        <div class="boundary">
+          <div class="boundary-head">
+            <div><span class="label">subject</span><span class="boundary-term">extraction</span></div>
+            <div><span class="label">actor</span><span class="boundary-term">AI or importer</span></div>
+          </div>
+          <div class="boundary-body">
+            <div>
+              <span class="label">may</span>
+              <ul>
+                <li>propose a candidate element</li>
+                <li>locate and cite evidence</li>
+                <li>report an unknown mapping</li>
+                <li>flag image-only meaning for review</li>
+              </ul>
+            </div>
+            <div>
+              <span class="label">may not</span>
+              <ul>
+                <li>approve a candidate as truth</li>
+                <li>invent an unknown mapping</li>
+                <li>turn an observed pattern into a binding rule</li>
+                <li>let technical portal metadata pass as brand truth</li>
+              </ul>
+            </div>
+          </div>
+          <div class="boundary-foot">Section 26.1: semantic curation judgement is not represented as fully parser-proven. A conformance suite can prove the mechanism was exercised. It cannot prove the judgement inside it was right.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section inverse" id="edges">
+      <div class="section-number">05 / Edges</div>
+      <div class="section-content">
+        <h2>Where OBDS starts. Where it ends.</h2>
+        <p class="lead">Everything upstream of an approved manifest &mdash; finding source material, drafting candidates, reconciling coverage, deciding what a statement should say &mdash; is curation. OBDS records it. It does not perform it.</p>
+
+        <div class="integrity-list">
+          <div class="integrity-item"><div><h3>Does not source</h3><p>It does not go looking in a brandbook, a PIM or a DAM on its own behalf.</p></div></div>
+          <div class="integrity-item"><div><h3>Does not extract</h3><p>It does not read meaning out of a page. A curator or an importer tool does.</p></div></div>
+          <div class="integrity-item"><div><h3>Does not verify against the world</h3><p>Pantone 289 C is trusted because a named person approved it, not because OBDS checked a swatch library.</p></div></div>
+          <div class="integrity-item"><div><h3>Does not judge correctness</h3><p>Whether an approved statement is factually right was already decided, upstream, by the curator.</p></div></div>
+        </div>
+
+        <p class="micro-note">The README says the same thing from the other direction: not a vector database, not a RAG framework, not an agent framework, not a prompt library, not a DAM, PIM or CMS, not a renderer. OBDS is specifically about brand truth once someone has already stood behind it.</p>
+      </div>
+    </section>
+
+    <section class="section" id="limits">
+      <div class="section-number">06 / Limits</div>
+      <div class="section-content">
+        <h2>What OBDS cannot guarantee.</h2>
+        <p class="lead">Two limits, stated without softening, because they are the honest edge of everything above.</p>
+
+        <div class="integrity-list">
+          <div class="integrity-item">
+            <div>
+              <h3>A wrong approval ships faithfully</h3>
+              <p>If a curator approves a wrong value, OBDS ships it faithfully, and every hash will be valid. Canonical hashing, shape hashing, schema validation, manifest approval &mdash; none of that checks whether a value is actually correct. It checks that the value a named person approved is the value that reaches the build, byte for byte, unaltered and attributable. OBDS governs whether a value applies. It does not, and cannot, govern whether it is true. A wrong approval is a governance failure, not a technical one.</p>
+            </div>
+          </div>
+          <div class="integrity-item">
+            <div>
+              <h3>An under-declared target builds anyway</h3>
+              <p>If a build target under-declares what it requires, the build succeeds, and nothing blocks the claim. Section 13.1: a target name or description must not imply a capability that its declared requirements and selected context cannot support &mdash; but this is a rule about how a target is written, enforced by whoever writes and reviews the Build Plan. It is not something the compiler can check by itself, because the compiler has no independent way to know what a name or description implies. Section 13.1 forbids that target. It provides no mechanism to detect one.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="pull">OBDS proves that approved truth reached the build unaltered. It cannot prove the truth was right, or that a target asked for everything it should have.</p>
+
+        <div class="actions">
+          <a href="/spec/1.1.0/OBDS-1.1.0.md#7-brand-manifest">
+            <span class="action-name">Section 7</span>
+            <span class="action-note">Brand Manifest, approval and source coverage.</span>
+          </a>
+          <a href="/spec/1.1.0/OBDS-1.1.0.md#24-selective-extraction-and-curation">
+            <span class="action-name">Section 24</span>
+            <span class="action-note">Selective extraction and curation.</span>
+          </a>
+          <a href="/spec/1.1.0/OBDS-1.1.0.md#26-conformance-claims">
+            <span class="action-name">Section 26</span>
+            <span class="action-note">Conformance claims, including 26.1 Foundation.</span>
+          </a>
+        </div>
+
+        <div class="contact-line">
+          <div><span class="label">Review, test, challenge</span></div>
+          <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
+        </div>
+
+        <p class="lang-disclosure" lang="en">This page is published in English only. The rest of
+        openbranddefinition.org carries parallel English and German copy; this
+        companion page does not yet. That is a deliberate choice for OBDS 1.1.0
+        rather than an oversight, and German copy is planned.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Kill The Dragon GmbH</span>
+    <span>Open Brand Definition / Authoring</span>
+  </footer>
+</div>
+</body>
+</html>

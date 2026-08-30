@@ -50,7 +50,15 @@ PACKAGE_ROOT_FILES = (
 PACKAGE_DIRS = ("LICENSES", "examples", "reference", "release-schemas")
 
 # Repository layout -> archive layout.
-SCHEMA_DIRS = {"schemas/1.0.0": "schemas", "value-schemas/1.0.0": "value-schemas"}
+# The frozen 1.0.0 contract surface flattens to schemas/ and value-schemas/, as
+# 1.0.0 through 1.0.4 shipped it. OBDS 1.1 adds one versioned contract beside it
+# and keeps its version in the path, so a consumer resolving by the version a
+# document declares finds it.
+SCHEMA_DIRS = {
+    "schemas/1.0.0": "schemas",
+    "value-schemas/1.0.0": "value-schemas",
+    "schemas/1.1.0": "schemas/1.1.0",
+}
 
 CACHE_DIRS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox", ".eggs", "node_modules"}
 CACHE_SUFFIXES = (".pyc", ".pyo")

@@ -1,0 +1,11 @@
+{
+  "changedInThePatch": [
+    "sourceRefs",
+    "annotations",
+    "manifest.version"
+  ],
+  "expectedGovernedResultHash": "sha256:c7594c47e076f4565ab82abd8fcf6fad51a2ad399843784283db4e7768e4ca42",
+  "kind": "obds-1.1-fixture",
+  "note": "Section 27.2 permits a PATCH that rotates source references and corrects annotations without changing Brand Truth. Such a release, and a manifest version bump, MUST NOT move governedResultHash. This is why sourceRefs, annotations and manifest.version are excluded from the payload.",
+  "schemaVersion": "1.1.0"
+}

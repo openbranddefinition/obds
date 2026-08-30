@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 1.0.4** is the stable Open Brand Definition Specification.
+**OBDS 1.1.0** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,15 +21,19 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 1.0.4. Stable. 2026-08-29.**
+**OBDS 1.1.0. Stable. 2026-08-30.**
 
-1.0.4 is a hygiene release. No normative contract changed, and the public schema surface is byte-identical to 1.0.0, 1.0.1, 1.0.2 and 1.0.3.
+OBDS 1.1 is the independent-implementability release.
 
-It corrects two things the specification itself already had right and the surrounding material did not.
+An independent implementation, written blind from the public documents, reproduced eight published OBDS hashes on its first attempt and then could not reproduce `artifactHash`. The cause was not a defect in the canonicaliser. OBDS defined no payload that two implementations were required to produce identically, so there was nothing to be interoperable about.
 
-The published conformance result now satisfies section 26 in its own right: it identifies the implementation by name and version, the conformance suite by hash, the profiles the executed cases provide evidence for, and the passed, failed and skipped counts, and it states that no required case was skipped or changed. The release gate verifies every one of those and recomputes the suite hash, so the result cannot silently fall short of the rule the specification places on every implementer.
+1.1 adds that: `governedResultHash`, section 14.3a. It carries the governance decision — which manifest, which target, which truth applied, in which states — and two independent implementations given the same manifest and the same Build Plan must produce the same value, whatever their prose, compiler, tokenizer or token counts. `artifactHash` keeps its 1.0 meaning unchanged and still identifies the exact artefact.
 
-The public material no longer implies that the fail-closed build gate is Foundation behaviour. Foundation, section 26.1, governs Brand Truth. Compiled Runtime, section 26.2, adds Build Plans, `requiresDefined`, the rule that a failed target produces no artefact, and Runtime Decision Records. The guarantee is unchanged and still mechanically tested; only its capability label is now correct.
+Section 10.2 precedence is now stated once and decidably. The scope vocabulary is closed at nine dimensions. The tokenizer, the validator registry and the four build failure codes are defined rather than inferred. Required truth now always reaches the artefact.
+
+The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3 and 1.0.4. OBDS 1.1 adds one versioned contract beside it, `schemas/1.1.0/compiled-context.schema.json`, and changes none of them.
+
+122 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 15 of 15 and is reported separately.
 
 ## Use and licensing
 

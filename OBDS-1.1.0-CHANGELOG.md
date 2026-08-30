@@ -2,9 +2,108 @@
 
 ## Release
 
-**Version:** OBDS 1.0.4  
+**Version:** OBDS 1.1.0  
 **Status:** Stable  
-**Date:** 2026-08-29
+**Date:** 2026-08-30
+
+## 1.1.0
+
+**Independent implementability completion. MINOR. No breaking change.**
+
+An independent TypeScript implementation, written blind from the public
+documents, reproduced eight published OBDS hashes on its first attempt and then
+could not reproduce `artifactHash`. The reason was not a defect in the
+canonicaliser. It was that OBDS defined no payload two implementations were
+required to produce identically. Section 14.3 says an implementation must
+reproduce the same hash *for the same payload*; two implementations that render
+governed truth differently have different payloads, so different hashes were
+always correct behaviour. There was simply nothing to be interoperable about.
+
+1.1 adds that missing thing and changes nothing that exists.
+
+**`governedResultHash`, section 14.3a.** A new field on the Compiled Brand
+Context, carrying SHA-256 over a small payload: the manifest id, the Build Plan
+target minus `maxTokens`, `asOf`, and one entry per applicable element with its
+id, subject, state and a hash of its value. Two independent implementations
+given the same manifest and the same Build Plan produce the same value,
+whatever their prose, compiler identity, tokenizer or token counts.
+
+The exclusions are the contract. `sourceRefs`, `annotations` and the manifest
+`version` are excluded, so a section 27.2 governance-neutral PATCH does not move
+the hash. Compiler identity, tokenizer identity, slots and token counts are
+excluded because they are implementation facts. Content integrity comes from the
+per-element value hashes rather than from the manifest content hash, so the
+payload does not depend on how the manifest document was serialised.
+
+**`artifactHash` is unchanged.** It still identifies this exact artefact,
+including its rendered slots and its provenance, and it may legitimately differ
+across implementations. Section 14.3 is not modified. Section 16.1 approvals and
+section 30 audit trails keep the meaning they had.
+
+**Section 10.2 precedence is now decidable.** "A strict superset of scope
+restrictions" admitted two readings that produced opposite build outcomes on an
+ordinary multi-market manifest: the reference resolved a winner, and an
+independent implementer reading the same sentence raised a hard conflict. The
+rule is now stated once, semantically: an element is more specific when the set
+of build targets it matches is a strict subset of the set the other matches.
+That is a strict partial order, and it reproduces shipped 1.0.4 behaviour on
+every discriminating case, including both conflict outcomes.
+
+**The scope vocabulary is closed at nine dimensions.** `brands` was accepted by
+the reference and appeared nowhere in the specification; `contentPurposes`
+appeared in the section 9 example and was rejected by the reference. Both are
+fixed. Scope values compare as NFC-normalised sets, and an element restricting a
+dimension the target does not declare is not applicable, which is the
+fail-closed reading and what the reference already did.
+
+**Required truth now reaches the artefact.** Section 13.2 said HARD_BOUNDARIES
+and FACT_GROUNDING always include every applicable element required by the
+target. A knowledge-natured element named in `requiresDefined` was nonetheless
+dropped when `styleTexture.mode` was `none`: the build verified it as `defined`,
+succeeded, and shipped a context without it. That is a behaviour correction, not
+a clarification, and it changes `artifactHash` for targets that were previously
+producing an incomplete context.
+
+**Four build failures now have four codes.** `OBDS-BUILD-REQUIRED-NOT-FOUND`,
+`-OUT-OF-SCOPE`, `-EXPIRED` and `-NOT-DEFINED`. Before 1.1 all four printed
+`actualState: not_applicable` and an operator could not tell "never curated"
+from "mis-scoped target" from "expired fact", though each needs a different
+response. Section 13.1a is the registry.
+
+**`obds:whitespace-v1@1.0.0` is defined.** It was stamped into every artefact
+and specified nowhere. Its separator set is the Unicode `White_Space` property
+plus U+001C, U+001D, U+001E and U+001F; those four are not `White_Space` and
+specifying the property alone would have silently changed token counts.
+
+**Foundation Validator Registry v1, section 11.5a.** Section 26.1 required
+executing every declared `validatorRef` and the specification never defined the
+namespace, a registry, resolution or an input contract, so no independent
+implementer could satisfy it. The registry is closed and has one entry,
+`obds:validator:colour-consistency-v1`, whose rule section 12.1 already stated
+normatively. Section 26.1 is scoped to registry validators.
+
+**`classification` is defined**, minimally: an optional opaque identifier string
+with no OBDS-assigned meaning, no vocabulary and no policy. Sections 13.6, 27.2
+and 29 referenced it normatively and nothing defined it.
+
+**Editorial.** The section 12.1 colour example now validates against the
+published `colour.schema.json`, which it did not. Section 11.8 states that
+DECISIONS is a record kind and not an element `family`. Section 14.4 gains the
+compiler-identity rule beside the tokenizer rule.
+
+**Contract surface.** OBDS 1.1 publishes exactly one new contract,
+`schemas/1.1.0/compiled-context.schema.json`. The 21 schemas and 6 value schemas
+of the 1.0.0 surface are byte-identical to 1.0.0 and untouched. A 1.1
+implementation reads 1.0.0 manifests and produces 1.1.0 compiled contexts.
+
+The claim that all public contracts are byte-identical since 1.0.0 is retired
+and replaced by: the OBDS 1.0.0 contract surface remains frozen and
+byte-identical across 1.0.0 through 1.0.4, and OBDS 1.1 adds one versioned
+contract beside it and changes none of them.
+
+**Conformance.** 122 cases pass, 0 fail, 0 skip. Foundation grew from 27 to 42
+with the 1.1 normative cases. The official declared Foundation conformance suite
+remains 15 of 15 and is still not aggregated into that total.
 
 ## 1.0.4
 

@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "expectedId": "urn:obds:brand:example-simple:context:brand-query-global-en",
+      "manifestId": "urn:obds:brand:example-simple",
+      "targetId": "brand-query-global-en"
+    },
+    {
+      "expectedId": "urn:obds:brand:x:context:target:with:colons",
+      "manifestId": "urn:obds:brand:x",
+      "targetId": "target:with:colons"
+    },
+    {
+      "expectedId": "urn:obds:brand:märkte:context:ziel-de",
+      "manifestId": "urn:obds:brand:märkte",
+      "targetId": "ziel-de"
+    }
+  ],
+  "kind": "obds-1.1-fixture",
+  "note": "Section 14: the compiled context id is {manifest.id}:context:{targetId}.",
+  "schemaVersion": "1.1.0"
+}

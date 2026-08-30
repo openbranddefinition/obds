@@ -2,7 +2,7 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 1.0.4 (stable, 29 August 2026)
+Current release: 1.1.0 (stable, 30 August 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
@@ -82,20 +82,30 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4.md
+https://openbranddefinition.org/spec/1.1.0/OBDS-1.1.0.md
+
+## Authoring and curation
+
+https://openbranddefinition.org/authoring/  (English only)
+
+OBDS does not write brand truth and does not check it against the world. A named
+human role approves it. OBDS begins at the approved Brand Manifest and ends at a
+Compiled Brand Context and a decision record. It cannot detect an approved
+statement that is false, and it cannot detect a build target that under-declares
+what it requires: both build successfully with valid hashes.
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/1.1.0/OBDS-1.1.0-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/1.1.0/OBDS-1.1.0-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4-CHANGELOG.md
+Complete package: https://openbranddefinition.org/spec/1.1.0/OBDS-1.1.0-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/1.1.0/OBDS-1.1.0-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/1.1.0/OBDS-1.1.0-CHANGELOG.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 
@@ -135,26 +145,26 @@ https://openbranddefinition.org/examples/README.md
 
 Published as released, not modified, historical.
 
+OBDS 1.0.4  https://openbranddefinition.org/spec/1.0.4/OBDS-1.0.4.md
+OBDS 1.0.3  https://openbranddefinition.org/spec/1.0.3/OBDS-1.0.3.md
 OBDS 1.0.2  https://openbranddefinition.org/spec/1.0.2/OBDS-1.0.2.md
 OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 1.0.4 is
+the licensing wording that was current at the time. Section 32.1 of 1.1.0 is
 the operative one, unchanged from 1.0.2.
 
-1.0.4 is a hygiene release. No normative contract changed. The public schema
-surface is byte-identical to 1.0.0, 1.0.1, 1.0.2 and 1.0.3, every schema $id
-still resolves under /schemas/1.0.0/ and /value-schemas/1.0.0/, and
-schemaVersion remains 1.0.0.
+OBDS 1.1 is the independent-implementability release. It adds governedResultHash, the value two
+implementations must agree on for the same manifest and build plan, and leaves artifactHash and
+its meaning untouched. Precedence, the scope vocabulary, the tokenizer, the validator registry
+and the build failure codes are now defined rather than inferred.
 
-1.0.4 corrects two things. The published conformance result now satisfies
-section 26 itself: it names the implementation and version, the suite hash,
-the profiles the executed cases are evidence for, and the passed, failed and
-skipped counts, and the release gate verifies all of them. And the capability
-boundary is now stated correctly: Foundation, section 26.1, governs Brand
-Truth; the build gate that refuses to produce a Compiled Brand Context, and
-therefore refuses the model call, is Compiled Runtime, section 26.2.
+The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3 and 1.0.4. OBDS 1.1 adds one versioned contract beside it and changes none of them.
+That contract is schemas/1.1.0/compiled-context.schema.json. Manifests stay at
+schemaVersion 1.0.0; compiled contexts move to 1.1.0.
+
+
 
 ## Note
 

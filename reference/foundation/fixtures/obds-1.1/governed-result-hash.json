@@ -1,0 +1,100 @@
+{
+  "kind": "obds-1.1-fixture",
+  "note": "Payload per section 14.3a and its hash, for the two published examples.",
+  "schemaVersion": "1.1.0",
+  "vectors": [
+    {
+      "example": "foundation-minimal",
+      "expectedGovernedResultHash": "sha256:c7594c47e076f4565ab82abd8fcf6fad51a2ad399843784283db4e7768e4ca42",
+      "payload": {
+        "asOf": "2026-08-28T00:00:00Z",
+        "kind": "obds-governed-result",
+        "manifest": {
+          "id": "urn:obds:brand:example-minimal"
+        },
+        "schemaVersion": "1.1.0",
+        "selection": [
+          {
+            "elementId": "structure.brand",
+            "state": "defined",
+            "subject": "structure.brand",
+            "valueHash": "sha256:1ffedfb1f507cae5d2a90bcdf801c5d9f1d5552a3bca0fafcda812827e0371c3"
+          }
+        ],
+        "target": {
+          "id": "brand-query-global-en",
+          "releasePolicy": "build_only",
+          "requiresDefined": [
+            "structure.brand"
+          ],
+          "scope": {
+            "locales": [
+              "en"
+            ],
+            "outputTypes": [
+              "brand-query"
+            ]
+          },
+          "stateMap": {
+            "kinds": [],
+            "mode": "all_applicable"
+          },
+          "styleTexture": {
+            "elementIds": [],
+            "mode": "all"
+          }
+        }
+      }
+    },
+    {
+      "example": "fail-closed",
+      "expectedGovernedResultHash": "sha256:ce0e0281c23975af1cc7cb3f6dc6b7505143985fa1fff91e5ce30af506c5e16d",
+      "payload": {
+        "asOf": "2026-08-28T00:00:00Z",
+        "kind": "obds-governed-result",
+        "manifest": {
+          "id": "urn:obds:brand:example-fail-closed"
+        },
+        "schemaVersion": "1.1.0",
+        "selection": [
+          {
+            "elementId": "context.efficacy-claim",
+            "state": "unknown",
+            "subject": "context.efficacy-claim",
+            "valueHash": null
+          },
+          {
+            "elementId": "structure.brand",
+            "state": "defined",
+            "subject": "structure.brand",
+            "valueHash": "sha256:33c698f5258fc9088e41a9c8442692c7af67c2820e0f0bd86688cd0c9c27805b"
+          }
+        ],
+        "target": {
+          "id": "claim-copy-global-en",
+          "releasePolicy": "build_only",
+          "requiresDefined": [
+            "structure.brand",
+            "context.efficacy-claim"
+          ],
+          "scope": {
+            "locales": [
+              "en"
+            ],
+            "outputTypes": [
+              "social-copy"
+            ]
+          },
+          "stateMap": {
+            "kinds": [],
+            "mode": "all_applicable"
+          },
+          "styleTexture": {
+            "elementIds": [],
+            "mode": "all"
+          }
+        }
+      }
+    }
+  ]
+}

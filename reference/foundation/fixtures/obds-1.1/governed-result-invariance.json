@@ -1,0 +1,69 @@
+{
+  "expectedGovernedResultHash": "sha256:c7594c47e076f4565ab82abd8fcf6fad51a2ad399843784283db4e7768e4ca42",
+  "kind": "obds-1.1-fixture",
+  "mustDifferAcrossImplementations": [
+    "artifactHash",
+    "slots",
+    "tokenBudget",
+    "build.compilerId",
+    "build.compilerVersion"
+  ],
+  "note": "Two implementations differing in maxTokens, rendered prose, compiler identity and token counts. governedResultHash is identical; artifactHash is not, and is not expected to be.",
+  "schemaVersion": "1.1.0",
+  "variants": [
+    {
+      "label": "implementation A",
+      "target": {
+        "id": "brand-query-global-en",
+        "maxTokens": 500,
+        "releasePolicy": "build_only",
+        "requiresDefined": [
+          "structure.brand"
+        ],
+        "scope": {
+          "locales": [
+            "en"
+          ],
+          "outputTypes": [
+            "brand-query"
+          ]
+        },
+        "stateMap": {
+          "kinds": [],
+          "mode": "all_applicable"
+        },
+        "styleTexture": {
+          "elementIds": [],
+          "mode": "all"
+        }
+      }
+    },
+    {
+      "label": "implementation B, different capacity budget",
+      "target": {
+        "id": "brand-query-global-en",
+        "maxTokens": 99999,
+        "releasePolicy": "build_only",
+        "requiresDefined": [
+          "structure.brand"
+        ],
+        "scope": {
+          "locales": [
+            "en"
+          ],
+          "outputTypes": [
+            "brand-query"
+          ]
+        },
+        "stateMap": {
+          "kinds": [],
+          "mode": "all_applicable"
+        },
+        "styleTexture": {
+          "elementIds": [],
+          "mode": "all"
+        }
+      }
+    }
+  ]
+}

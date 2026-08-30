@@ -23,7 +23,7 @@ def _schema_dir(root, name):
     return flat
 SCHEMAS = _schema_dir(ROOT, "schemas")
 VALUE_SCHEMAS = _schema_dir(ROOT, "value-schemas")
-SPEC = (ROOT / "OBDS-1.0.4.md").read_text(encoding="utf-8")
+SPEC = (ROOT / "OBDS-1.1.0.md").read_text(encoding="utf-8")
 
 FOUNDATION_SRC = ROOT / "reference" / "foundation" / "src"
 CA_ROOT = ROOT / "reference" / "context-assembly"
@@ -57,6 +57,26 @@ def schema(name: str):
     return json.loads((SCHEMAS / name).read_text(encoding="utf-8"))
 
 
+def schema_for(document, name="compiled-context.schema.json"):
+    """Resolve the contract by the document's own declared schemaVersion.
+
+    OBDS 1.1 publishes schemas/1.1.0/ beside the frozen schemas/1.0.0/. A
+    consumer picks the contract the document declares. Both repository layout
+    (schemas/<version>/<name>) and archive layout (flat schemas/, with
+    non-1.0.0 versions suffixed) resolve here.
+    """
+    version = document.get("schemaVersion", "1.0.0")
+    if version == "1.0.0":
+        return schema(name)
+    # Repository layout: schemas/1.0.0/ and schemas/1.1.0/ are siblings.
+    # Archive layout: the 1.0.0 surface is flat in schemas/ and 1.1.0/ sits
+    # inside it. Try both before giving up.
+    for candidate in (SCHEMAS / version / name, SCHEMAS.parent / version / name):
+        if candidate.is_file():
+            return json.loads(candidate.read_text(encoding="utf-8"))
+    raise FileNotFoundError(f"no contract for schemaVersion {version}: {name}")
+
+
 def test_golden_manifest_to_runtime_decision():
     examples = CA_ROOT / "examples"
     manifest = yaml.safe_load((examples / "manifest.yaml").read_text(encoding="utf-8"))
@@ -72,7 +92,7 @@ def test_golden_manifest_to_runtime_decision():
     result = build_target(manifest, plan, target)
     assert result.status == "ready"
     compiled = result.artefact
-    jsonschema.validate(compiled, schema("compiled-context.schema.json"))
+    jsonschema.validate(compiled, schema_for(compiled))
 
     search_index, chapter_set = builder.build_views(manifest, chapter_map)
     package, model_input = assembler.assemble(compiled, search_index, chapter_set, request)

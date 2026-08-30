@@ -12,7 +12,7 @@ from typing import Any
 import yaml
 import jsonschema
 
-from .canonical import artefact_hash, canonical_json_bytes, manifest_content_hash, sha256_id, value_shape_hash
+from .canonical import _utf16_sort_key, artefact_hash, canonical_json_bytes, manifest_content_hash, sha256_id, value_shape_hash
 from .checks import SUPPORTED_PRIMITIVES, validate_check
 
 
@@ -21,6 +21,17 @@ VALID_FAMILIES = {"structure", "identity", "design", "rules", "context", "stance
 VALID_NATURES = {"fact", "knowledge"}
 SUPPORTED_TOKENIZERS = {("obds:whitespace-v1", "1.0.0")}
 
+# Section 14.4: an implementation records its own compiler identity and never
+# stamps one it did not execute. Before OBDS 1.1 this copied the Build Plan's
+# declared identity straight into the artefact, so a plan naming any other
+# compiler produced an artefact claiming provenance that never happened.
+COMPILER_ID = "org.openbranddefinition.reference-compiler"
+COMPILER_VERSION = "1.0.0"
+
+# OBDS 1.1 section 9: the closed scope vocabulary, nine dimensions. `brands` was
+# accepted by the reference but appeared nowhere in the specification;
+# `contentPurposes` appeared in the section 9 example but was rejected here. Both
+# are fixed by stating one set. Widening the accepted set is compatible.
 SCOPE_DIMENSIONS = {
     "brands",
     "markets",
@@ -30,6 +41,7 @@ SCOPE_DIMENSIONS = {
     "audiences",
     "productFamilies",
     "outputTypes",
+    "contentPurposes",
 }
 
 
@@ -544,6 +556,66 @@ def _resolve_subject_precedence(applicable: list[dict[str, Any]]):
     return selected, conflicts
 
 
+def governed_result_payload(
+    manifest: dict[str, Any],
+    target: dict[str, Any],
+    as_of: str,
+    applicable: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """The OBDS 1.1 governed result: the interoperable governance decision.
+
+    Section 14.3a. Two independent implementations given the same manifest and
+    the same build plan MUST produce the same payload, and therefore the same
+    `governedResultHash`, regardless of their rendered prose, compiler identity,
+    tokenizer or token counts.
+
+    The payload is deliberately small. It carries the decision, not the artefact:
+
+    - `manifest.id` only. The manifest `version` is excluded by ruling R-14: a
+      version bump that changes no element value must not move the hash.
+    - the build-plan target object minus `maxTokens`, which is capacity and
+      therefore implementation-facing.
+    - one entry per applicable element with a `valueHash` over the element value
+      under section 14.3. Content integrity comes from these hashes, not from
+      `manifest.contentHash`, so the payload does not depend on how the manifest
+      document was serialised.
+
+    Excluded, with reasons: `sourceRefs` and `annotations`, because a section
+    27.2 governance-neutral PATCH must not move the hash; `compiledChecks`,
+    because they are derived from the RULE element values already bound here;
+    `validFrom`/`validTo`, because they are derived from the selection and
+    `asOf`, both present; compiler and tokenizer identity, slots, token counts
+    and `artifactHash`, all implementation-facing.
+    """
+    plan_target = {k: v for k, v in target.items() if k != "maxTokens"}
+    selection = []
+    for element in sorted(applicable, key=lambda item: _utf16_sort_key(item["id"])):
+        defined = element.get("state") == "defined"
+        selection.append({
+            "elementId": element["id"],
+            "subject": element.get("subject", element["id"]),
+            "state": element["state"],
+            "valueHash": sha256_id(element.get("value")) if defined else None,
+        })
+    return {
+        "kind": "obds-governed-result",
+        "schemaVersion": "1.1.0",
+        "manifest": {"id": manifest["id"]},
+        "target": copy.deepcopy(plan_target),
+        "asOf": as_of,
+        "selection": selection,
+    }
+
+
+def governed_result_hash(
+    manifest: dict[str, Any],
+    target: dict[str, Any],
+    as_of: str,
+    applicable: list[dict[str, Any]],
+) -> str:
+    return sha256_id(governed_result_payload(manifest, target, as_of, applicable))
+
+
 def _selection_validity_window(scope_matching: list[dict[str, Any]], as_of: datetime):
     boundaries = []
     for element in scope_matching:
@@ -1012,12 +1084,31 @@ def build_target(
     valid_from, valid_to = _selection_validity_window(scope_matching, as_of)
     applicable_ids = {element["id"] for element in applicable}
 
+    # OBDS 1.1: the four causes of a failed requirement are reported with distinct
+    # codes. Before 1.1 they all surfaced as OBDS-BUILD-REQUIRED-NOT-DEFINED with
+    # actualState `not_applicable`, so an operator could not tell a mis-scoped
+    # target from an expired fact from a truth that was never curated. Each needs
+    # a different human response.
+    scope_matching_ids = {element["id"] for element in scope_matching}
+    time_applicable_ids = {element["id"] for element in time_applicable}
+
     for element_id in target.get("requiresDefined", []):
         element = by_id.get(element_id)
+        code = "OBDS-BUILD-REQUIRED-NOT-DEFINED"
         if element is None:
             actual = "missing"
             passed = False
+            code = "OBDS-BUILD-REQUIRED-NOT-FOUND"
+        elif element_id not in scope_matching_ids:
+            actual = "not_applicable"
+            passed = False
+            code = "OBDS-BUILD-REQUIRED-OUT-OF-SCOPE"
+        elif element_id not in time_applicable_ids:
+            actual = "not_applicable"
+            passed = False
+            code = "OBDS-BUILD-REQUIRED-EXPIRED"
         elif element_id not in applicable_ids:
+            # In scope and valid, but a more specific element won its subject.
             actual = "not_applicable"
             passed = False
         else:
@@ -1032,7 +1123,7 @@ def build_target(
         })
         if not passed:
             result.errors.append(BuildError(
-                "OBDS-BUILD-REQUIRED-NOT-DEFINED",
+                code,
                 f"{element_id}: expected defined, got {actual}",
                 element_id,
             ))
@@ -1106,6 +1197,28 @@ def build_target(
     elif style.get("mode") == "none":
         knowledge = []
 
+    # OBDS 1.1, D-5. Section 13.2: "HARD_BOUNDARIES and FACT_GROUNDING always
+    # include every applicable element required by the target." Context selection
+    # governs additional content only and MUST NOT remove a required element.
+    #
+    # Before 1.1 a knowledge-natured element named in requiresDefined was verified
+    # as `defined`, the build succeeded, and the element was absent from the
+    # artefact whenever styleTexture.mode was `none` or a `selected` list omitted
+    # it. A build that verifies required truth as present and then ships a context
+    # without it is the failure this rule closes.
+    required_ids = list(target.get("requiresDefined", []))
+    already_placed = {e["id"] for e in hard_elements + fact_elements + state_elements + knowledge}
+    for element_id in required_ids:
+        if element_id in already_placed:
+            continue
+        element = by_id.get(element_id)
+        if element is None or element_id not in applicable_ids:
+            continue
+        if element.get("state") != "defined":
+            continue
+        knowledge.append(element)
+        already_placed.add(element_id)
+
     hard_elements.sort(key=lambda item: item["id"])
     fact_elements.sort(key=lambda item: item["id"])
     state_elements.sort(key=lambda item: item["id"])
@@ -1138,7 +1251,7 @@ def build_target(
     plan_hash = sha256_id(plan)
     artefact: dict[str, Any] = {
         "kind": "obds-compiled-brand-context",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "1.1.0",
         "id": f"{manifest['id']}:context:{target['id']}",
         "targetId": target["id"],
         "manifest": {
@@ -1149,8 +1262,8 @@ def build_target(
         "build": {
             "planId": plan["id"],
             "planHash": plan_hash,
-            "compilerId": plan["compiler"]["id"],
-            "compilerVersion": plan["compiler"]["version"],
+            "compilerId": COMPILER_ID,
+            "compilerVersion": COMPILER_VERSION,
             "asOf": plan["asOf"],
         },
         "scope": target_scope,
@@ -1171,6 +1284,7 @@ def build_target(
         ),
         "availableElementIds": sorted(element["id"] for element in applicable),
         "elementRecords": copy.deepcopy(sorted(applicable, key=lambda item: item["id"])),
+        "governedResultHash": governed_result_hash(manifest, target, plan["asOf"], applicable),
         "contextAssembly": copy.deepcopy(target.get("contextAssembly")),
         "slots": slots,
     }
@@ -1249,7 +1363,7 @@ def build_all(
         "manifestId": manifest["id"],
         "manifestVersion": manifest["version"],
         "manifestContentHash": manifest_content_hash(manifest),
-        "compilerVersion": plan["compiler"]["version"],
+        "compilerVersion": COMPILER_VERSION,
         "targets": report_targets,
     }
     if output:

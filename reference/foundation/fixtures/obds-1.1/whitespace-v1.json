@@ -1,0 +1,74 @@
+{
+  "cases": [
+    {
+      "expectedTokens": 3,
+      "label": "plain",
+      "text": "a b c"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "multiple spaces",
+      "text": "a   b"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "no-break space U+00A0",
+      "text": "a b"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "ideographic space U+3000",
+      "text": "a　b"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "line separator U+2028",
+      "text": "a b"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "file separator U+001C",
+      "text": "a\u001cb"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "group separator U+001D",
+      "text": "a\u001db"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "record separator U+001E",
+      "text": "a\u001eb"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "unit separator U+001F",
+      "text": "a\u001fb"
+    },
+    {
+      "expectedTokens": 2,
+      "label": "next line U+0085",
+      "text": "ab"
+    },
+    {
+      "expectedTokens": 0,
+      "label": "empty",
+      "text": ""
+    },
+    {
+      "expectedTokens": 0,
+      "label": "whitespace only",
+      "text": " \t\n "
+    },
+    {
+      "expectedTokens": 1,
+      "label": "combining sequence stays one token",
+      "text": "café"
+    }
+  ],
+  "kind": "obds-1.1-fixture",
+  "note": "Separator set: the Unicode White_Space property PLUS U+001C, U+001D, U+001E and U+001F. The last four are not White_Space but are separators here, because that is what the shipped implementation does. Specifying White_Space alone would silently change token counts.",
+  "schemaVersion": "1.1.0",
+  "tokenizer": "obds:whitespace-v1",
+  "tokenizerVersion": "1.0.0"
+}

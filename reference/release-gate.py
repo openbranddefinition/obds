@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.0.4 release gate.
+"""OBDS 1.1.0 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -46,7 +46,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 27,
+    "foundation": 43,
     "context-delivery": 3,
     "context-assembly": 15,
     "design-space": 18,
@@ -54,24 +54,27 @@ EXPECTED_SUITE_COUNTS = {
     "golden": 6,
     "adversarial": 23,
 }
-EXPECTED_TOTAL = 107
-EXPECTED_RELEASE = "1.0.4"
+EXPECTED_TOTAL = 123
+EXPECTED_RELEASE = "1.1.0"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
+# OBDS 1.1 adds exactly one versioned contract beside the frozen 1.0.0 surface.
+EXPECTED_V11_SCHEMAS = {"compiled-context.schema.json"}
 
-# OBDS 1.0.4 is a hygiene release. The public schema surface must stay
-# byte-identical to the frozen 1.0.0 surface, which 1.0.1, 1.0.2 and 1.0.3 also
-# carried unchanged. This fingerprint is sha256 over
-# the sorted "dir/file:sha256" lines of all 27 public contracts, taken from 1.0.0.
+# The OBDS 1.0.0 contract surface stays frozen and byte-identical across 1.0.0,
+# 1.0.1, 1.0.2, 1.0.3 and 1.0.4, and OBDS 1.1 does not touch it. 1.1 publishes one
+# additional versioned contract beside it, schemas/1.1.0/compiled-context.schema.json,
+# and changes none of the 27. This fingerprint is sha256 over the sorted
+# "dir/file:sha256" lines of all 27 public 1.0.0 contracts.
 FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469"
 
 # Normative contract identity against the immediately preceding release. Every
-# entry is sha256 of the contract as published in spec/1.0.3/, and unchanged from
-# 1.0.2, 1.0.1 and 1.0.0 before it. The fingerprint excludes `release` and
+# entry is sha256 of the contract as published in spec/1.0.4/, and unchanged from
+# 1.0.3, 1.0.2, 1.0.1 and 1.0.0 before it. The fingerprint excludes `release` and
 # `releaseModel.normativeSpecification`, which are packaging, so a version bump
 # alone never moves it. A maintenance release must not move any of them.
-PRIOR_RELEASE = "1.0.3"
+PRIOR_RELEASE = "1.0.4"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -187,7 +190,8 @@ def package_paths() -> list[Path]:
         if candidate.is_file():
             found.append(candidate)
     found.extend(sorted(p for p in ROOT.glob("OBDS-*") if p.is_file()))
-    for directory in (*(ROOT / d for d in PACKAGE_DIRS), SCHEMAS_DIR, VALUE_SCHEMAS_DIR):
+    for directory in (*(ROOT / d for d in PACKAGE_DIRS), SCHEMAS_DIR, VALUE_SCHEMAS_DIR,
+                      ROOT / "schemas" / "1.1.0"):
         if directory.is_dir():
             found.extend(sorted(directory.rglob("*")))
     return found
@@ -341,7 +345,14 @@ def validate_schemas(test_result, audit) -> None:
 
 
 def manifest_path(rel: str) -> Path:
-    """Map a manifest path, which is always flat, onto the current layout."""
+    """Map a manifest path onto the current layout.
+
+    The frozen 1.0.0 contracts are flat in the archive and under 1.0.0/ in the
+    repository. The 1.1 contract keeps its version in the path in both layouts,
+    so it needs no mapping.
+    """
+    if rel.startswith("schemas/1.1.0/"):
+        return ROOT / rel
     if rel.startswith("schemas/"):
         return SCHEMAS_DIR / rel.split("/", 1)[1]
     if rel.startswith("value-schemas/"):
@@ -561,6 +572,30 @@ def main() -> int:
     )
     check(audit["publicSchemaCount"] == len(schemas), "audit publicSchemaCount != disk")
     check(audit["publicValueSchemaCount"] == len(value_schemas), "audit publicValueSchemaCount != disk")
+
+    # The 1.1 contract surface: exactly one file, and the 1.0.0 surface untouched.
+    v11 = ROOT / "schemas" / "1.1.0"
+    if not v11.is_dir():
+        v11 = ROOT / "schemas" / "1.1.0"
+    found_v11 = {p.name for p in v11.glob("*.json")} if v11.is_dir() else set()
+    check(
+        found_v11 == EXPECTED_V11_SCHEMAS,
+        f"schemas/1.1.0/ contains {sorted(found_v11)}, expected {sorted(EXPECTED_V11_SCHEMAS)}",
+    )
+    if found_v11 == EXPECTED_V11_SCHEMAS:
+        v11_doc = load(v11 / "compiled-context.schema.json")
+        check(
+            v11_doc.get("$id") == "https://openbranddefinition.org/schemas/1.1.0/compiled-context.schema.json",
+            "schemas/1.1.0/compiled-context.schema.json has the wrong $id",
+        )
+        check(
+            v11_doc["properties"]["schemaVersion"].get("const") == "1.1.0",
+            "the 1.1.0 contract does not pin schemaVersion to 1.1.0",
+        )
+        check(
+            "governedResultHash" in v11_doc.get("required", []),
+            "the 1.1.0 contract does not require governedResultHash",
+        )
 
     index = load(ROOT / f"OBDS-{EXPECTED_RELEASE}-SCHEMA-INDEX.json")
     check(sorted(i["file"] for i in index["schemas"]) == schemas, "schema index does not match schemas/")
