@@ -82,7 +82,7 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/1.1.1/OBDS-1.1.1.md
+https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2.md
 
 ## Authoring and curation
 
@@ -96,16 +96,16 @@ what it requires: both build successfully with valid hashes.
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/1.1.1/OBDS-1.1.1-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/1.1.1/OBDS-1.1.1-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/1.1.1/OBDS-1.1.1-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/1.1.1/OBDS-1.1.1-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/1.1.1/OBDS-1.1.1-CHANGELOG.md
+Complete package: https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2-CHANGELOG.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 

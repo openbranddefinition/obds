@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.1.1 release gate.
+"""OBDS 1.1.2 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 49,
+    "foundation": 75,
     "context-delivery": 3,
     "context-assembly": 15,
     "design-space": 18,
@@ -55,8 +55,8 @@ EXPECTED_SUITE_COUNTS = {
     "golden": 6,
     "adversarial": 33,
 }
-EXPECTED_TOTAL = 139
-EXPECTED_RELEASE = "1.1.1"
+EXPECTED_TOTAL = 165
+EXPECTED_RELEASE = "1.1.2"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -80,7 +80,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "1.1.0"
+PRIOR_RELEASE = "1.1.1"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -1092,6 +1092,125 @@ def main() -> int:
                             f"{rel}: published colour value fails "
                             f"{colour_schema.name}: {list(err.path)} {err.message[:110]}"
                         )
+
+    # ------------------------------------------------------------------
+    # 14 to 17 were added in 1.1.2. Each one is a regression the outreach gate
+    # found in published 1.1.1 that checks 8 to 13 walked straight past.
+    # ------------------------------------------------------------------
+
+    # 14. the specification must stamp itself with this release. 1.1.1 shipped a
+    #     normative document whose own Version line read 1.1.0.
+    spec_path = ROOT / f"OBDS-{EXPECTED_RELEASE}.md"
+    if spec_path.is_file():
+        spec_head = spec_path.read_text(encoding="utf-8").split("\n---", 1)[0]
+        stamped = re.search(r"^\*\*Version:\*\*\s*(\S+)", spec_head, re.M)
+        check(
+            stamped is not None,
+            f"OBDS-{EXPECTED_RELEASE}.md carries no **Version:** line",
+        )
+        if stamped:
+            check(
+                stamped.group(1) == EXPECTED_RELEASE,
+                f"OBDS-{EXPECTED_RELEASE}.md stamps itself "
+                f"**Version:** {stamped.group(1)}, not {EXPECTED_RELEASE}",
+            )
+    public_readme = ROOT / f"OBDS-PUBLIC-README-{EXPECTED_RELEASE}.md"
+    if public_readme.is_file():
+        head = "\n".join(public_readme.read_text(encoding="utf-8").splitlines()[:40])
+        claims = re.findall(r"\*\*OBDS (\d+\.\d+\.\d+)[\.\*]", head)
+        for named in set(claims):
+            check(
+                named == EXPECTED_RELEASE,
+                f"OBDS-PUBLIC-README-{EXPECTED_RELEASE}.md announces OBDS {named}",
+            )
+
+    # 15. the website must not announce another release in its head or its
+    #     current-release labels. 1.1.1's <title> and meta description said 1.1.0
+    #     while the body said 1.1.1, and check 12 read only the body.
+    index_html_path = ROOT / "index.html"
+    if index_html_path.is_file():
+        site_text = index_html_path.read_text(encoding="utf-8")
+        head_text = site_text.split("</head>", 1)[0]
+        version_pattern = re.compile(r"\b(\d+\.\d+\.\d+)\b")
+        for label, fragment in (
+            ("<title>", re.search(r"<title>(.*?)</title>", head_text, re.S)),
+            ("meta description", re.search(r'name="description" content="(.*?)"', head_text, re.S)),
+            ("og:description", re.search(r'property="og:description" content="(.*?)"', head_text, re.S)),
+            ("obds-version meta", re.search(r'name="obds-version" content="(.*?)"', head_text, re.S)),
+        ):
+            if fragment is None:
+                continue
+            for named in set(version_pattern.findall(fragment.group(1))):
+                if named.startswith("4."):        # licence versions, not releases
+                    continue
+                check(
+                    named == EXPECTED_RELEASE,
+                    f"the website {label} names release {named}, "
+                    f"not {EXPECTED_RELEASE}",
+                )
+
+    # 16. a historical changelog section must keep its own numbers. Correcting
+    #     the current release's count by string replacement rewrote 1.1.0's
+    #     history in 1.1.1, which is worse than the defect it fixed.
+    changelog = ROOT / f"OBDS-{EXPECTED_RELEASE}-CHANGELOG.md"
+    if changelog.is_file():
+        text = changelog.read_text(encoding="utf-8")
+        sections = re.split(r"\n## (?=\d+\.\d+\.\d+\n)", text)
+        for section in sections[1:]:
+            name = section.split("\n", 1)[0].strip()
+            if name == EXPECTED_RELEASE:
+                continue
+            body = section.split("\n", 1)[1] if "\n" in section else ""
+            for line in body.splitlines():
+                if "**Conformance.**" not in line:
+                    continue
+                stated = {int(m) for m in re.findall(r"\b(\d{2,4})\b", line)
+                          if 50 <= int(m) <= 9999}
+                check(
+                    EXPECTED_TOTAL not in stated,
+                    f"the changelog's historical {name} section states this "
+                    f"release's count {EXPECTED_TOTAL}: {line.strip()[:80]}",
+                )
+
+    # 17. the two 1.1.2 normative fixtures must agree with the rules they pin.
+    #     Both describe behaviour no governed-result vector can reach.
+    escapes = ROOT / "reference" / "foundation" / "fixtures" / "obds-1.1" / "canonical-escapes.json"
+    vectors_path = ROOT / "reference" / "adversarial" / "canonical-vectors.json"
+    if escapes.is_file() and vectors_path.is_file():
+        published = set(load(vectors_path))
+        missing = []
+        for case in load(escapes)["cases"]:
+            for payload in (case["stringValue"], case["objectKey"]):
+                raw = json.dumps(payload, ensure_ascii=False)
+                if raw not in published:
+                    missing.append(case["codePoint"])
+        check(
+            not missing,
+            "canonical escape rows absent from the cross-language vectors: "
+            f"{sorted(set(missing))}",
+        )
+
+    validity = ROOT / "reference" / "foundation" / "fixtures" / "obds-1.1" / "validity-window.json"
+    if validity.is_file() and spec_path.is_file():
+        data = load(validity)
+        spec_text = spec_path.read_text(encoding="utf-8")
+        section = spec_text.split("### 14.0 Artefact validity", 1)
+        check(len(section) == 2, "section 14.0 is missing from the specification")
+        if len(section) == 2:
+            body = section[1].split("### 14.1", 1)[0]
+            check(
+                "every element whose scope matches the target" in body,
+                "section 14.0 no longer states which element set bounds the window",
+            )
+            check(
+                "the compiled selection remains valid" not in body,
+                "section 14.0 still carries the retired 'compiled selection' wording",
+            )
+        boundary = data.get("runtimeBoundary", {})
+        check(
+            boundary.get("rejectedAt") == boundary.get("validTo"),
+            "the validity fixture no longer pins the half-open boundary at validTo",
+        )
 
     if failures:
         print("RELEASE GATE: FAIL")

@@ -19,7 +19,7 @@ from obds_ref.compiler import (
     governed_result_payload,
     load_data,
 )
-from obds_ref.canonical import sha256_id
+from obds_ref.canonical import canonical_json_bytes, sha256_id
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = ROOT.parents[1]
@@ -377,8 +377,12 @@ def test_section_14_example_validates_against_the_published_contract():
 
     import jsonschema
 
-    spec_path = next(PACKAGE_ROOT.glob("OBDS-1.1.*.md"))
-    text = spec_path.read_text(encoding="utf-8")
+    # The release archive does not ship VERSION, so the specification is found
+    # by its own filename, which is OBDS-<x.y.z>.md in both layouts.
+    candidates = [path for path in PACKAGE_ROOT.glob("OBDS-*.md")
+                  if re.fullmatch(r"OBDS-\d+\.\d+\.\d+\.md", path.name)]
+    assert len(candidates) == 1, f"expected one specification, found {candidates}"
+    text = candidates[0].read_text(encoding="utf-8")
     section = text.split("## 14. Compiled Brand Context", 1)[1].split("### 14.0", 1)[0]
     block = re.search(r"```json\n(.*?)\n```", section, re.S).group(1)
     example_artefact = json.loads(block)
@@ -406,3 +410,115 @@ def test_section_14_example_validates_against_the_published_contract():
         return node
 
     jsonschema.Draft202012Validator(schema).validate(fill(example_artefact))
+
+
+# --- 1.1.2 B1: section 14.3b, the escape set -------------------------------
+
+def _escape_expectation(code_point: int) -> str:
+    """What section 14.3b says a single character serialises to."""
+    short = {0x22: '\\"', 0x5C: "\\\\", 0x08: "\\b", 0x09: "\\t",
+             0x0A: "\\n", 0x0C: "\\f", 0x0D: "\\r"}
+    if code_point in short:
+        return short[code_point]
+    if code_point <= 0x1F:
+        return "\\u%04x" % code_point
+    return chr(code_point)
+
+
+@pytest.mark.parametrize("case", fixture("canonical-escapes.json")["cases"],
+                         ids=lambda c: c["codePoint"])
+def test_canonical_escapes_follow_section_14_3b(case):
+    """The escape set is the contract, so it is asserted character by character.
+
+    Before 1.1.2 section 14.3 named no escape set at all: step 7 covered only
+    non-ASCII. A tab could be serialised as a short escape or as a six-character
+    escape, both valid JSON, and the two hash differently.
+    """
+    code_point = int(case["codePoint"][2:], 16)
+    expected_char = _escape_expectation(code_point)
+    if code_point == 0x0D:
+        # Step 2 turns carriage return into line feed before step 7 runs, so
+        # canonical output can never contain \r.
+        expected_char = "\\n"
+
+    value_bytes = canonical_json_bytes(case["stringValue"])
+    assert value_bytes.decode("utf-8") == '{"v":"a%sb"}' % expected_char
+
+    key_bytes = canonical_json_bytes(case["objectKey"])
+    assert key_bytes.decode("utf-8") == '{"a%sb":1}' % expected_char
+
+
+def test_canonical_escapes_do_not_escape_solidus_or_delete():
+    """Two consequences section 14.3b states explicitly, pinned separately."""
+    assert canonical_json_bytes({"v": "a/b"}) == b'{"v":"a/b"}'
+    assert canonical_json_bytes({"v": "a" + chr(0x7F) + "b"}).decode("utf-8") == (
+        '{"v":"a' + chr(0x7F) + 'b"}'
+    )
+
+
+def test_canonical_escapes_use_lowercase_hex():
+    assert canonical_json_bytes({"v": chr(0x1F)}) == b'{"v":"\\u001f"}'
+    assert canonical_json_bytes({"v": chr(0x00)}) == b'{"v":"\\u0000"}'
+
+
+# --- 1.1.2 B2: section 14.0, the artefact validity window -------------------
+
+def _validity_manifest(base_manifest, case):
+    from obds_ref.canonical import manifest_content_hash
+
+    manifest = copy.deepcopy(base_manifest)
+    template = copy.deepcopy(manifest["elements"][0])
+    elements = []
+    for spec in case["elements"]:
+        element = copy.deepcopy(template)
+        element["id"] = spec["id"]
+        element["subject"] = spec["subject"]
+        element["scope"] = copy.deepcopy(spec["scope"])
+        element["state"] = "defined"
+        element["validity"] = {"from": spec["from"], "to": spec["to"]}
+        element["value"] = {"name": spec["id"]}
+        elements.append(element)
+    manifest["elements"] = elements
+    manifest["approval"].pop("contentHash", None)
+    manifest["approval"]["contentHash"] = manifest_content_hash(manifest)
+    return manifest
+
+
+@pytest.mark.parametrize("case", fixture("validity-window.json")["cases"],
+                         ids=lambda c: c["id"])
+def test_validity_window_uses_every_scope_matching_element(case):
+    """Section 14.0: the window comes from all target-scope-matching elements.
+
+    Taken before the asOf filter and before precedence, so an element that is
+    not yet valid, or that loses its subject, still bounds the window. In 1.1.1
+    the same paragraph said both "the compiled selection" and "all
+    target-scope-matching elements", and the two sets differ.
+    """
+    data = fixture("validity-window.json")
+    base_manifest, base_plan = example("foundation-minimal")
+    manifest = _validity_manifest(base_manifest, case)
+    plan = copy.deepcopy(base_plan)
+    plan["manifestRef"]["contentHash"] = manifest["approval"]["contentHash"]
+    plan["asOf"] = data["asOf"]
+    plan["targets"][0]["scope"] = copy.deepcopy(data["targetScope"])
+    plan["targets"][0]["requiresDefined"] = list(case["requiresDefined"])
+
+    result = build_target(manifest, plan, plan["targets"][0])
+    assert result.status == case["expectedStatus"], case["description"]
+    artefact = result.artefact
+    assert artefact["validFrom"] == case["expectedValidFrom"], case["description"]
+    assert artefact["validTo"] == case["expectedValidTo"], case["description"]
+
+
+def test_validity_window_interval_is_half_open():
+    """validTo is exclusive: valid one second before, invalid at validTo itself."""
+    from datetime import datetime, timezone
+
+    boundary = fixture("validity-window.json")["runtimeBoundary"]
+    valid_to = datetime.fromisoformat(boundary["validTo"].replace("Z", "+00:00"))
+    accepted = datetime.fromisoformat(boundary["acceptedAt"].replace("Z", "+00:00"))
+    rejected = datetime.fromisoformat(boundary["rejectedAt"].replace("Z", "+00:00"))
+
+    assert accepted < valid_to, "the accepted instant must fall inside the window"
+    assert not (rejected < valid_to), "validTo itself must be outside the window"
+    assert rejected == valid_to

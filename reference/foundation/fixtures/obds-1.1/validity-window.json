@@ -1,0 +1,179 @@
+{
+  "asOf": "2026-08-28T00:00:00Z",
+  "cases": [
+    {
+      "description": "Nothing carries validity, so the window is unbounded.",
+      "elements": [
+        {
+          "from": null,
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "to": null
+        }
+      ],
+      "expectedStatus": "ready",
+      "expectedValidFrom": null,
+      "expectedValidTo": null,
+      "id": "no-boundaries-anywhere",
+      "requiresDefined": [
+        "structure.brand"
+      ]
+    },
+    {
+      "description": "An element that is not yet valid at asOf still bounds the window, because the selection changes when it becomes valid.",
+      "elements": [
+        {
+          "from": null,
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "to": null
+        },
+        {
+          "from": "2027-01-01T00:00:00Z",
+          "id": "structure.brand.future",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "structure.brand",
+          "to": null
+        }
+      ],
+      "expectedStatus": "ready",
+      "expectedValidFrom": null,
+      "expectedValidTo": "2027-01-01T00:00:00Z",
+      "id": "future-starting-relevant-element-bounds-validTo",
+      "requiresDefined": [
+        "structure.brand"
+      ]
+    },
+    {
+      "description": "The selected element's own expiry bounds the window.",
+      "elements": [
+        {
+          "from": null,
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "to": "2026-12-01T00:00:00Z"
+        }
+      ],
+      "expectedStatus": "ready",
+      "expectedValidFrom": null,
+      "expectedValidTo": "2026-12-01T00:00:00Z",
+      "id": "expiring-relevant-element-bounds-validTo",
+      "requiresDefined": [
+        "structure.brand"
+      ]
+    },
+    {
+      "description": "A scope-matching element that loses its subject to a more specific element still contributes its boundaries.",
+      "elements": [
+        {
+          "from": null,
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "to": "2026-11-01T00:00:00Z"
+        },
+        {
+          "from": null,
+          "id": "structure.brand.en",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "structure.brand",
+          "to": null
+        }
+      ],
+      "expectedStatus": "ready",
+      "expectedValidFrom": null,
+      "expectedValidTo": "2026-11-01T00:00:00Z",
+      "id": "losing-precedence-candidate-still-bounds-validTo",
+      "requiresDefined": [
+        "structure.brand.en"
+      ]
+    },
+    {
+      "description": "An element whose scope does not match the target contributes no boundary, however tight its own validity is.",
+      "elements": [
+        {
+          "from": null,
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "to": null
+        },
+        {
+          "from": "2026-09-01T00:00:00Z",
+          "id": "structure.brand.de",
+          "scope": {
+            "locales": [
+              "de"
+            ]
+          },
+          "subject": "structure.brand",
+          "to": "2026-10-01T00:00:00Z"
+        }
+      ],
+      "expectedStatus": "ready",
+      "expectedValidFrom": null,
+      "expectedValidTo": null,
+      "id": "non-applicable-element-contributes-nothing",
+      "requiresDefined": [
+        "structure.brand"
+      ]
+    },
+    {
+      "description": "Both ends of the window are exercised in one build.",
+      "elements": [
+        {
+          "from": "2026-01-01T00:00:00Z",
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "to": "2026-12-01T00:00:00Z"
+        },
+        {
+          "from": "2026-06-01T00:00:00Z",
+          "id": "structure.other",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "structure.other",
+          "to": null
+        }
+      ],
+      "expectedStatus": "ready",
+      "expectedValidFrom": "2026-06-01T00:00:00Z",
+      "expectedValidTo": "2026-12-01T00:00:00Z",
+      "id": "validFrom-is-the-latest-boundary-at-or-before-asOf",
+      "requiresDefined": [
+        "structure.brand"
+      ]
+    }
+  ],
+  "kind": "obds-1.1-fixture",
+  "note": "Section 14.0: the artefact validity window is derived from every element whose scope matches the target scope, taken before the asOf validity filter and before subject precedence. validFrom is the latest boundary at or before asOf, validTo the earliest strictly after it. The interval is half-open, so a runtime must reject an artefact at validTo itself.",
+  "runtimeBoundary": {
+    "acceptedAt": "2026-11-30T23:59:59Z",
+    "note": "validTo is exclusive: an artefact is valid at one second before validTo and invalid at validTo itself.",
+    "rejectedAt": "2026-12-01T00:00:00Z",
+    "validTo": "2026-12-01T00:00:00Z"
+  },
+  "targetScope": {
+    "locales": [
+      "en"
+    ],
+    "outputTypes": [
+      "brand-query"
+    ]
+  }
+}

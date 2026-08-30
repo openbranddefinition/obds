@@ -81,7 +81,7 @@
       "context-assembly": 15,
       "context-delivery": 3,
       "design-space": 18,
-      "foundation": 49,
+      "foundation": 75,
       "golden": 6,
       "integration": 15
     },
@@ -96,21 +96,21 @@
   },
   "kind": "obds-release-test-result",
   "notes": [
-    "OBDS 1.1.1 is a maintenance release. No normative contract change: the 27 public OBDS 1.0.0 contracts and the one versioned contract published beside them are unchanged.",
+    "OBDS 1.1.2 is a maintenance release. No normative contract change: the 27 public OBDS 1.0.0 contracts and the one versioned contract published beside them are unchanged.",
     "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4 and 1.1.0.",
     "The specification and the documentation are licensed under CC BY 4.0. The schemas, release metadata, reference implementation, conformance suite and examples are licensed under the Apache License 2.0.",
     "This file carries the section 26 identifiers: implementation, obdsVersion, suiteHash, conformanceProfiles, the counts and requiredCasesSkippedOrChanged.",
     "suiteHash covers the suite runner and the seven suite directories with their fixtures. It excludes reference/foundation/src/, which is the implementation under test and is identified by the implementation field.",
     "A profile is listed under conformanceProfiles because the executed suite contains cases for that conformance section. It is evidence for the section, not an independent certification.",
-    "This release runs 139 cases, adversarial 33, context-assembly 15, context-delivery 3, design-space 18, foundation 49, golden 6, integration 15.",
+    "This release runs 165 cases, adversarial 33, context-assembly 15, context-delivery 3, design-space 18, foundation 75, golden 6, integration 15.",
     "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
-    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-1.1.1-TEST-REQUIREMENTS.md."
+    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-1.1.2-TEST-REQUIREMENTS.md."
   ],
-  "obdsVersion": "1.1.1",
+  "obdsVersion": "1.1.2",
   "passed": true,
-  "passedCount": 139,
-  "promotedFrom": "1.1.0",
-  "release": "1.1.1",
+  "passedCount": 165,
+  "promotedFrom": "1.1.1",
+  "release": "1.1.2",
   "requiredCasesSkippedOrChanged": false,
   "schemaVersion": "1.0.0",
   "skippedCount": 0,
@@ -120,11 +120,11 @@
     "context-assembly": 15,
     "context-delivery": 3,
     "design-space": 18,
-    "foundation": 49,
+    "foundation": 75,
     "golden": 6,
     "integration": 15
   },
-  "suiteFileCount": 116,
-  "suiteHash": "sha256:228db72ffb20baa70d29294b47991224ecef8b0362b52acfed9b62c73c0d754c",
-  "testOutputHash": "sha256:37e81ebdccc55c887bc00581f30d67b4c60629ee61abaa71d9a6e82facf087e7"
+  "suiteFileCount": 118,
+  "suiteHash": "sha256:723da8ddfcf4cc4eac29bfce9a100244cffdb718672c4e1c413e62eb7489637a",
+  "testOutputHash": "sha256:23bede5d1009b139013ed3be47a4b054ba3e313273d386abf6ffdef7ad03e278"
 }

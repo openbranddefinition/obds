@@ -1,0 +1,193 @@
+{
+  "cases": [
+    {
+      "character": "quotation mark",
+      "codePoint": "U+0022",
+      "note": "short escape",
+      "objectKey": {
+        "a\"b": 1
+      },
+      "stringValue": {
+        "v": "a\"b"
+      }
+    },
+    {
+      "character": "reverse solidus",
+      "codePoint": "U+005C",
+      "note": "short escape",
+      "objectKey": {
+        "a\\b": 1
+      },
+      "stringValue": {
+        "v": "a\\b"
+      }
+    },
+    {
+      "character": "backspace",
+      "codePoint": "U+0008",
+      "note": "short escape",
+      "objectKey": {
+        "a\bb": 1
+      },
+      "stringValue": {
+        "v": "a\bb"
+      }
+    },
+    {
+      "character": "character tabulation",
+      "codePoint": "U+0009",
+      "note": "short escape",
+      "objectKey": {
+        "a\tb": 1
+      },
+      "stringValue": {
+        "v": "a\tb"
+      }
+    },
+    {
+      "character": "line feed",
+      "codePoint": "U+000A",
+      "note": "short escape",
+      "objectKey": {
+        "a\nb": 1
+      },
+      "stringValue": {
+        "v": "a\nb"
+      }
+    },
+    {
+      "character": "form feed",
+      "codePoint": "U+000C",
+      "note": "short escape",
+      "objectKey": {
+        "a\fb": 1
+      },
+      "stringValue": {
+        "v": "a\fb"
+      }
+    },
+    {
+      "character": "carriage return",
+      "codePoint": "U+000D",
+      "note": "normalised to line feed by step 2 before escaping",
+      "objectKey": {
+        "a\rb": 1
+      },
+      "stringValue": {
+        "v": "a\rb"
+      }
+    },
+    {
+      "character": "null",
+      "codePoint": "U+0000",
+      "note": "six-character escape, lowercase hex",
+      "objectKey": {
+        "a\u0000b": 1
+      },
+      "stringValue": {
+        "v": "a\u0000b"
+      }
+    },
+    {
+      "character": "start of heading",
+      "codePoint": "U+0001",
+      "note": "six-character escape, lowercase hex",
+      "objectKey": {
+        "a\u0001b": 1
+      },
+      "stringValue": {
+        "v": "a\u0001b"
+      }
+    },
+    {
+      "character": "unit separator",
+      "codePoint": "U+001F",
+      "note": "six-character escape, lowercase hex",
+      "objectKey": {
+        "a\u001fb": 1
+      },
+      "stringValue": {
+        "v": "a\u001fb"
+      }
+    },
+    {
+      "character": "delete",
+      "codePoint": "U+007F",
+      "note": "emitted directly, outside the escaped range",
+      "objectKey": {
+        "ab": 1
+      },
+      "stringValue": {
+        "v": "ab"
+      }
+    },
+    {
+      "character": "solidus",
+      "codePoint": "U+002F",
+      "note": "not escaped",
+      "objectKey": {
+        "a/b": 1
+      },
+      "stringValue": {
+        "v": "a/b"
+      }
+    },
+    {
+      "character": "latin small letter a with diaeresis",
+      "codePoint": "U+00E4",
+      "note": "emitted directly",
+      "objectKey": {
+        "aäb": 1
+      },
+      "stringValue": {
+        "v": "aäb"
+      }
+    },
+    {
+      "character": "CJK unified ideograph",
+      "codePoint": "U+4E2D",
+      "note": "emitted directly",
+      "objectKey": {
+        "a中b": 1
+      },
+      "stringValue": {
+        "v": "a中b"
+      }
+    },
+    {
+      "character": "grinning face",
+      "codePoint": "U+1F600",
+      "note": "emitted directly, no surrogate pair",
+      "objectKey": {
+        "a😀b": 1
+      },
+      "stringValue": {
+        "v": "a😀b"
+      }
+    },
+    {
+      "character": "line separator",
+      "codePoint": "U+2028",
+      "note": "emitted directly, not a line terminator here",
+      "objectKey": {
+        "a b": 1
+      },
+      "stringValue": {
+        "v": "a b"
+      }
+    },
+    {
+      "character": "paragraph separator",
+      "codePoint": "U+2029",
+      "note": "emitted directly",
+      "objectKey": {
+        "a b": 1
+      },
+      "stringValue": {
+        "v": "a b"
+      }
+    }
+  ],
+  "kind": "obds-1.1-fixture",
+  "note": "Section 14.3b: the exact escape set for string values and object keys. Expected canonical output is asserted by the test that reads this file, and the same payloads appear in reference/adversarial/canonical-vectors.json so the Python and JavaScript canonicalisers are compared on every row."
+}

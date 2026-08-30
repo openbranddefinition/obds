@@ -2,7 +2,7 @@
 
 ## OBDS 1.1: Stable Specification
 
-**Version:** 1.1.0  
+**Version:** 1.1.2  
 **Status:** Stable  
 **Date:** 2026-08-30  
 **Project home:** https://openbranddefinition.org  
@@ -1378,7 +1378,33 @@ same manifest and Build Plan therefore produce the same context `id`.
 
 ### 14.0 Artefact validity
 
-`validFrom` and `validTo` describe the interval in which the compiled selection remains valid. The interval is half-open: `validFrom` is inclusive and `validTo` is exclusive. The compiler derives the nearest surrounding validity boundaries of all target-scope-matching elements. Runtime MUST reject an artefact used before `validFrom` or at or after `validTo`.
+`validFrom` and `validTo` bound the interval in which rebuilding this target
+would produce the same selection. The interval is half-open: `validFrom` is
+inclusive and `validTo` is exclusive. Runtime MUST reject an artefact used
+before `validFrom` or at or after `validTo`.
+
+The window is derived from **every element whose scope matches the target
+scope**, and from no other element. That set is taken **before** the `asOf`
+validity filter and **before** subject precedence, so it includes:
+
+- an element that is not yet valid at `asOf`;
+- an element that has already expired at `asOf`; and
+- an element that is applicable but loses its semantic subject to a more
+  specific element.
+
+An element whose scope does not match the target contributes nothing.
+
+From that set, collect every `validity.from` and `validity.to` timestamp.
+`validFrom` is the latest of those boundaries at or before `asOf`, or `null` if
+there is none. `validTo` is the earliest strictly after `asOf`, or `null` if
+there is none.
+
+The wider set is deliberate and is the whole point of the field. A losing
+candidate whose validity begins tomorrow changes the selection tomorrow; an
+element not yet valid at `asOf` changes it when it becomes valid. Deriving the
+window from the surviving selection alone would leave an artefact nominally
+valid past the moment its own selection stops being correct, which is the
+failure this field exists to prevent.
 
 ### 14.1 Slot content
 
@@ -1425,7 +1451,7 @@ Canonicalisation is:
 4. preserve array order;
 5. serialise JSON as UTF-8 without a byte-order mark;
 6. use no insignificant whitespace;
-7. encode non-ASCII characters directly, not as optional escape variants;
+7. escape strings and object keys exactly as section 14.3b specifies, and encode every other character directly as UTF-8 rather than as an optional escape variant;
 8. serialise numbers using the ECMAScript-compatible shortest round-trippable IEEE-754 binary64 representation used by RFC 8785, with positive and negative zero both written as `0`; and
 9. compute SHA-256 over those bytes.
 
@@ -1438,6 +1464,52 @@ Governed JSON and YAML inputs MUST reject duplicate mapping keys, including keys
 A canonical hash proves byte identity after canonicalisation. It does **not** prove that a value still has the structure a consumer expects. Value-contract and shape validation are independent gates and MUST run before an approved manifest or compiled artefact is accepted.
 
 Volatile build data is not part of the artefact.
+
+### 14.3b String escaping
+
+Step 7 of section 14.3 is stated here in full because it decides bytes, and
+therefore hashes. It applies identically to string values and to object keys.
+
+This is the string serialisation of RFC 8785 section 3.2.2.2, which is the same
+serialisation ECMAScript `JSON.stringify` produces. It is written out rather
+than only cited so that an implementation whose standard library differs has an
+unambiguous target.
+
+After the normalisation in steps 1 and 2, a string is serialised between two
+`U+0022` quotation marks, and each character is emitted as follows.
+
+| Character | Emitted as |
+|---|---|
+| `U+0022` quotation mark | `\"` |
+| `U+005C` reverse solidus | `\\` |
+| `U+0008` backspace | `\b` |
+| `U+0009` character tabulation | `\t` |
+| `U+000A` line feed | `\n` |
+| `U+000C` form feed | `\f` |
+| `U+000D` carriage return | `\r` |
+| any other character in `U+0000` to `U+001F` | `\u00xx`, four hexadecimal digits, **lowercase** |
+| every other character | **directly**, as UTF-8 |
+
+Consequences worth stating, because each one is a place two implementations
+could otherwise disagree:
+
+- **`U+002F` solidus is not escaped.** `\/` is valid JSON and is not canonical.
+- **`U+007F` delete is not escaped.** It is not in the `U+0000` to `U+001F`
+  range, so it is emitted directly.
+- **`U+2028` and `U+2029` are not escaped.** They are emitted directly, like any
+  other non-ASCII character. An implementation that transports canonical output
+  as text MUST NOT treat them as line terminators.
+- **Hexadecimal digits in `\u` escapes are lowercase.** `\u001f`, never
+  `\u001F`.
+- **`\r` cannot occur** in canonical output. Step 2 converts every carriage
+  return to a line feed before this step runs. The row is listed so the escape
+  set is complete, not because canonical output can contain it.
+- **Non-ASCII characters, inside and outside the Basic Multilingual Plane, are
+  emitted directly.** There is no `\uXXXX` form for them and no surrogate pair
+  in canonical output.
+
+Cross-language vectors covering every row of this table, in string values and in
+object keys, are part of the release suite.
 
 ### 14.3a Governed result hash
 
@@ -2682,7 +2754,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.1.1.md`;
+1. one normative specification: `OBDS-1.1.2.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

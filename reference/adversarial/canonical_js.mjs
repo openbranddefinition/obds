@@ -34,7 +34,14 @@ function canon(v) {
   throw new Error('unsupported');
 }
 const raws = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+// Canonical output may contain U+2028 and U+2029, which section 14.3b emits
+// directly and which Python's splitlines() treats as line breaks. Printing the
+// text would silently misalign a batch comparison, so each result is emitted as
+// one line of lowercase hex. --text restores the old behaviour for one vector.
+const asText = process.argv.includes('--text');
 for (const raw of raws) {
   const parsed=JSON.parse(raw);
-  console.log(canon(parsed));
+  const canonical = canon(parsed);
+  if (asText) { console.log(canonical); continue; }
+  console.log(Buffer.from(canonical, 'utf8').toString('hex'));
 }

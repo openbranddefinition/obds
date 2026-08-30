@@ -1,11 +1,11 @@
 {
  "canonicalUrl": "https://openbranddefinition.org/",
  "conformanceTestsFailed": 0,
- "conformanceTestsPassed": 139,
+ "conformanceTestsPassed": 165,
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "1.1.1",
+ "currentRelease": "1.1.2",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:193c1710e7dee95c4487eab90bca55b82a3a071cd6b3a2306d49ad1971ca7568",
- "previousRelease": "1.1.0",
+ "packageZipSha256": "sha256:cfda913485e0b908158bbfb42ef9fabdc91ffa06a876ae33bfd3e81c8aa91405",
+ "previousRelease": "1.1.1",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -105,6 +105,14 @@
    "packageZipSha256": "sha256:193c1710e7dee95c4487eab90bca55b82a3a071cd6b3a2306d49ad1971ca7568",
    "status": "stable",
    "testOutputHash": "sha256:37e81ebdccc55c887bc00581f30d67b4c60629ee61abaa71d9a6e82facf087e7"
+  },
+  "1.1.2": {
+   "baseUrl": "https://openbranddefinition.org/spec/1.1.2/",
+   "date": "2026-08-30",
+   "note": "maintenance release; no normative contract change; states the section 14.3b string escape set and the section 14.0 validity-window element set, both recording measured 1.1.1 behaviour; corrects the version stamps and the rewritten 1.1.0 changelog history; adds four release-gate guards",
+   "packageZipSha256": "sha256:cfda913485e0b908158bbfb42ef9fabdc91ffa06a876ae33bfd3e81c8aa91405",
+   "status": "stable",
+   "testOutputHash": "sha256:23bede5d1009b139013ed3be47a4b054ba3e313273d386abf6ffdef7ad03e278"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -113,13 +121,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/1.1.1/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/1.1.2/",
  "specificationFilesPublished": true,
  "specificationPublishedAt": "2026-08-30",
  "stableReleaseDate": "2026-08-30",
- "testOutputHash": "sha256:37e81ebdccc55c887bc00581f30d67b4c60629ee61abaa71d9a6e82facf087e7",
+ "testOutputHash": "sha256:23bede5d1009b139013ed3be47a4b054ba3e313273d386abf6ffdef7ad03e278",
  "totalPublicContracts": 28,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 1,
- "websiteIndexSha256": "sha256:f4a945dbb33e84673bc24613c6520709425add2e835a799adb76fdec8e04de5a"
+ "websiteIndexSha256": "sha256:b01cfa3b94953d5c77c38130f466f0356460a82f65b9aee7804f49b0174be1f9"
 }

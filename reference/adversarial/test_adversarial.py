@@ -170,7 +170,7 @@ def test_b3_python_and_javascript_canonical_vectors_match():
         ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
     )
-    js = proc.stdout.strip().splitlines()
+    js = [bytes.fromhex(line).decode("utf-8") for line in proc.stdout.split()]
     assert py == js
 
 
@@ -291,7 +291,7 @@ def test_rc5_canonical_boundary_numbers_and_astral_key_order_match_js():
         ["node",str(Path(__file__).with_name("canonical_js.mjs")),str(vector_path)],
         text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True,
     )
-    assert py==proc.stdout.strip().splitlines()
+    assert py==[bytes.fromhex(line).decode("utf-8") for line in proc.stdout.split()]
     assert canonical_json_bytes({"n":1e20})==b'{"n":100000000000000000000}'
     assert canonical_json_bytes({"n":1e21})==b'{"n":1e+21}'
 
@@ -311,7 +311,7 @@ def test_rc5_unsupported_tokenizer_fails_closed():
 def test_rc5_legacy_colour_hex_schema_is_reference_internal():
     schema=json.loads((ROOT/"foundation"/"value-schemas"/"colour-hex.schema.json").read_text())
     assert "/reference/1.0.0/" in schema["$id"]
-    index=json.loads((PACKAGE_ROOT/"OBDS-1.1.1-SCHEMA-INDEX.json").read_text())
+    index=json.loads((PACKAGE_ROOT/"OBDS-1.1.2-SCHEMA-INDEX.json").read_text())
     assert all(item["file"]!="colour-hex.schema.json" for item in index.get("valueSchemas",[]))
 
 
@@ -332,7 +332,7 @@ def test_rc5_cross_language_canonical_fuzz_256_binary64_values(tmp_path):
         ["node",str(Path(__file__).with_name("canonical_js.mjs")),str(vector_path)],
         text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True,
     )
-    assert py==proc.stdout.strip().splitlines()
+    assert py==[bytes.fromhex(line).decode("utf-8") for line in proc.stdout.split()]
 
 
 # --- OBDS 1.1.1 B1: line-ending normalisation applies to values AND object keys ---
@@ -365,7 +365,7 @@ def test_b1_javascript_matches_python_on_every_line_ending_vector(tmp_path):
         ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
     )
-    assert py == proc.stdout.strip().splitlines()
+    assert py == [bytes.fromhex(line).decode("utf-8") for line in proc.stdout.split()]
     assert py == [expected for _, expected in CR_VECTORS]
 
 
@@ -412,7 +412,7 @@ def test_b1_governed_result_hash_agrees_across_languages_on_cr_payloads(tmp_path
         ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
         text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
     )
-    js_lines = proc.stdout.strip().splitlines()
+    js_lines = [bytes.fromhex(line).decode("utf-8") for line in proc.stdout.split()]
     for payload, js_text in zip(payloads, js_lines):
         py_bytes = canonical_json_bytes(payload)
         assert py_bytes.decode() == js_text

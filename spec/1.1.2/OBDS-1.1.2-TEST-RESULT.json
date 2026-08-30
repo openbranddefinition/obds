@@ -1,0 +1,130 @@
+{
+  "claimScope": "Result of the OBDS conformance runs for the exact release and suite hash named in this file, executed against the reference implementation named in `implementation`. Every required case ran; none was skipped, changed or expected to fail. `conformanceProfiles` lists only profiles this release can defend: `obds-foundation` because a declared conformance suite names that profile and every one of its cases passed, and `compiled-runtime` because every requirement section 26.2 lists is exercised by a named executed case, enumerated in the `requirementsExercised` array of the `compiled-runtime` entry in `conformanceProfiles`. No profile is claimed for context-delivery, context-assembly, visual-operations or composition; those suites are reported under `executedSuites` as coverage only, because they exercise modules other than the named implementation. This file is a suite result under section 26, not an independent certification and not a statement about any other implementation.",
+  "conformanceProfiles": [
+    {
+      "basis": "reference/foundation/conformance-suite.yaml declares `profile: foundation`. It is the only artefact in this package that names a conformance profile. Every declared case is executed by the release build and re-executed by reference/release-gate.py; the result is published as OBDS-<release>-FOUNDATION-CONFORMANCE.json.",
+      "conformanceSection": "26.1",
+      "declaredCaseCount": 15,
+      "declaredSuite": "reference/foundation/conformance-suite.yaml",
+      "failedCount": 0,
+      "id": "obds-foundation",
+      "passedCount": 15,
+      "suiteHash": "sha256:b2d8c17ebcd73b7802b4167ab610365c2e6fd017b6135e58c41396b0a06b170c"
+    },
+    {
+      "basis": "No declared per-profile conformance suite exists for section 26.2 in this release, so this is not a claim of the form 'passed the official 26.2 suite'. It is a claim that every requirement section 26.2 lists is implemented by the named reference compiler and exercised by a named executed case, enumerated in requirementsExercised. Defining a declared 26.2 suite is Phase B work.",
+      "conformanceSection": "26.2",
+      "id": "compiled-runtime",
+      "requirementsExercised": [
+        {
+          "case": "obds_ref.compiler.validate_plan, foundation and adversarial suites",
+          "requirement": "exact Build Plans"
+        },
+        {
+          "case": "test_required_unknown_fails_and_emits_no_artefact",
+          "requirement": "requiresDefined"
+        },
+        {
+          "case": "test_required_knowledge_element_reaches_the_artefact",
+          "requirement": "every required element present in the produced context"
+        },
+        {
+          "case": "test_governed_result_hash_matches_the_fixture, test_compiled_context_carries_the_governed_result_hash",
+          "requirement": "a governedResultHash that matches section 14.3a for the same manifest and Build Plan"
+        },
+        {
+          "case": "styleTexture and stateMap modes, foundation and adversarial suites",
+          "requirement": "explicit context selection"
+        },
+        {
+          "case": "test_fail_closed_example_emits_no_context_and_calls_no_model",
+          "requirement": "no artefact for a failed target"
+        },
+        {
+          "case": "test_canonical_json_normalises_nfc_and_line_endings",
+          "requirement": "canonical JSON artefacts"
+        },
+        {
+          "case": "test_simple_target_builds_and_hash_is_reproducible",
+          "requirement": "reproducible hashes"
+        },
+        {
+          "case": "obds_ref.checks.validate_check, foundation and adversarial suites",
+          "requirement": "Foundation Check Registry v1"
+        },
+        {
+          "case": "test_invalid_hash_no_call",
+          "requirement": "exact target loading"
+        },
+        {
+          "case": "test_runtime_record_ndjson, test_assembly_failed_runtime_record_is_schema_valid",
+          "requirement": "Runtime Decision Records"
+        },
+        {
+          "case": "test_failed_build_means_no_model_call, test_blocking_preflight_means_no_model_call",
+          "requirement": "zero instrumented model calls after failed build or blocking preflight"
+        },
+        {
+          "case": "test_blocking_postflight_withholds_output",
+          "requirement": "withheld output after blocking postflight"
+        },
+        {
+          "case": "build report tokenCounts per slot; overflow exercised by test_token_overflow_fails_without_artefact",
+          "requirement": "per-slot token reporting"
+        }
+      ]
+    }
+  ],
+  "executedSuites": {
+    "counts": {
+      "adversarial": 33,
+      "context-assembly": 15,
+      "context-delivery": 3,
+      "design-space": 18,
+      "foundation": 75,
+      "golden": 6,
+      "integration": 15
+    },
+    "note": "Suites executed by reference/run_all.py, reported as coverage only. No conformance profile is claimed for context-delivery, context-assembly or design-space: those suites exercise reference/context-delivery/build_views.py, reference/context-assembly/assemble_context.py and reference/design-space/design_space_ref.py, none of which is the implementation named in `implementation`."
+  },
+  "failedCount": 0,
+  "implementation": {
+    "language": "Python",
+    "name": "org.openbranddefinition.reference-compiler",
+    "repository": "https://github.com/openbranddefinition/obds",
+    "version": "1.0.0"
+  },
+  "kind": "obds-release-test-result",
+  "notes": [
+    "OBDS 1.1.2 is a maintenance release. No normative contract change: the 27 public OBDS 1.0.0 contracts and the one versioned contract published beside them are unchanged.",
+    "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4 and 1.1.0.",
+    "The specification and the documentation are licensed under CC BY 4.0. The schemas, release metadata, reference implementation, conformance suite and examples are licensed under the Apache License 2.0.",
+    "This file carries the section 26 identifiers: implementation, obdsVersion, suiteHash, conformanceProfiles, the counts and requiredCasesSkippedOrChanged.",
+    "suiteHash covers the suite runner and the seven suite directories with their fixtures. It excludes reference/foundation/src/, which is the implementation under test and is identified by the implementation field.",
+    "A profile is listed under conformanceProfiles because the executed suite contains cases for that conformance section. It is evidence for the section, not an independent certification.",
+    "This release runs 165 cases, adversarial 33, context-assembly 15, context-delivery 3, design-space 18, foundation 75, golden 6, integration 15.",
+    "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
+    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-1.1.2-TEST-REQUIREMENTS.md."
+  ],
+  "obdsVersion": "1.1.2",
+  "passed": true,
+  "passedCount": 165,
+  "promotedFrom": "1.1.1",
+  "release": "1.1.2",
+  "requiredCasesSkippedOrChanged": false,
+  "schemaVersion": "1.0.0",
+  "skippedCount": 0,
+  "status": "stable",
+  "suiteCounts": {
+    "adversarial": 33,
+    "context-assembly": 15,
+    "context-delivery": 3,
+    "design-space": 18,
+    "foundation": 75,
+    "golden": 6,
+    "integration": 15
+  },
+  "suiteFileCount": 118,
+  "suiteHash": "sha256:723da8ddfcf4cc4eac29bfce9a100244cffdb718672c4e1c413e62eb7489637a",
+  "testOutputHash": "sha256:23bede5d1009b139013ed3be47a4b054ba3e313273d386abf6ffdef7ad03e278"
+}

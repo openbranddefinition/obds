@@ -2,9 +2,74 @@
 
 ## Release
 
-**Version:** OBDS 1.1.1  
+**Version:** OBDS 1.1.2  
 **Status:** Stable  
 **Date:** 2026-08-30
+
+## 1.1.2
+
+**Maintenance release. PATCH. No breaking change, no new capability.**
+
+Five defects, all found by fresh external readers against published 1.1.1. Both
+changes to normative text write down behaviour the shipped reference already
+had; neither changes a byte any implementation produces.
+
+**The string escape set is now stated.** Section 14.3 resolved line endings in
+1.1.1 and still named no escape set: step 7 covered non-ASCII only. A tab could
+be serialised as `\t` or as `\u0009`, both valid JSON, and the two hash
+differently — the same defect class as the carriage-return divergence 1.1.1
+fixed, one layer down. New section 14.3b states the full table, identical for
+string values and object keys: short escapes for quote, reverse solidus,
+backspace, tab, line feed, form feed and carriage return; lowercase
+six-character escapes for the rest of `U+0000` to `U+001F`; everything else
+emitted directly. Solidus is not escaped, `U+007F` is not escaped, `U+2028` and
+`U+2029` are emitted directly, and hex digits are lowercase.
+
+Both shipped canonicalisers were measured first: they already agreed on all 38
+value and key cases. 14.3b records that behaviour rather than choosing a new
+one. Thirty-two new cross-language vectors cover every row of the table in both
+positions; the suite now compares **51 vectors with zero byte differences**.
+
+One test-harness defect fell out of the measurement: `canonical_js.mjs` printed
+canonical text with `console.log`, and `U+2028` and `U+2029` are line
+terminators for Python's `splitlines()`, so adding those vectors would have
+silently misaligned the comparison. The harness now emits one line of hex per
+vector.
+
+**The validity window has one rule.** Section 14.0 said both "the interval in
+which **the compiled selection** remains valid" and "the nearest surrounding
+validity boundaries of **all target-scope-matching elements**". Those are
+different sets, and the two readings give different `validTo` values, so two
+conforming runtimes would accept and reject the same artefact.
+
+The shipped behaviour was measured before anything was written: the window comes
+from every scope-matching element, taken before the `asOf` filter and before
+precedence. Section 14.0 now says exactly that, and says why — a losing
+candidate whose validity begins tomorrow changes the selection tomorrow, so the
+window has to end there. Six fixture cases pin it, including a future-starting
+element, an expiring element, a losing precedence candidate, a non-applicable
+element and the half-open boundary at `validTo`.
+
+**Version stamps.** The 1.1.1 specification stamped itself `**Version:** 1.1.0`,
+the public README announced 1.1.0, and the website `<title>`, description and
+`og:description` all said 1.1.0 while the page body said 1.1.1. Corrected.
+
+**Changelog history.** The 1.1.0 section had been rewritten with 1.1.1's
+conformance numbers. It is restored to what 1.1.0 actually ran:
+1.1.0 ran 123 cases with foundation 43.
+
+**Four new release-gate guards**, one per regression above: the specification's
+own `**Version:**` line must equal the release; the website title and current
+release labels must match; a historical changelog section must not carry the
+current release's counts; and the canonical string vectors and the
+validity-window fixture must both agree with the normative rule.
+
+**Conformance.** 165 cases pass, 0 fail, 0 skip. Foundation grew from 49 to 75
+with the escape-table and validity-window cases.
+
+**Section 27.1 classification.** Every change is a clarification, a defect fix
+in a document or a test, or a correction to release metadata. No published hash
+of any published example moved. PATCH.
 
 ## 1.1.1
 
@@ -183,7 +248,7 @@ and replaced by: the OBDS 1.0.0 contract surface remains frozen and
 byte-identical across 1.0.0 through 1.0.4, and OBDS 1.1 adds one versioned
 contract beside it and changes none of them.
 
-**Conformance.** 139 cases pass, 0 fail, 0 skip. Foundation grew from 27 to 49
+**Conformance.** 123 cases pass, 0 fail, 0 skip. Foundation grew from 27 to 43
 with the 1.1 normative cases. The official declared Foundation conformance suite
 remains 15 of 15 and is still not aggregated into that total.
 
