@@ -1,0 +1,260 @@
+{
+  "cases": [
+    {
+      "description": "Two incomparable KNOWLEDGE elements collide on a subject the target neither requires nor selects: styleTexture none, stateMap none. The target cannot observe the resolution, so it must build.",
+      "elements": [
+        {
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "traits": "fact"
+        },
+        {
+          "id": "guidance.a",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        },
+        {
+          "id": "guidance.b",
+          "scope": {
+            "outputTypes": [
+              "brand-query"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        }
+      ],
+      "expectedCodes": [],
+      "expectedConflictReported": true,
+      "expectedDecisionRelevant": false,
+      "expectedStatus": "ready",
+      "id": "irrelevant-conflict-does-not-fail-the-target",
+      "requiresDefined": [
+        "structure.brand"
+      ],
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "none"
+      }
+    },
+    {
+      "description": "The identical manifest, with one of the conflicting elements named in requiresDefined. A target cannot opt out of its own requirements.",
+      "elements": [
+        {
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "traits": "fact"
+        },
+        {
+          "id": "guidance.a",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        },
+        {
+          "id": "guidance.b",
+          "scope": {
+            "outputTypes": [
+              "brand-query"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        }
+      ],
+      "expectedCodes": [
+        "OBDS-BUILD-SUBJECT-CONFLICT"
+      ],
+      "expectedConflictReported": true,
+      "expectedDecisionRelevant": true,
+      "expectedStatus": "failed",
+      "id": "same-conflict-required-by-the-target-fails",
+      "requiresDefined": [
+        "structure.brand",
+        "guidance.a"
+      ],
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "none"
+      }
+    },
+    {
+      "description": "Two incomparable blocking RULES collide. HARD_BOUNDARIES is unconditional, so this fails whatever the target selects.",
+      "elements": [
+        {
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "traits": "fact"
+        },
+        {
+          "id": "rule.a",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "rule.claims",
+          "traits": "blocking-rule"
+        },
+        {
+          "id": "rule.b",
+          "scope": {
+            "outputTypes": [
+              "brand-query"
+            ]
+          },
+          "subject": "rule.claims",
+          "traits": "blocking-rule"
+        }
+      ],
+      "expectedCodes": [
+        "OBDS-BUILD-SUBJECT-CONFLICT"
+      ],
+      "expectedConflictReported": true,
+      "expectedDecisionRelevant": true,
+      "expectedStatus": "failed",
+      "id": "conflict-in-an-applicable-hard-boundary-fails",
+      "requiresDefined": [
+        "structure.brand"
+      ],
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "none"
+      }
+    },
+    {
+      "description": "The same KNOWLEDGE conflict, with styleTexture selecting one of the conflicting elements. The target reads it, so it fails.",
+      "elements": [
+        {
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "traits": "fact"
+        },
+        {
+          "id": "guidance.a",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        },
+        {
+          "id": "guidance.b",
+          "scope": {
+            "outputTypes": [
+              "brand-query"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        }
+      ],
+      "expectedCodes": [
+        "OBDS-BUILD-SUBJECT-CONFLICT"
+      ],
+      "expectedConflictReported": true,
+      "expectedDecisionRelevant": true,
+      "expectedStatus": "failed",
+      "id": "selected-guidance-conflict-fails",
+      "requiresDefined": [
+        "structure.brand"
+      ],
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [
+          "guidance.a"
+        ],
+        "mode": "selected"
+      }
+    },
+    {
+      "description": "The default styleTexture mode is `all`, which carries every defined KNOWLEDGE element into STYLE_TEXTURE. A conflict there is therefore relevant without the target naming anything.",
+      "elements": [
+        {
+          "id": "structure.brand",
+          "scope": {},
+          "subject": "structure.brand",
+          "traits": "fact"
+        },
+        {
+          "id": "guidance.a",
+          "scope": {
+            "locales": [
+              "en"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        },
+        {
+          "id": "guidance.b",
+          "scope": {
+            "outputTypes": [
+              "brand-query"
+            ]
+          },
+          "subject": "guidance.tone",
+          "traits": "knowledge"
+        }
+      ],
+      "expectedCodes": [
+        "OBDS-BUILD-SUBJECT-CONFLICT"
+      ],
+      "expectedConflictReported": true,
+      "expectedDecisionRelevant": true,
+      "expectedStatus": "failed",
+      "id": "styleTexture-all-reads-every-knowledge-element",
+      "requiresDefined": [
+        "structure.brand"
+      ],
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "all"
+      }
+    }
+  ],
+  "kind": "obds-1.1-fixture",
+  "note": "Section 10.2a: a hard conflict fails a target only when the conflicted subject is decision-relevant to that target. An irrelevant conflict is still reported in conflicts[], marked decisionRelevant false, so a manifest defect is never silently discarded. Element traits: `fact` is a defined non-rules fact, `knowledge` a defined KNOWLEDGE guidance element, `blocking-rule` a defined RULES element with enforcement block.",
+  "targetScope": {
+    "locales": [
+      "en"
+    ],
+    "outputTypes": [
+      "brand-query"
+    ]
+  }
+}

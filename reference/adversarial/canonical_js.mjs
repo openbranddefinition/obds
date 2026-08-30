@@ -33,7 +33,13 @@ function canon(v) {
   }
   throw new Error('unsupported');
 }
-const raws = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+// The vector file gained expected output in 1.1.3, so it is an object with a
+// `vectors` array rather than a bare array of inputs. A plain array is still
+// accepted, which is what ad-hoc test files pass.
+const loaded = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const raws = Array.isArray(loaded)
+  ? loaded
+  : loaded.vectors.map(v => v.input);
 // Canonical output may contain U+2028 and U+2029, which section 14.3b emits
 // directly and which Python's splitlines() treats as line breaks. Printing the
 // text would silently misalign a batch comparison, so each result is emitted as

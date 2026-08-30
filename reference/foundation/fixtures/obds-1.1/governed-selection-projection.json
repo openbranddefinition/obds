@@ -1,0 +1,97 @@
+{
+  "elements": [
+    {
+      "id": "structure.brand",
+      "scope": {},
+      "subject": "structure.brand",
+      "traits": "fact"
+    },
+    {
+      "id": "guidance.tone",
+      "scope": {},
+      "subject": "guidance.tone",
+      "traits": "knowledge"
+    },
+    {
+      "id": "context.unknown",
+      "scope": {},
+      "subject": "context.unknown",
+      "traits": "unknown-state"
+    }
+  ],
+  "expectation": {
+    "artifactHashIdenticalAcrossVariants": false,
+    "governedResultHashIdenticalAcrossVariants": false,
+    "governedResultHashReason": "styleTexture and stateMap are inside `target`, which the payload carries verbatim",
+    "note": "All three elements are applicable and none loses precedence, so selection carries all three in every variant, including the one whose artefact renders none of them.",
+    "selectionElementIds": [
+      "context.unknown",
+      "guidance.tone",
+      "structure.brand"
+    ],
+    "selectionIdenticalAcrossVariants": true
+  },
+  "kind": "obds-1.1-fixture",
+  "note": "Section 14.3a: `selection` is applicability then precedence, and nothing after it. styleTexture and stateMap are projection policies: they decide what the artefact renders, not what the governance decision resolved to. Across every variant below the `selection` list MUST be identical, element for element and state for state. The governedResultHash still differs between variants, because both policies live inside `target` and `target` is in the payload verbatim: two plans asking for different projections are different governed requests. What must not happen is the projection changing which truth was resolved.",
+  "requiresDefined": [
+    "structure.brand"
+  ],
+  "targetScope": {
+    "locales": [
+      "en"
+    ],
+    "outputTypes": [
+      "brand-query"
+    ]
+  },
+  "variants": [
+    {
+      "id": "styleTexture-all-stateMap-all_applicable",
+      "stateMap": {
+        "kinds": [],
+        "mode": "all_applicable"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "all"
+      }
+    },
+    {
+      "id": "styleTexture-none-stateMap-none",
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "none"
+      }
+    },
+    {
+      "id": "styleTexture-selected-stateMap-none",
+      "stateMap": {
+        "kinds": [],
+        "mode": "none"
+      },
+      "styleTexture": {
+        "elementIds": [
+          "guidance.tone"
+        ],
+        "mode": "selected"
+      }
+    },
+    {
+      "id": "styleTexture-none-stateMap-kinds",
+      "stateMap": {
+        "kinds": [
+          "guidance"
+        ],
+        "mode": "kinds"
+      },
+      "styleTexture": {
+        "elementIds": [],
+        "mode": "none"
+      }
+    }
+  ]
+}

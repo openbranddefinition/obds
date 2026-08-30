@@ -2,9 +2,78 @@
 
 ## Release
 
-**Version:** OBDS 1.1.2  
+**Version:** OBDS 1.1.3  
 **Status:** Stable  
 **Date:** 2026-08-30
+
+## 1.1.3
+
+**Maintenance release. PATCH. No new capability.**
+
+Five defects from the final outreach gate. One corrects a behaviour; the rest
+are text, vectors and tooling. No published example hash moved.
+
+**A hard conflict now fails a target only when the target can read it.** Section
+10.2 said a conflict is a conflict and stopped there, so the reference failed
+every target whenever any subject anywhere in the scope-matching set was
+unresolved, including subjects the target neither requires nor selects. That is
+fail-arbitrary, not fail-closed: the same manifest blocked or built depending on
+which unrelated subject a curator happened to leave open.
+
+New section 10.2a states when a conflict is decision-relevant: the element is
+named in `requiresDefined`, or is a blocking or approval-requiring RULE bound
+for HARD_BOUNDARIES, or is a defined non-rules fact bound for FACT_GROUNDING, or
+is carried into STATE_MAP or STYLE_TEXTURE by the target's own declared policy.
+The first three are unconditional; the last two follow what the target declared.
+An irrelevant conflict is **not** discarded: it stays in `conflicts[]` marked
+`decisionRelevant: false`, because it remains a manifest defect even when this
+target does not touch it. Five fixture cases pin it, including the two the
+default policies make relevant without the target naming anything.
+
+**Key ordering says one thing.** Step 3 of section 14.3 cited "RFC 8785 /
+ECMAScript property sorting" as if those were the same algorithm. They are not:
+`Object.keys({"10":1,"2":2})` yields `["2","10"]`, code-unit order yields
+`["10","2"]`. The step now states lexicographic UTF-16 code-unit order, names
+the ECMAScript enumeration order as explicitly not it, and gives the worked
+case. Nine ordering vectors were added; none existed.
+
+**`selection` is applicability then precedence, and nothing after it.** Section
+14.3a named three filters and never said that `styleTexture` and `stateMap` are
+not among them, so an implementer building `selection` from `includedElementIds`
+would produce a different governed result. It now says so, and says the part
+that is easy to get wrong in the other direction: both policies do sit inside
+`target`, which the payload carries verbatim, so changing one still moves
+`governedResultHash` legitimately. Two plans asking for different projections
+are different governed requests. What is forbidden is the projection changing
+which truth was resolved. A four-variant fixture pins the identical selection
+across policies that render nothing in common.
+
+**The cross-language vectors are now an oracle.** `canonical-vectors.json`
+carried inputs only, so it could prove two implementations agreed with each
+other and nothing more. Every vector now carries its canonical text, the
+lowercase hex of its canonical UTF-8 bytes and their SHA-256, and the
+must-reject documents are listed separately. A third-party implementation
+validates itself against the published file without running Python or
+JavaScript beside it. `canonicalHex` is authoritative because it survives
+transports that mangle `U+2028`, `U+2029` and line endings.
+
+**Current-release surfaces.** `/authoring/` shipped through all of 1.1.2
+announcing OBDS 1.1.0 in its title, status badge and subtitle, while its own
+deep links pointed at the current release. The home page said "Previous release:
+OBDS 1.1.0" when it was 1.1.1, and gave both 27 and 28 as the public contract
+count. All corrected. The release gate's version guard read `index.html` alone;
+it now reads every HTML page in the tree, `llms.txt`, and the publication
+metadata.
+
+**Conformance.** 176 cases pass, 0 fail, 0 skip. Foundation grew from 75 to 81
+with the conflict-relevance and governed-selection cases; adversarial from 33 to
+38 with the vector-oracle and key-ordering cases.
+
+**Section 27.1 classification.** The conflict correction changes behaviour in
+exactly one direction: a build that failed only because of a conflict the target
+could not observe now succeeds. No previously succeeding build fails, no
+previously valid artefact becomes invalid, and no published hash moved. Every
+other change is a clarification, a fixture, a vector or tooling. PATCH.
 
 ## 1.1.2
 

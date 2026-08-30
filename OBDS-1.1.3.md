@@ -2,7 +2,7 @@
 
 ## OBDS 1.1: Stable Specification
 
-**Version:** 1.1.2  
+**Version:** 1.1.3  
 **Status:** Stable  
 **Date:** 2026-08-30  
 **Project home:** https://openbranddefinition.org  
@@ -744,6 +744,41 @@ Then:
 - two incomparable maximal elements are a hard conflict;
 - an applicable explicit prohibit RULE blocks according to its exact scope and declared enforcement.
 
+#### 10.2a When a hard conflict fails a target
+
+A hard conflict is a property of a subject, not of a build. Whether it fails a
+given target depends on whether that target's outcome could depend on how the
+conflict is resolved.
+
+**A hard conflict MUST fail a target when the conflicted subject is
+decision-relevant to that target, and MUST NOT fail it otherwise.** A subject is
+decision-relevant to a target when at least one of its incomparable maximal
+elements would, if it won, reach that target's requirements or its compiled
+context. Concretely, when that element is:
+
+1. named in the target's `requiresDefined`;
+2. a RULES element whose `enforcement` is `block` or `require_approval`, so it
+   belongs in HARD_BOUNDARIES;
+3. a `defined` element of `nature: fact` outside `family: rules`, so it belongs
+   in FACT_GROUNDING;
+4. carried into STATE_MAP by the target's declared `stateMap` policy; or
+5. carried into STYLE_TEXTURE by the target's declared `styleTexture` policy.
+
+The first three are unconditional: a target cannot opt out of its own
+requirements, its hard boundaries or its fact grounding. The last two follow the
+policy the target declared, so a target that selects narrowly is not failed by a
+conflict it never reads.
+
+**An irrelevant conflict MUST NOT be silently discarded.** The Build Report MUST
+still carry it in `conflicts[]`, marked as not decision-relevant for this target,
+so an operator sees a manifest-level defect that this particular target happened
+not to touch. It is a manifest problem either way; it is only this target's
+problem when the target reads it.
+
+Failing a target on a conflict it cannot observe is not fail-closed, it is
+fail-arbitrary: the same manifest would block or build depending on which
+unrelated subject a curator happened to leave unresolved.
+
 ### 10.3 Missing or conflicting content
 
 The compiler MUST distinguish:
@@ -1129,7 +1164,7 @@ not.
 | `OBDS-BUILD-REQUIRED-OUT-OF-SCOPE` | the element exists but does not apply to the target scope |
 | `OBDS-BUILD-REQUIRED-EXPIRED` | the element exists and is in scope but is not valid at `asOf` |
 | `OBDS-BUILD-REQUIRED-NOT-DEFINED` | the listed element applies but is not the `defined` winner of its semantic subject, whether because its own state is not `defined` or because a more specific applicable element won that subject |
-| `OBDS-BUILD-SUBJECT-CONFLICT` | two incomparable maximal elements share one semantic subject |
+| `OBDS-BUILD-SUBJECT-CONFLICT` | two incomparable maximal elements share one semantic subject that is decision-relevant to this target under section 10.2a |
 | `OBDS-BUILD-MANIFEST-HASH` | the manifest content hash does not match the Build Plan reference |
 | `OBDS-BUILD-STYLE-SELECTION` | a selected style element is not an applicable defined KNOWLEDGE element |
 | `OBDS-BUILD-TOKEN-OVERFLOW` | the compiled context exceeds the declared token budget |
@@ -1447,7 +1482,7 @@ Canonicalisation is:
 
 1. recursively normalise every string and object key to Unicode NFC;
 2. convert line endings inside every string and object key to LF, CRLF first and then any remaining CR;
-3. after normalisation, sort object keys by UTF-16 code-unit order, matching RFC 8785 / ECMAScript property sorting;
+3. after normalisation, sort object keys into lexicographic order by UTF-16 code unit, comparing code unit by code unit and treating a shorter key that is a prefix of a longer one as smaller. This is the ordering RFC 8785 specifies. It is **not** ECMAScript property enumeration order, which places integer-like keys first and in numeric order: `{"10":1,"2":2}` canonicalises with `"10"` before `"2"`, not the reverse;
 4. preserve array order;
 5. serialise JSON as UTF-8 without a byte-order mark;
 6. use no insignificant whitespace;
@@ -1555,9 +1590,26 @@ Rules:
   different offsets are different documents and produce different
   `governedResultHash` values; making them agree is a Build Plan authoring
   decision, not a compiler one.
-- `selection` contains one entry per applicable element for the target, after
-  scope matching, validity at `asOf` and subject precedence, sorted by
-  `elementId` in UTF-16 code-unit order.
+- `selection` contains one entry per applicable element for the target, sorted
+  by `elementId` in UTF-16 code-unit order. "Applicable" means the result of
+  **applicability then precedence**, and nothing after it: scope matching,
+  validity at `asOf`, and subject precedence under section 10. It is the
+  governed result as resolved, **before** any projection or inclusion filtering.
+- **`styleTexture` and `stateMap` MUST NOT change `selection`.** They are
+  projection policies: they decide what the compiled artefact renders into its
+  slots, not what the governance decision resolved to. Two targets differing
+  only in those policies resolve the same governed truth and MUST carry the same
+  `selection`, element for element and state for state. An implementation that
+  builds `selection` from `includedElementIds`, or from any post-projection set,
+  is not conforming.
+
+  Both policies do remain inside `target`, and `target` is in this payload
+  verbatim, so changing one still moves `governedResultHash`. That is correct
+  and is not a contradiction: two Build Plans that ask for different projections
+  are different governed requests, and the hash identifies the request together
+  with what it resolved to. What the rule forbids is the projection silently
+  changing **which truth was resolved**, which is the part two implementations
+  must agree on.
 - `subject` is the effective semantic subject, defaulting to the element `id`.
 - `valueHash` is SHA-256 over the section 14.3 canonical JSON of the element
   `value`, and is `null` for any state other than `defined`. Content integrity
@@ -2754,7 +2806,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.1.2.md`;
+1. one normative specification: `OBDS-1.1.3.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

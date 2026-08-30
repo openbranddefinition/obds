@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.1.2 release gate.
+"""OBDS 1.1.3 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -47,16 +47,16 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 75,
+    "foundation": 81,
     "context-delivery": 3,
     "context-assembly": 15,
     "design-space": 18,
     "integration": 15,
     "golden": 6,
-    "adversarial": 33,
+    "adversarial": 38,
 }
-EXPECTED_TOTAL = 165
-EXPECTED_RELEASE = "1.1.2"
+EXPECTED_TOTAL = 176
+EXPECTED_RELEASE = "1.1.3"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -80,7 +80,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "1.1.1"
+PRIOR_RELEASE = "1.1.2"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -1124,9 +1124,53 @@ def main() -> int:
                 f"OBDS-PUBLIC-README-{EXPECTED_RELEASE}.md announces OBDS {named}",
             )
 
-    # 15. the website must not announce another release in its head or its
-    #     current-release labels. 1.1.1's <title> and meta description said 1.1.0
-    #     while the body said 1.1.1, and check 12 read only the body.
+    # 15. NO current-release surface may announce another release. Widened in
+    #     1.1.3: 1.1.2 checked index.html only, and /authoring/ shipped
+    #     announcing OBDS 1.1.0 in its title, badge and subtitle for a whole
+    #     release. Every HTML page, llms.txt, the README and the publication
+    #     metadata are current-release surfaces and are all checked here.
+    for page in sorted(ROOT.glob("*.html")) + sorted(ROOT.glob("*/index.html")):
+        if not page.is_file():
+            continue
+        rel_page = page.relative_to(ROOT).as_posix()
+        page_text = page.read_text(encoding="utf-8")
+        page_head = page_text.split("</head>", 1)[0]
+        release_re = re.compile(r"\b(\d+\.\d+\.\d+)\b")
+        # The title and the visible status badge are what a reader sees first.
+        title = re.search(r"<title>(.*?)</title>", page_head, re.S)
+        badge = re.search(r'class="status"[^>]*>([^<]*)<', page_text)
+        subtitle = re.search(r"Companion to OBDS ([\d.]+)", page_text)
+        for label, fragment in (("<title>", title.group(1) if title else None),
+                                ("status badge", badge.group(1) if badge else None),
+                                ("subtitle", subtitle.group(0) if subtitle else None)):
+            if not fragment:
+                continue
+            for named in set(release_re.findall(fragment)):
+                if named.startswith("4."):        # licence versions
+                    continue
+                check(
+                    named == EXPECTED_RELEASE,
+                    f"{rel_page} {label} names release {named}, "
+                    f"not {EXPECTED_RELEASE}",
+                )
+
+    # llms.txt announces the current release in prose, which no earlier check
+    # read. 1.1.2 shipped it saying 1.1.1.
+    llms = ROOT / "llms.txt"
+    if llms.is_file():
+        first_lines = "\n".join(llms.read_text(encoding="utf-8").splitlines()[:12])
+        current = re.search(r"Current release:\s*(\S+)", first_lines)
+        check(
+            current is not None,
+            "llms.txt carries no 'Current release:' line",
+        )
+        if current:
+            check(
+                current.group(1) == EXPECTED_RELEASE,
+                f"llms.txt announces current release {current.group(1)}, "
+                f"not {EXPECTED_RELEASE}",
+            )
+
     index_html_path = ROOT / "index.html"
     if index_html_path.is_file():
         site_text = index_html_path.read_text(encoding="utf-8")
@@ -1177,7 +1221,13 @@ def main() -> int:
     escapes = ROOT / "reference" / "foundation" / "fixtures" / "obds-1.1" / "canonical-escapes.json"
     vectors_path = ROOT / "reference" / "adversarial" / "canonical-vectors.json"
     if escapes.is_file() and vectors_path.is_file():
-        published = set(load(vectors_path))
+        vector_doc = load(vectors_path)
+        # 1.1.3 gave the vector file expected output, so it is an object with a
+        # `vectors` array. A bare array is still accepted for older layouts.
+        published = set(
+            vector_doc if isinstance(vector_doc, list)
+            else [case["input"] for case in vector_doc["vectors"]]
+        )
         missing = []
         for case in load(escapes)["cases"]:
             for payload in (case["stringValue"], case["objectKey"]):
@@ -1189,6 +1239,43 @@ def main() -> int:
             "canonical escape rows absent from the cross-language vectors: "
             f"{sorted(set(missing))}",
         )
+
+    # 18. the cross-language vectors must be usable without a second
+    #     implementation. Before 1.1.3 they carried inputs only, so a third party
+    #     could prove their two implementations agreed and nothing more.
+    if vectors_path.is_file():
+        vector_doc = load(vectors_path)
+        check(
+            isinstance(vector_doc, dict) and "vectors" in vector_doc,
+            "canonical-vectors.json carries no expected output",
+        )
+        if isinstance(vector_doc, dict) and "vectors" in vector_doc:
+            incomplete = [
+                case.get("input", "?")[:40] for case in vector_doc["vectors"]
+                if not {"input", "canonical", "canonicalHex", "sha256"} <= set(case)
+            ]
+            check(
+                not incomplete,
+                f"canonical vectors without full expected output: {incomplete[:5]}",
+            )
+            mismatched = []
+            for case in vector_doc["vectors"]:
+                if not {"canonicalHex", "sha256"} <= set(case):
+                    continue
+                raw = bytes.fromhex(case["canonicalHex"])
+                if "sha256:" + hashlib.sha256(raw).hexdigest() != case["sha256"]:
+                    mismatched.append(case["input"][:40])
+            check(
+                not mismatched,
+                f"canonical vector sha256 does not match its own bytes: {mismatched[:5]}",
+            )
+            ordering = [c for c in vector_doc["vectors"]
+                        if c["input"].startswith('{"10"') or c["input"].startswith('{"2"')]
+            check(
+                ordering,
+                "no integer-like key-ordering vector is published; section 14.3 "
+                "step 3 names that case explicitly",
+            )
 
     validity = ROOT / "reference" / "foundation" / "fixtures" / "obds-1.1" / "validity-window.json"
     if validity.is_file() and spec_path.is_file():

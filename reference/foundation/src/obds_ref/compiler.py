@@ -616,6 +616,73 @@ def governed_result_hash(
     return sha256_id(governed_result_payload(manifest, target, as_of, applicable))
 
 
+def _conflict_is_decision_relevant(
+    conflict: dict[str, Any],
+    by_id: dict[str, Any],
+    target: dict[str, Any],
+) -> bool:
+    """Section 10.2a: would resolving this conflict change what the target gets?
+
+    A hard conflict is a property of a subject. It fails a target only when one
+    of its incomparable maximal elements would, if it won, reach that target's
+    requirements or its compiled context. Before 1.1.3 every conflict anywhere in
+    the scope-matching set failed every target, so a manifest defect on a subject
+    a target never reads blocked that target — fail-arbitrary rather than
+    fail-closed.
+    """
+    required = set(target.get("requiresDefined", []))
+    style = target.get("styleTexture", {"mode": "all", "elementIds": []})
+    style_mode = style.get("mode", "all")
+    style_ids = set(style.get("elementIds", []))
+    state_policy = target.get("stateMap", {"mode": "none", "kinds": []})
+    state_mode = state_policy.get("mode", "none")
+    state_kinds = set(state_policy.get("kinds", []))
+
+    for element_id in conflict.get("elementIds", []):
+        element = by_id.get(element_id)
+        if element is None:
+            continue
+
+        # 1. named in requiresDefined. A target cannot opt out of its own
+        #    requirements.
+        if element_id in required:
+            return True
+
+        state = element.get("state")
+        family = element.get("family")
+        nature = element.get("nature")
+
+        # 2. a blocking or approval-requiring RULE belongs in HARD_BOUNDARIES,
+        #    unconditionally.
+        if (
+            family == "rules"
+            and state == "defined"
+            and (element.get("value") or {}).get("enforcement")
+            in {"block", "require_approval"}
+        ):
+            return True
+
+        # 3. a defined non-rules fact belongs in FACT_GROUNDING, unconditionally.
+        if state == "defined" and nature == "fact" and family != "rules":
+            return True
+
+        # 4. carried into STATE_MAP by the target's declared policy.
+        if state in {"unknown", "not_defined", "not_applicable"}:
+            if state_mode == "all_applicable":
+                return True
+            if state_mode == "kinds" and element.get("kind") in state_kinds:
+                return True
+
+        # 5. carried into STYLE_TEXTURE by the target's declared policy.
+        if state == "defined" and (nature == "knowledge" or family == "stance"):
+            if style_mode == "all":
+                return True
+            if style_mode == "selected" and element_id in style_ids:
+                return True
+
+    return False
+
+
 def _selection_validity_window(scope_matching: list[dict[str, Any]], as_of: datetime):
     boundaries = []
     for element in scope_matching:
@@ -1073,14 +1140,20 @@ def build_target(
     ]
     time_applicable = [element for element in scope_matching if _valid_at(element, as_of)]
     applicable, conflicts = _resolve_subject_precedence(time_applicable)
-    result.conflicts = conflicts
-    if conflicts:
-        for conflict in conflicts:
+    # Section 10.2a: a conflict fails this target only when the subject is
+    # decision-relevant to it. An irrelevant conflict is still reported, marked,
+    # so a manifest defect is never silently discarded.
+    annotated_conflicts = []
+    for conflict in conflicts:
+        relevant = _conflict_is_decision_relevant(conflict, by_id, target)
+        annotated_conflicts.append({**conflict, "decisionRelevant": relevant})
+        if relevant:
             result.errors.append(BuildError(
                 "OBDS-BUILD-SUBJECT-CONFLICT",
                 f"semantic subject {conflict['subject']} has incomparable maximal elements: "
                 + ", ".join(conflict["elementIds"]),
             ))
+    result.conflicts = annotated_conflicts
     valid_from, valid_to = _selection_validity_window(scope_matching, as_of)
     applicable_ids = {element["id"] for element in applicable}
 

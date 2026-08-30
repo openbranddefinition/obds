@@ -124,14 +124,14 @@
     }
   ],
   "claimScope": "Result of the official OBDS Foundation Conformance Suite declared in reference/foundation/conformance-suite.yaml, profile `foundation`, executed against the reference implementation. Every declared case ran and passed; none was skipped or changed. This run is deliberately not added to the aggregate suiteCounts: 14 of its 15 cases exercise the same fixtures and examples as the pytest suites, so aggregating both would double-count the same coverage.",
-  "executedAt": "2026-08-30T16:20:00.623889+00:00",
+  "executedAt": "2026-08-30T19:10:28.809375+00:00",
   "failedCount": 0,
   "implementation": {
     "name": "obds-reference",
     "version": "1.0.0"
   },
   "kind": "obds-conformance-result",
-  "obdsRelease": "1.1.2",
+  "obdsRelease": "1.1.3",
   "passed": true,
   "passedCount": 15,
   "profile": "foundation",

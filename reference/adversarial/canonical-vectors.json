@@ -1,53 +1,369 @@
-[
-  "{\"n\":1}",
-  "{\"n\":1.0}",
-  "{\"n\":0.1}",
-  "{\"n\":-0.0}",
-  "{\"n\":1.2345}",
-  "{\"n\":1e20}",
-  "{\"n\":1e21}",
-  "{\"n\":1e-6}",
-  "{\"n\":1e-7}",
-  "{\"n\":9007199254740992}",
-  "{\"x\":\"e\\u0301\"}",
-  "{\"z\":2,\"a\":1}",
-  "{\"\\uE000\":1,\"😀\":2}",
-  "{\"v\": \"a\\rb\"}",
-  "{\"v\": \"a\\r\\nb\"}",
-  "{\"a\\rb\": 1}",
-  "{\"a\\r\\nb\": 1}",
-  "{\"k\\r\": \"v\\r\", \"x\\r\\ny\": \"z\\r\\nw\"}",
-  "{\"a\\rb\": {\"c\\r\\nd\": [\"e\\rf\"]}}",
-  "{\"v\": \"a\\\"b\"}",
-  "{\"a\\\"b\": 1}",
-  "{\"v\": \"a\\\\b\"}",
-  "{\"a\\\\b\": 1}",
-  "{\"v\": \"a\\bb\"}",
-  "{\"a\\bb\": 1}",
-  "{\"v\": \"a\\tb\"}",
-  "{\"a\\tb\": 1}",
-  "{\"v\": \"a\\nb\"}",
-  "{\"a\\nb\": 1}",
-  "{\"v\": \"a\\fb\"}",
-  "{\"a\\fb\": 1}",
-  "{\"v\": \"a\\u0000b\"}",
-  "{\"a\\u0000b\": 1}",
-  "{\"v\": \"a\\u0001b\"}",
-  "{\"a\\u0001b\": 1}",
-  "{\"v\": \"a\\u001fb\"}",
-  "{\"a\\u001fb\": 1}",
-  "{\"v\": \"ab\"}",
-  "{\"ab\": 1}",
-  "{\"v\": \"a/b\"}",
-  "{\"a/b\": 1}",
-  "{\"v\": \"aäb\"}",
-  "{\"aäb\": 1}",
-  "{\"v\": \"a中b\"}",
-  "{\"a中b\": 1}",
-  "{\"v\": \"a😀b\"}",
-  "{\"a😀b\": 1}",
-  "{\"v\": \"a b\"}",
-  "{\"a b\": 1}",
-  "{\"v\": \"a b\"}",
-  "{\"a b\": 1}"
-]
+{
+  "kind": "obds-canonical-vectors",
+  "obdsVersion": "1.1.3",
+  "note": "Cross-language conformance vectors for OBDS Canonical JSON v1, sections 14.3 and 14.3b. Each vector is self-contained: `input` is the raw JSON document, `canonical` its canonical form as text, `canonicalHex` the lowercase hex of the canonical UTF-8 bytes, and `sha256` the digest of those bytes. An implementation in any language validates itself against these values without running another implementation beside it. `canonicalHex` is authoritative: it survives transports that mangle U+2028, U+2029 or line endings, which `canonical` does not.",
+  "mustRejectNote": "Documents under `mustReject` are not canonicalisable. Two keys that become equal after the normalisation in steps 1 and 2 collide, and section 14.3 requires rejection rather than silent collapse.",
+  "vectors": [
+    {
+      "input": "{\"n\":1}",
+      "canonical": "{\"n\":1}",
+      "canonicalHex": "7b226e223a317d",
+      "sha256": "sha256:2bfd14f43d17fc7cea24e0917a8879b4b2f880b8baeec1b9d90fbaad655e71bd"
+    },
+    {
+      "input": "{\"n\":1.0}",
+      "canonical": "{\"n\":1}",
+      "canonicalHex": "7b226e223a317d",
+      "sha256": "sha256:2bfd14f43d17fc7cea24e0917a8879b4b2f880b8baeec1b9d90fbaad655e71bd"
+    },
+    {
+      "input": "{\"n\":0.1}",
+      "canonical": "{\"n\":0.1}",
+      "canonicalHex": "7b226e223a302e317d",
+      "sha256": "sha256:c20c34ed16c837e86b4dcdb33f98c274c9f7da1231f64302082d2cd50743f951"
+    },
+    {
+      "input": "{\"n\":-0.0}",
+      "canonical": "{\"n\":0}",
+      "canonicalHex": "7b226e223a307d",
+      "sha256": "sha256:f3013f933b9fb80ab6d995e7ad9da36f683837ba1d81e950c943d40111eac2f0"
+    },
+    {
+      "input": "{\"n\":1.2345}",
+      "canonical": "{\"n\":1.2345}",
+      "canonicalHex": "7b226e223a312e323334357d",
+      "sha256": "sha256:402515b1a55acc8b581f714872c249fafdda2ba0796afdfe1cf761a28aee962e"
+    },
+    {
+      "input": "{\"n\":1e20}",
+      "canonical": "{\"n\":100000000000000000000}",
+      "canonicalHex": "7b226e223a3130303030303030303030303030303030303030307d",
+      "sha256": "sha256:58d2d5b8dd4228ab5775ce84f996718fa19ed49872271e9649b70cebaca26a09"
+    },
+    {
+      "input": "{\"n\":1e21}",
+      "canonical": "{\"n\":1e+21}",
+      "canonicalHex": "7b226e223a31652b32317d",
+      "sha256": "sha256:f1ee2b60ee95a3170fdc07a577e5f3514ced26867443d69da265acadead81007"
+    },
+    {
+      "input": "{\"n\":1e-6}",
+      "canonical": "{\"n\":0.000001}",
+      "canonicalHex": "7b226e223a302e3030303030317d",
+      "sha256": "sha256:28343867a0be00aee19f81aa90cfd6c646878b9303fa15410d16bfd3f8894578"
+    },
+    {
+      "input": "{\"n\":1e-7}",
+      "canonical": "{\"n\":1e-7}",
+      "canonicalHex": "7b226e223a31652d377d",
+      "sha256": "sha256:747d6d23b64d1b2d579adb832b44de31c91c875bbef7a8e397f5d183a746b54b"
+    },
+    {
+      "input": "{\"n\":9007199254740992}",
+      "canonical": "{\"n\":9007199254740992}",
+      "canonicalHex": "7b226e223a393030373139393235343734303939327d",
+      "sha256": "sha256:66c87d9cb3014e05a11baa97df62282d89d425f22ee15816577c84534e2ef1bb"
+    },
+    {
+      "input": "{\"x\":\"e\\u0301\"}",
+      "canonical": "{\"x\":\"é\"}",
+      "canonicalHex": "7b2278223a22c3a9227d",
+      "sha256": "sha256:97f06f396a709c3a29824e1cc794eeb98e2d1a262d7d455439d286d42803f0fe"
+    },
+    {
+      "input": "{\"z\":2,\"a\":1}",
+      "canonical": "{\"a\":1,\"z\":2}",
+      "canonicalHex": "7b2261223a312c227a223a327d",
+      "sha256": "sha256:99168216144c7fed5d4c54916cf98d9c66096280c04a499822a99b6658bd177a"
+    },
+    {
+      "input": "{\"\\uE000\":1,\"😀\":2}",
+      "canonical": "{\"😀\":2,\"\":1}",
+      "canonicalHex": "7b22f09f9880223a322c22ee8080223a317d",
+      "sha256": "sha256:28c95d1bbb2209223307e62f489020e8f9e0cfa16adf2daf6d88127a1e8dd22a"
+    },
+    {
+      "input": "{\"v\": \"a\\rb\"}",
+      "canonical": "{\"v\":\"a\\nb\"}",
+      "canonicalHex": "7b2276223a22615c6e62227d",
+      "sha256": "sha256:43dc8db4fc58426cc2be4587f29f305a2ad08c7ced319b4729538d634538f4bf"
+    },
+    {
+      "input": "{\"v\": \"a\\r\\nb\"}",
+      "canonical": "{\"v\":\"a\\nb\"}",
+      "canonicalHex": "7b2276223a22615c6e62227d",
+      "sha256": "sha256:43dc8db4fc58426cc2be4587f29f305a2ad08c7ced319b4729538d634538f4bf"
+    },
+    {
+      "input": "{\"a\\rb\": 1}",
+      "canonical": "{\"a\\nb\":1}",
+      "canonicalHex": "7b22615c6e62223a317d",
+      "sha256": "sha256:aaf0f235accbde6e499c72edf426c3b82335246a71bd1b45898e4bdd0a2f5df7"
+    },
+    {
+      "input": "{\"a\\r\\nb\": 1}",
+      "canonical": "{\"a\\nb\":1}",
+      "canonicalHex": "7b22615c6e62223a317d",
+      "sha256": "sha256:aaf0f235accbde6e499c72edf426c3b82335246a71bd1b45898e4bdd0a2f5df7"
+    },
+    {
+      "input": "{\"k\\r\": \"v\\r\", \"x\\r\\ny\": \"z\\r\\nw\"}",
+      "canonical": "{\"k\\n\":\"v\\n\",\"x\\ny\":\"z\\nw\"}",
+      "canonicalHex": "7b226b5c6e223a22765c6e222c22785c6e79223a227a5c6e77227d",
+      "sha256": "sha256:ae9b20d2ccbea66b9f1fbe242cf67133991325f8531a20f305d12820e9c6ea99"
+    },
+    {
+      "input": "{\"a\\rb\": {\"c\\r\\nd\": [\"e\\rf\"]}}",
+      "canonical": "{\"a\\nb\":{\"c\\nd\":[\"e\\nf\"]}}",
+      "canonicalHex": "7b22615c6e62223a7b22635c6e64223a5b22655c6e66225d7d7d",
+      "sha256": "sha256:58cd0fea886b0f7f06a216fd20695a44497ea5f6697522daf079377919a9e553"
+    },
+    {
+      "input": "{\"v\": \"a\\\"b\"}",
+      "canonical": "{\"v\":\"a\\\"b\"}",
+      "canonicalHex": "7b2276223a22615c2262227d",
+      "sha256": "sha256:05122b73d80ea58348a303402b060be2efe1afee8f45c301db98e7ff497b7c76"
+    },
+    {
+      "input": "{\"a\\\"b\": 1}",
+      "canonical": "{\"a\\\"b\":1}",
+      "canonicalHex": "7b22615c2262223a317d",
+      "sha256": "sha256:bf7eee3c228f8b7fdfc1e47adab6d55a4f5d190e983dce87207152e5bf5e9667"
+    },
+    {
+      "input": "{\"v\": \"a\\\\b\"}",
+      "canonical": "{\"v\":\"a\\\\b\"}",
+      "canonicalHex": "7b2276223a22615c5c62227d",
+      "sha256": "sha256:552b3cdceb42f91c2291e5fc7561020bee7b033406a325e70c34b32c61819408"
+    },
+    {
+      "input": "{\"a\\\\b\": 1}",
+      "canonical": "{\"a\\\\b\":1}",
+      "canonicalHex": "7b22615c5c62223a317d",
+      "sha256": "sha256:17dfee2b719ce7cf6fde51c1d26a1f1bbd046faee9562d0c57376ef0b0cedec4"
+    },
+    {
+      "input": "{\"v\": \"a\\bb\"}",
+      "canonical": "{\"v\":\"a\\bb\"}",
+      "canonicalHex": "7b2276223a22615c6262227d",
+      "sha256": "sha256:58f000c16d780fe9790ab8287ff68f84276dceb687ad32f207ec84be8f19a53f"
+    },
+    {
+      "input": "{\"a\\bb\": 1}",
+      "canonical": "{\"a\\bb\":1}",
+      "canonicalHex": "7b22615c6262223a317d",
+      "sha256": "sha256:4c59b3e43591d7410a402ded6770fa30dffa7ada29c6e51a3d730b22ca809492"
+    },
+    {
+      "input": "{\"v\": \"a\\tb\"}",
+      "canonical": "{\"v\":\"a\\tb\"}",
+      "canonicalHex": "7b2276223a22615c7462227d",
+      "sha256": "sha256:595711cef0e6e4d037e1fae2b1ece32702c442c0501d6362791e31cd1a6c866d"
+    },
+    {
+      "input": "{\"a\\tb\": 1}",
+      "canonical": "{\"a\\tb\":1}",
+      "canonicalHex": "7b22615c7462223a317d",
+      "sha256": "sha256:d772b391682a9661f1a291d9eec02fdcf073b134f9c5a78205b2957647cf628e"
+    },
+    {
+      "input": "{\"v\": \"a\\nb\"}",
+      "canonical": "{\"v\":\"a\\nb\"}",
+      "canonicalHex": "7b2276223a22615c6e62227d",
+      "sha256": "sha256:43dc8db4fc58426cc2be4587f29f305a2ad08c7ced319b4729538d634538f4bf"
+    },
+    {
+      "input": "{\"a\\nb\": 1}",
+      "canonical": "{\"a\\nb\":1}",
+      "canonicalHex": "7b22615c6e62223a317d",
+      "sha256": "sha256:aaf0f235accbde6e499c72edf426c3b82335246a71bd1b45898e4bdd0a2f5df7"
+    },
+    {
+      "input": "{\"v\": \"a\\fb\"}",
+      "canonical": "{\"v\":\"a\\fb\"}",
+      "canonicalHex": "7b2276223a22615c6662227d",
+      "sha256": "sha256:d4e5007b0b859c713a61e2fd2d936955bc8f82d3bb03ba58c76b38b269cc1302"
+    },
+    {
+      "input": "{\"a\\fb\": 1}",
+      "canonical": "{\"a\\fb\":1}",
+      "canonicalHex": "7b22615c6662223a317d",
+      "sha256": "sha256:fcb0a4460f99f3cff305333d31e2b20d8466d010c5b5a51a8c133647b66cb7f5"
+    },
+    {
+      "input": "{\"v\": \"a\\u0000b\"}",
+      "canonical": "{\"v\":\"a\\u0000b\"}",
+      "canonicalHex": "7b2276223a22615c753030303062227d",
+      "sha256": "sha256:cd8637b60cad2a4c003ab502c0033713e32376fa2bc25d77a50983ad5952bd17"
+    },
+    {
+      "input": "{\"a\\u0000b\": 1}",
+      "canonical": "{\"a\\u0000b\":1}",
+      "canonicalHex": "7b22615c753030303062223a317d",
+      "sha256": "sha256:a600dc61d5619ff07f026e997fc2cd8f0a8e9a4c84091154d740fdf9feff6858"
+    },
+    {
+      "input": "{\"v\": \"a\\u0001b\"}",
+      "canonical": "{\"v\":\"a\\u0001b\"}",
+      "canonicalHex": "7b2276223a22615c753030303162227d",
+      "sha256": "sha256:3c1640d7a8941d3f3985089c94dee1552190a78885a9c96c6239a0b6972cfcc6"
+    },
+    {
+      "input": "{\"a\\u0001b\": 1}",
+      "canonical": "{\"a\\u0001b\":1}",
+      "canonicalHex": "7b22615c753030303162223a317d",
+      "sha256": "sha256:52170782bdc27ab995911317d5f29447952a8832a2076f53d9e096d1e138d55d"
+    },
+    {
+      "input": "{\"v\": \"a\\u001fb\"}",
+      "canonical": "{\"v\":\"a\\u001fb\"}",
+      "canonicalHex": "7b2276223a22615c753030316662227d",
+      "sha256": "sha256:ce09814fc1d9793533c75ea2c2bbfece97b9f49382db44230e68d68fd14dd2b4"
+    },
+    {
+      "input": "{\"a\\u001fb\": 1}",
+      "canonical": "{\"a\\u001fb\":1}",
+      "canonicalHex": "7b22615c753030316662223a317d",
+      "sha256": "sha256:7443cb017a39cff0c02b439862f7ceb9eddcb499174c162ca4ebde72c02e6991"
+    },
+    {
+      "input": "{\"v\": \"ab\"}",
+      "canonical": "{\"v\":\"ab\"}",
+      "canonicalHex": "7b2276223a22617f62227d",
+      "sha256": "sha256:e58954dfa56c3ae42b97e367c2846651a706eb59e2ef6c6e2fb48298117082b6"
+    },
+    {
+      "input": "{\"ab\": 1}",
+      "canonical": "{\"ab\":1}",
+      "canonicalHex": "7b22617f62223a317d",
+      "sha256": "sha256:e69a99edab4545ed0802c0f366a24e6dad5b1a1fa5df2d39ffa7d8f174a1d034"
+    },
+    {
+      "input": "{\"v\": \"a/b\"}",
+      "canonical": "{\"v\":\"a/b\"}",
+      "canonicalHex": "7b2276223a22612f62227d",
+      "sha256": "sha256:d5224c96f154b8d85af87c679cd5117188ea9c04798d45b631bee4427dc12c4e"
+    },
+    {
+      "input": "{\"a/b\": 1}",
+      "canonical": "{\"a/b\":1}",
+      "canonicalHex": "7b22612f62223a317d",
+      "sha256": "sha256:1fc8ab3911867780058826e74c9dfa17aca3e67b8a964fa7ba84572a7ea73814"
+    },
+    {
+      "input": "{\"v\": \"aäb\"}",
+      "canonical": "{\"v\":\"aäb\"}",
+      "canonicalHex": "7b2276223a2261c3a462227d",
+      "sha256": "sha256:4c0ed665be4b3399c18f30c08c17763c9e6239fca8ca079e9ff8daea964ed0df"
+    },
+    {
+      "input": "{\"aäb\": 1}",
+      "canonical": "{\"aäb\":1}",
+      "canonicalHex": "7b2261c3a462223a317d",
+      "sha256": "sha256:b4f902147914f3ab723ce16f2346ee5e1c568a71e28221f15a59bc3607367075"
+    },
+    {
+      "input": "{\"v\": \"a中b\"}",
+      "canonical": "{\"v\":\"a中b\"}",
+      "canonicalHex": "7b2276223a2261e4b8ad62227d",
+      "sha256": "sha256:b9e1b7c62b124289f875b8ea0560446b5bd5c93f3d6292cdfd0efd478a8e7d27"
+    },
+    {
+      "input": "{\"a中b\": 1}",
+      "canonical": "{\"a中b\":1}",
+      "canonicalHex": "7b2261e4b8ad62223a317d",
+      "sha256": "sha256:a2f3e1d18d2839441943d1bee9d84e02577ce1844ea4b4026ef812e652a02c84"
+    },
+    {
+      "input": "{\"v\": \"a😀b\"}",
+      "canonical": "{\"v\":\"a😀b\"}",
+      "canonicalHex": "7b2276223a2261f09f988062227d",
+      "sha256": "sha256:dcae277440bbadab6e20d4bd3773fc15d8c266d0e8656f18a07715ee8267f1fa"
+    },
+    {
+      "input": "{\"a😀b\": 1}",
+      "canonical": "{\"a😀b\":1}",
+      "canonicalHex": "7b2261f09f988062223a317d",
+      "sha256": "sha256:f74fc39e2eed79443baed2e274d4d8f35759c776c1fa535d7262f6d7f7d38a8b"
+    },
+    {
+      "input": "{\"v\": \"a b\"}",
+      "canonical": "{\"v\":\"a b\"}",
+      "canonicalHex": "7b2276223a2261e280a862227d",
+      "sha256": "sha256:b7c886930e7f3d68f47d95d68f4f23d65b37ffe8b6268f2e12d974d3da5750a5"
+    },
+    {
+      "input": "{\"a b\": 1}",
+      "canonical": "{\"a b\":1}",
+      "canonicalHex": "7b2261e280a862223a317d",
+      "sha256": "sha256:4979abf68bd3b143532b975389511ec2850b7d74372b48a80a09c903163be687"
+    },
+    {
+      "input": "{\"v\": \"a b\"}",
+      "canonical": "{\"v\":\"a b\"}",
+      "canonicalHex": "7b2276223a2261e280a962227d",
+      "sha256": "sha256:dd427574bd46806c5b7fc67535542e0ed84523e512db4d56a04825d1820cee31"
+    },
+    {
+      "input": "{\"a b\": 1}",
+      "canonical": "{\"a b\":1}",
+      "canonicalHex": "7b2261e280a962223a317d",
+      "sha256": "sha256:aaee9704149848ae3996b11882a88fc85a1f4ed4e97df3a1ae9b04c281384e1e"
+    },
+    {
+      "input": "{\"10\": 1, \"2\": 2}",
+      "canonical": "{\"10\":1,\"2\":2}",
+      "canonicalHex": "7b223130223a312c2232223a327d",
+      "sha256": "sha256:4489ac68dd5e0c9eb21f0e6c3294139a7d51b793c0e2e515bdf6c12948537df1"
+    },
+    {
+      "input": "{\"2\": 1, \"10\": 2}",
+      "canonical": "{\"10\":2,\"2\":1}",
+      "canonicalHex": "7b223130223a322c2232223a317d",
+      "sha256": "sha256:cc0e4215ce9b47856142f2356851f02410d82609e64d037ee873afc483f703f6"
+    },
+    {
+      "input": "{\"1\": 1, \"2\": 2, \"10\": 3, \"20\": 4}",
+      "canonical": "{\"1\":1,\"10\":3,\"2\":2,\"20\":4}",
+      "canonicalHex": "7b2231223a312c223130223a332c2232223a322c223230223a347d",
+      "sha256": "sha256:c311d4581957306842fa568defbd7c42760655c1ef2097c01abfc83ae33ddd91"
+    },
+    {
+      "input": "{\"10\": 1, \"2\": 2, \"b\": 3, \"a\": 4}",
+      "canonical": "{\"10\":1,\"2\":2,\"a\":4,\"b\":3}",
+      "canonicalHex": "7b223130223a312c2232223a322c2261223a342c2262223a337d",
+      "sha256": "sha256:c7ef1c8b848c13d66bf3b5c6ee96a519c66fb75bec2d309017fcbf41caa433b2"
+    },
+    {
+      "input": "{\"a\": 1, \"A\": 2, \"_\": 3, \"0\": 4}",
+      "canonical": "{\"0\":4,\"A\":2,\"_\":3,\"a\":1}",
+      "canonicalHex": "7b2230223a342c2241223a322c225f223a332c2261223a317d",
+      "sha256": "sha256:36c8fd7b871b0a74450625c6b9303327eca5cadfc1b4cf9241e9e09fe9140856"
+    },
+    {
+      "input": "{\"z\": 1, \"ä\": 2, \"中\": 3}",
+      "canonical": "{\"z\":1,\"ä\":2,\"中\":3}",
+      "canonicalHex": "7b227a223a312c22c3a4223a322c22e4b8ad223a337d",
+      "sha256": "sha256:f0869f5db74c4cee3b3c2a8668331c6baa639eaf0b96e3f6627b90393a96287a"
+    },
+    {
+      "input": "{\"a\": 1, \"😀\": 2, \"￿\": 3}",
+      "canonical": "{\"a\":1,\"😀\":2,\"￿\":3}",
+      "canonicalHex": "7b2261223a312c22f09f9880223a322c22efbfbf223a337d",
+      "sha256": "sha256:cbee52ebe60211633300e36aeeabdef103e5d1c50bcaf83fd3f553809ccc1b9a"
+    },
+    {
+      "input": "{\"straße\": 1, \"strasse\": 2}",
+      "canonical": "{\"strasse\":2,\"straße\":1}",
+      "canonicalHex": "7b2273747261737365223a322c2273747261c39f65223a317d",
+      "sha256": "sha256:8193dd566e3049792955018e11802186a97870b542d9a4a96858390e4cba308a"
+    }
+  ],
+  "mustReject": [
+    {
+      "input": "{\"é\": 1, \"é\": 2}",
+      "mustReject": true,
+      "reason": "duplicate object key after NFC normalisation: é"
+    }
+  ]
+}

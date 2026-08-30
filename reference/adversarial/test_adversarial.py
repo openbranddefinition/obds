@@ -164,7 +164,7 @@ def test_b3_integer_and_integral_float_canonicalise_identically():
 
 def test_b3_python_and_javascript_canonical_vectors_match():
     vector_path = Path(__file__).with_name("canonical-vectors.json")
-    raws = json.loads(vector_path.read_text())
+    raws = [case["input"] for case in json.loads(vector_path.read_text())["vectors"]]
     py = [canonical_json_bytes(json.loads(raw)).decode() for raw in raws]
     proc = subprocess.run(
         ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
@@ -285,7 +285,7 @@ def test_rc5_all_public_canonical_copies_are_byte_identical():
 
 def test_rc5_canonical_boundary_numbers_and_astral_key_order_match_js():
     vector_path=Path(__file__).with_name("canonical-vectors.json")
-    raws=json.loads(vector_path.read_text())
+    raws=[case["input"] for case in json.loads(vector_path.read_text())["vectors"]]
     py=[canonical_json_bytes(json.loads(raw)).decode() for raw in raws]
     proc=subprocess.run(
         ["node",str(Path(__file__).with_name("canonical_js.mjs")),str(vector_path)],
@@ -311,7 +311,7 @@ def test_rc5_unsupported_tokenizer_fails_closed():
 def test_rc5_legacy_colour_hex_schema_is_reference_internal():
     schema=json.loads((ROOT/"foundation"/"value-schemas"/"colour-hex.schema.json").read_text())
     assert "/reference/1.0.0/" in schema["$id"]
-    index=json.loads((PACKAGE_ROOT/"OBDS-1.1.2-SCHEMA-INDEX.json").read_text())
+    index=json.loads((PACKAGE_ROOT/"OBDS-1.1.3-SCHEMA-INDEX.json").read_text())
     assert all(item["file"]!="colour-hex.schema.json" for item in index.get("valueSchemas",[]))
 
 
@@ -419,3 +419,85 @@ def test_b1_governed_result_hash_agrees_across_languages_on_cr_payloads(tmp_path
         py_hash = hashlib.sha256(py_bytes).hexdigest()
         js_hash = hashlib.sha256(js_text.encode("utf-8")).hexdigest()
         assert py_hash == js_hash
+
+
+# --- OBDS 1.1.3 B5: the vectors are an independent oracle -------------------
+#
+# Before 1.1.3 canonical-vectors.json carried inputs only, so it could prove two
+# implementations agreed with each other and nothing else. A third party had no
+# published expected output to check against. Each vector now carries its
+# canonical text, the hex of its canonical UTF-8 bytes, and their SHA-256.
+
+def _vector_document():
+    path = Path(__file__).with_name("canonical-vectors.json")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def test_b5_every_vector_carries_its_expected_output():
+    document = _vector_document()
+    assert document["kind"] == "obds-canonical-vectors"
+    assert document["vectors"], "the file must carry vectors"
+    for case in document["vectors"]:
+        assert set(case) == {"input", "canonical", "canonicalHex", "sha256"}, case
+        assert case["sha256"].startswith("sha256:")
+        assert len(case["sha256"]) == 71
+        # The three expectations must describe one thing.
+        assert bytes.fromhex(case["canonicalHex"]).decode("utf-8") == case["canonical"]
+        digest = hashlib.sha256(bytes.fromhex(case["canonicalHex"])).hexdigest()
+        assert case["sha256"] == "sha256:" + digest
+
+
+def test_b5_python_matches_the_published_expected_vectors():
+    """Python is checked against the file, not against JavaScript."""
+    for case in _vector_document()["vectors"]:
+        produced = canonical_json_bytes(json.loads(case["input"]))
+        assert produced.hex() == case["canonicalHex"], case["input"]
+        assert "sha256:" + hashlib.sha256(produced).hexdigest() == case["sha256"]
+
+
+def test_b5_javascript_matches_the_published_expected_vectors():
+    """JavaScript is checked against the file, not against Python."""
+    vector_path = Path(__file__).with_name("canonical-vectors.json")
+    proc = subprocess.run(
+        ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    )
+    produced = proc.stdout.split()
+    cases = _vector_document()["vectors"]
+    assert len(produced) == len(cases)
+    for case, hex_text in zip(cases, produced):
+        assert hex_text == case["canonicalHex"], case["input"]
+        digest = hashlib.sha256(bytes.fromhex(hex_text)).hexdigest()
+        assert case["sha256"] == "sha256:" + digest
+
+
+@pytest.mark.parametrize("case", _vector_document()["mustReject"],
+                         ids=lambda c: c["input"][:40])
+def test_b5_must_reject_documents_are_rejected_by_both(case, tmp_path):
+    """A key collision created by normalisation must fail closed, in both."""
+    with pytest.raises(ValueError, match="duplicate object key"):
+        canonical_json_bytes(json.loads(case["input"]))
+
+    vector_path = tmp_path / "reject.json"
+    vector_path.write_text(json.dumps([case["input"]], ensure_ascii=False),
+                           encoding="utf-8")
+    proc = subprocess.run(
+        ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+    )
+    assert proc.returncode != 0, f"JavaScript accepted {case['input']}"
+
+
+def test_b5_integer_like_keys_sort_by_code_unit_not_numerically():
+    """Section 14.3 step 3: `"10"` sorts before `"2"`.
+
+    ECMAScript property enumeration puts integer-like keys first and in numeric
+    order, which is the opposite. The step-3 wording used to cite both as if
+    they were the same algorithm.
+    """
+    assert canonical_json_bytes({"10": 1, "2": 2}) == b'{"10":1,"2":2}'
+    assert canonical_json_bytes({"2": 1, "10": 2}) == b'{"10":2,"2":1}'
+    assert canonical_json_bytes({"1": 1, "2": 2, "10": 3, "20": 4}) == \
+        b'{"1":1,"10":3,"2":2,"20":4}'
+    assert canonical_json_bytes({"10": 1, "2": 2, "b": 3, "a": 4}) == \
+        b'{"10":1,"2":2,"a":4,"b":3}'

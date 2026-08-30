@@ -522,3 +522,148 @@ def test_validity_window_interval_is_half_open():
     assert accepted < valid_to, "the accepted instant must fall inside the window"
     assert not (rejected < valid_to), "validTo itself must be outside the window"
     assert rejected == valid_to
+
+
+# --- 1.1.3 B1: section 10.2a, decision-relevant subject conflicts -----------
+
+TRAITS = {
+    "fact": {"nature": "fact", "family": "structure", "kind": "brand-identity"},
+    "knowledge": {"nature": "knowledge", "family": "context", "kind": "guidance"},
+    "blocking-rule": {"nature": "knowledge", "family": "rules", "kind": "rule",
+                      "value": {"enforcement": "block", "statement": "placeholder"}},
+    "unknown-state": {"nature": "knowledge", "family": "context", "kind": "guidance",
+                      "state": "unknown"},
+}
+
+
+def _element_from_spec(template, spec):
+    from obds_ref.canonical import manifest_content_hash  # noqa: F401
+
+    element = copy.deepcopy(template)
+    element["id"] = spec["id"]
+    element["subject"] = spec["subject"]
+    element["scope"] = copy.deepcopy(spec["scope"])
+    element.update(copy.deepcopy(TRAITS[spec["traits"]]))
+    element.setdefault("state", "defined")
+    if element["state"] == "defined" and "value" not in element:
+        element["value"] = {"name": spec["id"]}
+    if element["state"] != "defined":
+        element.pop("value", None)
+        element.pop("valueContractRef", None)
+    return element
+
+
+def _manifest_with(base_manifest, specs):
+    from obds_ref.canonical import manifest_content_hash
+
+    manifest = copy.deepcopy(base_manifest)
+    template = copy.deepcopy(manifest["elements"][0])
+    manifest["elements"] = [_element_from_spec(template, spec) for spec in specs]
+    manifest["approval"].pop("contentHash", None)
+    manifest["approval"]["contentHash"] = manifest_content_hash(manifest)
+    return manifest
+
+
+@pytest.mark.parametrize("case", fixture("subject-conflict-relevance.json")["cases"],
+                         ids=lambda c: c["id"])
+def test_subject_conflict_fails_only_when_decision_relevant(case):
+    """Section 10.2a: a conflict fails a target only when the target can read it.
+
+    Before 1.1.3 every conflict anywhere in the scope-matching set failed every
+    target, so a manifest defect on a subject a target never touches blocked that
+    target. That is fail-arbitrary, not fail-closed: the same manifest would
+    block or build depending on which unrelated subject a curator left open.
+    """
+    data = fixture("subject-conflict-relevance.json")
+    base_manifest, base_plan = example("foundation-minimal")
+    manifest = _manifest_with(base_manifest, case["elements"])
+    plan = copy.deepcopy(base_plan)
+    plan["manifestRef"]["contentHash"] = manifest["approval"]["contentHash"]
+    target = plan["targets"][0]
+    target["scope"] = copy.deepcopy(data["targetScope"])
+    target["requiresDefined"] = list(case["requiresDefined"])
+    target["styleTexture"] = copy.deepcopy(case["styleTexture"])
+    target["stateMap"] = copy.deepcopy(case["stateMap"])
+
+    result = build_target(manifest, plan, target)
+
+    assert result.status == case["expectedStatus"], case["description"]
+    codes = [error.code for error in result.errors]
+    for expected in case["expectedCodes"]:
+        assert expected in codes, f"{case['id']}: expected {expected}, got {codes}"
+    if not case["expectedCodes"]:
+        assert "OBDS-BUILD-SUBJECT-CONFLICT" not in codes, case["description"]
+
+    # An irrelevant conflict must still be visible. Silently discarding it would
+    # hide a real manifest defect.
+    assert result.conflicts, "the conflict must be reported whatever the outcome"
+    relevant = [c.get("decisionRelevant") for c in result.conflicts]
+    assert case["expectedDecisionRelevant"] in relevant, (
+        f"{case['id']}: decisionRelevant flags were {relevant}"
+    )
+
+
+# --- 1.1.3 B3: section 14.3a, projection must not change the selection ------
+
+def test_projection_policies_do_not_change_the_governed_selection():
+    """styleTexture and stateMap decide what is rendered, not what was resolved.
+
+    Four targets differing only in their projection policies must resolve the
+    identical `selection`. Their governedResultHash values still differ, because
+    both policies sit inside `target` and the payload carries `target` verbatim:
+    two plans asking for different projections are different governed requests.
+    What must not happen is the projection changing which truth was resolved.
+    An implementation building `selection` from includedElementIds would produce
+    a different selection for each variant, and that is the failure this pins.
+    """
+    from obds_ref.compiler import _resolve_subject_precedence, _valid_at, scope_matches
+    from obds_ref.compiler import _parse_timestamp
+
+    data = fixture("governed-selection-projection.json")
+    base_manifest, base_plan = example("foundation-minimal")
+    manifest = _manifest_with(base_manifest, data["elements"])
+
+    selections = {}
+    governed = {}
+    artefacts = {}
+    for variant in data["variants"]:
+        plan = copy.deepcopy(base_plan)
+        plan["manifestRef"]["contentHash"] = manifest["approval"]["contentHash"]
+        target = plan["targets"][0]
+        target["scope"] = copy.deepcopy(data["targetScope"])
+        target["requiresDefined"] = list(data["requiresDefined"])
+        target["styleTexture"] = copy.deepcopy(variant["styleTexture"])
+        target["stateMap"] = copy.deepcopy(variant["stateMap"])
+
+        result = build_target(manifest, plan, target)
+        assert result.status == "ready", f"{variant['id']}: {[e.code for e in result.errors]}"
+        governed[variant["id"]] = result.artefact["governedResultHash"]
+        artefacts[variant["id"]] = result.artefact["artifactHash"]
+
+        # Rebuild the selection the way section 14.3a defines it: applicability
+        # then precedence, and nothing after it.
+        as_of = _parse_timestamp(plan["asOf"], field_name="asOf")
+        scope_matching = [
+            element for element in manifest["elements"]
+            if scope_matches(element.get("scope", {}), target["scope"])
+        ]
+        time_applicable = [e for e in scope_matching if _valid_at(e, as_of)]
+        applicable, _ = _resolve_subject_precedence(time_applicable)
+        payload = governed_result_payload(manifest, target, plan["asOf"], applicable)
+        selections[variant["id"]] = [entry["elementId"] for entry in payload["selection"]]
+
+    expectation = data["expectation"]
+    for variant_id, ids in selections.items():
+        assert ids == expectation["selectionElementIds"], (
+            f"{variant_id}: projection changed the resolved selection: {ids}"
+        )
+    assert len({tuple(ids) for ids in selections.values()}) == 1
+
+    # The artefact must differ, and so must the governed hash, because both
+    # policies are inside `target`. Neither is a defect; both are the contract.
+    assert len(set(artefacts.values())) == len(artefacts), (
+        "projection policy did not change the artefact: " + repr(artefacts)
+    )
+    assert len(set(governed.values())) == len(governed), (
+        "target carries the policies verbatim, so the governed hash must move too"
+    )
