@@ -1,0 +1,33 @@
+# Vercel does NOT apply .gitignore. Without this file every path in the working
+# directory is uploaded and served, which is how answers/ — including internal
+# reports and third-party source PDFs — became publicly reachable after the
+# 1.0.4 deployment. Everything listed here is local working material and must
+# never leave this machine.
+
+# Local working notes, research and internal reports.
+answers/
+
+# Withdrawn drafts and local-only material, mirrored from .gitignore.
+md/
+licensing/
+archive/
+openbranddefinition-site-*-public-draft/
+
+# Environments and caches.
+.venv/
+.venv*/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.eggs/
+
+# Hosting and secrets.
+.vercel
+.env*
+.DS_Store
