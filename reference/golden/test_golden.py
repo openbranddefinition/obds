@@ -23,7 +23,7 @@ def _schema_dir(root, name):
     return flat
 SCHEMAS = _schema_dir(ROOT, "schemas")
 VALUE_SCHEMAS = _schema_dir(ROOT, "value-schemas")
-SPEC = (ROOT / "OBDS-1.1.4.md").read_text(encoding="utf-8")
+SPEC = (ROOT / "OBDS-1.1.5.md").read_text(encoding="utf-8")
 
 FOUNDATION_SRC = ROOT / "reference" / "foundation" / "src"
 CA_ROOT = ROOT / "reference" / "context-assembly"

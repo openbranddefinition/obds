@@ -239,6 +239,11 @@ def _manifest_internal_references(element: dict[str, Any]) -> list[tuple[str, st
                 for index, ref in enumerate(references):
                     if isinstance(ref, str) and ref:
                         refs.append((f"value.references[{index}]", ref))
+            required_refs = value.get("requiresDefinedRefs", [])
+            if isinstance(required_refs, list):
+                for index, ref in enumerate(required_refs):
+                    if isinstance(ref, str) and ref:
+                        refs.append((f"value.requiresDefinedRefs[{index}]", ref))
             checks = value.get("checks", [])
             if isinstance(checks, list):
                 for index, check in enumerate(checks):
@@ -626,6 +631,7 @@ def _conflict_is_decision_relevant(
     conflict: dict[str, Any],
     by_id: dict[str, Any],
     target: dict[str, Any],
+    rule_required_ids: set[str],
 ) -> bool:
     """Section 10.2a: would resolving this conflict change what the target gets?
 
@@ -636,7 +642,7 @@ def _conflict_is_decision_relevant(
     a target never reads blocked that target — fail-arbitrary rather than
     fail-closed.
     """
-    required = set(target.get("requiresDefined", []))
+    required = set(target.get("requiresDefined", [])) | rule_required_ids
     style = target.get("styleTexture", {"mode": "all", "elementIds": []})
     style_mode = style.get("mode", "all")
     style_ids = set(style.get("elementIds", []))
@@ -1148,12 +1154,21 @@ def build_target(
     ]
     time_applicable = [element for element in scope_matching if _valid_at(element, as_of)]
     applicable, conflicts = _resolve_subject_precedence(time_applicable)
+    rule_requirements = [
+        (required_id, element["id"])
+        for element in applicable
+        if element.get("family") == "rules" and element.get("state") == "defined"
+        for required_id in element.get("value", {}).get("requiresDefinedRefs", [])
+    ]
+    rule_required_ids = {required_id for required_id, _ in rule_requirements}
     # Section 10.2a: a conflict fails this target only when the subject is
     # decision-relevant to it. An irrelevant conflict is still reported, marked,
     # so a manifest defect is never silently discarded.
     annotated_conflicts = []
     for conflict in conflicts:
-        relevant = _conflict_is_decision_relevant(conflict, by_id, target)
+        relevant = _conflict_is_decision_relevant(
+            conflict, by_id, target, rule_required_ids
+        )
         annotated_conflicts.append({**conflict, "decisionRelevant": relevant})
         if relevant:
             result.errors.append(BuildError(
@@ -1173,7 +1188,10 @@ def build_target(
     scope_matching_ids = {element["id"] for element in scope_matching}
     time_applicable_ids = {element["id"] for element in time_applicable}
 
-    for element_id in target.get("requiresDefined", []):
+    requirements = [
+        (element_id, None) for element_id in target.get("requiresDefined", [])
+    ] + rule_requirements
+    for element_id, requiring_rule_id in requirements:
         element = by_id.get(element_id)
         code = "OBDS-BUILD-REQUIRED-NOT-DEFINED"
         if element is None:
@@ -1196,12 +1214,15 @@ def build_target(
             actual = element["state"]
             passed = actual == "defined"
 
-        result.requirements.append({
+        requirement = {
             "elementId": element_id,
             "expectedState": "defined",
             "actualState": actual,
             "result": "pass" if passed else "fail",
-        })
+        }
+        if requiring_rule_id is not None:
+            requirement["requiringRuleElementId"] = requiring_rule_id
+        result.requirements.append(requirement)
         if not passed:
             result.errors.append(BuildError(
                 code,

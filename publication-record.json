@@ -1,11 +1,11 @@
 {
  "canonicalUrl": "https://openbranddefinition.org/",
  "conformanceTestsFailed": 0,
- "conformanceTestsPassed": 184,
+ "conformanceTestsPassed": 199,
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "1.1.4",
+ "currentRelease": "1.1.5",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,7 +42,7 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:2d79da9b15b535c09dec170bd0f7c1c3ba5269405843f2abc7f2b809ef462be2",
+ "packageZipSha256": "sha256:5549c4521cd4fde29ad5c4ef7d0d4afe085ef538fa4751d120accb100bdd640e",
  "previousRelease": "1.1.2",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
@@ -125,6 +125,10 @@
   "1.1.4": {
    "packageZipSha256": "sha256:2d79da9b15b535c09dec170bd0f7c1c3ba5269405843f2abc7f2b809ef462be2",
    "testOutputHash": "sha256:40d2bfdaa293bc68dfc11501e84533eb736d9044baf16ceb0e003be574742f0d"
+  },
+  "1.1.5": {
+   "packageZipSha256": "sha256:5549c4521cd4fde29ad5c4ef7d0d4afe085ef538fa4751d120accb100bdd640e",
+   "testOutputHash": "sha256:1b3cecea8d1bfda688b42f8fdb8fab2d71d18877c0bf992606a4335a124e05ed"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -137,9 +141,9 @@
  "specificationFilesPublished": true,
  "specificationPublishedAt": "2026-08-30",
  "stableReleaseDate": "2026-08-30",
- "testOutputHash": "sha256:40d2bfdaa293bc68dfc11501e84533eb736d9044baf16ceb0e003be574742f0d",
+ "testOutputHash": "sha256:1b3cecea8d1bfda688b42f8fdb8fab2d71d18877c0bf992606a4335a124e05ed",
  "totalPublicContracts": 28,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 1,
- "websiteIndexSha256": "sha256:3e247da8030a2a753a1e11ea43c517128488672f78ca7476ac1f2f12851d2aee"
+ "websiteIndexSha256": "sha256:cfda4c7ea0bdca0b20447b8f08fc72afbddbfa184f936e2c8b5835f6f5c4120b"
 }

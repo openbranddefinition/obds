@@ -53,7 +53,7 @@ The repository root is the package root, so a clone is directly runnable:
 
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python reference/run_all.py        # 184 passed, 0 failed, 0 skipped
+.venv/bin/python reference/run_all.py        # 199 passed, 0 failed, 0 skipped
 .venv/bin/python reference/release-gate.py   # metadata, contract identity, licences, junk
 ```
 

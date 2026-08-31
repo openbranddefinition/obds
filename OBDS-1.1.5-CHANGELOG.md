@@ -2,9 +2,43 @@
 
 ## Release
 
-**Version:** OBDS 1.1.4  
+**Version:** OBDS 1.1.5  
 **Status:** Stable  
 **Date:** 2026-08-31
+
+## 1.1.5
+
+**Maintenance release. PATCH. No new capability.**
+
+An applicable RULE may now be used only when every element it names in
+`requiresDefinedRefs[]` resolves to exactly one applicable `defined` Brand
+Element. A dependency that is missing, out of scope for the target, invalid at
+the Build Plan `asOf`, lost to a more specific element in its subject, in an
+unresolved subject conflict, or in any state other than `defined` now fails the
+target build, as section 13 already required. No production artefact is written.
+
+Before this, the Foundation compiler contained no reference to the field at all.
+A RULE with `obligation: prohibit` and `enforcement: block` whose declared
+dependency did not exist, or existed as `unknown`, still compiled into an active
+check and the target built successfully. That is fail-open in the one place the
+specification is most explicit about failing closed.
+
+The fix reuses the existing requirement resolution, so the four established
+causes stay distinguishable: `OBDS-BUILD-REQUIRED-NOT-FOUND`,
+`-OUT-OF-SCOPE`, `-EXPIRED` and `-NOT-DEFINED`. The Build Report names the
+requiring RULE in `requirements[].requiringRuleElementId`. A dangling
+`requiresDefinedRefs` entry is now a manifest validation error, because
+section 7 already counts the field as a Foundation internal reference.
+
+`references[]` is unchanged and remains non-blocking: it is explanatory
+material, not an execution prerequisite. A RULE that loses its subject to a
+more specific RULE does not bind its dependencies, because it is never used.
+
+Conformance rises from 184 to 199 passing tests, the fifteen added tests being
+regression coverage for this defect. All five shipped example artefacts are
+byte-identical to 1.1.4 apart from the `builtAt` timestamp, no published hash
+moved, and no schema, Brand State, capability or `governedResultHash` semantic
+changed.
 
 ## 1.1.4
 

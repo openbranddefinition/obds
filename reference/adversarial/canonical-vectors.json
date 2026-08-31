@@ -1,6 +1,6 @@
 {
   "kind": "obds-canonical-vectors",
-  "obdsVersion": "1.1.4",
+  "obdsVersion": "1.1.5",
   "note": "Cross-language conformance vectors for OBDS Canonical JSON v1, sections 14.3 and 14.3b. Each vector is self-contained: `input` is the raw JSON document, `canonical` its canonical form as text, `canonicalHex` the lowercase hex of the canonical UTF-8 bytes, and `sha256` the digest of those bytes. An implementation in any language validates itself against these values without running another implementation beside it. `canonicalHex` is authoritative: it survives transports that mangle U+2028, U+2029 or line endings, which `canonical` does not.",
   "mustRejectNote": "Documents under `mustReject` are not canonicalisable. Two keys that become equal after the normalisation in steps 1 and 2 collide, and section 14.3 requires rejection rather than silent collapse.",
   "vectors": [

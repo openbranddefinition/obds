@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.1.4 release gate.
+"""OBDS 1.1.5 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 89,
+    "foundation": 104,
     "context-delivery": 3,
     "context-assembly": 15,
     "design-space": 18,
@@ -55,8 +55,8 @@ EXPECTED_SUITE_COUNTS = {
     "golden": 6,
     "adversarial": 38,
 }
-EXPECTED_TOTAL = 184
-EXPECTED_RELEASE = "1.1.4"
+EXPECTED_TOTAL = 199
+EXPECTED_RELEASE = "1.1.5"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -80,7 +80,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "1.1.3"
+PRIOR_RELEASE = "1.1.4"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",

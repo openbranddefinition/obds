@@ -184,7 +184,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "1.1.3"
+PRIOR_RELEASE = "1.1.4"
 
 
 def release_notes(release: str, counts: dict[str, int]) -> list[str]:

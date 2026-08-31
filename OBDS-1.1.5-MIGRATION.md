@@ -54,6 +54,15 @@ Before publishing 1.0:
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
 
+## 1.1.4 to 1.1.5
+
+No schema changed and no manifest change is required.
+
+The one observable change is that a manifest whose applicable RULE declares a
+`requiresDefinedRefs` dependency that does not resolve to `defined` now fails
+manifest validation or the target build. Such a manifest was already outside the
+specification; the reference compiler simply did not say so.
+
 ## 1.1.3 to 1.1.4
 
 No migration work. No schema changed and no manifest change is required.
