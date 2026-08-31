@@ -27,6 +27,11 @@ __pycache__/
 .tox/
 .eggs/
 
+# Local tool configuration. Gitignored, so it never reaches GitHub, but Vercel
+# does not read .gitignore: without this line `.claude/settings.local.json` was
+# served publicly. Same failure mode as `answers/` before 1.1.2.
+.claude/
+
 # Hosting and secrets.
 .vercel
 .env*

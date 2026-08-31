@@ -26,6 +26,9 @@ TIMEOUT = 25
 # Must NOT be served. Each entry is a path plus why it matters.
 MUST_BE_ABSENT = [
     ("/answers/", "the working-notes directory itself"),
+    ("/.claude/settings.local.json",
+     "local Claude Code permissions, gitignored but not excluded from the upload "
+     "until .vercelignore listed .claude/"),
     ("/answers/Sprint/research-input/LEDVANCE-Sustainability-Report.pdf",
      "third-party source PDF"),
     ("/answers/Sprint/research-input/"
