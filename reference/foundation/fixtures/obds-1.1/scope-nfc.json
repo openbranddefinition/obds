@@ -1,0 +1,72 @@
+{
+  "duplicates": [
+    {
+      "dimension": "locales",
+      "id": "identical-values",
+      "values": [
+        "en",
+        "en"
+      ]
+    },
+    {
+      "dimension": "audiences",
+      "id": "canonically-equivalent-values",
+      "values": [
+        "münchen",
+        "münchen"
+      ]
+    }
+  ],
+  "kind": "obds-1.1-fixture",
+  "matchingCases": [
+    {
+      "elementValue": "münchen",
+      "id": "element-nfc-target-nfd",
+      "targetValue": "münchen"
+    },
+    {
+      "elementValue": "münchen",
+      "id": "element-nfd-target-nfc",
+      "targetValue": "münchen"
+    }
+  ],
+  "note": "Section 9: scope values are sets compared after Unicode NFC normalisation. These cases exercise reciprocal matching, specificity, duplicate rejection, order invariance, and governed-result invariance.",
+  "orderVariants": [
+    {
+      "broaderValues": [
+        "münchen",
+        "wien"
+      ],
+      "id": "nfc-first",
+      "narrowValue": "münchen"
+    },
+    {
+      "broaderValues": [
+        "wien",
+        "münchen"
+      ],
+      "id": "nfd-second",
+      "narrowValue": "münchen"
+    }
+  ],
+  "specificityCases": [
+    {
+      "broaderValues": [
+        "münchen",
+        "wien"
+      ],
+      "id": "nfc-narrow",
+      "narrowValue": "münchen",
+      "targetValue": "münchen"
+    },
+    {
+      "broaderValues": [
+        "münchen",
+        "wien"
+      ],
+      "id": "nfd-narrow",
+      "narrowValue": "münchen",
+      "targetValue": "münchen"
+    }
+  ]
+}

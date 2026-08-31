@@ -2,9 +2,36 @@
 
 ## Release
 
-**Version:** OBDS 1.1.3  
+**Version:** OBDS 1.1.4  
 **Status:** Stable  
-**Date:** 2026-08-30
+**Date:** 2026-08-31
+
+## 1.1.4
+
+**Maintenance release. PATCH. No new capability.**
+
+Scope comparison now normalises values to Unicode NFC before comparing them, as
+section 9 already required. Scope collections compare as sets and array order is
+not significant. Duplicate scope values, including canonically equivalent NFC/NFD
+pairs, now make the document invalid.
+
+Before this, `canonical.py` NFC-normalised every string before hashing while the
+scope decision logic compared raw strings. Two manifests differing only in the
+Unicode form of a scope value therefore carried an identical `approval.contentHash`
+yet produced different governed build decisions: a stale broader value could win a
+subject over its narrower override, and an `obligation: prohibit` /
+`enforcement: block` RULE could silently stop applying, with `compiledChecks`
+dropping from 1 to 0 and no error anywhere.
+
+The fix is one helper applied at three comparison sites in the reference compiler:
+scope matching, scope specificity and scope validation. Normalisation happens at
+comparison time, so no stored Brand Truth is mutated and no published hash moves.
+All five shipped example artefacts are byte-identical to 1.1.3 apart from the
+`builtAt` timestamp. No schema changed, no Brand State was added, no capability was
+added and `governedResultHash` semantics are unchanged.
+
+**Conformance.** 184 cases pass, 0 fail, 0 skip. Foundation grew from 81 to 89
+with eight Unicode NFC scope-comparison regression cases.
 
 ## 1.1.3
 

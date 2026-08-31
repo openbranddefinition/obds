@@ -2,9 +2,9 @@
 
 ## OBDS 1.1: Stable Specification
 
-**Version:** 1.1.3  
+**Version:** 1.1.4  
 **Status:** Stable  
-**Date:** 2026-08-30  
+**Date:** 2026-08-31  
 **Project home:** https://openbranddefinition.org  
 
 ---
@@ -2806,7 +2806,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.1.3.md`;
+1. one normative specification: `OBDS-1.1.4.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

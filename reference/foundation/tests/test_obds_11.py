@@ -18,6 +18,8 @@ from obds_ref.compiler import (
     build_target,
     governed_result_payload,
     load_data,
+    scope_matches,
+    validate_manifest,
 )
 from obds_ref.canonical import canonical_json_bytes, sha256_id
 
@@ -246,6 +248,136 @@ def test_element_restricting_a_dimension_the_target_omits_is_not_applicable():
     result = build_target(manifest, plan, plan["targets"][0])
     assert result.status == "failed"
     assert result.requirements[0]["actualState"] == "not_applicable"
+
+
+# --- 1.1.4: scope sets use Unicode NFC --------------------------------------
+
+def _rehash_scope_case(manifest, plan):
+    from obds_ref.canonical import manifest_content_hash
+
+    manifest["approval"].pop("contentHash", None)
+    manifest["approval"]["contentHash"] = manifest_content_hash(manifest)
+    plan["manifestRef"]["contentHash"] = manifest["approval"]["contentHash"]
+
+
+def _scope_precedence_result(case):
+    base_manifest, base_plan = example("foundation-minimal")
+    manifest = copy.deepcopy(base_manifest)
+    template = copy.deepcopy(manifest["elements"][0])
+
+    broader = copy.deepcopy(template)
+    broader.update({
+        "id": "fact.broad",
+        "subject": "s.tagline",
+        "scope": {"audiences": list(case["broaderValues"])},
+        "value": {"name": "STALE-BROAD-VALUE"},
+    })
+    narrow = copy.deepcopy(template)
+    narrow.update({
+        "id": "fact.narrow",
+        "subject": "s.tagline",
+        "scope": {"audiences": [case["narrowValue"]]},
+        "value": {"name": "CORRECT-NARROW-VALUE"},
+    })
+    manifest["elements"].extend([broader, narrow])
+
+    plan = copy.deepcopy(base_plan)
+    plan["targets"][0]["scope"]["audiences"] = [case["targetValue"]]
+    _rehash_scope_case(manifest, plan)
+    return build_target(manifest, plan, plan["targets"][0])
+
+
+@pytest.mark.parametrize("case", fixture("scope-nfc.json")["matchingCases"],
+                         ids=lambda c: c["id"])
+def test_scope_matching_and_required_truth_use_nfc(case):
+    element_scope = {"audiences": [case["elementValue"]]}
+    target_scope = {"audiences": [case["targetValue"]]}
+    assert scope_matches(element_scope, target_scope)
+
+    manifest, plan = example("foundation-minimal")
+    manifest = copy.deepcopy(manifest)
+    manifest["elements"][0]["scope"] = element_scope
+    plan = copy.deepcopy(plan)
+    plan["targets"][0]["scope"].update(target_scope)
+    _rehash_scope_case(manifest, plan)
+
+    result = build_target(manifest, plan, plan["targets"][0])
+    assert result.status == "ready", [error.code for error in result.errors]
+    assert result.requirements == [{
+        "elementId": "structure.brand",
+        "expectedState": "defined",
+        "actualState": "defined",
+        "result": "pass",
+    }]
+
+
+def test_scope_specificity_and_governed_hash_use_nfc_in_both_representations():
+    results = [
+        _scope_precedence_result(case)
+        for case in fixture("scope-nfc.json")["specificityCases"]
+    ]
+
+    for result in results:
+        assert result.status == "ready", [error.code for error in result.errors]
+        assert result.conflicts == []
+        selected = {record["id"]: record for record in result.artefact["elementRecords"]}
+        assert selected["fact.narrow"]["value"]["name"] == "CORRECT-NARROW-VALUE"
+        assert "fact.broad" not in selected
+    assert len({result.artefact["governedResultHash"] for result in results}) == 1
+
+
+@pytest.mark.parametrize("case", fixture("scope-nfc.json")["matchingCases"],
+                         ids=lambda c: c["id"])
+def test_prohibit_rule_remains_applicable_and_executes_after_nfc_matching(case):
+    manifest = load_data(ROOT / "examples" / "simple" / "manifest.yaml")
+    plan = load_data(ROOT / "examples" / "simple" / "build-plan.yaml")
+    manifest = copy.deepcopy(manifest)
+    plan = copy.deepcopy(plan)
+    rule = next(element for element in manifest["elements"] if element["id"] == "rule.no-best")
+    assert rule["value"]["obligation"] == "prohibit"
+    assert rule["value"]["enforcement"] == "block"
+    rule["scope"] = {"audiences": [case["elementValue"]]}
+    plan["targets"][0]["scope"]["audiences"] = [case["targetValue"]]
+    _rehash_scope_case(manifest, plan)
+
+    result = build_target(manifest, plan, plan["targets"][0])
+    assert result.status == "ready", [error.code for error in result.errors]
+    assert len(result.artefact["compiledChecks"]) == 1
+
+    from obds_ref.checks import execute_checks
+    findings = execute_checks(
+        result.artefact["compiledChecks"], phase="postflight", text="We are the best."
+    )
+    assert len(findings) == 1
+    assert findings[0].enforcement == "block"
+    assert findings[0].passed is False
+
+
+@pytest.mark.parametrize("case", fixture("scope-nfc.json")["duplicates"],
+                         ids=lambda c: c["id"])
+def test_duplicate_scope_values_are_invalid_after_nfc(case):
+    manifest, _ = example("foundation-minimal")
+    manifest = copy.deepcopy(manifest)
+    manifest["elements"][0]["scope"] = {case["dimension"]: list(case["values"])}
+
+    errors = validate_manifest(manifest, verify_hash=False)
+    assert (
+        f"structure.brand: scope.{case['dimension']} contains duplicate values "
+        "after Unicode NFC normalisation"
+    ) in errors
+
+
+def test_scope_set_order_does_not_change_the_governed_decision():
+    results = []
+    for variant in fixture("scope-nfc.json")["orderVariants"]:
+        case = {**variant, "targetValue": "münchen"}
+        results.append(_scope_precedence_result(case))
+
+    assert all(result.status == "ready" for result in results)
+    assert all(result.conflicts == [] for result in results)
+    assert all("fact.narrow" in result.artefact["availableElementIds"] for result in results)
+    assert all("fact.broad" not in result.artefact["availableElementIds"] for result in results)
+    assert len({result.artefact["governedResultHash"] for result in results}) == 1
 
 
 # --- tokenizer ---------------------------------------------------------------

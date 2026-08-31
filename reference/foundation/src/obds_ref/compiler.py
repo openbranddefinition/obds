@@ -171,6 +171,10 @@ def save_yaml(path: str | Path, data: dict[str, Any]) -> None:
     )
 
 
+def _normalised_scope_values(values: list[str]) -> set[str]:
+    return {unicodedata.normalize("NFC", value) for value in values}
+
+
 def _check_scope(scope: Any, *, target: bool) -> list[str]:
     errors: list[str] = []
     if scope is None:
@@ -187,10 +191,11 @@ def _check_scope(scope: Any, *, target: bool) -> list[str]:
         if not all(isinstance(item, str) and item for item in values):
             errors.append(f"scope.{dimension} values must be non-empty strings")
             continue
+        if len(_normalised_scope_values(values)) != len(values):
+            errors.append(f"scope.{dimension} contains duplicate values after Unicode NFC normalisation")
         if target and len(values) != 1:
             errors.append(f"target scope.{dimension} must contain exactly one value")
     return errors
-
 
 
 def _hex_to_rgb(value: str) -> list[int] | None:
@@ -517,7 +522,8 @@ def _scope_more_specific(a: dict[str, list[str]], b: dict[str, list[str]]) -> bo
     for dimension, b_values in b.items():
         if dimension not in a:
             return False
-        a_set, b_set = set(a[dimension]), set(b_values)
+        a_set = _normalised_scope_values(a[dimension])
+        b_set = _normalised_scope_values(b_values)
         if not a_set.issubset(b_set):
             return False
         if a_set != b_set:
@@ -983,12 +989,14 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
     return errors
 
 
-def scope_matches(element_scope: dict[str, list[Any]], target_scope: dict[str, list[Any]]) -> bool:
+def scope_matches(element_scope: dict[str, list[str]], target_scope: dict[str, list[str]]) -> bool:
     for dimension, allowed_values in element_scope.items():
         target_values = target_scope.get(dimension)
         if not target_values:
             return False
-        if target_values[0] not in allowed_values:
+        if not _normalised_scope_values(target_values).issubset(
+            _normalised_scope_values(allowed_values)
+        ):
             return False
     return True
 

@@ -54,6 +54,15 @@ Before publishing 1.0:
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
 
+## 1.1.3 to 1.1.4
+
+No migration work. No schema changed and no manifest change is required.
+
+Scope values are now normalised to Unicode NFC when they are compared, as section
+9 already required. A consumer can observe a behavioural change only if a manifest
+currently relies on an NFD scope value failing to match its canonically equivalent
+NFC value. That manifest was already broken; 1.1.4 makes the required comparison.
+
 ## 1.0.4 to 1.1
 
 No migration work for a manifest. Manifests stay at `schemaVersion: 1.0.0` and no

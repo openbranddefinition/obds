@@ -1,0 +1,161 @@
+{
+  "kind": "obds-schema-index",
+  "note": "`schemas` and `valueSchemas` are the frozen OBDS 1.0.0 contract surface, unchanged since 1.0.0. `versionedSchemas` carries the contracts published beside it at their own version.",
+  "release": "1.1.4",
+  "schemaContractVersion": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "schemas": [
+    {
+      "capability": "context-assembly",
+      "file": "assembly-request.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/assembly-request.schema.json"
+    },
+    {
+      "capability": "foundation",
+      "file": "brand-manifest.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/brand-manifest.schema.json"
+    },
+    {
+      "capability": "compiled-runtime",
+      "file": "build-plan.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/build-plan.schema.json"
+    },
+    {
+      "capability": "compiled-runtime",
+      "file": "compiled-context.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/compiled-context.schema.json"
+    },
+    {
+      "capability": "composition",
+      "file": "composition-relation.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/composition-relation.schema.json"
+    },
+    {
+      "capability": "composition",
+      "file": "composition-role-system.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/composition-role-system.schema.json"
+    },
+    {
+      "capability": "foundation",
+      "file": "curation-assessment.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/curation-assessment.schema.json"
+    },
+    {
+      "capability": "foundation",
+      "file": "curation-coverage.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/curation-coverage.schema.json"
+    },
+    {
+      "capability": "composition",
+      "file": "identity-hierarchy.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/identity-hierarchy.schema.json"
+    },
+    {
+      "capability": "foundation",
+      "file": "manifest-change-report.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/manifest-change-report.schema.json"
+    },
+    {
+      "capability": "obds-assurance-lineage",
+      "file": "measurement-observation.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/measurement-observation.schema.json"
+    },
+    {
+      "capability": "foundation",
+      "file": "measurement-v2.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/measurement-v2.schema.json"
+    },
+    {
+      "capability": "context-assembly",
+      "file": "model-input-package.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/model-input-package.schema.json"
+    },
+    {
+      "capability": "composition",
+      "file": "omission-priority.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/omission-priority.schema.json"
+    },
+    {
+      "capability": "context-delivery",
+      "file": "reasoning-chapter.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/reasoning-chapter.schema.json"
+    },
+    {
+      "capability": "visual-operations",
+      "file": "render-geometry-record.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/render-geometry-record.schema.json"
+    },
+    {
+      "capability": "context-assembly",
+      "file": "review-result.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/review-result.schema.json"
+    },
+    {
+      "capability": "compiled-runtime",
+      "file": "runtime-decision-record.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/runtime-decision-record.schema.json"
+    },
+    {
+      "capability": "context-delivery",
+      "file": "search-card.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/search-card.schema.json"
+    },
+    {
+      "capability": "obds-assurance-lineage",
+      "file": "source-contradiction-record.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/source-contradiction-record.schema.json"
+    },
+    {
+      "capability": "visual-operations",
+      "file": "visual-check.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.0.0/visual-check.schema.json"
+    }
+  ],
+  "status": "stable",
+  "valueSchemas": [
+    {
+      "capability": "foundation",
+      "file": "brand-group.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/1.0.0/brand-group.schema.json",
+      "schemaHash": "sha256:b84a5fd2fb8dbc7a46b66a3cea97d6496f454ab0d78b11668ed5793491304f91"
+    },
+    {
+      "capability": "foundation",
+      "file": "brand-identity.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json",
+      "schemaHash": "sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51"
+    },
+    {
+      "capability": "foundation",
+      "file": "clear-zone.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/1.0.0/clear-zone.schema.json",
+      "schemaHash": "sha256:130382ace9fc3a6e23ada9160f6ee2329f918a91ca186d8ce3f67065cd093d33"
+    },
+    {
+      "capability": "foundation",
+      "file": "colour.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/1.0.0/colour.schema.json",
+      "schemaHash": "sha256:2a037f40a4fe192a478482a07911fb0362a1f9a428ce1d438442fdf9d65dc592"
+    },
+    {
+      "capability": "foundation",
+      "file": "rule.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json",
+      "schemaHash": "sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787"
+    },
+    {
+      "capability": "foundation",
+      "file": "semantic-boundary.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/1.0.0/semantic-boundary.schema.json",
+      "schemaHash": "sha256:b4eb01d3f91577f5e1f1722bcc80dff64af24f6e78d888ffb72bc92d1bf60ec0"
+    }
+  ],
+  "versionedSchemas": [
+    {
+      "capability": "compiled-runtime",
+      "file": "1.1.0/compiled-context.schema.json",
+      "id": "https://openbranddefinition.org/schemas/1.1.0/compiled-context.schema.json",
+      "schemaHash": "sha256:8ac36e921e7e03532fbebe6a0ce0e584adc55a6c72a794c862681a29d4a5ef99"
+    }
+  ]
+}
