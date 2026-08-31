@@ -26,6 +26,9 @@ TIMEOUT = 25
 # Must NOT be served. Each entry is a path plus why it matters.
 MUST_BE_ABSENT = [
     ("/answers/", "the working-notes directory itself"),
+    ("/openbranddefinition-site-0.9.5-public-draft.zip",
+     "withdrawn draft site archive; the directory pattern in .vercelignore "
+     "carried a trailing slash and never matched the companion zip"),
     ("/.claude/settings.local.json",
      "local Claude Code permissions, gitignored but not excluded from the upload "
      "until .vercelignore listed .claude/"),
@@ -59,6 +62,10 @@ MUST_BE_ABSENT = [
 # Must be served. A blocklist that also breaks the site is not a fix.
 MUST_BE_PRESENT = [
     "/",
+    # The release download. Listed here because .vercelignore excludes root-level
+    # archives: if that pattern ever stops being root-anchored, this fails loudly
+    # instead of the download quietly disappearing.
+    "/spec/1.1.4/OBDS-1.1.4-FINAL.zip",
     "/llms.txt",
     "/publication-record.json",
     "/sitemap.xml",

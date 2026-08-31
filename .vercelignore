@@ -13,6 +13,13 @@ licensing/
 archive/
 openbranddefinition-site-*-public-draft/
 
+# The trailing slash above matches the unpacked directory only, so the companion
+# archive `openbranddefinition-site-0.9.5-public-draft.zip` stayed in the upload
+# and was served publicly. Root-anchored, so the published release archives under
+# spec/<version>/OBDS-<version>-FINAL.zip are untouched; deploy-smoke-test.py
+# asserts both halves of that.
+/*.zip
+
 # Environments and caches.
 .venv/
 .venv*/
