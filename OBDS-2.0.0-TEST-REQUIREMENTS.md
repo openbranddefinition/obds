@@ -1,19 +1,19 @@
-# OBDS 1.1.6 Test and Runtime Requirements
+# OBDS 2.0.0 Test and Runtime Requirements
 
-This file declares every dependency needed to reproduce the official 279/279 conformance run.
+This file declares every dependency needed to reproduce the official 429/429 conformance run.
 It separates what a consumer of OBDS needs from what the reference conformance suite needs.
 
 ## 1. OBDS consumer requirements
 
 **None imposed by the specification.**
 
-OBDS 1.1.6 is a data and contract specification. A conforming implementation may be written in
+OBDS 2.0.0 is a data and contract specification. A conforming implementation may be written in
 any language. The normative artefacts are plain text:
 
-- `OBDS-1.1.6.md` (normative specification);
+- `OBDS-2.0.0.md` (normative specification);
 - `schemas/*.json` (21 public JSON Schemas, draft 2020-12);
 - `value-schemas/*.json` (6 public value-contract JSON Schemas, draft 2020-12);
-- `OBDS-1.1.6-SCHEMA-INDEX.json` and `OBDS-1.1.6-CAPABILITY-REGISTRY.json`.
+- `OBDS-2.0.0-SCHEMA-INDEX.json` and `OBDS-2.0.0-CAPABILITY-REGISTRY.json`.
 
 To consume OBDS you need a JSON Schema validator for your platform, a JSON reader and, if you
 accept governed YAML, a YAML 1.2 reader that rejects duplicate keys. Nothing in this package is
@@ -73,7 +73,7 @@ node --version                     # must succeed
 From an unpacked release archive the same two commands work unchanged:
 
 ```bash
-unzip OBDS-1.1.6-FINAL.zip && cd OBDS-1.1.6-FINAL
+unzip OBDS-2.0.0-FINAL.zip && cd OBDS-2.0.0-FINAL
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python reference/run_all.py
 .venv/bin/python reference/release-gate.py
@@ -82,7 +82,7 @@ python -m venv .venv && .venv/bin/pip install -r requirements.txt
 Expected outcome:
 
 ```text
-279 passed, 0 failed, 0 skipped
+429 passed, 0 failed, 0 skipped
 ```
 
 The suite contains no `skipif`, no `pytest.skip` and no `xfail`. Every case runs on every
@@ -117,7 +117,7 @@ gate is junk that would actually be shipped: `.DS_Store`, `Thumbs.db`, editor ba
 declared passed count, proves the public schema surface and the normative contract fingerprints
 have not moved, verifies every file listed in `PACKAGE-MANIFEST.json` against its recorded
 sha256, and proves the package ships no junk. It is a package check, not an OBDS capability and
-not part of the 279-case conformance suite.
+not part of the 429-case conformance suite.
 
 ```bash
 python reference/release-gate.py
@@ -127,22 +127,25 @@ python reference/release-gate.py
 
 | Suite | Cases |
 |---|---:|
-| foundation | 173 |
+| foundation | 323 |
 | context-delivery | 3 |
 | context-assembly | 24 |
 | design-space | 20 |
 | integration | 15 |
 | golden | 6 |
 | adversarial | 38 |
-| **Total** | **279** |
+| **Total** | **429** |
 
 The foundation suite grew from 27 to 43 in OBDS 1.1, to 49 in 1.1.1 with the `requiresDefined`
 precedence cases, the `asOf` verbatim case and the section 14 example check, to 75 in 1.1.2
 with the section 14.3b escape table and the section 14.0 validity-window cases, to 81 in 1.1.3
 with the conflict-relevance and governed-selection cases, to 89 in 1.1.4 with the eight
 Unicode NFC scope-comparison regression cases, to 104 in 1.1.5 with the fifteen
-`requiresDefinedRefs` regression cases, and to 173 in 1.1.6 with the canonical identity,
-pinned Unicode, `elementValueRef` applicability and executable validity-boundary cases. The adversarial
+`requiresDefinedRefs` regression cases, to 173 in 1.1.6 with the canonical identity,
+pinned Unicode, `elementValueRef` applicability and executable validity-boundary cases, and to
+323 in 2.0.0 with the governed YAML scalar cases, the section 14.3a conflict and hash cases,
+the evidence four section 26.2 requirements now name, and the regression cases for the
+defects three independent reviews found in the 2.0.0 candidate itself. The adversarial
 suite grew from 23 to 33 in 1.1.1 with the line-ending vectors. It carried
 27 cases from 1.0.2, when two cases were added to verify the published examples in `examples/`.
 Releases up to and including 1.0.1 ran 105 cases with 25 in foundation; those historical results

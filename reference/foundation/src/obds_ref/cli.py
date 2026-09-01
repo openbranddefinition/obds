@@ -22,6 +22,18 @@ from .compiler import (
 )
 
 
+def _load_conformance_fixture(path):
+    """A canonical fixture is read raw, so it never met the section 28.1 bound.
+
+    A deep document crashed the runner with a RecursionError instead of failing
+    the case, which is the one failure mode a conformance runner must not have.
+    """
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, RecursionError) as exc:
+        raise ValidationFailure([f"{path}: parse error: {exc}"]) from exc
+
+
 def _print_json(value: Any) -> None:
     print(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True))
 
@@ -137,7 +149,7 @@ def command_conformance(args):
             def model(prompt): calls.append(prompt); return case.get("modelOutput",""),"conformance-request-1"
             record=run_with_model(artefact,task_input=case.get("taskInput",""),model=model,target_id=case.get("targetId"),provider="conformance-adapter",model_id="instrumented-model"); passed=record["decision"]==case["expectedDecision"] and len(calls)==case["expectedModelCalls"]; details={"decision":record["decision"],"modelCalls":len(calls)}
         elif typ=="canonical":
-            fixture=json.loads((base/case["document"]).read_text(encoding="utf-8")); from .canonical import manifest_content_hash; m=fixture["manifest"]["expectedContentHash"]==manifest_content_hash(fixture["manifest"]["input"]); a=fixture["artefact"]["expectedArtifactHash"]==artefact_hash(fixture["artefact"]["input"]); passed=m and a; details={"manifestHash":m,"artifactHash":a}
+            fixture=_load_conformance_fixture(base/case["document"]); from .canonical import manifest_content_hash; m=fixture["manifest"]["expectedContentHash"]==manifest_content_hash(fixture["manifest"]["input"]); a=fixture["artefact"]["expectedArtifactHash"]==artefact_hash(fixture["artefact"]["input"]); passed=m and a; details={"manifestHash":m,"artifactHash":a}
         results.append({"id":case["id"],"type":typ,"passed":passed,**details})
     pc=sum(1 for x in results if x["passed"]); fc=len(results)-pc
     from datetime import datetime,timezone

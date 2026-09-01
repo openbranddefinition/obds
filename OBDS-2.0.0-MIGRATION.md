@@ -54,6 +54,138 @@ Before publishing 1.0:
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
 
+## 1.1.6 to 2.0.0
+
+**This is the only OBDS release so far that can invalidate a manifest you already
+have.** Almost certainly it does not. Run the check at the end of this section
+and you will know in a second.
+
+No schema changed. No Brand State was added. No capability, profile or field was
+added or removed. `schemaVersion` stays `1.0.0` for manifests and `1.1.0` for
+compiled contexts. If your documents pass the check below **and contain no plain
+scalar written in exponent notation**, an OBDS 2.0 implementation reads them
+exactly as 1.1.6 did, and every hash you have stays valid. Exponent notation is
+the one change the check cannot report, because the document stays valid and
+only its value moves; it has its own check below.
+
+### What changed
+
+Section 28 always made JSON the canonical interchange format and allowed YAML
+where it produces an equivalent JSON document. It never said how a YAML plain
+scalar becomes a JSON value. Section 28.1 now says, and that pins two things
+that were previously left to the parser.
+
+**One class of form changes meaning: exponent notation.** An unquoted scalar
+written with an `e` or `E` exponent — `1e3`, `1E3`, `2E-2`, `1.5e3`, `-2e-2`,
+`9e9` — was the *string* under a YAML 1.1 reader and is the *number* under 2.0,
+which is what the same characters have always meant read as JSON. The class is
+every plain scalar matching the JSON number grammar with an exponent, except the
+spellings a YAML 1.1 reader already read as a number, which are those carrying
+both a decimal point and a signed exponent (`1.0e+3`, `1.23e-4`); those are
+unchanged. This is the only change in the release that is silent: the document
+stays valid and the value moves under it, so a hash computed over it moves too.
+
+**The rejected forms.** Each is a form some YAML version reads as a value the
+JSON grammar does not produce, so leaving it accepted meant a document whose
+meaning depended on its reader. **Was** is what the OBDS 1.1.6 reference reader
+did with it, which is not always what YAML 1.2 does; the two disagreeing is the
+whole reason the form is rejected. Write the **Write instead** cell exactly: a
+form that was a string must stay a string, or your `approval.contentHash` moves.
+
+| Written in your YAML | Was, under 1.1.6 | Is now | Write instead |
+|---|---|---|---|
+| `017` | the number 15 | rejected | `15`, or `'017'` for the string |
+| `017.5` | the number 17.5 | rejected | `17.5`, or `'017.5'` for the string |
+| `017e3` | the string `"017e3"` | rejected | `'017e3'` |
+| `+42` | the number 42 | rejected | `42` |
+| `1.` | the number 1.0 | rejected | `1.0` |
+| `1.e3` | the string `"1.e3"` | rejected | `'1.e3'` |
+| `.5` | the number 0.5 | rejected | `0.5` |
+| `1_000` | the number 1000 | rejected | `1000` |
+| `1_000.0`, `1_0.5`, `.5_0`, `0.0_` | the numbers 1000.0, 10.5, 0.5, 0.0 | rejected | `1000.0`, `10.5`, `0.5`, `0.0` |
+| `12:30` | the number 750 | rejected | `'12:30'` |
+| `1_0:30`, `40_:3`, `4_:1:2` | the numbers 630, 2403, 14462 | rejected | quote them, or write the number you meant |
+| `2026-09-01` | already rejected: a date object, which governed JSON has no type for | rejected, with a message that names it | `'2026-09-01'` |
+| `2026-09-01 00:00:00 Z` | already rejected: a datetime object | rejected, with a message that names it | `'2026-09-01T00:00:00Z'` |
+| `0x1f`, `0b1010` | the numbers 31, 10 | rejected | `31`, `10` |
+| `0o17` | the string `"0o17"` | rejected | `'0o17'` |
+| `~` | null | rejected | `null` |
+| an empty value | null | rejected | `null` |
+| a document nesting more than 100 collections deep, counting the outermost | read, up to whatever the reader's stack allowed | rejected | flatten it; the deepest document this release ships nests 10 |
+| any exponent form: `1e3`, `1E3`, `2E-2`, `-1.5e3` | the string | **the number** | `'1e3'` for the string; nothing for the number |
+
+Every row above except the last is loud: the document is rejected and the
+message names the value. The last row is the only silent one in this release.
+
+**A form carrying an exponent needs one more look before you rewrite it.** The
+1.1.6 reader used the YAML 1.1 float grammar, which required the exponent to
+carry a sign, so within a single row the 1.1.6 value flips with that sign:
+`1.e3` was the string `"1.e3"` but `1.e+3` was the number `1000.0`; `.5e3` was a
+string but `.5e+3` was `500.0`; `+1.5e3` was a string but `+1.5e+3` was `1500.0`;
+`017e3` was a string but `017.5e+3` was `17500.0`. Quote the unsigned spellings
+and write the plain number for the signed ones. Getting this backwards is the
+one way to follow this table and still move a hash.
+
+A raw U+0085, U+2028 or U+2029 is also rejected, because YAML 1.1 counts them as
+line breaks and YAML 1.2 does not. Write them as an escape in a double-quoted
+scalar; section 14.3b already escapes two of them, so they remain ordinary
+governed content.
+
+Explicit tags such as `!!str` and `!!int` are rejected, as is the merge key
+`<<`. Anchors and aliases keep working: an alias expands to the same node in
+every YAML version, so it was never ambiguous.
+
+Nothing here applies to JSON. If you author in JSON, 2.0 reads your documents
+exactly as 1.1.6 did.
+
+### What to do
+
+Two checks, because the release has two kinds of change and one command cannot
+report both.
+
+**1. The rejected forms, which are loud.** Validate every governed YAML document
+you have, not only manifests: a Build Plan carries no self-hash and its target is
+hashed verbatim into `governedResultHash`, so an ambiguous scalar there moves a
+hash with nothing to compare against.
+
+```bash
+python -m obds_ref.cli validate path/to/manifest.yaml
+```
+
+If it validates, no rejected form is present. If it reports an ambiguous plain
+scalar, the message names the value and the reason, and the table above says what
+to write instead.
+
+**2. Exponent notation, which is silent.** Nothing rejects it, so list the
+occurrences and read them:
+
+```bash
+grep -rnE '(^|[^0-9A-Za-z_.+-])[-+]?[0-9]+(\.[0-9]*)?[eE][-+]?[0-9]+([^0-9A-Za-z_.]|$)' \
+  path/to/governed/*.yaml
+```
+
+Every scalar in exponent notation is on a line it prints. The reverse does not
+hold: it also prints lines where the pattern appears inside a comment
+(`# see 1e3 below`), a URL or another string, because it matches text and not
+YAML structure. Read the lines; under 2.0 every unquoted occurrence is a
+number. If you meant the number, nothing changes. If you meant
+the string, quote it. The pattern deliberately over-reports: it prints quoted
+occurrences too, and the two spellings that were already numbers (`1.0e+3`,
+`1.23e-4`). It matches the value wherever it sits on the line, so flow mappings
+(`{a: 1e3}`), inline sequences (`[1e3, 2e4]`) and a scalar with a trailing
+comment are all reported. A list you read is safer than a verdict you trust.
+
+Only after both checks pass does the promise at the top of this section hold.
+
+If a value did change, quote it or rewrite it, then recompute
+`approval.contentHash` and re-approve the manifest, exactly as for any other
+change to governed content. A changed hash means the governed truth changed, and
+that is a decision a named human makes, not a migration script.
+
+The reference implementation ships 29 governed YAML documents. All 29 were
+checked against both readings, and against the exponent pattern above, and none
+of them changed.
+
 ## 1.1.5 to 1.1.6
 
 No schema changed and no manifest change is required. Four observable changes,

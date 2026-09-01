@@ -86,20 +86,216 @@ def _strict_pairs(pairs):
 
 
 class _OBDSSafeLoader(yaml.SafeLoader):
+    """Section 28.1. Governed YAML is a JSON data model written in YAML.
+
+    Every implicit resolver is removed, so a plain scalar reaches one
+    constructor that owns the whole decision. An explicit tag is refused at
+    compose time, before any constructor runs, and the merge key `<<` is
+    refused where the mapping is built: each of them lets the same characters
+    produce a different data model, which is the defect this section closes.
+    `!!str 1e3` must not be a way to reach a value the plain rules would not
+    produce, and `<<` must not mean one thing here and another in every other
+    YAML reader.
+
+    Anchors and aliases are permitted, because an alias expands to the same
+    node in every YAML version. Their expansion is bounded by
+    `_reject_unbounded_alias_expansion`, which also rejects a recursive alias.
+    Nesting is bounded here, for the same reason and with the same argument: an
+    unstated limit is whatever the runtime's stack happens to be, which is not a
+    thing two implementations can agree on.
+    """
+
+    _depth = 0
+
+    def compose_node(self, parent, index):
+        event = self.peek_event()
+        tag = getattr(event, "tag", None)
+        if tag is not None:
+            # Including the non-specific "!": it suppresses resolution, so it is
+            # another way to reach a value the plain rules would not produce.
+            raise yaml.constructor.ConstructorError(
+                None, None,
+                f"governed YAML must not use an explicit tag: {tag}",
+                event.start_mark,
+            )
+        opens_collection = isinstance(
+            event, (yaml.events.SequenceStartEvent, yaml.events.MappingStartEvent)
+        )
+        if opens_collection:
+            if self._depth >= MAX_NESTING_DEPTH:
+                raise yaml.constructor.ConstructorError(
+                    None, None,
+                    f"nesting exceeds {MAX_NESTING_DEPTH} levels",
+                    event.start_mark,
+                )
+            self._depth += 1
+        try:
+            return super().compose_node(parent, index)
+        finally:
+            if opens_collection:
+                self._depth -= 1
+
+
+class _AmbiguousYAMLScalar(ValueError):
     pass
 
 
-# YAML 1.2 boolean semantics: only true/false are booleans. Values such as NO
-# remain strings instead of becoming false.
-for ch, resolvers in list(_OBDSSafeLoader.yaml_implicit_resolvers.items()):
-    _OBDSSafeLoader.yaml_implicit_resolvers[ch] = [
-        item for item in resolvers if item[0] != "tag:yaml.org,2002:bool"
-    ]
-_OBDSSafeLoader.add_implicit_resolver(
-    "tag:yaml.org,2002:bool",
-    re.compile(r"^(?:true|false|True|False|TRUE|FALSE)$"),
-    list("tTfF"),
+# Section 28.1. Governed YAML resolves plain scalars under the YAML 1.2 Core
+# Schema, and a plain scalar that resolves to null, a boolean or a number must
+# denote the same value read as a JSON literal. Everything else is a string.
+#
+# Before 2.0.0 the loader inherited PyYAML's YAML 1.1 implicit resolvers with
+# only the boolean set replaced, so the same bytes meant different things
+# depending on the file extension: `{"a": 1e3}` was the number 1000 as JSON and
+# the string "1e3" as YAML, and therefore had two canonical hashes.
+_YAML_NULL = re.compile(r"^(?:null|Null|NULL)$")
+_YAML_BOOL = re.compile(r"^(?:true|True|TRUE|false|False|FALSE)$")
+# The JSON number grammar, not a YAML one. A plain scalar that resolves to a
+# number therefore denotes what the same characters denote read as JSON.
+_JSON_NUMBER = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?$")
+
+# The YAML 1.1 int and float resolvers, in the shape PyYAML implements them.
+# They are here to be rejected against, not resolved with: a scalar that YAML
+# 1.1 reads as a number and the JSON grammar does not produce is exactly the
+# form whose meaning depends on the reader.
+_YAML11_INT = re.compile(r"""^(?:[-+]?0b[01_]+
+                             |[-+]?0[0-7_]+
+                             |[-+]?(?:0|[1-9][0-9_]*)
+                             |[-+]?0x[0-9a-fA-F_]+
+                             |[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+)$""", re.X)
+_YAML11_FLOAT = re.compile(r"""^(?:[-+]?[0-9][0-9_]*\.[0-9_]*(?:[eE][-+][0-9]+)?
+                               |\.[0-9][0-9_]*(?:[eE][-+][0-9]+)?
+                               |[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*
+                               |[-+]?\.(?:inf|Inf|INF)
+                               |\.(?:nan|NaN|NAN))$""", re.X)
+
+
+class _Yaml11NumberNotJson:
+    """A pattern object for the rejection table: matches on the class, not a spelling."""
+
+    def match(self, text: str):
+        if _JSON_NUMBER.match(text):
+            return None
+        return _YAML11_INT.match(text) or _YAML11_FLOAT.match(text)
+
+
+_YAML11_NUMBER_NOT_JSON = _Yaml11NumberNotJson()
+
+
+def _yaml11_reason(text: str) -> str:
+    """Name the YAML 1.1 spelling the author actually wrote."""
+    if "_" in text:
+        return "digit separator: a number in YAML 1.1, a string in YAML 1.2"
+    if ":" in text:
+        return "sexagesimal: a number in YAML 1.1, a string in YAML 1.2"
+    return "a number in YAML 1.1, not a JSON number"
+
+
+# Section 28.1, the rejection table. Each form is one some YAML version reads as
+# a value the JSON grammar does not produce, so resolving it either way would
+# make a governed document's meaning depend on which YAML version the reader
+# carries. Quoting always resolves the rejection.
+_YAML_AMBIGUOUS = (
+    (re.compile(r"^[-+]?0[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+)?$"), "leading zero: octal or a float in YAML 1.1, decimal in YAML 1.2, not a JSON number"),
+    (re.compile(r"^\+(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?$"), "leading plus: a number in YAML 1.2, not a JSON number"),
+    (re.compile(r"^[-+]?[0-9]+\.(?:[eE][-+]?[0-9]+)?$"), "bare decimal point: a float in YAML 1.2, not a JSON number"),
+    (re.compile(r"^[-+]?\.[0-9]+(?:[eE][-+]?[0-9]+)?$"), "bare decimal point: a float in YAML 1.2, not a JSON number"),
+    (re.compile(r"""^(?:[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]
+                     |[0-9][0-9][0-9][0-9]-[0-9][0-9]?-[0-9][0-9]?
+                      (?:[Tt]|[ \t]+)[0-9][0-9]?
+                      :[0-9][0-9]:[0-9][0-9](?:\.[0-9]*)?
+                      (?:[ \t]*(?:Z|[-+][0-9][0-9]?(?::[0-9][0-9])?))?)$""", re.X),
+     "date or timestamp shaped: a timestamp in YAML 1.1, a string in YAML 1.2"),
+    (re.compile(r"^[-+]?0b[01_]+$"), "alternative number base: JSON has none"),
+    (re.compile(r"^0o[0-7]+$"), "alternative number base: JSON has none"),
+    (re.compile(r"^[-+]?0x[0-9a-fA-F_]+$"), "alternative number base: JSON has none"),
+    (re.compile(r"^~$"), "YAML 1.1 null shorthand: write null"),
+    (re.compile(r"^(?:[-+]?\.(?:inf|Inf|INF)|\.(?:nan|NaN|NAN))$"), "non-finite number: outside the OBDS numeric domain"),
+    (re.compile(r"^$"), "empty plain scalar: null in YAML, absent in JSON; write null"),
+    # The rows above are the YAML 1.2 side: forms YAML 1.2 reads as a value the
+    # JSON grammar does not produce. This one is the YAML 1.1 side, and it is
+    # last so the specific messages win. It is stated as the class rather than
+    # as spellings because the spellings were enumerated once and missed every
+    # combination — `1_000.0`, `1_0:30`, `.5_0` — each a number in YAML 1.1 and
+    # a string here, which is a value that changes with no diagnostic. Stating
+    # the class also stops the table over-reaching: a hand-written digit
+    # separator or sexagesimal pattern rejected `0__8` and `0:07`, which no
+    # YAML version reads as anything but a string.
+    (_YAML11_NUMBER_NOT_JSON, _yaml11_reason),
 )
+
+
+def _resolve_plain_scalar(text: str):
+    """Section 28.1: resolve one plain YAML scalar, or reject it."""
+    for pattern, why in _YAML_AMBIGUOUS:
+        if pattern.match(text):
+            reason = why(text) if callable(why) else why
+            raise _AmbiguousYAMLScalar(
+                f"ambiguous plain scalar {text!r}: {reason}. Quote it, or write "
+                "it in a form JSON accepts."
+            )
+    if _YAML_NULL.match(text):
+        return None
+    if _YAML_BOOL.match(text):
+        return text.lower() == "true"
+    if _JSON_NUMBER.match(text):
+        if "." in text or "e" in text or "E" in text:
+            return float(text)
+        return _strict_parse_int(text)
+    return text
+
+
+def _construct_plain_scalar(loader, node):
+    if node.style is None:
+        try:
+            return _resolve_plain_scalar(node.value)
+        except _AmbiguousYAMLScalar as exc:
+            raise yaml.constructor.ConstructorError(
+                None, None, str(exc), node.start_mark
+            ) from exc
+        except ValueError as exc:
+            raise yaml.constructor.ConstructorError(
+                None, None, str(exc), node.start_mark
+            ) from exc
+    return node.value
+
+
+def _reject_non_plain_node(loader, node):
+    """Section 28.1: no explicit tag and no merge key.
+
+    No implicit resolver remains, so anything arriving at a typed constructor
+    got its tag explicitly.
+    """
+    raise yaml.constructor.ConstructorError(
+        None, None,
+        f"governed YAML must not use {node.tag!r}: an explicit tag or a merge "
+        "key lets the same characters produce different data",
+        node.start_mark,
+    )
+
+
+# Every implicit resolver is replaced, not subtracted from: a plain scalar now
+# reaches one constructor that owns the whole decision.
+_OBDSSafeLoader.yaml_implicit_resolvers = {}
+_OBDSSafeLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_SCALAR_TAG,
+    _construct_plain_scalar,
+)
+# Anything reaching a typed constructor did so through an explicit tag, since
+# no implicit resolver remains. Merge keys arrive as tag:yaml.org,2002:merge.
+for _tag in (
+    "tag:yaml.org,2002:bool",
+    "tag:yaml.org,2002:int",
+    "tag:yaml.org,2002:float",
+    "tag:yaml.org,2002:null",
+    "tag:yaml.org,2002:binary",
+    "tag:yaml.org,2002:timestamp",
+    "tag:yaml.org,2002:merge",
+    "tag:yaml.org,2002:set",
+    "tag:yaml.org,2002:omap",
+    "tag:yaml.org,2002:pairs",
+):
+    _OBDSSafeLoader.add_constructor(_tag, _reject_non_plain_node)
 
 
 def _construct_mapping(loader, node, deep=False):
@@ -109,6 +305,14 @@ def _construct_mapping(loader, node, deep=False):
         key = loader.construct_object(key_node, deep=deep)
         if not isinstance(key, str):
             raise yaml.constructor.ConstructorError(None, None, "mapping keys must be strings", key_node.start_mark)
+        if key == "<<" and key_node.style is None:
+            # Section 28.1: written plain, every other YAML reader merges this
+            # key, so keeping it literal would mean one document, two data
+            # models. Written quoted it is an ordinary string key everywhere,
+            # and that is what save_yaml emits.
+            raise yaml.constructor.ConstructorError(
+                None, None, "governed YAML must not use a merge key", key_node.start_mark
+            )
         nkey = unicodedata.normalize("NFC", key)
         if nkey in seen:
             raise yaml.constructor.ConstructorError(None, None, f"duplicate mapping key: {key}", key_node.start_mark)
@@ -138,18 +342,144 @@ def _reject_constant(text: str):
     raise ValueError(f"non-finite JSON number is invalid: {text}")
 
 
+# Section 28.1. YAML 1.1 counts these as line breaks and YAML 1.2 does not, so a
+# raw one inside a scalar reads as a break in one parser and as a character in
+# the other. PyYAML turns a raw U+0085 into a space; a YAML 1.2 parser keeps it.
+# They are legitimate governed content, and section 14.3b escapes two of them, so
+# they are not forbidden: they must be written as an escape in a double-quoted
+# scalar, where every YAML version agrees on what they are.
+_YAML_VERSION_SENSITIVE_BREAKS = {
+    "\u0085": "U+0085 NEXT LINE",
+    "\u2028": "U+2028 LINE SEPARATOR",
+    "\u2029": "U+2029 PARAGRAPH SEPARATOR",
+}
+
+
+def _reject_raw_version_sensitive_breaks(text: str) -> None:
+    for character, name in _YAML_VERSION_SENSITIVE_BREAKS.items():
+        if character in text:
+            raise ValidationFailure([
+                f"governed YAML must not contain a raw {name}: YAML 1.1 reads it "
+                "as a line break and YAML 1.2 does not. Write it as an escape in "
+                "a double-quoted scalar."
+            ])
+
+
+# Section 28.1. Anchors and aliases are permitted because an alias expands to
+# the same node in every YAML version, but "the same node" is not the same as
+# "the same amount of data": eight aliases per level, nine levels deep, is
+# 425 bytes of governed YAML and 175,304,795 nodes once expanded. A subset that
+# calls itself closed has to say where the expansion stops, so it stops here.
+MAX_EXPANDED_NODES = 1_000_000
+
+# Section 28.1. Nesting has the same problem as alias expansion: left unstated,
+# the limit is whatever the reader's stack allows, which differs per runtime and
+# per version of this file. A level is one nested collection, counting the
+# outermost, so `{"a": [1]}` is two and this bound accepts one hundred. The
+# deepest governed document this project ships nests ten.
+MAX_NESTING_DEPTH = 100
+
+
+def _reject_unbounded_alias_expansion(node) -> int:
+    """Section 28.1: reject a recursive alias, and bound alias expansion.
+
+    The count is over the expanded data model, so an aliased node is counted
+    once per use. Distinct nodes are memoised, so the walk itself stays linear
+    in the size of the document as written.
+    """
+
+    memo: dict[int, int] = {}
+    on_path: set[int] = set()
+
+    def size(current) -> int:
+        key = id(current)
+        cached = memo.get(key)
+        if cached is not None:
+            return cached
+        if key in on_path:
+            raise ValidationFailure([
+                "governed YAML must not use a recursive alias: it has no "
+                "expansion, so it has no canonical form"
+            ])
+        on_path.add(key)
+        if isinstance(current, yaml.MappingNode):
+            total = 1 + sum(size(k) + size(v) for k, v in current.value)
+        elif isinstance(current, yaml.SequenceNode):
+            total = 1 + sum(size(item) for item in current.value)
+        else:
+            total = 1
+        on_path.discard(key)
+        if total > MAX_EXPANDED_NODES:
+            raise ValidationFailure([
+                f"governed YAML alias expansion exceeds {MAX_EXPANDED_NODES} "
+                "nodes: write the document out rather than aliasing it"
+            ])
+        memo[key] = total
+        return total
+
+    return size(node)
+
+
+def _reject_excessive_nesting(data) -> None:
+    """Section 28.1: one bound for one data model, whichever format carried it.
+
+    The composer refuses a deep YAML document before it builds it; this is the
+    same rule stated where JSON arrives too, so the two formats cannot disagree
+    about which documents are governable.
+    """
+    stack = [(data, 0)]
+    while stack:
+        node, depth = stack.pop()
+        if isinstance(node, (dict, list)):
+            if depth >= MAX_NESTING_DEPTH:
+                raise ValidationFailure([
+                    f"parse error: nesting exceeds {MAX_NESTING_DEPTH} levels"
+                ])
+            children = node.values() if isinstance(node, dict) else node
+            stack.extend((child, depth + 1) for child in children)
+
+
+def _load_governed_yaml(text: str):
+    """Compose first, bound the expansion, then construct.
+
+    `yaml.load` does both in one step, which would build the expansion this
+    function exists to refuse.
+    """
+    loader = _OBDSSafeLoader(text)
+    try:
+        node = loader.get_single_node()
+        if node is None:
+            return None
+        _reject_unbounded_alias_expansion(node)
+        return loader.construct_document(node)
+    finally:
+        loader.dispose()
+
+
 def load_data(path: str | Path) -> dict[str, Any]:
     path = Path(path)
-    text = path.read_text(encoding="utf-8")
     try:
+        text = path.read_text(encoding="utf-8")
+        if path.suffix.lower() != ".json":
+            _reject_raw_version_sensitive_breaks(text)
         if path.suffix.lower() == ".json":
             data = json.loads(text, object_pairs_hook=_strict_pairs, parse_int=_strict_parse_int, parse_constant=_reject_constant)
         else:
-            data = yaml.load(text, Loader=_OBDSSafeLoader)
-    except (json.JSONDecodeError, _StrictJSONDuplicate, yaml.YAMLError) as exc:
+            data = _load_governed_yaml(text)
+    except ValidationFailure as exc:
+        raise ValidationFailure([f"{path}: parse error: {error}" for error in exc.errors]) from exc
+    except RecursionError as exc:
+        raise ValidationFailure([
+            f"{path}: parse error: document nests too deeply to read"
+        ]) from exc
+    except (json.JSONDecodeError, _StrictJSONDuplicate, yaml.YAMLError, ValueError, OSError) as exc:
         raise ValidationFailure([f"{path}: parse error: {exc}"]) from exc
     if not isinstance(data, dict):
         raise ValidationFailure([f"{path}: root must be an object"])
+    try:
+        _reject_excessive_nesting(data)
+    except ValidationFailure as exc:
+        raise ValidationFailure([f"{path}: {error}" for error in exc.errors]) from exc
     try:
         canonical_json_bytes(data)
     except (TypeError, ValueError) as exc:
@@ -164,9 +494,37 @@ def save_json(path: str | Path, data: dict[str, Any]) -> None:
     )
 
 
+class _OBDSSafeDumper(yaml.SafeDumper):
+    """Section 28.1 applies to what this project writes, not only what it reads.
+
+    PyYAML's emitter decides whether a string needs quoting with YAML 1.1
+    resolvers, so it wrote the string "1e3" as a plain `1e3`, which the governed
+    reader now reads back as the number 1000. A writer and a reader that
+    disagree are the same defect in the other direction.
+    """
+
+
+def _represent_governed_str(dumper, value):
+    if any(character in value for character in _YAML_VERSION_SENSITIVE_BREAKS):
+        # Only the double-quoted style escapes them; raw, this reader refuses
+        # its own output.
+        return dumper.represent_scalar("tag:yaml.org,2002:str", value, style='"')
+    plain_is_faithful = False
+    try:
+        plain_is_faithful = _resolve_plain_scalar(value) == value
+    except (ValueError, TypeError):
+        plain_is_faithful = False
+    style = None if plain_is_faithful else "'"
+    return dumper.represent_scalar("tag:yaml.org,2002:str", value, style=style)
+
+
+_OBDSSafeDumper.add_representer(str, _represent_governed_str)
+
+
 def save_yaml(path: str | Path, data: dict[str, Any]) -> None:
     Path(path).write_text(
-        yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=110),
+        yaml.dump(data, Dumper=_OBDSSafeDumper, sort_keys=False,
+                  allow_unicode=True, width=110, default_flow_style=False),
         encoding="utf-8",
     )
 

@@ -2,9 +2,239 @@
 
 ## Release
 
-**Version:** OBDS 1.1.6  
+**Version:** OBDS 2.0.0  
 **Status:** Stable  
 **Date:** 2026-09-01
+
+## 2.0.0
+
+**Interchange correction. MAJOR.**
+
+Three defects, all reported by a final outreach gate against the published
+1.1.6 and each reproduced on a clean checkout before any code was written. Two
+are specification defects and one is a conformance-evidence defect. Closing the
+first of them is a breaking change, which is why this is 2.0; the reasoning is
+below, under "Why this is 2.0 and not 1.1.7". The
+reference implementation behaved correctly in that gate at every place it was
+probed, and the five blockers 1.1.6 closed remained closed under attack.
+
+### Section 28.1, governed YAML scalar resolution is pinned
+
+Section 28 has always made JSON the canonical interchange format and allowed
+YAML where it produces an equivalent JSON document. It never said how a YAML
+plain scalar becomes a JSON value, and the reference loader inherited PyYAML's
+YAML 1.1 implicit resolvers with only the boolean set replaced.
+
+The consequence, measured on the published 1.1.6:
+
+```text
+input bytes    {"a": 1e3}
+
+read as .json  {'a': 1000.0}   canonical sha256:ac51767992e3cb03...
+read as .yaml  {'a': '1e3'}    canonical sha256:0504fb0fff0e8f1a...
+```
+
+One byte sequence, two governed values, two canonical hashes. The canonical hash
+of a governed document depended on its filename, and two conforming
+implementations reading the same approved manifest could compute different
+`manifestContentHash`, `valueHash` and `governedResultHash` values. Every
+governed artefact this project ships is YAML.
+
+Section 28.1 now states the whole contract in two tables. Plain scalars resolve
+under the YAML 1.2 Core Schema, and a plain scalar that resolves to null, a
+boolean or a number must denote the same value when the same characters are read
+as a JSON literal. `1e3` is therefore the number 1000, as JSON always said.
+
+The second table is the part that matters for determinism. A plain scalar in a
+form that YAML 1.1 silently turns into something the Core Schema does not is
+**rejected**, not resolved either way: `017`, `1_000`, `12:30`, `2026-09-01`,
+`0x1f`, `0o17`, `0b1010`, `~`, `.inf` and `.nan`. Accepting any of them under
+either reading would leave a document's meaning dependent on which YAML version
+the reader carries, which is the defect. Quoting always resolves it, and every
+timestamp in this specification was already quoted.
+
+`yes`, `no`, `on`, `off`, `y` and `n` remain strings, as OBDS 1.0 already
+required. The reference no longer subtracts one resolver from PyYAML's YAML 1.1
+table; it replaces the table, so one constructor owns the whole decision.
+
+### Section 26.2 evidence is resolved, not counted
+
+The release gate asserted `len(requirementsExercised) >= 12`. It never checked
+that the named cases exist, are unique, executed or passed. Replacing all
+fourteen case names with `no_such_test_0` through `no_such_test_13` and
+rehashing the package manifest, as a release author would, left the gate green.
+Four of the fourteen requirements named prose rather than a case at all.
+
+That is the same failure the 1.1.5 validity guard had, and the same failure this
+project fixed in 1.1.6 one guard away: a guard advertising a protection it
+cannot give.
+
+Each requirement now names one or more executed case identifiers of the form
+`<suite>/<module>::<test>`. Guard 20 runs the seven conformance suites itself,
+collects what actually executed, and fails when a declared identifier does not
+exist, did not pass, was skipped, or is reused to satisfy a second requirement.
+It also pins the fourteen requirement names, so removing one shrinks the claim
+loudly instead of silently. There is no threshold left to raise.
+
+Four requirements had no resolvable evidence, and the evidence for *explicit
+context selection* was weak enough that four separate single-line inversions of
+the projection logic survived the whole suite. The tests those four requirements
+now point at assert the expected contents of a governed decision rather than a
+relative property between two runs, which was the anti-pattern behind both this
+defect and the 1.1.5 one.
+
+### Section 14.3a is aligned with section 10.2a
+
+Section 14.3a still argued from the pre-1.1.3 rule: "section 10.2 makes an
+unresolved conflict a target failure ... so no `governedResultHash` exists for
+such a build at all." Section 10.2a replaced that premise in 1.1.3. A conflict
+that is not decision-relevant for a target does not fail it, and a hash does
+exist. An implementer following 14.3a and one following 10.2a disagreed about
+the one value section 26.2 makes an interoperability MUST.
+
+The paragraph now distinguishes the two cases and states what the hash means:
+**`governedResultHash` identifies the governed result, not the diagnostic
+history that produced it.** A build whose irrelevant conflict contributes
+nothing hashes the same as a build where that subject has no element at all,
+because both apply exactly the same truth. The distinction is not lost: section
+13.7 keeps the conflict in the Build Report, marked as not decision-relevant, so
+an audit still sees the manifest defect. The reference implementation was
+already right; only the text moved.
+
+### Why this is 2.0 and not 1.1.7
+
+It was drafted as 1.1.7 and that was wrong. Section 27.1 allows PATCH only for a
+backwards-compatible clarification or defect fix, and section 28.1 is neither.
+
+The argument for PATCH was that a document relying on the old reading was
+already outside section 28, which requires YAML to produce an equivalent JSON
+document. That holds for `1e3`, which was the string `"1e3"` as YAML and the
+number 1000 as JSON: such a document never had one canonical identity. It does
+not hold for the rejection table. `017` was the number 15, and a manifest
+containing it produced a perfectly good equivalent JSON document, `{"a": 15}`.
+Section 28 was satisfied. Rejecting it now is not a clarification, it is a
+breaking change, and section 27.1 has one sentence for that case: "A 1.x
+implementation MUST NOT silently reinterpret an existing 1.0 field with
+incompatible meaning. Breaking semantics require OBDS 2.0."
+
+MINOR was not available either: section 27.1 defines it as a backwards-compatible
+capability, profile or optional field, and this is none of those.
+
+So the honest classification is MAJOR. A standard that argues its own rules do
+not quite apply to it is worth less than one that follows them and says why.
+
+**2.0 is deliberately narrow.** No new Brand State, no new profile, no new
+capability, no architectural change, no redesign of the hash model. One
+interchange correction, one evidence correction, one specification correction,
+and a migration table. Section 30 states what a 1.x manifest has to change,
+which for almost every manifest is nothing: all 29 governed YAML documents this
+release ships resolve identically under both readings, every published example
+hash is unchanged, and the frozen OBDS 1.0.0 contract surface is byte-identical
+at `sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469`.
+
+### Conformance and compatibility
+
+Conformance rises from 279 to 429 passing tests, the one hundred and fifty
+added being regression coverage for these three defects, for the defects a
+third, a fourth, a fifth, a sixth and a seventh independent review found in the
+candidate itself,
+and the evidence four section 26.2 requirements now point at.
+
+The first draft of section 28.1 moved the ambiguity instead of removing it, and
+two independent reviews said so. An empty scalar became the empty string rather
+than null, `!!str 1e3` reached a number through an explicit tag, a merge key
+became a literal `<<` key, the writer emitted plain `1e3` for a string its own
+reader then read as a number, and an anchor rule invalidated a Build Plan this
+repository ships. The section now pins the YAML version and not only the scalar
+rules, refuses explicit tags including the non-specific `!`, refuses the merge
+key while leaving anchors and aliases alone, refuses a raw U+0085, U+2028 or
+U+2029, and the writer quotes anything that would not survive its own reader.
+
+A third independent review found four more, all in the same section, and all
+fixed before publication. The rejection table listed `1.` and `017` but not
+`1.e3` and `017e3`, which are YAML 1.2 core floats and not JSON numbers, so they
+fell through to the string rule and reproduced the exact defect the section
+exists to close. The anchors-and-aliases rule called itself closed while
+bounding only recursion: eight aliases per level over nine levels is 425 bytes
+of governed YAML and 175,304,795 nodes expanded, so the section
+now requires a documented expansion bound and the reference implementation
+rejects above one million nodes. Fifteen YAML blocks in this specification carry
+keys with no value, which the new rejection table refuses, so section 28.1 now
+names that spelling as shape-sketch notation and a test holds every block in the
+document to the rule. And the migration section claimed one form changed
+meaning when the class is every plain scalar in exponent notation: `1e3`, `1E3`,
+`2E-2`, `-1.5e3` and the rest, minus the spellings a YAML 1.1 reader already
+read as numbers. That is the only silent change in this release, it is the only
+one no validator can report, and it now has its own named check.
+
+A fourth independent review found five more, and they are why the rejection
+table stopped enumerating spellings. Two rows named a class and matched only
+part of it: a digit separator combined with a decimal point or a sexagesimal
+colon (`1_000.0`, `1_0.5`, `1_0:30`) was a number to a YAML 1.1 reader and a
+string here, and a timestamp written with a space before its zone
+(`2026-09-01 00:00:00 Z`) was a datetime there and a string here. The first is a
+value that moves with no diagnostic; the second is a form 1.1.6 refused outright
+and this release would have started accepting. The table now carries a final row
+that rejects on the class: any plain scalar a YAML 1.1 reader resolves to a
+number that the JSON grammar does not produce. Exponent notation is now the only
+remaining form whose value differs between the 1.1.6 reader and this one.
+
+A fifth, a sixth and a seventh independent review then showed the reverse failure, which
+matters more: stating the class in hand-written patterns made the table
+over-reach and refuse strings. `._5`, `2026-9-1`, `0__8`, `0:07`, `+0o7`, `0X1f`
+and `-.nan` are strings under YAML 1.1 and under YAML 1.2, and every one of them
+was being rejected as an ambiguous scalar. Section 28.1 says a form not listed
+and not matching the resolution table is a string, and the reference
+implementation is the section 26.2 oracle, so over-reaching here would have made
+an independent implementation that read the table literally non-interoperable
+with it. The YAML 1.1 rows are now the resolver itself rather than a paraphrase
+of it, and the YAML 1.2 rows are spelled as YAML 1.2 spells them: only `inf`
+takes a sign, the octal `0o` form takes none, and a timestamp's date-only
+spelling needs two-digit fields. That the table is closed is now a conformance
+case rather than an assertion:
+`test_the_rejection_table_is_closed_against_the_real_yaml_resolvers` drives
+PyYAML's own resolver and a written-out YAML 1.2 core schema over every short
+string on a numeric alphabet, and requires a form to be rejected exactly when
+some YAML version reads it as a value the JSON grammar does not produce. The
+only accepted exceptions are `yes`, `no`, `on`, `off`, `y` and `n`, which
+section 28.1 has required to be strings since OBDS 1.0.
+
+Nesting is bounded for the same reason as alias expansion, and by the seventh
+review's argument: unstated, the limit is whatever the reader's call stack
+allows. The 2.0.0 candidate read 327 levels where 1.1.6 read 491, and past that
+both crashed rather than refused. Section 28.1 now requires a documented nesting
+bound over the data model, so JSON and YAML cannot disagree about it. A level is
+one nested collection, counting the outermost; the reference implementation
+accepts one hundred and rejects the hundred and first. The deepest governed
+document this project ships nests ten.
+
+The migration table also stated YAML 1.2 readings in a column headed by what
+1.1.6 did, which would have told a migrator to rewrite the string `017e3` as the
+number `17000` and move the hash the section exists to protect. The column is
+now the 1.1.6 reading throughout and says so. The published grep for exponent
+notation missed flow mappings, inline sequences and trailing comments; it now
+matches the value wherever it sits on the line.
+
+The generator for `OBDS-2.0.0-TEST-RESULT.json` described this release as a
+maintenance release with no normative contract change, a sentence 1.1.0 shipped
+by copying 1.0.4 and this release nearly shipped over a MAJOR. The release kind
+and the byte-identity list are now derived from the version and the publication
+record rather than written twice.
+
+No schema in the frozen surface changed. `release-schemas/release-test-result.schema.json`
+changed, because the evidence array now carries resolvable identifiers instead
+of prose; it is release metadata, not part of the OBDS 1.0.0 contract surface,
+whose fingerprint is unchanged at
+`sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469`.
+No Brand State was added, no capability was added, and no published example hash
+moved.
+
+Explicitly out of scope, and not touched: the authored-form `elementValueRef`
+validation issue, the CR/LF identity and hash injectivity observation, the
+`llms.txt` previous-release list, the homepage freeze enumeration, the
+`.gitignore` `.env` pattern, `scope: null`, the unreachable `-NOT-FOUND`
+diagnostic, stale artefacts in reused output directories, `OBDS-CHECK-*`
+documentation, the `/README.md` live route, and authoring wording.
 
 ## 1.1.6
 

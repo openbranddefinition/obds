@@ -1,8 +1,8 @@
 # Open Brand Definition Specification (OBDS)
 
-## OBDS 1.1: Stable Specification
+## OBDS 2.0: Stable Specification
 
-**Version:** 1.1.6  
+**Version:** 2.0.0  
 **Status:** Stable  
 **Date:** 2026-09-01  
 **Project home:** https://openbranddefinition.org  
@@ -400,8 +400,8 @@ schemaVersion: 1.0.0
 version: 1.0.0
 status: approved            # draft | approved | archived
 owner: Example Company
-createdAt: 2026-07-20T10:00:00+02:00
-updatedAt: 2026-07-20T10:00:00+02:00
+createdAt: '2026-07-20T10:00:00+02:00'
+updatedAt: '2026-07-20T10:00:00+02:00'
 profiles:
   - obds-foundation
 valueContracts:
@@ -418,7 +418,7 @@ curation:                  # optional; used when derived from source material
   reportRef:
 approval:
   approvedBy: person-or-role-id
-  approvedAt: 2026-07-20T10:00:00+02:00
+  approvedAt: '2026-07-20T10:00:00+02:00'
   contentHash: sha256:...
   reviewedAgainst:          # recommended when replacing an approved version
     version: 1.0.0
@@ -1119,7 +1119,7 @@ A Build Plan is configuration, not brand truth. It lists only the contexts the i
 id: urn:obds:build-plan:example
 kind: obds-build-plan
 schemaVersion: 1.0.0
-asOf: 2026-08-27T00:00:00Z
+asOf: '2026-08-27T00:00:00Z'
 manifestRef:
   id: urn:obds:brand:example
   version: 1.0.0
@@ -1714,10 +1714,28 @@ Rules:
   `validFrom`, `validTo`, compiler identity, tokenizer identity, slots, token
   counts and `artifactHash`.
 
-A subject in hard conflict contributes no entry, and cannot silently collapse
-with a subject that has no element: section 10.2 makes an unresolved conflict a
-target failure, and section 13.5 produces no artefact for a failed target, so no
-`governedResultHash` exists for such a build at all.
+A subject in hard conflict contributes no `selection` entry, because no element
+won it. What that means for the build depends on section 10.2a:
+
+- a **decision-relevant** conflict fails the target. Section 13.5 produces no
+  artefact for a failed target, so no `governedResultHash` exists for that build
+  at all.
+- a conflict that is **not decision-relevant** for this target does not fail it.
+  The build proceeds, the conflicted subject contributes nothing to the governed
+  selection, and a `governedResultHash` exists.
+
+In the second case that hash is deliberately the same as it would be for a
+manifest in which the subject has no applicable element, because in both cases
+the target's governed result is the same: nothing from that subject applies.
+**`governedResultHash` identifies the governed result, not the diagnostic
+history that produced it.** Two builds that agree on every applied truth agree
+on the hash, whatever else the manifest contains.
+
+That is a statement about the hash, not permission to lose the distinction.
+Section 13.7 requires the Build Report to carry the conflict in `conflicts[]`,
+marked as not decision-relevant, so an operator sees a manifest defect that this
+target happened not to read. An audit reads the Build Report; the hash answers a
+narrower question.
 
 The exclusions are the contract. A section 27.2 governance-neutral PATCH, which
 rotates source references or corrects annotations without changing Brand Truth,
@@ -1914,7 +1932,7 @@ Manifest access is permitted only in the explicit `manifest_checked` no-hit reso
 kind: obds-model-input-package
 schemaVersion: 1.0.0
 id: urn:obds:model-input:...
-assembledAt: 2026-07-31T09:00:00Z
+assembledAt: '2026-07-31T09:00:00Z'
 targetId: brand-review-global-en
 
 deliveryMode: reasoning       # lookup | reasoning | full
@@ -2764,6 +2782,8 @@ Specification releases use Semantic Versioning:
 
 A 1.x implementation MUST NOT silently reinterpret an existing 1.0 field with incompatible meaning. Breaking semantics require OBDS 2.0.
 
+OBDS 2.0 is that release, and it is deliberately narrow. It corrects one interchange defect, stated in section 28.1: governed YAML had no pinned reading, so the same bytes could produce two different governed values and two different canonical hashes depending on which YAML version the reader carried. Closing that rejects documents 1.x accepted and changes how one form resolves, which is a breaking change to an existing normative contract and therefore MAJOR by the rule above. Nothing else in 2.0 is new: no Brand State, no profile, no capability, no architecture. Section 30 lists what a 1.x manifest has to change, which for almost every manifest is nothing.
+
 ### 27.2 Brand and runtime versioning
 
 OBDS separates:
@@ -2802,6 +2822,116 @@ Pre-1.0 manifests that used `state: prohibited` MUST migrate that meaning to an 
 - Human-readable Markdown views are generated exports and identify their source hash.
 - Runtime projections MAY use a more compact serialisation than the canonical manifest when they are deterministically derived, preserve the selected semantics and identify the authoritative source hash.
 - A compact projection is never a second source of Brand Truth.
+
+### 28.1 Governed YAML scalar resolution
+
+Section 28 makes JSON the canonical interchange format and allows YAML where it
+produces an equivalent JSON document. Which JSON document a YAML file produces
+depends on how it is read, and that was left to the implementation. It is pinned
+here, because a governed document whose meaning depends on the reader has no
+canonical hash.
+
+**Governed YAML is a subset of YAML 1.2, defined by this section.** Where YAML
+1.1 and YAML 1.2 disagree, YAML 1.2 governs; where this section restricts YAML
+1.2 further, this section governs. The restrictions are listed here in full so
+that "the subset" is a closed statement and not an invitation to guess:
+
+- U+0085, U+2028 and U+2029 are line breaks in YAML 1.1 and ordinary characters
+  in YAML 1.2, so a governed YAML document MUST NOT contain one of them raw.
+  They remain valid governed content and section 14.3b escapes two of them;
+  write them as an escape in a double-quoted scalar, where every YAML version
+  agrees what they are.
+- A tab MUST NOT be used as separation between a key and its value. YAML 1.2
+  permits it and YAML 1.1 does not, and a governed document gains nothing from
+  the difference. Use a space.
+- An explicit tag MUST be rejected, including the non-specific `!`. A tag
+  suppresses or overrides resolution, which is another way to reach a value the
+  rules below would not produce.
+- The merge key `<<` written as a plain scalar MUST be rejected. It is a YAML
+  1.1 construct that other readers expand and this one would not, so one
+  document would carry two data models. A quoted `"<<"` is an ordinary string
+  key and is accepted.
+- Anchors and aliases are permitted. An alias expands to the same node in every
+  YAML version, so it produces one data model, and the duplicate-key rules below
+  apply to the expansion exactly as they apply to anything else. A recursive
+  alias MUST be rejected. An implementation MUST also bound how large an alias
+  expansion may be and MUST reject a document that exceeds its bound, because
+  nested aliases expand multiplicatively: eight aliases per level, nine levels
+  deep, is 425 bytes of governed YAML and 175,304,795 nodes once expanded. The
+  bound MUST be documented. The reference implementation rejects above one
+  million expanded nodes.
+- An implementation MUST bound how deeply a governed document nests and MUST
+  reject a document that exceeds its bound, and the bound MUST be documented.
+  Left unstated it is whatever the reader's call stack allows, which differs
+  between runtimes and between versions of the same runtime, so two conforming
+  implementations would disagree about which documents are governable. The bound
+  applies to the data model and therefore to JSON and YAML alike. A level is one
+  nested collection, counting the outermost: `{"a": [1]}` is two. The reference
+  implementation accepts one hundred levels and rejects the hundred and first.
+
+**Resolution.** A plain scalar resolves to the first of these that matches, and
+the rules are exhaustive:
+
+| Plain scalar | Resolves to |
+|---|---|
+| `null`, `Null`, `NULL` | null |
+| `true`, `True`, `TRUE`, `false`, `False`, `FALSE` | boolean |
+| a JSON number literal, `-?(0\|[1-9][0-9]*)(\.[0-9]+)?([eE][-+]?[0-9]+)?` | that number |
+| a form in the rejection table below | nothing: the document is rejected |
+| anything else | string |
+
+The number row is the JSON grammar, not a YAML one. A plain scalar that resolves
+to null, a boolean or a number therefore denotes exactly what the same
+characters denote read as a JSON literal, which is what makes the same bytes
+mean the same thing in both formats. `1e3` is the number 1000.
+
+`yes`, `no`, `on`, `off`, `y` and `n` are strings, as OBDS 1.0 already required.
+
+**Rejection.** A plain scalar in any of these forms MUST be rejected rather than
+resolved. Each is a form that some YAML version reads as a value the JSON
+grammar above does not produce, so accepting it under either reading would make
+a governed document's meaning depend on which YAML version an implementation
+carries. The table is closed: a form not listed and not matching the resolution
+table is a string.
+
+| Rejected form | Because |
+|---|---|
+| `017`, `-017`, `017.5`, `017e3` | octal in YAML 1.1, decimal in YAML 1.2, not a JSON number |
+| `+42`, `+1.5`, `+0` | an integer in YAML 1.2, not a JSON number |
+| `1.`, `1.e3`, `.5`, `.5e3`, `-.5` | a float in YAML 1.2, not a JSON number |
+| `1_000` | a number in YAML 1.1, a string in YAML 1.2 |
+| `12:30`, `1:2:3` | sexagesimal in YAML 1.1, a string in YAML 1.2 |
+| `2026-09-01`, `2026-09-01T00:00:00Z` | a timestamp in YAML 1.1, a string in YAML 1.2 |
+| `0x1f`, `0o17`, `0b1010` | alternative number bases, which JSON does not have |
+| `~` | the YAML 1.1 null shorthand; write `null` |
+| `.inf`, `.nan`, `-.inf` | outside the OBDS numeric domain of section 14.3 |
+| the empty plain scalar | null in YAML, absent in JSON; write `null` |
+
+Quoting always resolves a rejection, because a quoted scalar is a string in
+every YAML version. A governed timestamp is therefore written quoted, and every
+example in this specification writes it that way.
+
+**Notation.** Many YAML blocks in this specification show the shape of a record
+rather than a document: a key with no value names a field and leaves the value
+to the author, in the same way that `status: ready | failed` on the next line
+names a choice rather than carries one. Those blocks are field-shape sketches
+and are not governed documents. A governed document has no empty plain scalar;
+a field that is present and has no value is written `null`.
+
+**Nodes that are not plain scalars.** A quoted scalar, single or double, is a
+string. A block scalar is a string. A mapping key resolves under the same rules
+and must be a string, so `1: x` is rejected as a non-string key. What is refused
+among non-plain constructs is listed above and nowhere else.
+
+**Everything else is unchanged.** Duplicate mapping keys are rejected, including
+keys equal after the section 14.3 normalisation. Numbers are finite IEEE-754
+binary64 values as section 14.3 defines, so a value outside that domain is
+rejected wherever it is written. Scope values are strings. Section 14.3c pins
+the Unicode version.
+
+A conforming implementation MUST reach the same JSON data model, and therefore
+the same canonical bytes and the same hashes, for a governed document whether it
+reads it as JSON or as YAML.
 
 ---
 
@@ -2901,7 +3031,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.1.6.md`;
+1. one normative specification: `OBDS-2.0.0.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

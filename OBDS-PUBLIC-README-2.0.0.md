@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 1.1.6** is the stable Open Brand Definition Specification.
+**OBDS 2.0.0** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,7 +21,7 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 1.1.6. Stable. 2026-09-01.**
+**OBDS 2.0.0. Stable. 2026-09-01.**
 
 OBDS 1.1 is the independent-implementability release.
 
@@ -31,9 +31,9 @@ An independent implementation, written blind from the public documents, reproduc
 
 Section 10.2 precedence is now stated once and decidably. The scope vocabulary is closed at nine dimensions. The tokenizer, the validator registry and the four build failure codes are defined rather than inferred. Required truth now always reaches the artefact.
 
-The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5 and 1.1.6. OBDS 1.1 adds one versioned contract beside it, `schemas/1.1.0/compiled-context.schema.json`, and changes none of them.
+The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6 and 2.0.0. OBDS 1.1 adds one versioned contract beside it, `schemas/1.1.0/compiled-context.schema.json`, and changes none of them.
 
-279 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 15 of 15 and is reported separately.
+429 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 15 of 15 and is reported separately.
 
 ## Use and licensing
 

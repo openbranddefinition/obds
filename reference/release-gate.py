@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.1.6 release gate.
+"""OBDS 2.0.0 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -48,7 +48,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 173,
+    "foundation": 323,
     "context-delivery": 3,
     "context-assembly": 24,
     "design-space": 20,
@@ -56,8 +56,8 @@ EXPECTED_SUITE_COUNTS = {
     "golden": 6,
     "adversarial": 38,
 }
-EXPECTED_TOTAL = 279
-EXPECTED_RELEASE = "1.1.6"
+EXPECTED_TOTAL = 429
+EXPECTED_RELEASE = "2.0.0"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -81,7 +81,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "1.1.5"
+PRIOR_RELEASE = "1.1.6"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -150,6 +150,152 @@ SUITE_RUNNER = "reference/run_all.py"
 SUITE_EXCLUDED_PREFIX = "reference/foundation/src/"
 
 failures: list[str] = []
+
+
+
+def section_26_2_requirements(spec_text: str) -> list[str]:
+    """The requirements section 26.2 actually lists, read from the specification.
+
+    Pinning them in this file would only move the problem: an author editing the
+    release metadata would edit the pin beside it. They are derived from the
+    normative sentence instead, so the claim is measured against the standard.
+    """
+    marker = "### 26.2 OBDS Compiled Runtime"
+    if marker not in spec_text:
+        return []
+    body = spec_text.split(marker, 1)[1].lstrip()
+    sentence = body.split("\n\n", 1)[0].strip()
+    prefix = "Additionally requires "
+    if not sentence.startswith(prefix) or not sentence.endswith("."):
+        return []
+    listed = sentence[len(prefix):-1]
+    parts = [item.strip() for item in listed.split(", ")]
+    if parts and " and " in parts[-1]:
+        head, _, tail = parts[-1].rpartition(" and ")
+        parts[-1:] = [head.strip(), tail.strip()]
+    return [item.replace("`", "") for item in parts if item]
+
+CONFORMANCE_SUITES = (
+    "foundation",
+    "context-delivery",
+    "context-assembly",
+    "design-space",
+    "integration",
+    "golden",
+    "adversarial",
+)
+
+
+def executed_conformance_cases() -> tuple[dict[str, str], dict[str, int], list[str]]:
+    """Every case the official suite executed, by id, with its outcome.
+
+    The gate runs the suites itself rather than trusting a recorded list, so an
+    evidence id can only resolve if the case really ran in this checkout.
+    """
+    import tempfile
+    import xml.etree.ElementTree as ElementTree
+
+    outcomes: dict[str, str] = {}
+    counts: dict[str, int] = {}
+    failures: list[str] = []
+    with tempfile.TemporaryDirectory() as tmp:
+        for suite in CONFORMANCE_SUITES:
+            directory = ROOT / "reference" / suite
+            if not directory.is_dir():
+                failures.append(f"{suite}: suite directory is missing")
+                continue
+            report = Path(tmp) / f"{suite}.xml"
+            completed = subprocess.run(
+                [sys.executable, "-m", "pytest", "-q", f"--junitxml={report}"],
+                cwd=directory,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            )
+            if completed.returncode != 0:
+                tail = (completed.stdout or "").strip().splitlines()
+                failures.append(f"{suite}: pytest exited {completed.returncode}: "
+                                + (tail[-1] if tail else "no output"))
+            if not report.is_file():
+                failures.append(f"{suite}: pytest produced no report")
+                continue
+            executed = 0
+            for case in ElementTree.parse(report).getroot().iter("testcase"):
+                identifier = f"{suite}/{case.get('classname')}::{case.get('name')}"
+                outcome = "passed"
+                for child in case:
+                    if child.tag in ("failure", "error"):
+                        outcome = "failed"
+                    elif child.tag == "skipped":
+                        outcome = "skipped"
+                outcomes[identifier] = outcome
+                executed += 1
+            counts[suite] = executed
+    return outcomes, counts, failures
+
+
+def _check_section_26_2_evidence(entry: dict) -> None:
+    """Guard 20. Resolve the evidence, do not count it.
+
+    Until 2.0.0 this guard asserted `len(requirementsExercised) >= 12`. A
+    release author could replace all fourteen case names with invented strings
+    and the gate still passed, which is the same failure the 1.1.5 validity
+    guard had: a guard that advertises a protection it cannot give.
+    """
+    entries = entry.get("requirementsExercised") or []
+    declared = [item.get("requirement") for item in entries]
+
+    spec_path = ROOT / f"OBDS-{EXPECTED_RELEASE}.md"
+    required = section_26_2_requirements(
+        spec_path.read_text(encoding="utf-8") if spec_path.is_file() else ""
+    )
+    check(len(required) >= 10,
+          "TEST-RESULT: section 26.2 could not be read from the specification, so "
+          "the evidence claim cannot be measured against it")
+    check(
+        list(declared) == list(required),
+        "TEST-RESULT: requirementsExercised must name exactly the requirements "
+        "section 26.2 lists, in the order it lists them; the difference is "
+        f"{sorted(set(required) ^ set(x for x in declared if x))}",
+    )
+
+    executed, counts, failures = executed_conformance_cases()
+    check(not failures, "TEST-RESULT: the gate could not execute the suite: " + "; ".join(failures))
+    check(bool(executed), "TEST-RESULT: no conformance case could be resolved at all")
+    # The gate just ran the suite. It must believe that run, not the recorded
+    # output beside it: adding a test made run_all report one more case while
+    # the gate reported the frozen number and passed.
+    check(
+        counts == EXPECTED_SUITE_COUNTS,
+        f"TEST-RESULT: the suite the gate executed is {counts}, "
+        f"not the {EXPECTED_SUITE_COUNTS} this release claims",
+    )
+    check(
+        sum(counts.values()) == EXPECTED_TOTAL,
+        f"TEST-RESULT: the gate executed {sum(counts.values())} cases, "
+        f"not the {EXPECTED_TOTAL} this release claims",
+    )
+
+    seen: dict[str, str] = {}
+    for item in entries:
+        requirement = item.get("requirement")
+        cases = item.get("cases")
+        if not isinstance(cases, list) or not cases:
+            check(False, f"TEST-RESULT: {requirement!r} names no evidence case")
+            continue
+        for identifier in cases:
+            if identifier not in executed:
+                check(False,
+                      f"TEST-RESULT: evidence case does not exist in the executed "
+                      f"suite: {identifier} (for {requirement!r})")
+                continue
+            check(executed[identifier] == "passed",
+                  f"TEST-RESULT: evidence case did not pass, it {executed[identifier]}: "
+                  f"{identifier} (for {requirement!r})")
+            check(identifier not in seen,
+                  f"TEST-RESULT: evidence case {identifier} is claimed for both "
+                  f"{seen.get(identifier)!r} and {requirement!r}")
+            seen[identifier] = requirement
 
 
 def check(condition: bool, message: str) -> None:
@@ -524,9 +670,7 @@ def main() -> int:
         check(len(entry.get("basis") or "") >= 40,
               f"TEST-RESULT: profile {entry.get('id')} has no basis statement")
         if entry.get("id") == "compiled-runtime":
-            check(len(entry.get("requirementsExercised") or []) >= 12,
-                  "TEST-RESULT: compiled-runtime must name an executed case for every "
-                  "requirement section 26.2 lists")
+            _check_section_26_2_evidence(entry)
 
     executed = test_result.get("executedSuites") or {}
     check(
@@ -1301,7 +1445,7 @@ def main() -> int:
         )
 
     # Guard 19. The check above compares two fixture constants to each other, so
-    # it is true whatever the implementation does: on 1.1.6 both boundary
+    # it is true whatever the implementation does: on 2.0.0 both boundary
     # comparisons in the compiler and both in the runtime could be inverted and
     # this guard, the test beside it and the whole suite stayed green. A guard
     # may not advertise protection it cannot give, so the claim now depends on

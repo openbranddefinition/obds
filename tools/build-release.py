@@ -121,21 +121,46 @@ COMPILED_RUNTIME_PROFILE = {
         "executed case, enumerated in requirementsExercised. Defining a declared "
         "26.2 suite is Phase B work."
     ),
+    # Section 26.2 evidence. Each requirement names one or more executed case
+    # IDs, and reference/release-gate.py resolves every one of them against the
+    # suite it actually ran: the case must exist, must have executed, must have
+    # passed, and must not be reused to satisfy a second requirement. Before
+    # 2.0.0 this array held prose and the gate only counted its length, so
+    # fourteen invented strings passed the gate unchanged.
     "requirementsExercised": [
-        {"requirement": "exact Build Plans", "case": "obds_ref.compiler.validate_plan, foundation and adversarial suites"},
-        {"requirement": "requiresDefined", "case": "test_required_unknown_fails_and_emits_no_artefact"},
-        {"requirement": "every required element present in the produced context", "case": "test_required_knowledge_element_reaches_the_artefact"},
-        {"requirement": "a governedResultHash that matches section 14.3a for the same manifest and Build Plan", "case": "test_governed_result_hash_matches_the_fixture, test_compiled_context_carries_the_governed_result_hash"},
-        {"requirement": "explicit context selection", "case": "styleTexture and stateMap modes, foundation and adversarial suites"},
-        {"requirement": "no artefact for a failed target", "case": "test_fail_closed_example_emits_no_context_and_calls_no_model"},
-        {"requirement": "canonical JSON artefacts", "case": "test_canonical_json_normalises_nfc_and_line_endings"},
-        {"requirement": "reproducible hashes", "case": "test_simple_target_builds_and_hash_is_reproducible"},
-        {"requirement": "Foundation Check Registry v1", "case": "obds_ref.checks.validate_check, foundation and adversarial suites"},
-        {"requirement": "exact target loading", "case": "test_invalid_hash_no_call"},
-        {"requirement": "Runtime Decision Records", "case": "test_runtime_record_ndjson, test_assembly_failed_runtime_record_is_schema_valid"},
-        {"requirement": "zero instrumented model calls after failed build or blocking preflight", "case": "test_failed_build_means_no_model_call, test_blocking_preflight_means_no_model_call"},
-        {"requirement": "withheld output after blocking postflight", "case": "test_blocking_postflight_withholds_output"},
-        {"requirement": "per-slot token reporting", "case": "build report tokenCounts per slot; overflow exercised by test_token_overflow_fails_without_artefact"},
+        {"requirement": "exact Build Plans",
+         "cases": ["foundation/tests.test_obds_200::test_exact_build_plans_bind_one_manifest"]},
+        {"requirement": "requiresDefined",
+         "cases": ["foundation/tests.test_reference::test_required_unknown_fails_and_emits_no_artefact"]},
+        {"requirement": "every required element present in the produced context",
+         "cases": ["foundation/tests.test_obds_11::test_required_knowledge_element_reaches_the_artefact"]},
+        {"requirement": "explicit context selection",
+         "cases": ["foundation/tests.test_obds_200::test_explicit_context_selection_decides_slot_contents"]},
+        {"requirement": "no artefact for a failed target",
+         "cases": ["foundation/tests.test_examples::test_fail_closed_example_emits_no_context_and_calls_no_model"]},
+        {"requirement": "canonical JSON artefacts",
+         "cases": ["foundation/tests.test_obds_200::test_canonical_json_artefacts_are_written_canonically",
+                   "foundation/tests.test_reference::test_canonical_json_normalises_nfc_and_line_endings"]},
+        {"requirement": "reproducible hashes",
+         "cases": ["foundation/tests.test_reference::test_simple_target_builds_and_hash_is_reproducible"]},
+        {"requirement": "a governedResultHash that matches section 14.3a for the same manifest and Build Plan",
+         "cases": ["foundation/tests.test_obds_11::test_governed_result_hash_matches_the_fixture",
+                   "foundation/tests.test_obds_11::test_compiled_context_carries_the_governed_result_hash"]},
+        {"requirement": "Foundation Check Registry v1",
+         "cases": ["foundation/tests.test_obds_200::test_foundation_check_registry_v1_compiles_and_refuses"]},
+        {"requirement": "exact target loading",
+         "cases": ["foundation/tests.test_obds_200::test_exact_target_loading_builds_only_the_named_target",
+                   "foundation/tests.test_reference::test_invalid_hash_no_call"]},
+        {"requirement": "Runtime Decision Records",
+         "cases": ["foundation/tests.test_reference::test_runtime_record_ndjson",
+                   "foundation/tests.test_reference::test_assembly_failed_runtime_record_is_schema_valid"]},
+        {"requirement": "zero instrumented model calls after failed build or blocking preflight",
+         "cases": ["foundation/tests.test_reference::test_failed_build_means_no_model_call",
+                   "foundation/tests.test_reference::test_blocking_preflight_means_no_model_call"]},
+        {"requirement": "withheld output after blocking postflight",
+         "cases": ["foundation/tests.test_reference::test_blocking_postflight_withholds_output"]},
+        {"requirement": "per-slot token reporting",
+         "cases": ["foundation/tests.test_obds_200::test_per_slot_token_reporting_is_the_sum_of_its_slots"]},
     ],
 }
 
@@ -173,9 +198,15 @@ CLAIM_SCOPE = (
     "expected to fail. `conformanceProfiles` lists only profiles this release "
     "can defend: `obds-foundation` because a declared conformance suite names "
     "that profile and every one of its cases passed, and `compiled-runtime` "
-    "because every requirement section 26.2 lists is exercised by a named "
-    "executed case, enumerated in the `requirementsExercised` array of the "
-    "`compiled-runtime` entry in `conformanceProfiles`. No profile is claimed "
+    "because every requirement section 26.2 lists names one or more executed "
+    "cases in the `requirementsExercised` array of the `compiled-runtime` entry "
+    "in `conformanceProfiles`, and the release gate resolves each of them "
+    "against the suite it runs itself: the case must exist, must have passed "
+    "and must not be reused for a second requirement. What the gate proves is "
+    "that the named evidence really ran and really passed. That a case "
+    "materially exercises the requirement it is attached to is an authoring "
+    "judgement no name-resolving check can make, and it is claimed here rather "
+    "than proven. No profile is claimed "
     "for context-delivery, context-assembly, visual-operations or composition; "
     "those suites are reported under `executedSuites` as coverage only, because "
     "they exercise modules other than the named implementation. This file is a "
@@ -184,7 +215,26 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "1.1.5"
+PRIOR_RELEASE = "1.1.6"
+
+
+def _release_kind(release: str) -> str:
+    """MAJOR, MINOR or PATCH, read off the version rather than asserted.
+
+    1.1.0 shipped notes copied from 1.0.4 calling a MINOR release a maintenance
+    release; 2.0.0 nearly shipped the same sentence over a MAJOR one. The word
+    is derived here so it cannot be left behind by the next bump.
+    """
+    major, minor, patch = (int(part) for part in release.split("."))
+    if minor == 0 and patch == 0:
+        return "MAJOR"
+    return "MINOR" if patch == 0 else "PATCH"
+
+
+def _english_list(items: list[str]) -> str:
+    if len(items) == 1:
+        return items[0]
+    return ", ".join(items[:-1]) + " and " + items[-1]
 
 
 def release_notes(release: str, counts: dict[str, int]) -> list[str]:
@@ -196,12 +246,24 @@ def release_notes(release: str, counts: dict[str, int]) -> list[str]:
     not exist. Nothing checked them because nothing generated them.
     """
     total = sum(counts.values())
+    record = json.loads(
+        (ROOT / "publication-record.json").read_text(encoding="utf-8")
+    )
+    entry = record.get("releases", {}).get(release, {})
+    note = entry.get("note")
+    if not note:
+        raise SystemExit(
+            f"publication-record.json has no releases.{release}.note; the "
+            "release kind is stated there and derived here, not written twice"
+        )
+    published = sorted(
+        (v for v in record.get("releases", {}) if v != release),
+        key=lambda v: tuple(int(part) for part in v.split(".")),
+    )
+    surface = _english_list(published) if published else "no earlier release"
     return [
-        f"OBDS {release} is a maintenance release. No normative contract change: "
-        "the 27 public OBDS 1.0.0 contracts and the one versioned contract "
-        "published beside them are unchanged.",
-        "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, "
-        "1.0.2, 1.0.3, 1.0.4 and 1.1.0.",
+        f"OBDS {release} is a {_release_kind(release)} release: {note}.",
+        f"The public schema surface is byte-identical to OBDS {surface}.",
         "The specification and the documentation are licensed under CC BY 4.0. "
         "The schemas, release metadata, reference implementation, conformance "
         "suite and examples are licensed under the Apache License 2.0.",
