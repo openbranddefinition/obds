@@ -272,3 +272,295 @@ def test_rc5_model_projection_omits_validator_plumbing_and_duplicate_exact_chapt
     guidance = package["slots"]["guidanceContext"]
     assert guidance.count("design.logo.clear-zone") == 0
     assert guidance.count("rule.logo.clear-zone") == 0
+
+
+def test_canonically_equivalent_identities_are_accepted_1_1_6():
+    """Section 8.0a: a compiled context is indexed on canonical identity.
+
+    The compiler emits canonical ids in availableElementIds while
+    elementRecords keeps the approved spelling, so indexing the records by their
+    raw id rejected a valid artefact whose ids were not already NFC. That made a
+    1.1.6 artefact unusable by the same release's Context Assembly.
+    """
+    import copy
+
+    manifest, compiled, index, chapters = setup()
+    compiled = copy.deepcopy(compiled)
+    record = copy.deepcopy(compiled["elementRecords"][0])
+    raw_id = "context.cafe\u0301"
+    record["id"] = raw_id
+    record["subject"] = raw_id
+    compiled["elementRecords"].append(record)
+    compiled["availableElementIds"] = sorted(
+        compiled["availableElementIds"] + ["context.caf\u00e9"]
+    )
+    compiled.pop("artifactHash", None)
+    compiled["artifactHash"] = canonical.artefact_hash(compiled)
+
+    policy, by_id = assembler._validate_compiled_context(
+        compiled,
+        {"targetId": compiled["targetId"],
+         "deliveryMode": compiled["contextAssembly"]["deliveryMode"],
+         "applicationMode": compiled["contextAssembly"]["applicationMode"]},
+    )
+
+    assert "context.caf\u00e9" in by_id
+    assert by_id["context.caf\u00e9"]["id"] == raw_id, "the approved spelling is preserved"
+
+
+def test_build_views_accepts_a_canonically_equivalent_identity_1_1_6():
+    """Section 8.0a: a valid NFD identity must not crash the view builders.
+
+    The chapter index was keyed on the canonical identity and then queried with
+    the stored spelling, so a manifest that validate_manifest() accepts raised
+    KeyError in both build_views copies.
+    """
+    import copy
+
+    manifest = load_yaml("manifest.yaml")
+    template = copy.deepcopy(manifest["elements"][0])
+    element = copy.deepcopy(template)
+    element["id"] = "structure.cafe\u0301"
+    element["subject"] = "structure.cafe\u0301"
+    manifest["elements"].append(element)
+
+    index, chapters = builder.build_views(manifest)
+
+    cards = [card for card in index["cards"] if card["elementId"] == "structure.caf\u00e9"]
+    assert len(cards) == 1, [card["elementId"] for card in index["cards"]]
+    assert cards[0]["chapterRefs"], "the card must be reachable from its chapter"
+
+
+def test_review_references_resolve_across_normalisation_forms_1_1_6():
+    """A review naming an element in the other form is not an unknown element."""
+    import copy
+
+    manifest, compiled, index, chapters = setup()
+    compiled = copy.deepcopy(compiled)
+    record = copy.deepcopy(compiled["elementRecords"][0])
+    record["id"] = "context.cafe\u0301"
+    record["subject"] = "context.cafe\u0301"
+    compiled["elementRecords"].append(record)
+    compiled["availableElementIds"] = sorted(
+        compiled["availableElementIds"] + ["context.caf\u00e9"]
+    )
+    compiled.pop("artifactHash", None)
+    compiled["artifactHash"] = canonical.artefact_hash(compiled)
+
+    package = {
+        "sources": {"compiledContextHash": compiled["artifactHash"]},
+        "selection": {"activeGuidanceElementIds": ["context.caf\u0065\u0301"]},
+        "modelInputHash": "sha256:" + "0" * 64,
+    }
+    review = {
+        "modelInputHash": package["modelInputHash"],
+        "decision": "pass",
+        "findings": [{"category": "opportunity", "elementIds": ["context.cafe\u0301"]}],
+    }
+    review["reviewHash"] = canonical.sha256_id(
+        {key: value for key, value in review.items() if key != "reviewHash"}
+    )
+
+    assert reviewer.validate_review(compiled, package, review) is True
+
+    review["reviewHash"] = canonical.sha256_id(
+        {key: value for key, value in review.items() if key != "reviewHash"}
+    )
+
+    assert reviewer.validate_review(compiled, package, review) is True
+
+
+def test_assembly_order_follows_the_canonical_identity_1_1_6():
+    """Section 8.0a: two spellings of one identity assemble identically.
+
+    The fact, gap and guidance slots were sorted on the stored spelling, so two
+    compiled contexts carrying the same governed truth assembled into a
+    different order and produced a different modelInputHash.
+
+    The pair is chosen so the order actually flips. Against `design.caff`, the
+    composed form `design.caf\u00e9` sorts after it, because U+00E9 is above
+    `f`; the decomposed form `design.cafe\u0301` sorts before it, because `e`
+    is below `f`. Canonical ordering has to pick one, and both spellings have to
+    agree on it.
+    """
+    import copy
+
+    NFC_ID = "design.caf\u00e9"
+    NFD_ID = "design.cafe\u0301"
+    NEIGHBOUR = "design.caff"
+
+    def package_for(stored_id):
+        manifest, compiled, index, chapters = setup()
+        compiled = copy.deepcopy(compiled)
+        renamed = next(
+            record for record in compiled["elementRecords"]
+            if record["id"] == "structure.brand"
+        )
+        renamed["id"] = stored_id
+        renamed["subject"] = stored_id
+        neighbour = copy.deepcopy(renamed)
+        neighbour["id"] = NEIGHBOUR
+        neighbour["subject"] = NEIGHBOUR
+        neighbour["value"] = {"name": "Neighbour"}
+        compiled["elementRecords"].append(neighbour)
+        compiled["availableElementIds"] = sorted(
+            [item for item in compiled["availableElementIds"] if item != "structure.brand"]
+            + [NFC_ID, NEIGHBOUR]
+        )
+        compiled.pop("artifactHash", None)
+        compiled["artifactHash"] = canonical.artefact_hash(compiled)
+
+        request = load_yaml("assembly-request-create.yaml")
+        request["selection"]["factElementIds"] = [
+            NFC_ID if item == "structure.brand" else item
+            for item in request["selection"]["factElementIds"]
+        ] + [NEIGHBOUR]
+        package, _ = assembler.assemble(compiled, index, chapters, request)
+        return package
+
+    nfd_package = package_for(NFD_ID)
+    nfc_package = package_for(NFC_ID)
+
+    assert nfd_package["selection"]["factElementIds"] == nfc_package["selection"]["factElementIds"]
+    assert nfd_package["slots"] == nfc_package["slots"]
+    assert nfd_package["modelInputHash"] == nfc_package["modelInputHash"]
+
+
+def test_gap_and_guidance_text_is_ordered_before_it_is_rendered_1_1_6():
+    """Section 8.0a: the slot text and the emitted arrays must agree.
+
+    The canonical sorts ran after the stateMap and guidanceContext text had been
+    built, so the emitted id arrays looked correctly ordered while the rendered
+    text still carried the request's selection order, and modelInputHash moved
+    with it.
+    """
+    import copy
+
+    def package_for(order):
+        manifest, compiled, index, chapters = setup("marketing-review-global-en")
+        request = load_yaml("assembly-request-review.yaml")
+        request["selection"]["activeGuidanceElementIds"] = list(order)
+        package, _ = assembler.assemble(compiled, index, chapters, request)
+        return package
+
+    forward = package_for(["identity.value.simplicity", "identity.value.reliability"])
+    reverse = package_for(["identity.value.reliability", "identity.value.simplicity"])
+
+    assert forward["selection"]["activeGuidanceElementIds"] == reverse["selection"]["activeGuidanceElementIds"]
+    assert forward["slots"] == reverse["slots"]
+    assert forward["modelInputHash"] == reverse["modelInputHash"]
+
+
+def test_target_id_and_resolution_manifest_compare_on_the_canonical_identity_1_1_6():
+    """Section 8.0a: an identity is an identity wherever it is compared."""
+    import copy
+
+    manifest, compiled, index, chapters = setup()
+    compiled = copy.deepcopy(compiled)
+    compiled["targetId"] = "social-copy-global-en-caf\u0065\u0301"
+    compiled.pop("artifactHash", None)
+    compiled["artifactHash"] = canonical.artefact_hash(compiled)
+
+    policy, by_id = assembler._validate_compiled_context(
+        compiled,
+        {"targetId": "social-copy-global-en-caf\u00e9",
+         "deliveryMode": compiled["contextAssembly"]["deliveryMode"],
+         "applicationMode": compiled["contextAssembly"]["applicationMode"]},
+    )
+    assert by_id, "the compiled context must be accepted across normalisation forms"
+
+
+def test_resolution_manifest_id_compares_on_the_canonical_identity_1_1_6():
+    """Section 8.0a: the manifest_checked resolution path is an identity check.
+
+    The earlier test named this path but exercised only targetId, so reverting
+    the resolution-manifest comparison to raw equality still passed.
+    """
+    import copy
+
+    manifest, compiled, index, chapters = setup()
+    compiled = copy.deepcopy(compiled)
+    compiled["manifest"] = dict(compiled["manifest"])
+    compiled["manifest"]["id"] = "urn:obds:brand:caf\u00e9"
+    compiled.pop("artifactHash", None)
+    compiled["artifactHash"] = canonical.artefact_hash(compiled)
+
+    resolution_manifest = {
+        "id": "urn:obds:brand:cafe\u0301",
+        "version": compiled["manifest"]["version"],
+        "approval": {"contentHash": compiled["manifest"]["contentHash"]},
+    }
+
+    assembler._validate_resolution_manifest(
+        compiled,
+        {"resolution": "manifest_checked"},
+        resolution_manifest,
+    )
+
+
+def test_model_facing_references_render_the_canonical_identity_1_1_6():
+    """Two canonically equivalent rules must render identically, not just hash so.
+
+    text_hash normalises, so a raw rendered reference produced different model
+    input text under an identical modelInputHash: the hash asserted an identity
+    the bytes did not have.
+    """
+    import copy
+
+    def rendered(reference):
+        element = {
+            "id": "rule.example",
+            "state": "defined",
+            "family": "rules",
+            "value": {
+                "statement": "Example.",
+                "obligation": "require",
+                "enforcement": "inform",
+                "references": [reference],
+                "checks": [{
+                    "primitive": "literal_required",
+                    "params": {"elementValueRef": {"elementId": reference, "path": "text"}},
+                }],
+            },
+        }
+        return assembler.render_rule_for_model(element)
+
+    assert rendered("context.cafe\u0301") == rendered("context.caf\u00e9")
+
+
+def test_an_applicable_prohibition_reaches_the_model_input_1_1_6():
+    """Sections 14.1 and 15.4: a prohibition is a hard boundary whatever its
+    enforcement.
+
+    Context Assembly rebuilt the hard boundaries from the element records using
+    the enforcement filter alone, so an applicable `obligation: prohibit` RULE
+    with advisory enforcement was dropped from the model input even though the
+    compiler had put it in the slot.
+    """
+    import copy
+
+    manifest, compiled, index, chapters = setup()
+    compiled = copy.deepcopy(compiled)
+    rule = copy.deepcopy(next(
+        record for record in compiled["elementRecords"]
+        if record.get("family") == "rules" and record.get("state") == "defined"
+    ))
+    rule["id"] = "rules.advisory-prohibition"
+    rule["subject"] = "rules.advisory-prohibition"
+    rule["value"] = dict(rule["value"])
+    rule["value"]["obligation"] = "prohibit"
+    rule["value"]["enforcement"] = "inform"
+    rule["value"]["checks"] = []
+    compiled["elementRecords"].append(rule)
+    compiled["availableElementIds"] = sorted(
+        compiled["availableElementIds"] + ["rules.advisory-prohibition"]
+    )
+    compiled.pop("artifactHash", None)
+    compiled["artifactHash"] = canonical.artefact_hash(compiled)
+
+    request = load_yaml("assembly-request-create.yaml")
+    package, text = assembler.assemble(compiled, index, chapters, request)
+
+    assert "rules.advisory-prohibition" in package["selection"]["hardBoundaryElementIds"]
+    assert "rules.advisory-prohibition" in package["slots"]["hardBoundaries"]
+    assert "rules.advisory-prohibition" in text

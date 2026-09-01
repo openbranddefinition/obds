@@ -12,7 +12,7 @@ from typing import Any
 import yaml
 import jsonschema
 
-from .canonical import _utf16_sort_key, artefact_hash, canonical_json_bytes, manifest_content_hash, sha256_id, value_shape_hash
+from .canonical import _utf16_sort_key, artefact_hash, canonical_json_bytes, identity_key, manifest_content_hash, sha256_id, value_shape_hash
 from .checks import SUPPORTED_PRIMITIVES, validate_check
 
 
@@ -260,22 +260,22 @@ def _manifest_internal_references(element: dict[str, Any]) -> list[tuple[str, st
 
 def validate_plan_against_manifest(plan: dict[str, Any], manifest: dict[str, Any]) -> list[str]:
     errors: list[str] = []
-    ids = {element.get("id") for element in manifest.get("elements", []) if isinstance(element, dict) and isinstance(element.get("id"), str)}
+    ids = {identity_key(element["id"]) for element in manifest.get("elements", []) if isinstance(element, dict) and isinstance(element.get("id"), str)}
     for target in plan.get("targets", []):
         if not isinstance(target, dict): continue
         target_id = target.get("id", "<target>")
         for element_id in target.get("requiresDefined", []):
-            if element_id not in ids:
+            if identity_key(element_id) not in ids:
                 errors.append(f"{target_id}: requiresDefined reference not found: {element_id}")
         style = target.get("styleTexture", {})
         if isinstance(style, dict) and style.get("mode") == "selected":
             for element_id in style.get("elementIds", []):
-                if element_id not in ids:
+                if identity_key(element_id) not in ids:
                     errors.append(f"{target_id}: styleTexture reference not found: {element_id}")
         assembly = target.get("contextAssembly", {})
         if isinstance(assembly, dict):
             for element_id in assembly.get("eligibleGuidanceIds", []):
-                if element_id not in ids:
+                if identity_key(element_id) not in ids:
                     errors.append(f"{target_id}: contextAssembly.eligibleGuidanceIds reference not found: {element_id}")
     return errors
 
@@ -284,7 +284,7 @@ def _value_contract_map(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
     result: dict[str, dict[str, Any]] = {}
     for contract in manifest.get("valueContracts", []):
         if isinstance(contract, dict) and isinstance(contract.get("id"), str):
-            result[contract["id"]] = contract
+            result[identity_key(contract["id"])] = contract
     return result
 
 
@@ -292,7 +292,7 @@ def _element_contract(manifest: dict[str, Any], element: dict[str, Any]):
     ref = element.get("valueContractRef")
     if not isinstance(ref, str):
         return None
-    return _value_contract_map(manifest).get(ref)
+    return _value_contract_map(manifest).get(identity_key(ref))
 
 
 def _value_schema_path(schema_ref: str) -> Path | None:
@@ -353,12 +353,12 @@ def _semver(value: str) -> tuple[int, int, int]:
 
 def manifest_change_report(old: dict[str, Any], new: dict[str, Any]) -> dict[str, Any]:
     old_elements = {
-        element["id"]: element
+        identity_key(element["id"]): element
         for element in old.get("elements", [])
         if isinstance(element, dict) and isinstance(element.get("id"), str)
     }
     new_elements = {
-        element["id"]: element
+        identity_key(element["id"]): element
         for element in new.get("elements", [])
         if isinstance(element, dict) and isinstance(element.get("id"), str)
     }
@@ -391,8 +391,10 @@ def manifest_change_report(old: dict[str, Any], new: dict[str, Any]) -> dict[str
         new_shape_hash = value_shape_hash(new_element["value"]) if new_has_value else None
         old_contract = _element_contract(old, old_element)
         new_contract = _element_contract(new, new_element)
-        old_contract_id = old_contract.get("id") if old_contract else None
-        new_contract_id = new_contract.get("id") if new_contract else None
+        # Section 8.0a: a value contract id is an identity, so a canonically
+        # equivalent respelling is not a contract change.
+        old_contract_id = identity_key(old_contract["id"]) if old_contract else None
+        new_contract_id = identity_key(new_contract["id"]) if new_contract else None
 
         kinds = []
         if old_value_hash != new_value_hash:
@@ -430,8 +432,17 @@ def manifest_change_report(old: dict[str, Any], new: dict[str, Any]) -> dict[str
             "id", "subject", "family", "kind", "nature", "state", "value",
             "scope", "sourceRefs", "validity", "annotations",
         }
-        old_metadata = {key: value for key, value in old_element.items() if key not in known}
-        new_metadata = {key: value for key, value in new_element.items() if key not in known}
+        # `valueContractRef` names an identity, so it is compared on its
+        # canonical form like the contract id it resolves to.
+        def _metadata(element):
+            result = {key: value for key, value in element.items() if key not in known}
+            ref = result.get("valueContractRef")
+            if isinstance(ref, str):
+                result["valueContractRef"] = identity_key(ref)
+            return result
+
+        old_metadata = _metadata(old_element)
+        new_metadata = _metadata(new_element)
         if old_metadata != new_metadata:
             kinds.append("metadata")
 
@@ -506,8 +517,15 @@ def _parse_timestamp(raw: str, *, field_name: str) -> datetime:
 
 
 def _element_subject(element: dict[str, Any]) -> str:
+    """The element's semantic subject, as a canonical identity (section 8.0a)."""
     subject = element.get("subject")
-    return subject if isinstance(subject, str) and subject else element["id"]
+    raw = subject if isinstance(subject, str) and subject else element["id"]
+    return identity_key(raw)
+
+
+def _element_id(element: dict[str, Any]) -> str:
+    """The element's canonical identity (section 8.0a)."""
+    return identity_key(element["id"])
 
 
 def _valid_at(element: dict[str, Any], as_of: datetime) -> bool:
@@ -561,7 +579,7 @@ def _resolve_subject_precedence(applicable: list[dict[str, Any]]):
         elif len(maximal) > 1:
             conflicts.append({
                 "subject": subject,
-                "elementIds": sorted(item["id"] for item in maximal),
+                "elementIds": sorted(_element_id(item) for item in maximal),
                 "reason": "incomparable_maximal_elements",
             })
     return selected, conflicts
@@ -600,11 +618,14 @@ def governed_result_payload(
     """
     plan_target = {k: v for k, v in target.items() if k != "maxTokens"}
     selection = []
-    for element in sorted(applicable, key=lambda item: _utf16_sort_key(item["id"])):
+    # Section 8.0a: both the sort key and the emitted identity are the canonical
+    # identity. Sorting raw document bytes let two canonically equivalent ids
+    # order differently, which permuted the payload and moved the hash.
+    for element in sorted(applicable, key=lambda item: _utf16_sort_key(_element_id(item))):
         defined = element.get("state") == "defined"
         selection.append({
-            "elementId": element["id"],
-            "subject": element.get("subject", element["id"]),
+            "elementId": _element_id(element),
+            "subject": _element_subject(element),
             "state": element["state"],
             "valueHash": sha256_id(element.get("value")) if defined else None,
         })
@@ -642,15 +663,27 @@ def _conflict_is_decision_relevant(
     a target never reads blocked that target — fail-arbitrary rather than
     fail-closed.
     """
-    required = set(target.get("requiresDefined", [])) | rule_required_ids
+    required = {identity_key(item) for item in target.get("requiresDefined", [])} | rule_required_ids
+    # Guidance the target declares itself eligible to activate is part of what
+    # this target reads, so a conflict on that subject changes its governed
+    # result: the artefact would otherwise declare eligible guidance that is
+    # not in availableElementIds.
+    assembly = target.get("contextAssembly") or {}
+    if isinstance(assembly, dict):
+        required |= {
+            identity_key(item)
+            for item in assembly.get("eligibleGuidanceIds", [])
+            if isinstance(item, str) and item
+        }
     style = target.get("styleTexture", {"mode": "all", "elementIds": []})
     style_mode = style.get("mode", "all")
-    style_ids = set(style.get("elementIds", []))
+    style_ids = {identity_key(item) for item in style.get("elementIds", [])}
     state_policy = target.get("stateMap", {"mode": "none", "kinds": []})
     state_mode = state_policy.get("mode", "none")
-    state_kinds = set(state_policy.get("kinds", []))
+    state_kinds = {identity_key(item) for item in state_policy.get("kinds", [])}
 
-    for element_id in conflict.get("elementIds", []):
+    for raw_element_id in conflict.get("elementIds", []):
+        element_id = identity_key(raw_element_id)
         element = by_id.get(element_id)
         if element is None:
             continue
@@ -664,15 +697,30 @@ def _conflict_is_decision_relevant(
         family = element.get("family")
         nature = element.get("nature")
 
-        # 2. a blocking or approval-requiring RULE belongs in HARD_BOUNDARIES,
-        #    unconditionally.
-        if (
-            family == "rules"
-            and state == "defined"
-            and (element.get("value") or {}).get("enforcement")
-            in {"block", "require_approval"}
-        ):
-            return True
+        # 2. a defined RULE that would govern this build if it won. Until 1.1.6
+        #    only `block` and `require_approval` counted here, which read the
+        #    concrete list of section 10.2a rather than the principle that
+        #    introduces it. A RULE also governs when it carries its own
+        #    dependencies, contributes a compiled check, or states a prohibition:
+        #    resolving the conflict the other way then changes the requirements,
+        #    the compiled checks or the applicable prohibitions of this target.
+        #    Leaving those out let an unresolved conflict between two
+        #    non-blocking RULES silently cancel a declared dependency, so
+        #    repairing the manifest turned a passing build into a failing one.
+        if family == "rules" and state == "defined":
+            value = element.get("value") or {}
+            if value.get("enforcement") in {"block", "require_approval"}:
+                return True
+            if value.get("requiresDefinedRefs"):
+                return True
+            if value.get("checks"):
+                return True
+            # Section 14.1 puts every applicable prohibition in HARD_BOUNDARIES,
+            # whatever its enforcement, so a prohibition always reaches the
+            # compiled context of every target and a conflict over one is always
+            # decision-relevant.
+            if value.get("obligation") == "prohibit":
+                return True
 
         # 3. a defined non-rules fact belongs in FACT_GROUNDING, unconditionally.
         if state == "defined" and nature == "fact" and family != "rules":
@@ -682,7 +730,7 @@ def _conflict_is_decision_relevant(
         if state in {"unknown", "not_defined", "not_applicable"}:
             if state_mode == "all_applicable":
                 return True
-            if state_mode == "kinds" and element.get("kind") in state_kinds:
+            if state_mode == "kinds" and identity_key(element.get("kind") or "") in state_kinds:
                 return True
 
         # 5. carried into STYLE_TEXTURE by the target's declared policy.
@@ -753,11 +801,11 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
         schema_hash = contract.get("schemaHash")
         if not isinstance(contract_id, str) or not contract_id:
             errors.append(f"{prefix}.id must be a non-empty string")
-        elif contract_id in contract_ids:
-            errors.append(f"duplicate value contract id: {contract_id}")
+        elif identity_key(contract_id) in contract_ids:
+            errors.append(f"duplicate value contract id after Unicode NFC normalisation: {contract_id}")
         else:
-            contract_ids.add(contract_id)
-            contract_map[contract_id] = contract
+            contract_ids.add(identity_key(contract_id))
+            contract_map[identity_key(contract_id)] = contract
         if family not in VALID_FAMILIES:
             errors.append(f"{prefix}.family is invalid: {family}")
         if not isinstance(kind, str) or not kind:
@@ -808,10 +856,12 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
         element_id = element.get("id")
         if not isinstance(element_id, str) or not element_id:
             errors.append(f"{prefix}.id must be a non-empty string")
-        elif element_id in seen:
-            errors.append(f"duplicate element id: {element_id}")
+        elif identity_key(element_id) in seen:
+            # Section 8.0a. Two canonically equivalent ids are one identity, so
+            # they are a duplicate even when their document bytes differ.
+            errors.append(f"duplicate element id after Unicode NFC normalisation: {element_id}")
         else:
-            seen.add(element_id)
+            seen.add(identity_key(element_id))
 
         subject = element.get("subject")
         if subject is not None and (not isinstance(subject, str) or not subject):
@@ -860,7 +910,7 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
             if not isinstance(contract_ref, str) or not contract_ref:
                 errors.append(f"{element_id or prefix}: defined structured value requires valueContractRef")
             else:
-                contract = contract_map.get(contract_ref)
+                contract = contract_map.get(identity_key(contract_ref))
                 if contract is None:
                     errors.append(f"{element_id or prefix}: valueContractRef not found: {contract_ref}")
                 else:
@@ -904,12 +954,12 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
                             continue
                         errors.extend(f"{element_id}: {err}" for err in validate_check(check))
 
-    ids = {element.get("id") for element in manifest.get("elements", []) if isinstance(element, dict) and isinstance(element.get("id"), str)}
+    ids = {identity_key(element["id"]) for element in manifest.get("elements", []) if isinstance(element, dict) and isinstance(element.get("id"), str)}
     for element in manifest.get("elements", []):
         if not isinstance(element, dict): continue
         source_id = element.get("id", "<element>")
         for location, referenced_id in _manifest_internal_references(element):
-            if referenced_id not in ids:
+            if identity_key(referenced_id) not in ids:
                 errors.append(f"{source_id}: internal element reference not found at {location}: {referenced_id}")
     return errors
 
@@ -948,10 +998,10 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         target_id = target.get("id")
         if not isinstance(target_id, str) or not target_id:
             errors.append(f"{prefix}.id must be a non-empty string")
-        elif target_id in target_ids:
-            errors.append(f"duplicate target id: {target_id}")
+        elif identity_key(target_id) in target_ids:
+            errors.append(f"duplicate target id after Unicode NFC normalisation: {target_id}")
         else:
-            target_ids.add(target_id)
+            target_ids.add(identity_key(target_id))
 
         errors.extend(f"{target_id or prefix}: {err}" for err in _check_scope(target.get("scope", {}), target=True))
 
@@ -1014,15 +1064,18 @@ def _format_value(value: Any) -> str:
 
 
 def _rule_line(element: dict[str, Any]) -> str:
+    # Section 8.0a: the artefact presents one identity. availableElementIds and
+    # includedElementIds carry the canonical form, so the rendered slots do too;
+    # two spellings of one identity would otherwise render as two artefacts.
     value = element["value"]
     return (
-        f"- `{element['id']}` — {value.get('statement', '')} "
+        f"- `{_element_id(element)}` — {value.get('statement', '')} "
         f"[{value.get('validationMode', 'unknown')}, {value.get('enforcement', 'inform')}]"
     )
 
 
 def _fact_line(element: dict[str, Any]) -> str:
-    return f"- `{element['id']}` — {_format_value(element['value'])}"
+    return f"- `{_element_id(element)}` — {_format_value(element['value'])}"
 
 
 def _state_line(element: dict[str, Any]) -> str:
@@ -1030,11 +1083,11 @@ def _state_line(element: dict[str, Any]) -> str:
     annotations = element.get("annotations") or []
     if annotations:
         note = " " + str(annotations[0]).strip()
-    return f"- `{element['id']}` — {element['state']}.{note}"
+    return f"- `{_element_id(element)}` — {element['state']}.{note}"
 
 
 def _style_block(element: dict[str, Any]) -> str:
-    return f"`{element['id']}`\n\n{_format_value(element['value'])}"
+    return f"`{_element_id(element)}`\n\n{_format_value(element['value'])}"
 
 
 def _resolve_path(value: Any, path: str) -> Any:
@@ -1072,11 +1125,15 @@ def _materialise_checks(
                         element["id"],
                     ))
                     continue
-                source_element = elements_by_id.get(ref["elementId"])
+                source_element = elements_by_id.get(identity_key(ref["elementId"]))
                 if not source_element or source_element.get("state") != "defined":
+                    # elements_by_id carries the applicable selection only, so
+                    # this also catches expired, out-of-scope, subject-losing and
+                    # conflicted references. The requirement resolution in
+                    # build_target has already named the precise cause.
                     errors.append(BuildError(
                         "OBDS-CHECK-REF-MISSING",
-                        f"check reference is not defined: {ref['elementId']}",
+                        f"check reference is not an applicable defined element: {ref['elementId']}",
                         element["id"],
                     ))
                     continue
@@ -1105,7 +1162,7 @@ def _materialise_checks(
                 continue
 
             compiled.append({
-                "ruleElementId": element["id"],
+                "ruleElementId": _element_id(element),
                 "primitive": check["primitive"],
                 "phase": check.get("phase", "postflight"),
                 "enforcement": value.get("enforcement", "block"),
@@ -1136,7 +1193,7 @@ def build_target(
 
     manifest_ref = plan["manifestRef"]
     if (
-        manifest_ref.get("id") != manifest.get("id")
+        identity_key(manifest_ref.get("id") or "") != identity_key(manifest.get("id") or "")
         or manifest_ref.get("version") != manifest.get("version")
         or manifest_ref.get("contentHash") != expected_manifest_hash
     ):
@@ -1145,7 +1202,7 @@ def build_target(
 
     target_scope = target.get("scope", {})
     elements = manifest["elements"]
-    by_id = {element["id"]: element for element in elements}
+    by_id = {_element_id(element): element for element in elements}
     as_of = _parse_timestamp(plan["asOf"], field_name="build plan asOf")
 
     scope_matching = [
@@ -1155,10 +1212,30 @@ def build_target(
     time_applicable = [element for element in scope_matching if _valid_at(element, as_of)]
     applicable, conflicts = _resolve_subject_precedence(time_applicable)
     rule_requirements = [
-        (required_id, element["id"])
+        (identity_key(required_id), _element_id(element))
         for element in applicable
         if element.get("family") == "rules" and element.get("state") == "defined"
         for required_id in element.get("value", {}).get("requiresDefinedRefs", [])
+    ]
+    # Section 11.5. A check that binds another element's value through
+    # `elementValueRef` consumes that element as governed truth, exactly as
+    # `requiresDefinedRefs` does. Until 1.1.6 it was resolved against the raw
+    # manifest snapshot on `state` alone, so an expired, out-of-scope or
+    # subject-losing value could still be materialised into an active check.
+    # Routing it through the same requirement resolution gives it the same four
+    # causes, the same fail-closed outcome and the same conflict relevance.
+    rule_value_refs = [
+        (identity_key(reference["elementId"]), _element_id(element))
+        for element in applicable
+        if element.get("family") == "rules" and element.get("state") == "defined"
+        for check in element.get("value", {}).get("checks", [])
+        if isinstance(check, dict)
+        for reference in [(check.get("params") or {}).get("elementValueRef")]
+        if isinstance(reference, dict) and isinstance(reference.get("elementId"), str)
+        and reference["elementId"]
+    ]
+    rule_requirements = rule_requirements + [
+        item for item in rule_value_refs if item not in rule_requirements
     ]
     rule_required_ids = {required_id for required_id, _ in rule_requirements}
     # Section 10.2a: a conflict fails this target only when the subject is
@@ -1178,18 +1255,18 @@ def build_target(
             ))
     result.conflicts = annotated_conflicts
     valid_from, valid_to = _selection_validity_window(scope_matching, as_of)
-    applicable_ids = {element["id"] for element in applicable}
+    applicable_ids = {_element_id(element) for element in applicable}
 
     # OBDS 1.1: the four causes of a failed requirement are reported with distinct
     # codes. Before 1.1 they all surfaced as OBDS-BUILD-REQUIRED-NOT-DEFINED with
     # actualState `not_applicable`, so an operator could not tell a mis-scoped
     # target from an expired fact from a truth that was never curated. Each needs
     # a different human response.
-    scope_matching_ids = {element["id"] for element in scope_matching}
-    time_applicable_ids = {element["id"] for element in time_applicable}
+    scope_matching_ids = {_element_id(element) for element in scope_matching}
+    time_applicable_ids = {_element_id(element) for element in time_applicable}
 
     requirements = [
-        (element_id, None) for element_id in target.get("requiresDefined", [])
+        (identity_key(element_id), None) for element_id in target.get("requiresDefined", [])
     ] + rule_requirements
     for element_id, requiring_rule_id in requirements:
         element = by_id.get(element_id)
@@ -1232,7 +1309,8 @@ def build_target(
 
     style = target.get("styleTexture", {"mode": "all", "elementIds": []})
     if style.get("mode") == "selected":
-        for element_id in style.get("elementIds", []):
+        for raw_style_id in style.get("elementIds", []):
+            element_id = identity_key(raw_style_id)
             element = by_id.get(element_id)
             if (
                 element is None
@@ -1246,18 +1324,30 @@ def build_target(
                     element_id,
                 ))
 
-    compiled_checks, check_errors = _materialise_checks(applicable, by_id)
+    # Section 11.5: checks bind the governed winner, so they resolve against the
+    # applicable selection, never the raw snapshot.
+    applicable_by_id = {_element_id(element): element for element in applicable}
+    compiled_checks, check_errors = _materialise_checks(applicable, applicable_by_id)
     result.errors.extend(check_errors)
 
     if result.errors:
         return result
 
+    # Section 14.1: hardBoundaries contains applicable prohibitions AND rules
+    # with enforcement block or require_approval. Filtering on enforcement alone
+    # dropped an applicable `obligation: prohibit` RULE whose enforcement was
+    # advisory, so the artefact carried no trace of a prohibition the manifest
+    # declares. "Prohibition appears in hardBoundaries through applicable
+    # explicit RULE elements" is the same section, one paragraph down.
     hard_elements = [
         element for element in applicable
         if (
             element.get("family") == "rules"
             and element.get("state") == "defined"
-            and element.get("value", {}).get("enforcement") in {"block", "require_approval"}
+            and (
+                element.get("value", {}).get("enforcement") in {"block", "require_approval"}
+                or element.get("value", {}).get("obligation") == "prohibit"
+            )
         )
     ]
     fact_elements = [
@@ -1277,11 +1367,11 @@ def build_target(
         ]
         state_coverage = "complete"
     elif state_policy.get("mode") == "kinds":
-        kinds = set(state_policy.get("kinds", []))
+        kinds = {identity_key(item) for item in state_policy.get("kinds", [])}
         state_elements = [
             element for element in applicable
             if element.get("state") in {"unknown", "not_defined", "not_applicable"}
-            and element.get("kind") in kinds
+            and identity_key(element.get("kind") or "") in kinds
         ]
         state_coverage = "partial"
     else:
@@ -1294,8 +1384,8 @@ def build_target(
         and (element.get("nature") == "knowledge" or element.get("family") == "stance")
     ]
     if style.get("mode", "all") == "selected":
-        selected = set(style.get("elementIds", []))
-        knowledge = [element for element in knowledge if element["id"] in selected]
+        selected = {identity_key(item) for item in style.get("elementIds", [])}
+        knowledge = [element for element in knowledge if _element_id(element) in selected]
     elif style.get("mode") == "none":
         knowledge = []
 
@@ -1308,8 +1398,8 @@ def build_target(
     # artefact whenever styleTexture.mode was `none` or a `selected` list omitted
     # it. A build that verifies required truth as present and then ships a context
     # without it is the failure this rule closes.
-    required_ids = list(target.get("requiresDefined", []))
-    already_placed = {e["id"] for e in hard_elements + fact_elements + state_elements + knowledge}
+    required_ids = [identity_key(item) for item in target.get("requiresDefined", [])]
+    already_placed = {_element_id(e) for e in hard_elements + fact_elements + state_elements + knowledge}
     for element_id in required_ids:
         if element_id in already_placed:
             continue
@@ -1321,11 +1411,15 @@ def build_target(
         knowledge.append(element)
         already_placed.add(element_id)
 
-    hard_elements.sort(key=lambda item: item["id"])
-    fact_elements.sort(key=lambda item: item["id"])
-    state_elements.sort(key=lambda item: item["id"])
-    knowledge.sort(key=lambda item: item["id"])
-    compiled_checks.sort(key=lambda item: (item["ruleElementId"], item["primitive"], item["phase"]))
+    # Section 8.0a: slot order is an identity ordering, so it uses the
+    # canonical form like every other. Sorting raw bytes let two canonically
+    # equivalent manifests agree on governedResultHash and still disagree on
+    # artifactHash, because the rendered slots came out in a different order.
+    hard_elements.sort(key=_element_id)
+    fact_elements.sort(key=_element_id)
+    state_elements.sort(key=_element_id)
+    knowledge.sort(key=_element_id)
+    compiled_checks.sort(key=lambda item: (identity_key(item["ruleElementId"]), item["primitive"], item["phase"]))
 
     slots = {
         "hardBoundaries": "\n".join(_rule_line(e) if e.get("family") == "rules" else _state_line(e) for e in hard_elements),
@@ -1382,10 +1476,10 @@ def build_target(
         "validFrom": valid_from,
         "validTo": valid_to,
         "includedElementIds": sorted(
-            {element["id"] for element in hard_elements + fact_elements + state_elements + knowledge}
+            {_element_id(element) for element in hard_elements + fact_elements + state_elements + knowledge}
         ),
-        "availableElementIds": sorted(element["id"] for element in applicable),
-        "elementRecords": copy.deepcopy(sorted(applicable, key=lambda item: item["id"])),
+        "availableElementIds": sorted(_element_id(element) for element in applicable),
+        "elementRecords": copy.deepcopy(sorted(applicable, key=_element_id)),
         "governedResultHash": governed_result_hash(manifest, target, plan["asOf"], applicable),
         "contextAssembly": copy.deepcopy(target.get("contextAssembly")),
         "slots": slots,

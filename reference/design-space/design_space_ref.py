@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import math
 
+from canonical import identity_key
+
 
 def resolve_measurement(measurement, basis_amount=None, basis_unit=None):
     mode = measurement["mode"]
@@ -212,19 +214,21 @@ def validate_coverage(coverage):
 
 
 def validate_rule_dependencies(manifest, rule):
-    by_id = {e["id"]: e for e in manifest["elements"]}
+    # Section 8.0a: an element id is compared on its canonical form.
+    by_id = {identity_key(e["id"]): e for e in manifest["elements"]}
     for ref in rule.get("value", {}).get("requiresDefinedRefs", []):
-        if ref not in by_id:
+        key = identity_key(ref)
+        if key not in by_id:
             raise ValueError(f"missing dependency {ref}")
-        if by_id[ref]["state"] != "defined":
-            raise ValueError(f"dependency {ref} is {by_id[ref]['state']}")
+        if by_id[key]["state"] != "defined":
+            raise ValueError(f"dependency {ref} is {by_id[key]['state']}")
     return True
 
 
 def validate_contradictions(manifest, contradiction_records):
-    by_id = {e["id"]: e for e in manifest["elements"]}
+    by_id = {identity_key(e["id"]): e for e in manifest["elements"]}
     for record in contradiction_records:
-        element = by_id[record["elementId"]]
+        element = by_id[identity_key(record["elementId"])]
         if record["status"] == "unresolved" and element["state"] != "unknown":
             raise ValueError(
                 f"unresolved contradiction requires unknown current state: {element['id']}"

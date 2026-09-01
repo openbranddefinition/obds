@@ -54,6 +54,49 @@ Before publishing 1.0:
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
 
+## 1.1.5 to 1.1.6
+
+No schema changed and no manifest change is required. Four observable changes,
+each of which only affects a manifest that was already outside the
+specification.
+
+**One new normative rule, section 14.3c.** A governed string or object key must
+consist only of code points assigned in Unicode 15.1.0, or Unicode
+noncharacters, and must contain no surrogate. A document containing a code point
+assigned only in a later Unicode version is now rejected. An implementation must
+also run on a Unicode database at or after 15.1.0: the reference compiler needs
+CPython 3.13 and the JavaScript oracle needs Node 21. This is what makes NFC, and therefore every
+hash derived from it, identical on every conforming runtime. If you author in a
+script added after Unicode 15.1.0, you cannot govern it under OBDS 1.1.6; raise
+the pinned version in a later MINOR release rather than diverging locally. The
+pinned assignment set ships with the release as
+`reference/foundation/src/obds_ref/unicode-pin-15.1.0.json`.
+
+**Element ids and semantic subjects are compared after NFC, section 8.0a.** Two
+canonically equivalent ids are now one identity, so a manifest carrying both is
+rejected as a duplicate, and an NFD and an NFC spelling of one subject now
+resolve as one subject. `approval.contentHash` is unaffected, because it was
+always computed over canonical, and therefore NFC, bytes. If your manifest ids
+come from macOS paths or a DAM export they may be NFD; nothing needs to change,
+because the comparison is now on the canonical form either way.
+
+**`elementValueRef` resolves through the governed selection, section 11.5.** A
+check that binds another element's value now fails the target when that element
+has expired, is out of scope, lost its subject, sits in an unresolved conflict
+or is not `defined`, with the section 13.1a cause that applies. Previously the
+reference resolved it against the raw approved snapshot on `state` alone, so a
+withdrawn value could still be compiled into an active blocking check. A target
+that relied on that behaviour was enforcing text that was not governed truth.
+
+**Conflict relevance counts more RULES, section 10.2a.** An unresolved subject
+conflict is decision-relevant when one of the competing elements is a `defined`
+RULE that would add requirements or compiled checks if it won, and when the
+conflicted element is named in the target's `contextAssembly.eligibleGuidanceIds`,
+not only when its enforcement is `block` or `require_approval`. A build that
+succeeded while two competing non-blocking RULES cancelled a declared
+dependency now fails, which is the outcome the same manifest already produced
+once the conflict was resolved.
+
 ## 1.1.4 to 1.1.5
 
 No schema changed and no manifest change is required.

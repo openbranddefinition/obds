@@ -188,3 +188,28 @@ def test_curation_assessment_schema():
     assessment = data("curation-assessment.json")
     jsonschema.validate(assessment, schema("curation-assessment.schema.json"))
     assert "figures" in assessment["searchedModalities"]
+
+
+def test_rule_dependencies_resolve_across_normalisation_forms_1_1_6():
+    """Section 8.0a: an element id is compared on its canonical form.
+
+    Design Space resolved requiresDefinedRefs against raw ids, so a dependency
+    spelled in the other normalisation form was reported as missing.
+    """
+    manifest = {
+        "elements": [
+            {"id": "context.caf\u00e9", "state": "defined"},
+            {
+                "id": "rules.example",
+                "state": "defined",
+                "value": {"requiresDefinedRefs": ["context.cafe\u0301"]},
+            },
+        ]
+    }
+    assert ref.validate_rule_dependencies(manifest, manifest["elements"][1]) is True
+
+
+def test_contradiction_records_resolve_across_normalisation_forms_1_1_6():
+    manifest = {"elements": [{"id": "design.caf\u00e9", "state": "unknown"}]}
+    records = [{"elementId": "design.cafe\u0301", "status": "unresolved"}]
+    assert ref.validate_contradictions(manifest, records) is True

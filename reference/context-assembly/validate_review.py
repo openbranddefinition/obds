@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from canonical import sha256_id
+from canonical import identity_key, sha256_id
 
 FINDING_CATEGORIES = {"violation", "material_conflict", "opportunity"}
 REVIEW_DECISIONS = {"pass", "pass_with_suggestions", "approval_required", "fail"}
@@ -9,8 +9,9 @@ REVIEW_DECISIONS = {"pass", "pass_with_suggestions", "approval_required", "fail"
 def validate_review(compiled_context, package, review):
     if package["sources"]["compiledContextHash"] != compiled_context.get("artifactHash"):
         raise ValueError("review compiledContextHash mismatch")
-    by_id = {item["id"]: item for item in compiled_context["elementRecords"]}
-    active = set(package["selection"]["activeGuidanceElementIds"])
+    # Section 8.0a: identities are compared on their canonical form.
+    by_id = {identity_key(item["id"]): item for item in compiled_context["elementRecords"]}
+    active = {identity_key(item) for item in package["selection"]["activeGuidanceElementIds"]}
 
     if review["modelInputHash"] != package["modelInputHash"]:
         raise ValueError("review modelInputHash mismatch")
@@ -29,15 +30,15 @@ def validate_review(compiled_context, package, review):
             raise ValueError("invalid review finding category")
 
         for element_id in ids:
-            if element_id not in by_id:
+            if identity_key(element_id) not in by_id:
                 raise ValueError(f"review references unknown element: {element_id}")
 
         if category == "violation":
             any_violation = True
             rules = [
-                by_id[element_id]
+                by_id[identity_key(element_id)]
                 for element_id in ids
-                if by_id[element_id].get("family") == "rules"
+                if by_id[identity_key(element_id)].get("family") == "rules"
             ]
             if not rules:
                 raise ValueError("violation must reference a RULE")
@@ -49,7 +50,7 @@ def validate_review(compiled_context, package, review):
                     approval_violations += 1
 
         elif category in {"material_conflict", "opportunity"}:
-            if not set(ids).issubset(active):
+            if not {identity_key(element_id) for element_id in ids}.issubset(active):
                 raise ValueError(
                     f"{category} must reference active guidance only"
                 )

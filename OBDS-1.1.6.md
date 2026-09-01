@@ -2,9 +2,9 @@
 
 ## OBDS 1.1: Stable Specification
 
-**Version:** 1.1.5  
+**Version:** 1.1.6  
 **Status:** Stable  
-**Date:** 2026-08-31  
+**Date:** 2026-09-01  
 **Project home:** https://openbranddefinition.org  
 
 ---
@@ -525,6 +525,38 @@ Rules:
 
 The `subject` inside a `semantic-boundary` value is descriptive qualitative content. The top-level element `subject` is the machine key used for precedence.
 
+### 8.0a Canonical identity
+
+An element `id` and an effective `subject` are semantic identities: they decide
+which truth is selected, which element a reference resolves to, and in what
+order the governed result of section 14.3a is hashed.
+
+Every governed string is compared after Unicode NFC. Identities are no
+exception:
+
+- two identity strings are the same identity exactly when their NFC forms are equal;
+- element `id` uniqueness under section 8.6, subject grouping and comparison under section 10.2, every internal element reference under section 7, `requiresDefined`, `requiresDefinedRefs`, `elementValueRef` and the `selection` ordering of section 14.3a MUST all compare and sort the NFC form; and
+- an implementation MUST reject a manifest in which two elements carry canonically equivalent ids, exactly as section 9 rejects canonically equivalent duplicates in a scope collection.
+
+Only NFC. The line-ending folding of section 14.3 step 2 is a serialisation
+rule for canonical bytes and does not apply to identity: `a\rb` and `a\nb` are
+two identities, and an implementation that folded them here would reject two
+distinct elements as one duplicate.
+
+This is a comparison rule, not a rewriting rule. The stored representation of an
+approved manifest is unchanged, and `approval.contentHash` is unaffected,
+because it is computed over canonical bytes, which are already NFC.
+
+The same rule governs the other governed strings that are compared rather than
+rendered: value contract ids and the `valueContractRef` that names one, and the
+vocabulary values a target matches against, such as `stateMap.kinds` against an
+element `kind`. Section 9 already states it for scope values.
+
+Without it one approved manifest can produce two different governed results: the
+same `contentHash` covers an NFD and an NFC spelling of one subject, while raw
+byte comparison treats them as two subjects, so a broad value and the narrower
+override meant to replace it both survive as governed truth.
+
 Elements MAY carry an optional `classification`: an opaque identifier string.
 OBDS assigns it no meaning, defines no vocabulary for it and enforces no policy
 from it. It is governed metadata: section 13.6 change reports track it and
@@ -756,9 +788,15 @@ decision-relevant to a target when at least one of its incomparable maximal
 elements would, if it won, reach that target's requirements or its compiled
 context. Concretely, when that element is:
 
-1. named in the target's `requiresDefined`;
-2. a RULES element whose `enforcement` is `block` or `require_approval`, so it
-   belongs in HARD_BOUNDARIES;
+1. named in the target's `requiresDefined`, in its
+   `contextAssembly.eligibleGuidanceIds`, or named as a dependency by an
+   applicable RULE through `requiresDefinedRefs` or `elementValueRef`;
+2. a `defined` RULES element that would govern this build if it won, which it
+   does when its `enforcement` is `block` or `require_approval`, or when its
+   `obligation` is `prohibit`, because section 14.1 places both in
+   HARD_BOUNDARIES; when it declares `requiresDefinedRefs`, so it would add
+   requirements this target must satisfy; or when it declares `checks`, so it
+   would contribute compiled checks;
 3. a `defined` element of `nature: fact` outside `family: rules`, so it belongs
    in FACT_GROUNDING;
 4. carried into STATE_MAP by the target's declared `stateMap` policy; or
@@ -768,6 +806,15 @@ The first three are unconditional: a target cannot opt out of its own
 requirements, its hard boundaries or its fact grounding. The last two follow the
 policy the target declared, so a target that selects narrowly is not failed by a
 conflict it never reads.
+
+The list is a reading of the rule above it, never a narrowing of it. Where the
+list and the rule disagree, the rule governs: if resolving the conflict the
+other way would change what this target requires, blocks, prohibits or checks,
+the subject is decision-relevant. Reading the list as the whole rule left a case
+open until 1.1.6, in which two competing non-blocking RULES cancelled a declared
+dependency between them: the target built while its dependency was `unknown`,
+and deleting one of the two conflicting RULES made the same target fail.
+Repairing a manifest defect must never make a governed build less valid.
 
 **An irrelevant conflict MUST NOT be silently discarded.** The Build Report MUST
 still carry it in `conflicts[]`, marked as not decision-relevant for this target,
@@ -876,7 +923,7 @@ Every check is a pure function of its declared phase input and parameters. Imple
 
 Rules:
 
-- `elementValueRef` is resolved against the exact approved manifest snapshot during the build.
+- `elementValueRef` is resolved during the build against the governed selection for this target and this `asOf`, not against the raw approved manifest snapshot. A check binds truth that this execution is entitled to use, so the referenced element MUST resolve to the one applicable `defined` element of its subject, under the same resolution as `requiresDefinedRefs`: it MUST exist, match the target scope, be valid at the Build Plan `asOf`, win its semantic subject, be free of an unresolved subject conflict, and be `defined`. If it does not, the target fails with the section 13.1a cause that applies and no production artefact is written. The check is never silently omitted, and a value that has expired, does not apply to this target, or lost its subject is never compiled into an active check.
 - Unsupported primitives, invalid parameters or unsupported registry versions fail the target build.
 - Runtime MUST execute every compiled Foundation check natively or reject the artefact.
 - Foundation Check Registry v1 excludes regex, general expression languages and token-length checks.
@@ -1480,6 +1527,7 @@ The payload is the complete Compiled Brand Context except `artifactHash`.
 
 Canonicalisation is:
 
+0. reject the payload if any string or object key contains a code point outside the pinned Unicode version, as section 14.3c specifies;
 1. recursively normalise every string and object key to Unicode NFC;
 2. convert line endings inside every string and object key to LF, CRLF first and then any remaining CR;
 3. after normalisation, sort object keys into lexicographic order by UTF-16 code unit, comparing code unit by code unit and treating a shorter key that is a prefix of a longer one as smaller. This is the ordering RFC 8785 specifies. It is **not** ECMAScript property enumeration order, which places integer-like keys first and in numeric order: `{"10":1,"2":2}` canonicalises with `"10"` before `"2"`, not the reverse;
@@ -1499,6 +1547,53 @@ Governed JSON and YAML inputs MUST reject duplicate mapping keys, including keys
 A canonical hash proves byte identity after canonicalisation. It does **not** prove that a value still has the structure a consumer expects. Value-contract and shape validation are independent gates and MUST run before an approved manifest or compiled artefact is accepted.
 
 Volatile build data is not part of the artefact.
+
+### 14.3c Pinned Unicode version
+
+Step 1 of section 14.3 normalises to NFC. NFC is only deterministic once the
+Unicode version performing it is fixed. A code point that is unassigned in one
+version and is given a non-zero canonical combining class in a later one
+reorders against its neighbours, so two implementations running byte-identical
+code on runtimes with different Unicode databases produce different canonical
+bytes, and therefore different `manifestContentHash`, `governedResultHash` and
+`artifactHash` values, for the same document. They may also disagree on whether
+a document is valid at all, because two object keys can become equal only in the
+later version.
+
+OBDS therefore pins the version:
+
+```text
+Unicode 15.1.0
+```
+
+Rules:
+
+- an implementation MUST use a Unicode database of version 15.1.0 or later to perform the normalisation in section 14.3 step 1;
+- a governed string or object key MUST consist only of code points that are assigned in Unicode 15.1.0, or that are Unicode noncharacters, and MUST NOT contain a surrogate code point; and
+- an implementation MUST reject a document containing any other code point, before normalising it.
+
+Noncharacters are admitted because the Unicode Character Encoding Stability
+Policy guarantees that they are never assigned, so their combining class and
+decomposition can never change and they are normalisation-stable in every
+version. Surrogates are excluded because they are not characters: they cannot be
+encoded as UTF-8, which step 5 requires, and an implementation that emitted them
+as an escape instead would produce different bytes for the same document.
+
+Within the admitted set the Unicode Normalization Stability Policy guarantees
+that NFC is identical on every database at or after the pinned version. That is
+what makes the canonical bytes, and every hash derived from them, reproducible
+across implementations and across time.
+
+The release ships the pinned assignment set as machine-readable data so that an
+implementation on a newer Unicode database can apply the rule without carrying
+its own copy of Unicode 15.1.0:
+
+```text
+reference/foundation/src/obds_ref/unicode-pin-15.1.0.json
+```
+
+Raising the pinned version is a normative change and MUST NOT happen in a PATCH
+release, because it widens the set of admissible documents.
 
 ### 14.3b String escaping
 
@@ -2806,7 +2901,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS 1.0 release includes:
 
-1. one normative specification: `OBDS-1.1.5.md`;
+1. one normative specification: `OBDS-1.1.6.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

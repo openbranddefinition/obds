@@ -6,7 +6,7 @@ import json
 import re
 import uuid
 
-from canonical import sha256_id, text_hash
+from canonical import identity_key, sha256_id, text_hash
 
 
 
@@ -48,16 +48,20 @@ def render_element(element):
         rendered = ""
     else:
         rendered = _compact_json(value)
-    return f"{element['id']} [{element['state']}]: {rendered}".rstrip()
+    return f"{identity_key(element['id'])} [{element['state']}]: {rendered}".rstrip()
 
 
 def render_rule_for_model(element):
     value = element.get("value") or {}
-    prefix = f"{element['id']} [{value.get('obligation','?')}/{value.get('enforcement','inform')}]"
+    prefix = f"{identity_key(element['id'])} [{value.get('obligation','?')}/{value.get('enforcement','inform')}]"
     parts = [f"{prefix}: {value.get('statement','').strip()}"]
     refs = value.get("references") or []
     if refs:
-        parts.append("refs=" + ",".join(refs))
+        # Section 8.0a: a reference names an identity, so the model sees the
+        # canonical form. Rendering the stored spelling made two canonically
+        # equivalent rules render differently while text_hash, which normalises,
+        # reported the same modelInputHash for both.
+        parts.append("refs=" + ",".join(identity_key(item) for item in refs))
     condition = value.get("condition") or {}
     if condition:
         parts.append("condition=" + _compact_json(condition))
@@ -69,7 +73,12 @@ def render_rule_for_model(element):
         compact_checks = []
         for check in checks:
             primitive = check.get("primitive", "check")
-            params = check.get("params") or {}
+            params = dict(check.get("params") or {})
+            reference = params.get("elementValueRef")
+            if isinstance(reference, dict) and isinstance(reference.get("elementId"), str):
+                reference = dict(reference)
+                reference["elementId"] = identity_key(reference["elementId"])
+                params["elementValueRef"] = reference
             compact_checks.append(primitive + "(" + _compact_json(params) + ")")
         parts.append("checks=" + ";".join(compact_checks))
     return " | ".join(parts)
@@ -103,7 +112,7 @@ def _validate_compiled_context(compiled_context, request):
         raise ValueError("Context Assembly requires a Compiled Brand Context")
     if compiled_context.get("artifactHash") != artifact_hash(compiled_context):
         raise ValueError("compiled context artifactHash mismatch")
-    if compiled_context.get("targetId") != request.get("targetId"):
+    if identity_key(compiled_context.get("targetId") or "") != identity_key(request.get("targetId") or ""):
         raise ValueError("assembly target does not match compiled context")
 
     token_budget = compiled_context.get("tokenBudget") or {}
@@ -128,10 +137,14 @@ def _validate_compiled_context(compiled_context, request):
     records = compiled_context.get("elementRecords")
     if not isinstance(records, list):
         raise ValueError("compiled context has no elementRecords")
-    by_id = {item["id"]: item for item in records}
+    # Section 8.0a: identities are compared on their canonical form. The
+    # compiled context emits canonical ids in availableElementIds while
+    # elementRecords keeps the approved spelling, so indexing the records by
+    # their raw id rejected a valid artefact whose ids were not already NFC.
+    by_id = {identity_key(item["id"]): item for item in records}
     if len(by_id) != len(records):
         raise ValueError("duplicate element IDs in compiled context")
-    declared = set(compiled_context.get("availableElementIds", []))
+    declared = {identity_key(item) for item in compiled_context.get("availableElementIds", [])}
     if declared != set(by_id):
         raise ValueError("compiled context availableElementIds mismatch")
     return policy, by_id
@@ -144,7 +157,7 @@ def _validate_resolution_manifest(compiled_context, retrieval, resolution_manife
         expected = compiled_context["manifest"]
         actual_hash = (resolution_manifest.get("approval") or {}).get("contentHash")
         if (
-            resolution_manifest.get("id") != expected.get("id")
+            identity_key(resolution_manifest.get("id") or "") != identity_key(expected.get("id") or "")
             or resolution_manifest.get("version") != expected.get("version")
             or actual_hash != expected.get("contentHash")
         ):
@@ -161,7 +174,7 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
     for source in (search_index, chapter_set):
         if source["manifest"]["contentHash"] != manifest_hash:
             raise ValueError("derived view manifest mismatch")
-        if source["manifest"]["id"] != manifest_ref["id"] or source["manifest"]["version"] != manifest_ref["version"]:
+        if identity_key(source["manifest"]["id"]) != identity_key(manifest_ref["id"]) or source["manifest"]["version"] != manifest_ref["version"]:
             raise ValueError("derived view manifest identity mismatch")
 
     cards = {item["id"]: item for item in search_index["cards"]}
@@ -191,11 +204,11 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
 
     for key in ("factElementIds", "gapElementIds", "activeGuidanceElementIds"):
         for element_id in selected[key]:
-            if element_id not in by_id:
+            if identity_key(element_id) not in by_id:
                 raise ValueError(f"element is not available in compiled target: {element_id}")
 
-    eligible = set(policy.get("eligibleGuidanceIds", []))
-    active = set(selected["activeGuidanceElementIds"])
+    eligible = {identity_key(item) for item in policy.get("eligibleGuidanceIds", [])}
+    active = {identity_key(item) for item in selected["activeGuidanceElementIds"]}
     if not active.issubset(eligible):
         raise ValueError("active guidance is not eligible for compiled target")
 
@@ -204,14 +217,21 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
         for element in by_id.values()
         if element.get("family") == "rules"
         and element.get("state") == "defined"
-        and (element.get("value") or {}).get("enforcement") in {"block", "require_approval"}
+        and (
+            (element.get("value") or {}).get("enforcement") in {"block", "require_approval"}
+            # Section 14.1, and section 15.4 downstream: an applicable
+            # prohibition is a hard boundary whatever its enforcement. Selecting
+            # on enforcement alone dropped it out of the model input even when
+            # the compiler had correctly placed it in the slot.
+            or (element.get("value") or {}).get("obligation") == "prohibit"
+        )
     ]
-    hard_boundary_elements.sort(key=lambda item: item["id"])
-    hard_boundary_ids = [item["id"] for item in hard_boundary_elements]
+    hard_boundary_elements.sort(key=lambda item: identity_key(item["id"]))
+    hard_boundary_ids = [identity_key(item["id"]) for item in hard_boundary_elements]
 
     fact_elements = []
     for element_id in selected["factElementIds"]:
-        element = by_id[element_id]
+        element = by_id[identity_key(element_id)]
         if element.get("state") != "defined":
             raise ValueError(f"fact element is not defined: {element_id}")
         if element.get("family") == "rules":
@@ -220,7 +240,7 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
 
     gap_elements = []
     for element_id in selected["gapElementIds"]:
-        element = by_id[element_id]
+        element = by_id[identity_key(element_id)]
         if element.get("state") not in {"unknown", "not_defined", "not_applicable"}:
             raise ValueError(f"gap element has no knowledge-gap state: {element_id}")
         gap_elements.append(element)
@@ -230,7 +250,7 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
 
     active_guidance = []
     for element_id in selected["activeGuidanceElementIds"]:
-        element = by_id[element_id]
+        element = by_id[identity_key(element_id)]
         if element.get("state") != "defined":
             raise ValueError(f"active guidance is not defined: {element_id}")
         if element.get("family") == "rules":
@@ -253,6 +273,15 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
             item for item in by_id.values()
             if item.get("state") in {"unknown", "not_defined", "not_applicable"}
         ]
+
+    # Section 8.0a: ordering is an identity ordering, and it has to happen
+    # before anything is rendered. Sorting after the slots were built left the
+    # selection order in stateMap, guidanceContext and modelInputHash while the
+    # emitted id arrays looked correctly sorted.
+    fact_elements.sort(key=lambda item: identity_key(item["id"]))
+    gap_elements.sort(key=lambda item: identity_key(item["id"]))
+    active_guidance.sort(key=lambda item: identity_key(item["id"]))
+    selected_chapters.sort(key=lambda item: item["id"])
 
     state_lines = [render_element(item) for item in gap_elements]
     if retrieval["truthOutcome"] == "not_covered":
@@ -279,14 +308,14 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
         )
     if selected_chapters:
         exact_ids = set(hard_boundary_ids)
-        exact_ids.update(item["id"] for item in fact_elements)
-        exact_ids.update(item["id"] for item in gap_elements)
-        exact_ids.update(item["id"] for item in active_guidance)
+        exact_ids.update(identity_key(item["id"]) for item in fact_elements)
+        exact_ids.update(identity_key(item["id"]) for item in gap_elements)
+        exact_ids.update(identity_key(item["id"]) for item in active_guidance)
         chapter_parts = []
         for item in selected_chapters:
             content = _filtered_reference_chapter_content(item, exact_ids)
             if content:
-                chapter_parts.append(f"{item['id']}: {content}")
+                chapter_parts.append(f"{identity_key(item['id'])}: {content}")
         if chapter_parts:
             guidance_parts.append(
                 "[REASONING_CHAPTERS]\n"
@@ -294,11 +323,6 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
                 "Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\n"
                 + "\n\n".join(chapter_parts)
             )
-
-    fact_elements.sort(key=lambda item: item["id"])
-    gap_elements.sort(key=lambda item: item["id"])
-    active_guidance.sort(key=lambda item: item["id"])
-    selected_chapters.sort(key=lambda item: item["id"])
 
     slots = {
         "hardBoundaries": "\n".join(render_rule_for_model(item) for item in hard_boundary_elements),
@@ -333,8 +357,8 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
             "searchCardIds": selected["searchCardIds"],
             "reasoningChapterIds": [item["id"] for item in selected_chapters],
             "hardBoundaryElementIds": hard_boundary_ids,
-            "factElementIds": sorted(item["id"] for item in fact_elements),
-            "gapElementIds": sorted(item["id"] for item in gap_elements),
+            "factElementIds": sorted(identity_key(item["id"]) for item in fact_elements),
+            "gapElementIds": sorted(identity_key(item["id"]) for item in gap_elements),
             "activeGuidanceElementIds": sorted(active),
         },
         "slots": slots,

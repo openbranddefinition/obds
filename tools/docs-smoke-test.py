@@ -24,7 +24,7 @@ Run from the repository root:
     python3 tools/docs-smoke-test.py
     python3 tools/docs-smoke-test.py --python /path/to/venv/bin/python
 
-Requires Python 3.11+, Node.js 18+ on PATH and the release's Python
+Requires Python 3.13+, Node.js 21+ on PATH and the release's Python
 dependencies. Without `--python` it builds a temporary virtualenv, which needs
 network access.
 """

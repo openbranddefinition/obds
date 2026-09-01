@@ -1,11 +1,11 @@
 {
  "canonicalUrl": "https://openbranddefinition.org/",
  "conformanceTestsFailed": 0,
- "conformanceTestsPassed": 199,
+ "conformanceTestsPassed": 279,
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "1.1.5",
+ "currentRelease": "1.1.6",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:5549c4521cd4fde29ad5c4ef7d0d4afe085ef538fa4751d120accb100bdd640e",
- "previousRelease": "1.1.2",
+ "packageZipSha256": "sha256:e7771238ccc75c938de64240be1ae8f32a64443cf3f7c33c4045efc163af410a",
+ "previousRelease": "1.1.5",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -129,6 +129,14 @@
   "1.1.5": {
    "packageZipSha256": "sha256:5549c4521cd4fde29ad5c4ef7d0d4afe085ef538fa4751d120accb100bdd640e",
    "testOutputHash": "sha256:1b3cecea8d1bfda688b42f8fdb8fab2d71d18877c0bf992606a4335a124e05ed"
+  },
+  "1.1.6": {
+   "baseUrl": "https://openbranddefinition.org/spec/1.1.6/",
+   "date": "2026-09-01",
+   "note": "hardening release; one normative addition, section 14.3c, which pins the Unicode version governing canonical NFC and admits only code points assigned in it plus the permanent noncharacters; section 8.0a states canonical identity for element id and semantic subject; section 11.5 resolves elementValueRef through the governed selection instead of the raw manifest snapshot; section 10.2a states that its concrete list reads the rule rather than narrowing it and counts a RULE that would add requirements or checks, and an element the target declares eligible guidance; the half-open validity boundary is now proved by tests that execute the implementation at the exact instants, and the release gate runs them",
+   "packageZipSha256": "sha256:e7771238ccc75c938de64240be1ae8f32a64443cf3f7c33c4045efc163af410a",
+   "status": "stable",
+   "testOutputHash": "sha256:8a8f0b4ee1f5c5b8fe6a874c30e7a9fd3eac96eaa598deecc28ac0e6ad985033"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -137,13 +145,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/1.1.3/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/1.1.6/",
  "specificationFilesPublished": true,
- "specificationPublishedAt": "2026-08-30",
- "stableReleaseDate": "2026-08-30",
- "testOutputHash": "sha256:1b3cecea8d1bfda688b42f8fdb8fab2d71d18877c0bf992606a4335a124e05ed",
+ "specificationPublishedAt": "2026-09-01",
+ "stableReleaseDate": "2026-09-01",
+ "testOutputHash": "sha256:8a8f0b4ee1f5c5b8fe6a874c30e7a9fd3eac96eaa598deecc28ac0e6ad985033",
  "totalPublicContracts": 28,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 1,
- "websiteIndexSha256": "sha256:cfda4c7ea0bdca0b20447b8f08fc72afbddbfa184f936e2c8b5835f6f5c4120b"
+ "websiteIndexSha256": "sha256:057bc7ead8dd78ef90f8cf56238c50486109f7701e8ce5918d96053ecb08f8e2"
 }

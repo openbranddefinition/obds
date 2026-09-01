@@ -32,19 +32,16 @@ MUST_BE_ABSENT = [
     ("/.claude/settings.local.json",
      "local Claude Code permissions, gitignored but not excluded from the upload "
      "until .vercelignore listed .claude/"),
-    ("/answers/Sprint/research-input/LEDVANCE-Sustainability-Report.pdf",
-     "third-party source PDF"),
-    ("/answers/Sprint/research-input/"
-     "ORGINAL-asset-13415960_ledvance_sustainability_report_2025_en.pdf",
-     "third-party source PDF"),
-    ("/answers/Sprint/research-input/sustainability-review.md",
-     "third-party derived research"),
-    ("/answers/Sprint/research/sustainability-claims/README.md",
-     "internal benchmark"),
-    ("/answers/Sprint/research/sustainability-claims/evidence-base.md",
-     "internal benchmark evidence"),
-    ("/answers/Sprint/research/sustainability-claims/raw-results.json",
-     "internal benchmark output"),
+    # Deep paths inside answers/, because Vercel serves files individually and a
+    # 404 on the directory alone does not prove the files are gone. In 1.1.6
+    # exactly three entries were removed, the ones that named a client's source
+    # documents: this file is itself served from the deployed site, so listing
+    # them published the inventory it exists to keep private. The ten that
+    # remain name only internal reports and benchmarks, so deep-path coverage of
+    # answers/ is unchanged apart from those three.
+    ("/answers/Sprint/research/sustainability-claims/README.md", "internal benchmark"),
+    ("/answers/Sprint/research/sustainability-claims/evidence-base.md", "internal benchmark evidence"),
+    ("/answers/Sprint/research/sustainability-claims/raw-results.json", "internal benchmark output"),
     ("/answers/Sprint/EXECUTIVE-REPORT.md", "internal report"),
     ("/answers/1.1-outreach-rerun/EXECUTIVE-REPORT.md", "internal report"),
     ("/answers/1.1-outreach-rerun/sustainability/RESULTS.md", "internal report"),
@@ -56,6 +53,9 @@ MUST_BE_ABSENT = [
     ("/licensing/", "withdrawn licensing drafts"),
     ("/archive/", "local archive"),
     ("/.venv/bin/python", "local virtualenv"),
+    ("/.venv-obds/bin/python", "local virtualenv, as actually named here"),
+    ("/.env.local", "local deployment token"),
+    ("/.vercel/project.json", "local deployment link"),
     ("/node_modules/", "local dependencies"),
 ]
 
@@ -65,7 +65,8 @@ MUST_BE_PRESENT = [
     # The release download. Listed here because .vercelignore excludes root-level
     # archives: if that pattern ever stops being root-anchored, this fails loudly
     # instead of the download quietly disappearing.
-    "/spec/1.1.4/OBDS-1.1.4-FINAL.zip",
+    "/spec/1.1.6/OBDS-1.1.6-FINAL.zip",
+    "/spec/1.1.5/OBDS-1.1.5-FINAL.zip",
     "/llms.txt",
     "/publication-record.json",
     "/sitemap.xml",

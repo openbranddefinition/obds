@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 1.1.5 release gate.
+"""OBDS 1.1.6 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -36,6 +36,7 @@ import hashlib
 import io
 import json
 import re
+import subprocess
 import textwrap
 import sys
 from contextlib import redirect_stdout
@@ -47,16 +48,16 @@ ROOT = Path(__file__).resolve().parents[1]
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 104,
+    "foundation": 173,
     "context-delivery": 3,
-    "context-assembly": 15,
-    "design-space": 18,
+    "context-assembly": 24,
+    "design-space": 20,
     "integration": 15,
     "golden": 6,
     "adversarial": 38,
 }
-EXPECTED_TOTAL = 199
-EXPECTED_RELEASE = "1.1.5"
+EXPECTED_TOTAL = 279
+EXPECTED_RELEASE = "1.1.6"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -80,7 +81,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "1.1.4"
+PRIOR_RELEASE = "1.1.5"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -1297,6 +1298,48 @@ def main() -> int:
         check(
             boundary.get("rejectedAt") == boundary.get("validTo"),
             "the validity fixture no longer pins the half-open boundary at validTo",
+        )
+
+    # Guard 19. The check above compares two fixture constants to each other, so
+    # it is true whatever the implementation does: on 1.1.6 both boundary
+    # comparisons in the compiler and both in the runtime could be inverted and
+    # this guard, the test beside it and the whole suite stayed green. A guard
+    # may not advertise protection it cannot give, so the claim now depends on
+    # tests that call the implementation at the exact boundary instants, and the
+    # gate executes them.
+    boundary_tests = ROOT / "reference" / "foundation" / "tests" / "test_obds_116.py"
+    check(boundary_tests.is_file(), "the executable validity boundary tests are missing")
+    if boundary_tests.is_file():
+        source = boundary_tests.read_text(encoding="utf-8")
+        for symbol in (
+            "_valid_at(element, as_of)",
+            "_artifact_valid_at(artefact, runtime_at)",
+            "run_with_model(",
+        ):
+            check(
+                symbol in source,
+                f"the boundary tests no longer execute {symbol}",
+            )
+        completed = subprocess.run(
+            [sys.executable, "-m", "pytest", "-q", "tests/test_obds_116.py",
+             "-k", "half_open or applies_the_half_open or window"],
+            cwd=ROOT / "reference" / "foundation",
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        tail = (completed.stdout or "").strip().splitlines()
+        check(
+            completed.returncode == 0,
+            "the executable validity boundary tests do not pass: "
+            + (tail[-1] if tail else "no output"),
+        )
+        executed = re.search(r"(\d+) passed", completed.stdout or "")
+        boundary_count = int(executed.group(1)) if executed else 0
+        check(
+            boundary_count >= 16,
+            f"only {boundary_count} executable boundary cases ran; both bounds of "
+            "the compiler and of the runtime must be exercised at the instant",
         )
 
     if failures:

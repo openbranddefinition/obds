@@ -2,9 +2,269 @@
 
 ## Release
 
-**Version:** OBDS 1.1.5  
+**Version:** OBDS 1.1.6  
 **Status:** Stable  
-**Date:** 2026-08-31
+**Date:** 2026-09-01
+
+## 1.1.6
+
+**Hardening release. PATCH, with one normative addition.**
+
+Five defects, all reported by a final outreach gate against the published 1.1.5
+and each reproduced on a clean checkout before any code was written. They fall
+into three classes: canonical identity and Unicode determinism, RULE
+applicability and conflict relevance, and conformance boundary evidence.
+
+Unlike 1.1.4 and 1.1.5 this release is not purely behavioural. Section 14.3c is
+new normative text, and it narrows the set of admissible documents. That is
+stated plainly rather than described as no normative change, because a reader
+comparing 1.1.5 to 1.1.6 would find the difference themselves.
+
+### Section 14.3c, the Unicode version is pinned
+
+`Unicode 15.1.0`. A governed string or object key must consist only of code
+points assigned in that version, or Unicode noncharacters, and must contain no
+surrogate. Anything else is rejected before normalisation.
+
+Section 14.3 step 1 normalises to NFC, and never said which Unicode version
+performs it. NFC is only stable for code points already assigned: a code point
+unassigned in one version and given a non-zero canonical combining class in the
+next reorders against its neighbours. Forty-six code points are unassigned in
+15.1.0 and are such marks from 16.0.0 onward, and the number grows with every
+version.
+
+The consequence was measured, not argued. Byte-identical `canonical.py` on
+CPython 3.13, which carries Unicode 15.1.0, and on CPython 3.14, which carries
+16.0.0, produced different canonical bytes for `{"s":"ạࢗz"}`:
+`7b2273223a2261e0a297cca37a227d` against `7b2273223a22e1baa1e0a2977a227d`. The
+two runtimes also disagreed on whether a two-key document was valid at all, one
+canonicalising two keys where the other rejected a duplicate. Through the
+compiler that moved `manifestContentHash`, `governedResultHash` and
+`artifactHash`, so a manifest approved under one runtime no longer built under
+the other. Section 14.3a calls `governedResultHash` the value two independent
+implementations must agree on; without a pinned version they could not.
+
+The published vector suite could not detect it. Its highest code point is
+U+1F600 and none of the forty-six appears in it, so both implementations passed
+all fifty-nine vectors and still diverged.
+
+Noncharacters are admitted deliberately. Unicode guarantees they are never
+assigned, so their combining class and decomposition can never change; U+FFFF
+appears in the published canonical vectors and keeps working. Within the
+admitted set the Unicode Normalization Stability Policy makes NFC identical on
+every database at or after the pinned version.
+
+The release ships the pinned assignment set as data,
+`reference/foundation/src/obds_ref/unicode-pin-15.1.0.json`, 715 ranges, so an
+implementation on a newer Unicode database can apply the rule without carrying
+its own copy of 15.1.0. Raising the pinned version widens the admissible set and
+is therefore not a PATCH.
+
+### Section 8.0a, canonical identity for `id` and `subject`
+
+Every governed string is compared after NFC. Element ids and semantic subjects
+were the exception: they were compared and sorted as raw document bytes, in
+subject grouping, in id uniqueness, in every reference resolution and in the
+`selection` ordering that section 14.3a hashes.
+
+`approval.contentHash` is computed over canonical bytes, which are NFC, so an
+NFD and an NFC spelling of one subject are the same approved snapshot. Raw
+comparison made them two subjects. A manifest with `approval.contentHash`
+`sha256:b0b98703…` therefore produced `governedResultHash`
+`sha256:3ca674eb…` in its NFD spelling and `sha256:0be5151c…` in its NFC
+spelling, and in the first the broad value and the narrow override meant to
+replace it both survived as governed truth, with `status: ready` and an empty
+`conflicts[]`. One approved manifest, two governed results, and an artefact
+asserting that one semantic subject resolved to two values.
+
+1.1.4 pinned NFC where the defect was found, in scope comparison. 1.1.6 pins it
+at the two remaining places that decide which truth is selected and in what
+order it is hashed. Two canonically equivalent element ids are now a duplicate,
+exactly as section 9 already treats canonically equivalent scope values. This is
+a comparison rule: the stored representation is untouched.
+
+### Section 11.5, `elementValueRef` resolves through the governed selection
+
+A check binding another element's value through `elementValueRef` was resolved
+against the raw approved manifest snapshot, gated on `state: defined` alone.
+Scope, validity, precedence and conflict resolution were all skipped.
+
+Reproduced: an element with `validity.to` of 2026-06-01, a Build Plan `asOf` of
+2026-08-28, and a RULE with `obligation: require`, `enforcement: block` and a
+`literal_required` check referencing it. The element was correctly absent from
+`availableElementIds`, and its withdrawn text was compiled into an active
+blocking check with `status: ready`. Time alone triggered it; no authoring error
+was needed. End to end, `obds check` then passed the superseded text and blocked
+the current governed value, while `governedResultHash` did not move at all, so
+two conforming implementations could agree on the section 26.2 governance hash
+and disagree on whether output was blocked.
+
+`elementValueRef` now runs through the same requirement resolution as
+`requiresDefinedRefs` and carries the same four causes,
+`OBDS-BUILD-REQUIRED-NOT-FOUND`, `-OUT-OF-SCOPE`, `-EXPIRED` and
+`-NOT-DEFINED`. The check is never silently omitted, and no production artefact
+is written.
+
+### Section 10.2a, conflict relevance reads the rule, not only the list
+
+Section 10.2a states a rule and then illustrates it with five concrete cases.
+The list was read as the whole rule, and it had not been revisited when 1.1.5
+made RULES elements requirement-bearing.
+
+The result was a build that got better when the manifest got worse. Two
+competing RULES on one subject, both `inform`, one declaring a
+`requiresDefinedRefs` dependency that was `unknown`: the conflict was marked
+`decisionRelevant: false`, the RULE never bound, and the target built and wrote
+an artefact. Deleting the rival RULE let the surviving one bind, and the same
+target then failed with `OBDS-BUILD-REQUIRED-NOT-DEFINED`. Repairing a manifest
+defect must never make a governed build less valid.
+
+Case 2 now counts a `defined` RULE that would govern this build if it won:
+`enforcement` of `block` or `require_approval` as before, and additionally a
+declared `requiresDefinedRefs` or declared `checks`. Case 1 now also counts an
+element named in the target's `contextAssembly.eligibleGuidanceIds`, and
+dependencies named through `elementValueRef`. The section now says explicitly
+that where the list and the rule disagree, the rule governs.
+
+A prohibition counts as well, because section 14.1 says `hardBoundaries`
+contains applicable prohibitions **and** rules with `enforcement: block` or
+`require_approval`, and repeats it a paragraph down: "Prohibition appears in
+`hardBoundaries` through applicable explicit RULE elements." An applicable
+prohibition therefore always reaches the compiled context, whatever its
+enforcement, so a conflict over one is always decision-relevant.
+
+It took three attempts, and the third is worth recording too: the compiler slot
+was corrected while Context Assembly rebuilt the same list downstream with the
+same enforcement-only filter, so the prohibition reached the artefact and then
+vanished again on the way to the model input. Both filters now read section
+14.1, and every other place naming `require_approval` was checked and is
+enforcement-specific by design.
+
+The first two attempts: The arm was first added, then withdrawn on the argument
+that a prohibition with advisory enforcement reaches nothing, and the fifth
+review showed why the argument was wrong: it was reading the reference
+implementation rather than section 14.1. The slot filter selected on enforcement
+alone, so an applicable `obligation: prohibit` RULE with advisory enforcement
+appeared nowhere in the artefact. That is corrected here too; it is a
+consequence of getting the conflict rule right, not a separate change.
+
+A conflict that genuinely changes nothing this target reads still builds, and is
+still reported in `conflicts[]`. Not every conflict is a blocker.
+
+### The half-open validity boundary is proved by execution
+
+Section 10.1 defines validity as `[from, to)`. Three shipped mechanisms claimed
+to pin it: a changelog sentence, `test_validity_window_interval_is_half_open`,
+and a release-gate guard whose failure message read "the validity fixture no
+longer pins the half-open boundary at validTo".
+
+None of them executed the implementation. The test read three timestamps out of
+a fixture and asserted they agreed with each other; the guard asserted that the
+fixture agreed with itself. No fixture placed `asOf` on a boundary instant. All
+four boundary comparisons, `<` and `>=` in the compiler's `_valid_at` and in the
+runtime's `_artifact_valid_at`, could be inverted simultaneously and every test
+in the suite still reported a pass.
+
+1.1.6 adds tests that call `_valid_at`, `_artifact_valid_at` and
+`run_with_model` at `from` minus one second, `from`, `to` minus one second and
+`to` exactly, in `Z`, offset and fractional-second spellings, and through a
+complete build. Each of the four mutations is now killed. The release gate no
+longer asserts fixture self-consistency alone: it executes those tests and fails
+if they do not run or do not pass. A guard must not advertise protection it
+cannot give.
+
+### What the independent review caught
+
+The first implementation of section 14.3c was wrong twice, and an independent
+reviewer who had not written it found both before release.
+
+The guard located a code point by the parity of a single binary search over the
+flattened range bounds. That is correct inside a range and wrong on its upper
+endpoint, so all 715 upper endpoints were rejected as unassigned, U+0377 and
+U+10FFFF among them. No published vector and no shipped example uses one, so the
+whole suite stayed green. The lookup now carries starts and ends separately and
+both bounds are inclusive; a test walks every range endpoint and both
+neighbours, and a second test cross-checks the entire shipped table against the
+15.1.0 database when the host carries that version.
+
+Admitting only code points assigned in 15.1.0 makes NFC identical on every
+database at or after 15.1.0. It says nothing about an older one, which does not
+know those code points and gives them combining class zero. The package
+documented Python 3.11, whose Unicode 14 database therefore produced different
+canonical bytes for an admitted 15.0 character. `canonical.py` now refuses to
+import on a host below the pinned version, and the documented minimum is
+CPython 3.13, the first release carrying Unicode 15.1.0.
+
+A second round of review, and a separate adversarial audit of the three
+corrected classes, found five more. The pin admitted the surrogate range,
+because a surrogate's Unicode category is not `Cn`: Python rejected it later
+when encoding UTF-8 while the JavaScript oracle emitted an escape, so the two
+disagreed on a document neither should have accepted. The oracle did not check
+its own Unicode floor, and the package documented Node 18. `elementValueRef`,
+`requiresDefined` and the governed selection were normalised while the four
+rendered slots, the compiled checks, the `stateMap.kinds` vocabulary and value
+contract ids were not, so two canonically equivalent manifests agreed on
+`governedResultHash` and disagreed on `artifactHash`, and an element could drop
+out of STATE_MAP silently. Context Assembly and Context Delivery still indexed
+`elementRecords` by the raw id, so a valid 1.1.6 artefact whose ids were not
+already NFC was refused by the same release's own consumer. And the new
+`obligation: prohibit` arm of conflict relevance failed targets that could not
+observe the prohibition at all, which is the fail-arbitrary behaviour section
+10.2a forbids; it was withdrawn.
+
+All five are closed, each with a test. The pinned table now excludes surrogates,
+the minimum is CPython 3.13 and Node 21, and every identity path named in
+section 8.0a is normalised, including the rendered slots, so an artefact
+presents one identity throughout.
+
+A third and a fourth round found five more, all in the same class and all in
+code this release had already touched. `identity_key` reused the
+canonicalisation helper and therefore folded CR and CRLF to LF, which section
+8.0a does not ask for: `a\rb` and `a\nb` are two identities, and merging them
+rejected two distinct elements as one duplicate. Context Assembly sorted the
+fact, gap and guidance elements after their text had been rendered, so the
+emitted id arrays looked correctly ordered while `stateMap`, `guidanceContext`
+and `modelInputHash` still carried the request's selection order. The assembly
+request `targetId` and the `manifest_checked` resolution manifest id were still
+compared raw. And a version stamp edit on the authoring page had rewritten a
+historical sentence, which the scope freeze forbids; it is restored.
+
+The pattern is worth stating plainly, because it is the same one the outreach
+gate reported. Three times the fix went to the line that was reported rather
+than to the class behind it, and each round found the class one level further
+down. The fourth round swept every identity comparison, index, ordering and
+emitted value in the reference implementation at once, and each one is now
+pinned by a test that fails when the normalisation is removed.
+
+### Conformance and compatibility
+
+Conformance rises from 199 to 279 passing tests, the eighty added being
+regression coverage for these five defects, each verified to fail against the
+1.1.5 implementation.
+
+No schema changed. No Brand State was added. No capability was added. The
+frozen OBDS 1.0.0 contract surface is byte-identical, fingerprint
+`sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469`,
+unchanged since 1.0.0.
+
+Every shipped example is ASCII, so no published example hash moves for that
+reason. `governedResultHash` semantics are unchanged for every document that was
+already unambiguous; it changes only where 1.1.5 produced two different values
+for one approved manifest, which is the defect.
+
+Explicitly out of scope, and not touched: the YAML octal resolver, stale
+artefacts left in a reused output directory, historical publication-record
+entries, withdrawn drafts in the public Git history, authoring wording, and the
+broader mutation-coverage gaps found by the same gate.
+
+One change outside the five defects is deliberate and authorised separately, so
+it is named here rather than left for a reader to find. `tools/deploy-smoke-test.py`
+pins the current release archive instead of the previous one, probes the local
+virtualenv under the name it actually has, adds `/.env.local` and
+`/.vercel/project.json`, and drops the three probes that named a client's source
+documents. The tool is served from the deployed site, so those three published
+the inventory the probe exists to keep private. It ships in `tools/`, which is
+not part of the release package, so it moves no release hash.
 
 ## 1.1.5
 

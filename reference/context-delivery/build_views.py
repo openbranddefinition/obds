@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import yaml
 
-from canonical import canonical_json_bytes, sha256_id
+from canonical import canonical_json_bytes, identity_key, sha256_id
 
 
 
@@ -136,7 +136,8 @@ def render_value(value):
 
 def build_views(manifest, chapter_map=None):
     elements = manifest.get("elements", [])
-    by_id = {item["id"]: item for item in elements}
+    # Section 8.0a: identities are compared on their canonical form.
+    by_id = {identity_key(item["id"]): item for item in elements}
     if len(by_id) != len(elements):
         raise ValueError("duplicate element IDs")
 
@@ -151,12 +152,12 @@ def build_views(manifest, chapter_map=None):
     else:
         families = {}
         for item in elements:
-            families.setdefault(item["family"], []).append(item["id"])
+            families.setdefault(item["family"], []).append(identity_key(item["id"]))
         groups = [
             {
                 "id": f"chapter.{family}",
                 "title": family.replace("-", " ").title(),
-                "elementIds": sorted(ids),
+                "elementIds": sorted(identity_key(item) for item in ids),
             }
             for family, ids in sorted(families.items())
             if ids
@@ -166,11 +167,12 @@ def build_views(manifest, chapter_map=None):
     chapters = []
     for group in groups:
         ids = group["elementIds"]
-        missing = [item for item in ids if item not in by_id]
+        missing = [item for item in ids if identity_key(item) not in by_id]
         if missing:
             raise ValueError(f"chapter {group['id']} has missing elements: {missing}")
         blocks = []
-        for element_id in ids:
+        for raw_element_id in ids:
+            element_id = identity_key(raw_element_id)
             item = by_id[element_id]
             element_to_chapters[element_id].append(group["id"])
             blocks.append(
@@ -183,7 +185,7 @@ def build_views(manifest, chapter_map=None):
             "id": group["id"],
             "title": group["title"],
             "manifest": manifest_ref,
-            "elementIds": ids,
+            "elementIds": [identity_key(item) for item in ids],
             "content": "\n\n".join(blocks),
             "renderer": {
                 "id": "org.openbranddefinition.reference-chapter-renderer",
@@ -194,8 +196,8 @@ def build_views(manifest, chapter_map=None):
         chapters.append(chapter)
 
     cards = []
-    for item in sorted(elements, key=lambda value: value["id"]):
-        element_id = item["id"]
+    for item in sorted(elements, key=lambda value: identity_key(value["id"])):
+        element_id = identity_key(item["id"])
         text = first_text(item.get("value"))
         label = (
             item.get("value", {}).get("name")
