@@ -801,14 +801,24 @@ def test_the_release_notes_state_the_release_kind_they_actually_are():
     The generator hardcoded "maintenance release. No normative contract
     change", which is what 1.1.0 shipped by copying 1.0.4, and it survived into
     a MAJOR release that exists precisely because it breaks a contract.
+
+    The expected word is read off the version here rather than pinned, because a
+    pinned word is the same defect one file over: 3.0.1 is a PATCH and the pin
+    still said MAJOR. Semantic Versioning decides which word it is, and the notes
+    have to carry that one.
     """
+    major, minor, patch = (int(part) for part in RELEASE.split("."))
+    expected = "MAJOR" if (minor, patch) == (0, 0) else "MINOR" if patch == 0 else "PATCH"
+    unexpected = {"MAJOR", "MINOR", "PATCH"} - {expected}
+
     result = json.loads(
         (PACKAGE_ROOT / f"OBDS-{RELEASE}-TEST-RESULT.json").read_text(encoding="utf-8")
     )
     notes = " ".join(result["notes"])
-    assert "MAJOR release" in notes
+    assert f"{expected} release" in notes, notes
+    for wrong in sorted(unexpected):
+        assert f"{wrong} release" not in notes, notes
     assert "maintenance release" not in notes
-    assert "No normative contract change" not in notes
 
 
 @pytest.mark.parametrize("text", [

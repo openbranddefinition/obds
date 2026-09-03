@@ -48,7 +48,14 @@ PACKAGE_ROOT_FILES = (
     "TRADEMARKS.md",
     "requirements.txt",
 )
-PACKAGE_DIRS = ("LICENSES", "examples", "reference", "release-schemas")
+# One definition, in the gate, for the same reason `contract_directories()` and
+# the suite hash live there: the gate ships inside the archive and this script
+# does not, so a reader of the package can see what the package is. Two copies of
+# a directory list are two chances to be wrong about it, which is exactly how
+# `tools/` came to be named by the surface registries and left out of the
+# 3.0.0 archive.
+def package_dirs() -> tuple[str, ...]:
+    return tuple(_gate().PACKAGE_DIRS)
 
 # Repository layout -> archive layout. Derived, not listed: see
 # `contract_directories()` in reference/release-gate.py, which owns the
@@ -235,7 +242,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "2.0.0"
+PRIOR_RELEASE = "3.0.0"
 
 
 def _release_kind(release: str) -> str:
@@ -329,7 +336,7 @@ def package_files(release: str) -> list[tuple[str, Path]]:
     for source in sorted(ROOT.glob(f"OBDS-*{release}*")):
         if source.is_file() and not excluded(source):
             pairs.append((source.name, source))
-    for directory in PACKAGE_DIRS:
+    for directory in package_dirs():
         base = ROOT / directory
         if not base.is_dir():
             sys.exit(f"missing package directory {directory}/")

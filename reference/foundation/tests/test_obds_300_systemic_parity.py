@@ -43,12 +43,29 @@ from obds_ref.checks import (
 from obds_ref.compiler import ValidationFailure, load_data
 from systemic_surface import (
     BYTE_IDENTICAL_COPIES,
+    COMPILED_CONTEXT_CONSUMERS,
+    CONTRACT_VERSION_CONSUMERS,
+    CONTRACT_VERSION_MODULES,
+    HASH_CALL_SITES,
     PACKAGE_ROOT,
+    PUBLISHED_3_0_CONTRACTS,
     REFERENCE,
     SEMANTIC_PRIMITIVE_IMPLEMENTATIONS,
 )
 
 JS_HARNESS = REFERENCE / "adversarial" / "canonical_js.mjs"
+
+
+def _release() -> str:
+    """The release this package is, read from the specification it ships."""
+    import re as _release_re
+
+    names = sorted(
+        path.name for path in PACKAGE_ROOT.glob("OBDS-*.md")
+        if _release_re.fullmatch(r"OBDS-\d+\.\d+\.\d+\.md", path.name)
+    )
+    assert len(names) == 1, f"expected one normative specification, found {names}"
+    return names[0][len("OBDS-"):-len(".md")]
 
 
 def _node():
@@ -145,7 +162,7 @@ def test_every_published_contract_directory_reaches_the_release_package():
     published = _published_contract_files()
     assert published, "no published contract directory was found at all"
 
-    packaged = {path for _, path in builder.package_files("3.0.0")}
+    packaged = {path for _, path in builder.package_files(_release())}
     missing = sorted(
         str(path.relative_to(PACKAGE_ROOT)) for _, path in published if path not in packaged
     )
@@ -197,9 +214,58 @@ def test_release_tooling_reads_governed_release_evidence_under_the_governed_cont
     with pytest.raises(ValidationFailure):
         module.load(duplicated)
 
-    # Not vacuous: the same reader reads the release's own record.
-    record = module.load(PACKAGE_ROOT / "publication-record.json")
-    assert isinstance(record, dict) and "releases" in record
+    # Not vacuous: the same reader reads a real governed release document. It
+    # reads the package manifest rather than `publication-record.json`, which is
+    # website material and is not in the archive: from 3.0.1 the tooling is
+    # packaged, so a test that reads a repository-only file passes in the
+    # repository and fails in the package it is shipped inside.
+    manifest = module.load(PACKAGE_ROOT / "PACKAGE-MANIFEST.json")
+    assert isinstance(manifest, dict) and "files" in manifest
+
+
+def test_every_path_the_surface_registries_name_reaches_the_release_package():
+    """A file the suite reads has to be in the package the suite is run against.
+
+    The 3.0.0 archive omitted `tools/`. The surface registries name
+    `tools/build-release.py` and `tools/docs-smoke-test.py`, which in the
+    repository is correct: the packager computes governed hashes and resolves
+    contract paths, so it is part of the surface. In the unpacked archive the
+    files were absent, eight enumeration guards refused a release the repository
+    had passed, and the two commands the release documents for the archive layout
+    did not run.
+
+    Nothing caught it. The release gate and the suite both run in the repository,
+    where the files exist, and only the post-deployment docs smoke test unpacks
+    the archive. So the invariant is asserted here, where it is cheap: every path
+    a registry names is a path the packager ships.
+    """
+    builder = _load("parity_builder_surface", PACKAGE_ROOT / "tools" / "build-release.py")
+    packaged = {path for _, path in builder.package_files(_release())}
+
+    named: set[str] = set()
+    for key in HASH_CALL_SITES:
+        named.add(key.split("::", 1)[0])
+    for key in COMPILED_CONTEXT_CONSUMERS:
+        named.add(key.split("::", 1)[0])
+    for key in CONTRACT_VERSION_CONSUMERS:
+        named.add(key.split("::", 1)[0])
+    named.update(CONTRACT_VERSION_MODULES)
+    named.update(PUBLISHED_3_0_CONTRACTS)
+    for primitive in SEMANTIC_PRIMITIVE_IMPLEMENTATIONS.values():
+        named.add(primitive["authoritative"])
+        named.update(primitive["implementations"])
+    for copies in BYTE_IDENTICAL_COPIES.values():
+        named.update(copies)
+
+    missing = sorted(
+        relative for relative in named
+        if (PACKAGE_ROOT / relative).is_file() and (PACKAGE_ROOT / relative) not in packaged
+    )
+    assert not missing, (
+        "these files are named by a surface registry and would not be in the release "
+        "archive, so the archive cannot run the suite it was verified with:\n  "
+        + "\n  ".join(missing)
+    )
 
 
 def test_the_package_builder_and_the_release_gate_share_one_contract_list():

@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 3.0.0** is the stable Open Brand Definition Specification.
+**OBDS 3.0.1** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,7 +21,7 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 3.0.0. Stable. 2026-09-03.**
+**OBDS 3.0.1. Stable. 2026-09-03.**
 
 OBDS 3.0 is the Semantic Closure release.
 
@@ -33,11 +33,13 @@ It adds no Brand State, no profile, no capability and no architecture. It closes
 - **Runtime contract enforcement.** Every governed document is validated against its published 3.0 contract before any field of it is read, and every required hash is reproduced from its payload rather than compared between two supplied claims.
 - **Conflict relevance.** One relevance model, decided once by the compiler and consumed downstream rather than re-derived.
 
-Each of the five is a breaking correction to an existing normative contract, which is why 3.0.0 is MAJOR. For most projects the migration is the Build Plan and nothing else: `schemaVersion: 3.0.0`, and `stateMap` and `styleTexture` stated on every target.
+3.0.1 is a packaging correction on top of it: the release archive now carries the tooling needed to reproduce the documented standalone checks. No normative contract changed.
+
+Each of the five closures is a breaking correction to an existing normative contract, which is why 3.0.0 is MAJOR. For most projects the migration is the Build Plan and nothing else: `schemaVersion: 3.0.0`, and `stateMap` and `styleTexture` stated on every target.
 
 `schemas/3.0.0/` publishes the Build Plan, Compiled Brand Context and Runtime Decision Record contracts, and `value-schemas/3.0.0/` publishes the RULE value contract. The OBDS 1.0.0 contract surface remains frozen and byte-identical across every release so far, and the 1.1.0 contract published beside it is unchanged.
 
-1067 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 23 of 23 and is reported separately.
+1068 conformance cases pass, 0 fail, 0 skip. The official declared Foundation conformance suite is 23 of 23 and is reported separately.
 
 ## Use and licensing
 

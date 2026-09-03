@@ -1,7 +1,7 @@
 {
   "kind": "obds-schema-index",
   "note": "`schemas` and `valueSchemas` are the frozen OBDS 1.0.0 contract surface, unchanged since 1.0.0. `versionedSchemas` carries the contracts published beside it at their own version.",
-  "release": "3.0.0",
+  "release": "3.0.1",
   "schemaContractVersion": "1.0.0",
   "schemaVersion": "1.0.0",
   "schemas": [

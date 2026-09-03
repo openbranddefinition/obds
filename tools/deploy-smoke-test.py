@@ -11,8 +11,10 @@ Run it after every deployment:
     python3 tools/deploy-smoke-test.py
     python3 tools/deploy-smoke-test.py https://obds-sigma.vercel.app
 
-This file lives in tools/, which is not part of the release package, so it never
-moves a release hash.
+`tools/` is part of the release package from 3.0.1 on, so editing this file
+moves a release hash. That is the price of an archive that can verify itself:
+the surface registries name the packager, and a file the suite reads has to be
+in the package the suite is run against.
 """
 from __future__ import annotations
 
@@ -47,7 +49,7 @@ MUST_BE_ABSENT = [
     ("/answers/1.1-outreach-rerun/sustainability/RESULTS.md", "internal report"),
     ("/answers/1.1-outreach-rerun/evaluator/B-due-diligence.md", "internal report"),
     ("/answers/1.1.1/OUTREACH-GATE.md", "internal gate report"),
-    ("/answers/1.1.2/RC-REPORT.md", "internal release-candidate report"),
+    ("/answers/1.1.2/RC-REPORT.md", "an internal pre-publication report"),
     ("/answers/1.0.4-1.1/KNOWN-ISSUE-1.0.4-testOutputHash.md", "internal note"),
     ("/md/", "withdrawn drafts"),
     ("/licensing/", "withdrawn licensing drafts"),

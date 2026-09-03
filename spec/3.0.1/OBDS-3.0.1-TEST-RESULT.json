@@ -1,0 +1,204 @@
+{
+  "claimScope": "Result of the OBDS conformance runs for the exact release and suite hash named in this file, executed against the reference implementation named in `implementation`. Every required case ran; none was skipped, changed or expected to fail. `conformanceProfiles` lists only profiles this release can defend: `obds-foundation` because a declared conformance suite names that profile and every one of its cases passed, and `compiled-runtime` because every requirement section 26.2 lists names one or more executed cases in the `requirementsExercised` array of the `compiled-runtime` entry in `conformanceProfiles`, and the release gate resolves each of them against the suite it runs itself: the case must exist, must have passed and must not be reused for a second requirement. What the gate proves is that the named evidence really ran and really passed. That a case materially exercises the requirement it is attached to is an authoring judgement no name-resolving check can make, and it is claimed here rather than proven. No profile is claimed for context-delivery, context-assembly, visual-operations or composition; those suites are reported under `executedSuites` as coverage only, because they exercise modules other than the named implementation. This file is a suite result under section 26, not an independent certification and not a statement about any other implementation.",
+  "conformanceProfiles": [
+    {
+      "basis": "reference/foundation/conformance-suite.yaml declares `profile: foundation`. It is the only artefact in this package that names a conformance profile. Every declared case is executed by the release build and re-executed by reference/release-gate.py; the result is published as OBDS-<release>-FOUNDATION-CONFORMANCE.json.",
+      "conformanceSection": "26.1",
+      "declaredCaseCount": 23,
+      "declaredSuite": "reference/foundation/conformance-suite.yaml",
+      "failedCount": 0,
+      "id": "obds-foundation",
+      "passedCount": 23,
+      "suiteHash": "sha256:aa40518545bc53eccd4945759130a97ed0c1e7e285db1ae2fff9c88b20245e7e"
+    },
+    {
+      "basis": "No declared per-profile conformance suite exists for section 26.2 in this release, so this is not a claim of the form 'passed the official 26.2 suite'. It is a claim that every requirement section 26.2 lists is implemented by the named reference compiler and exercised by a named executed case, enumerated in requirementsExercised. Defining a declared 26.2 suite is Phase B work.",
+      "conformanceSection": "26.2",
+      "id": "compiled-runtime",
+      "requirementsExercised": [
+        {
+          "cases": [
+            "foundation/tests.test_obds_200::test_exact_build_plans_bind_one_manifest"
+          ],
+          "requirement": "exact Build Plans"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_reference::test_required_unknown_fails_and_emits_no_artefact"
+          ],
+          "requirement": "requiresDefined"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_11::test_required_knowledge_element_reaches_the_artefact"
+          ],
+          "requirement": "every required element present in the produced context"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_200::test_explicit_context_selection_decides_slot_contents"
+          ],
+          "requirement": "explicit context selection"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_examples::test_fail_closed_example_emits_no_context_and_calls_no_model"
+          ],
+          "requirement": "no artefact for a failed target"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_200::test_canonical_json_artefacts_are_written_canonically",
+            "foundation/tests.test_reference::test_canonical_json_normalises_nfc_and_line_endings"
+          ],
+          "requirement": "canonical JSON artefacts"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_reference::test_simple_target_builds_and_hash_is_reproducible"
+          ],
+          "requirement": "reproducible hashes"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_11::test_governed_result_hash_matches_the_fixture",
+            "foundation/tests.test_obds_11::test_compiled_context_carries_the_governed_result_hash"
+          ],
+          "requirement": "a governedResultHash that matches section 14.3a for the same manifest and Build Plan"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_200::test_foundation_check_registry_v1_compiles_and_refuses"
+          ],
+          "requirement": "Foundation Check Registry v1"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_200::test_exact_target_loading_builds_only_the_named_target",
+            "foundation/tests.test_reference::test_invalid_hash_no_call"
+          ],
+          "requirement": "exact target loading"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_reference::test_runtime_record_ndjson",
+            "foundation/tests.test_reference::test_assembly_failed_runtime_record_is_schema_valid"
+          ],
+          "requirement": "Runtime Decision Records"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_reference::test_failed_build_means_no_model_call",
+            "foundation/tests.test_reference::test_blocking_preflight_means_no_model_call"
+          ],
+          "requirement": "zero instrumented model calls after failed build or blocking preflight"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_reference::test_blocking_postflight_withholds_output"
+          ],
+          "requirement": "withheld output after blocking postflight"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_200::test_per_slot_token_reporting_is_the_sum_of_its_slots"
+          ],
+          "requirement": "per-slot token reporting"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_300_class_a::test_a1_every_governed_reader_is_the_one_governed_reader",
+            "foundation/tests.test_obds_300_class_a::test_a2_readers_agree_on_every_shipped_governed_document"
+          ],
+          "requirement": "the governed input contract at every governed reader"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_300_class_b::test_b2_one_content_hash_cannot_resolve_to_two_governed_identities",
+            "foundation/tests.test_obds_300_class_b::test_b1_a_shared_field_is_an_identity_position_in_every_artefact_that_carries_it"
+          ],
+          "requirement": "identity binding of the manifest triple wherever an artefact names a manifest"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_300_class_c::test_c10_a_deferred_literal_passes_the_stage_that_authors_it",
+            "foundation/tests.test_obds_300_class_c::test_c10_a_deferred_literal_is_still_refused_once_it_should_have_been_resolved"
+          ],
+          "requirement": "two-stage validation of Foundation RULE checks"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_300_class_c::test_c9_a_forged_rendered_task_input_never_reaches_the_model",
+            "foundation/tests.test_obds_300_class_c::test_c9_a_decoy_task_input_never_reaches_the_model"
+          ],
+          "requirement": "exact task-input binding"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_300_systemic_executors::test_the_assembled_runtime_executes_the_model_input_package_contract[another kind]",
+            "foundation/tests.test_obds_300_systemic_executors::test_mechanism_4_no_executor_accepts_a_resealed_schema_invalid_artefact[missing required property-reference/foundation/src/obds_ref/cli.py::command_validate]"
+          ],
+          "requirement": "contract validation of every governed runtime document before governed field use"
+        },
+        {
+          "cases": [
+            "foundation/tests.test_obds_300_class_b::test_b2_a_resolution_snapshot_must_reproduce_its_approval_hash"
+          ],
+          "requirement": "governed hashes reproduced rather than declared"
+        }
+      ]
+    }
+  ],
+  "executedSuites": {
+    "counts": {
+      "adversarial": 38,
+      "context-assembly": 24,
+      "context-delivery": 3,
+      "design-space": 20,
+      "foundation": 962,
+      "golden": 6,
+      "integration": 15
+    },
+    "note": "Suites executed by reference/run_all.py, reported as coverage only. No conformance profile is claimed for context-delivery, context-assembly or design-space: those suites exercise reference/context-delivery/build_views.py, reference/context-assembly/assemble_context.py and reference/design-space/design_space_ref.py, none of which is the implementation named in `implementation`."
+  },
+  "failedCount": 0,
+  "implementation": {
+    "language": "Python",
+    "name": "org.openbranddefinition.reference-compiler",
+    "repository": "https://github.com/openbranddefinition/obds",
+    "version": "1.0.0"
+  },
+  "kind": "obds-release-test-result",
+  "notes": [
+    "OBDS 3.0.1 is a PATCH release: packaging correction; PATCH under section 27.1 because no normative contract changed; the 3.0.0 archive omitted tools/, which the Semantic Closure surface registries name, so the two commands documented for the archive layout did not run and eight enumeration guards refused a release the repository had passed; tools/ is part of the package from 3.0.1 on, the directory list has one definition in reference/release-gate.py, and one packaging test asserts that every path a surface registry names is a path the packager ships; the specification differs from 3.0.0 in its own version stamp and the release-file name in section 33 and in nothing else.",
+    "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0 and 3.0.0.",
+    "The specification and the documentation are licensed under CC BY 4.0. The schemas, release metadata, reference implementation, conformance suite and examples are licensed under the Apache License 2.0.",
+    "This file carries the section 26 identifiers: implementation, obdsVersion, suiteHash, conformanceProfiles, the counts and requiredCasesSkippedOrChanged.",
+    "suiteHash covers the suite runner and the seven suite directories with their fixtures. It excludes reference/foundation/src/, which is the implementation under test and is identified by the implementation field.",
+    "A profile is listed under conformanceProfiles because the executed suite contains cases for that conformance section. It is evidence for the section, not an independent certification.",
+    "This release runs 1068 cases, adversarial 38, context-assembly 24, context-delivery 3, design-space 20, foundation 962, golden 6, integration 15.",
+    "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
+    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-3.0.1-TEST-REQUIREMENTS.md."
+  ],
+  "obdsVersion": "3.0.1",
+  "passed": true,
+  "passedCount": 1068,
+  "promotedFrom": "3.0.0",
+  "release": "3.0.1",
+  "requiredCasesSkippedOrChanged": false,
+  "schemaVersion": "1.0.0",
+  "skippedCount": 0,
+  "status": "stable",
+  "suiteCounts": {
+    "adversarial": 38,
+    "context-assembly": 24,
+    "context-delivery": 3,
+    "design-space": 20,
+    "foundation": 962,
+    "golden": 6,
+    "integration": 15
+  },
+  "suiteFileCount": 154,
+  "suiteHash": "sha256:c2e1da72822dd087b748a44b25bceea88bdb2b72aa5dcd89a4846c3c49b9ac86",
+  "testOutputHash": "sha256:4152abe21af46c2271e137cb77f3723d9024b3f2a4b375bc457843f37c15078a"
+}

@@ -2,9 +2,70 @@
 
 ## Release
 
-**Version:** OBDS 3.0.0  
+**Version:** OBDS 3.0.1  
 **Status:** Stable  
 **Date:** 2026-09-03
+
+## 3.0.1
+
+**Packaging correction. PATCH.**
+
+OBDS 3.0.1 is a packaging and distribution correction. No normative OBDS
+contract changed. The release ZIP now includes the tooling required to reproduce
+the documented standalone conformance and release-gate checks.
+
+### What was wrong
+
+The 3.0.0 archive omitted `tools/`. The Semantic Closure surface registries name
+`tools/build-release.py` and `tools/docs-smoke-test.py`, which in the repository
+is correct: the packager computes governed hashes and resolves contract paths, so
+it belongs to the surface mechanism 2 and mechanism 5 enumerate. In an unpacked
+archive those files were absent, eight enumeration guards refused a release the
+repository had passed, and the two commands `README.md` and the test requirements
+document for the archive layout did not run.
+
+Nothing caught it before publication. The release gate and the suite both run in
+the repository, where the files exist. Only the post-deployment docs smoke test
+unpacks the archive, and it runs after the deployment.
+
+### What changed
+
+- `tools/` is part of the release package. The directory list has one definition,
+  in `reference/release-gate.py`; the packager imports it instead of keeping a
+  second copy, for the same reason it already imports `contract_directories()`.
+- One new packaging test asserts the invariant directly: every path a surface
+  registry names is a path the packager ships. It fails when `tools/` is removed
+  from the package, which is the state 3.0.0 shipped in.
+- The two smoke-test docstrings that described `tools/` as outside the package
+  are corrected, and one description in `tools/deploy-smoke-test.py` was reworded
+  because the gate refuses pre-release wording anywhere in the package.
+
+### What did not change
+
+No Brand State, no profile, no capability, no architecture, and no normative
+contract. Governed-input semantics, identity semantics, RULE enforcement, Unicode
+behaviour, Build Plan semantics, runtime contract enforcement, conflict relevance,
+Context Assembly semantics and hash verification semantics are byte-identical to
+3.0.0. The public schemas, the value schemas and the versioned 3.0.0 contracts are
+byte-identical. The specification text differs from 3.0.0 in two mechanical lines:
+its own version stamp and the release-file name in section 33.
+
+`spec/3.0.0/` is untouched.
+
+**Conformance.** 1068 cases pass, 0 fail, 0 skip, one more than 3.0.0 because of
+the packaging test above. The declared Foundation conformance suite is green at 23
+of 23 declared cases. The same suite and the same release gate now also pass from
+an unpacked release archive, which is the defect this release exists to correct.
+
+| Suite | Cases |
+|---|---|
+| foundation | 962 |
+| context-delivery | 3 |
+| context-assembly | 24 |
+| design-space | 20 |
+| integration | 15 |
+| golden | 6 |
+| adversarial | 38 |
 
 ## 3.0.0
 

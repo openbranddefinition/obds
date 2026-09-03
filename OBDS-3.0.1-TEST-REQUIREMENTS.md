@@ -1,21 +1,21 @@
-# OBDS 3.0.0 Test and Runtime Requirements
+# OBDS 3.0.1 Test and Runtime Requirements
 
-This file declares every dependency needed to reproduce the official 1067/1067 conformance run.
+This file declares every dependency needed to reproduce the official 1068/1068 conformance run.
 It separates what a consumer of OBDS needs from what the reference conformance suite needs.
 
 ## 1. OBDS consumer requirements
 
 **None imposed by the specification.**
 
-OBDS 3.0.0 is a data and contract specification. A conforming implementation may be written in
+OBDS 3.0.1 is a data and contract specification. A conforming implementation may be written in
 any language. The normative artefacts are plain text:
 
-- `OBDS-3.0.0.md` (normative specification);
+- `OBDS-3.0.1.md` (normative specification);
 - `schemas/*.json` (21 public JSON Schemas, draft 2020-12) plus the versioned
   contracts beside them under `schemas/1.1.0/` and `schemas/3.0.0/`;
 - `value-schemas/*.json` (6 public value-contract JSON Schemas, draft 2020-12) plus
   `value-schemas/3.0.0/rule.schema.json`;
-- `OBDS-3.0.0-SCHEMA-INDEX.json` and `OBDS-3.0.0-CAPABILITY-REGISTRY.json`.
+- `OBDS-3.0.1-SCHEMA-INDEX.json` and `OBDS-3.0.1-CAPABILITY-REGISTRY.json`.
 
 To consume OBDS you need a JSON Schema validator for your platform, a JSON reader and, if you
 accept governed YAML, a YAML 1.2 reader that rejects duplicate keys. Nothing in this package is
@@ -79,10 +79,13 @@ node --version                     # must succeed
 .venv/bin/python reference/release-gate.py
 ```
 
-From an unpacked release archive the same two commands work unchanged:
+From an unpacked release archive the same two commands work unchanged. Under 3.0.0 they did
+not: the archive omitted `tools/`, which the surface registries name, so eight enumeration guards
+refused a release the repository had passed. `tools/` is part of the package from 3.0.1 on and one
+packaging test asserts the invariant directly.
 
 ```bash
-unzip OBDS-3.0.0-FINAL.zip && cd OBDS-3.0.0-FINAL
+unzip OBDS-3.0.1-FINAL.zip && cd OBDS-3.0.1-FINAL
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python reference/run_all.py
 .venv/bin/python reference/release-gate.py
@@ -91,7 +94,7 @@ python -m venv .venv && .venv/bin/pip install -r requirements.txt
 Expected outcome:
 
 ```text
-1067 passed, 0 failed, 0 skipped
+1068 passed, 0 failed, 0 skipped
 ```
 
 The suite contains no `skipif`, no `pytest.skip` and no `xfail`. Every case runs on every
@@ -136,14 +139,14 @@ python reference/release-gate.py
 
 | Suite | Cases |
 |---|---:|
-| foundation | 961 |
+| foundation | 962 |
 | context-delivery | 3 |
 | context-assembly | 24 |
 | design-space | 20 |
 | integration | 15 |
 | golden | 6 |
 | adversarial | 38 |
-| **Total** | **1067** |
+| **Total** | **1068** |
 
 The foundation suite grew from 27 to 43 in OBDS 1.1, to 49 in 1.1.1 with the `requiresDefined`
 precedence cases, the `asOf` verbatim case and the section 14 example check, to 75 in 1.1.2
@@ -154,7 +157,8 @@ Unicode NFC scope-comparison regression cases, to 104 in 1.1.5 with the fifteen
 pinned Unicode, `elementValueRef` applicability and executable validity-boundary cases, and to
 323 in 2.0.0 with the governed YAML scalar cases and the section 14.3a conflict and hash cases.
 It grew again in 3.0.0 with the Semantic Closure classes and the five systemic mechanisms
-described below. The adversarial suite grew from 23 to 33 in 1.1.1 with the line-ending vectors.
+described below, and by one case in 3.0.1 with the packaging invariant that every path a surface
+registry names is a path the packager ships. The adversarial suite grew from 23 to 33 in 1.1.1 with the line-ending vectors.
 It carried 27 cases from 1.0.2, when two cases were added to verify the published examples in
 `examples/`. Releases up to and including 1.0.1 ran 105 cases with 25 in foundation; those
 historical results stand as published in `spec/1.0.0/` and `spec/1.0.1/`.

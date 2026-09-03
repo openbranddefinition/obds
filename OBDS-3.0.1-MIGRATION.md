@@ -1,7 +1,7 @@
 # OBDS Migration Notes
 
 Start at the section for the release you are on. Coming from 2.x, that is
-"2.0.0 to 3.0.0".
+"2.0.0 to 3.0.0"; coming from 3.0.0 there is nothing to do.
 
 ## 0.9.9 to 1.0.0
 
@@ -58,6 +58,27 @@ Before publishing 1.0:
 7. confirm every declared Brand Profile is supported by the consuming implementation;
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
+
+## 3.0.0 to 3.0.1
+
+Nothing to do.
+
+3.0.1 is a packaging correction. No normative contract changed, so no manifest,
+Build Plan, compiled artefact or stored hash moves. `schemaVersion` stays `3.0.0`
+in Build Plans and compiled contexts, and the published 3.0.0 contracts are
+byte-identical.
+
+The one difference you can observe: the release archive now contains `tools/`, so
+the two documented commands
+
+```text
+python reference/run_all.py
+python reference/release-gate.py
+```
+
+run from an unpacked `OBDS-3.0.1-FINAL.zip` as well as from a clone. Under 3.0.0
+they did not, because the surface registries named files the archive did not
+carry.
 
 ## 2.0.0 to 3.0.0
 
