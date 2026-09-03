@@ -1,20 +1,87 @@
 from __future__ import annotations
 
-from canonical import identity_key, sha256_id
+from canonical import identity_key, sha256_id, text_hash
+from model_input import ModelInputContractError, render_model_input
+
+# Section 14. The review validator is a Compiled Brand Context executor: it
+# derives a governed review decision from `elementRecords`, so it executes the
+# published contract and reproduces the seal, from the one implementation of
+# each that Context Assembly already carries. Importing them is the point —
+# a second copy of either is the defect this closes.
+from assemble_context import (
+    artifact_hash,
+    compiled_context_contract_errors,
+    model_input_package_contract_errors,
+    review_result_contract_errors,
+)
 
 FINDING_CATEGORIES = {"violation", "material_conflict", "opportunity"}
 REVIEW_DECISIONS = {"pass", "pass_with_suggestions", "approval_required", "fail"}
 
 
 def validate_review(compiled_context, package, review):
-    if package["sources"]["compiledContextHash"] != compiled_context.get("artifactHash"):
+    # All three governed documents, each against its published contract, before
+    # any field of any of them is read. Only the artefact's contract was executed
+    # here, so a package and a review declaring another kind at another schema
+    # version still produced a governed review decision.
+    for what, document, errors in (
+        ("compiled context", compiled_context, compiled_context_contract_errors),
+        ("model input package", package, model_input_package_contract_errors),
+        ("review result", review, review_result_contract_errors),
+    ):
+        violations = errors(document)
+        if violations:
+            raise ValueError(f"{what} does not satisfy its published contract: {violations[0]}")
+    # The seal is reproduced, not read. This compared the package's claim against
+    # the artefact's own declared `artifactHash` — two claims about the same
+    # thing, and neither of them checked. A rule could be added to
+    # `elementRecords`, or a `block` enforcement downgraded to `inform`, with
+    # both declared values left untouched, and the governed review decision
+    # derived from `elementRecords` below changed with nothing to notice.
+    computed = artifact_hash(compiled_context)
+    if compiled_context.get("artifactHash") != computed:
+        raise ValueError("compiled context artifactHash mismatch")
+    if package["sources"]["compiledContextHash"] != computed:
         raise ValueError("review compiledContextHash mismatch")
+
+    # Every hash this function acts on is reproduced from the payload it claims
+    # to describe. `artifactHash` was closed first and these were left: the
+    # package's `assemblyHash` was never checked at all, and `modelInputHash`
+    # was only compared between two supplied claims — so replacing it in both
+    # the package and the review, or editing `slots.taskInput` under the old
+    # value, produced a review decision bound to a model input that was never
+    # sent. Equality between two claims is not verification.
+    package_payload = {key: value for key, value in package.items() if key != "assemblyHash"}
+    if package.get("assemblyHash") != sha256_id(package_payload):
+        raise ValueError("package assemblyHash mismatch")
+    try:
+        rendered_hash = text_hash(render_model_input(package["slots"]))
+    except (ModelInputContractError, TypeError, ValueError) as error:
+        raise ValueError(f"package slots do not render a model input: {error}") from error
+    if package.get("modelInputHash") != rendered_hash:
+        raise ValueError("package modelInputHash mismatch")
+    if review["modelInputHash"] != rendered_hash:
+        raise ValueError("review modelInputHash mismatch")
+
+    # Section 8.0a: the package and the review must be about the artefact this
+    # review claims to be about. Reproducing four hashes proved the documents
+    # were intact; nothing tied their governed identities together, so a package
+    # naming another brand at another version, or another target, validated.
+    context_manifest = compiled_context["manifest"]
+    package_manifest = package["manifest"]
+    if identity_key(package_manifest["id"]) != identity_key(context_manifest["id"]):
+        raise ValueError("review package manifest id does not match the compiled context")
+    for field in ("version", "contentHash"):
+        if package_manifest.get(field) != context_manifest.get(field):
+            raise ValueError(f"review package manifest {field} does not match the compiled context")
+    target = identity_key(compiled_context["targetId"])
+    for where, claimed in (("package", package.get("targetId")), ("review", review.get("targetId"))):
+        if not isinstance(claimed, str) or identity_key(claimed) != target:
+            raise ValueError(f"review {where} targetId does not match the compiled context")
+
     # Section 8.0a: identities are compared on their canonical form.
     by_id = {identity_key(item["id"]): item for item in compiled_context["elementRecords"]}
     active = {identity_key(item) for item in package["selection"]["activeGuidanceElementIds"]}
-
-    if review["modelInputHash"] != package["modelInputHash"]:
-        raise ValueError("review modelInputHash mismatch")
 
     if review.get("decision") not in REVIEW_DECISIONS:
         raise ValueError("invalid review decision")

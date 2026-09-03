@@ -4,6 +4,11 @@ import re
 import yaml
 
 ROOT=Path(__file__).resolve().parents[2]
+import sys as _sys
+_sys.path.insert(0, str(ROOT / 'reference' / 'foundation' / 'src'))
+# Section 28.1: governed documents go through the one governed reader, in tests
+# that bless published evidence as much as in product code.
+from obds_ref.governed_io import load_data as _governed_load  # noqa: E402
 def _schema_dir(root, name):
     """Resolve schemas/ and value-schemas/ in either supported layout: flat in an
     unpacked release archive, under 1.0.0/ in the working repository."""
@@ -16,11 +21,30 @@ def _schema_dir(root, name):
     return flat
 SCHEMAS=_schema_dir(ROOT,'schemas')
 VALUE_SCHEMAS=_schema_dir(ROOT,'value-schemas')
-SPEC=(ROOT/'OBDS-2.0.0.md').read_text(encoding='utf-8')
+def _release() -> str:
+    """The release this package is, read from the specification it ships.
+
+    Naming `OBDS-2.0.0.md` here made this test a document that has to be edited
+    at every release, which is the drift class the release gate was built for.
+    The package carries exactly one `OBDS-<x.y.z>.md`, so the release is derived
+    from it.
+    """
+    import re as _release_re
+
+    names = sorted(
+        path.name for path in ROOT.glob("OBDS-*.md")
+        if _release_re.fullmatch(r"OBDS-\d+\.\d+\.\d+\.md", path.name)
+    )
+    assert len(names) == 1, f"expected one normative specification, found {names}"
+    return names[0][len("OBDS-"):-len(".md")]
+
+
+RELEASE = _release()
+SPEC=(ROOT/f'OBDS-{RELEASE}.md').read_text(encoding='utf-8')
 
 
 def test_single_normative_spec_no_core_file():
-    assert (ROOT/'OBDS-2.0.0.md').exists()
+    assert (ROOT/f'OBDS-{RELEASE}.md').exists()
     assert not (ROOT/'OBDS-CORE-1.0.0.md').exists()
 
 
@@ -62,7 +86,7 @@ def test_reference_manifests_validate_as_1_0():
         else:
             paths=[ROOT/'reference'/suite/'examples'/'manifest.yaml']
         for path in paths:
-            obj=yaml.safe_load(path.read_text())
+            obj=_governed_load(path)
             jsonschema.validate(obj,schema)
 
 
@@ -85,8 +109,8 @@ def _canonical_hash(value):
 
 
 def test_schema_index_capabilities_and_files_are_synchronised():
-    registry=json.loads((ROOT/'OBDS-2.0.0-CAPABILITY-REGISTRY.json').read_text())
-    index=json.loads((ROOT/'OBDS-2.0.0-SCHEMA-INDEX.json').read_text())
+    registry=json.loads((ROOT/f'OBDS-{RELEASE}-CAPABILITY-REGISTRY.json').read_text())
+    index=json.loads((ROOT/f'OBDS-{RELEASE}-SCHEMA-INDEX.json').read_text())
     allowed={'foundation'}
     allowed.update(item['id'] for item in registry['runtimeCapabilities'])
     allowed.update(item['id'] for item in registry['brandProfiles'])
@@ -101,7 +125,7 @@ def test_schema_index_capabilities_and_files_are_synchronised():
 
 
 def test_schema_index_ids_and_value_schema_hashes_match_files():
-    index=json.loads((ROOT/'OBDS-2.0.0-SCHEMA-INDEX.json').read_text())
+    index=json.loads((ROOT/f'OBDS-{RELEASE}-SCHEMA-INDEX.json').read_text())
     seen_ids=set()
     for item in index['schemas']:
         obj=json.loads((SCHEMAS/item['file']).read_text())
@@ -117,7 +141,7 @@ def test_schema_index_ids_and_value_schema_hashes_match_files():
 
 
 def test_foundation_standard_value_contract_registry_matches_public_value_schemas():
-    registry=json.loads((ROOT/'OBDS-2.0.0-CAPABILITY-REGISTRY.json').read_text())
+    registry=json.loads((ROOT/f'OBDS-{RELEASE}-CAPABILITY-REGISTRY.json').read_text())
     declared=set(registry['foundation']['standardValueContracts'])
     public={path.name.removesuffix('.schema.json') for path in (VALUE_SCHEMAS).glob('*.json')}
     assert declared==public
@@ -137,7 +161,7 @@ def test_rc5_canonical_implementations_are_identical():
 
 
 def test_rc5_legacy_hex_fixture_is_not_public_schema_surface():
-    index=json.loads((ROOT/'OBDS-2.0.0-SCHEMA-INDEX.json').read_text())
+    index=json.loads((ROOT/f'OBDS-{RELEASE}-SCHEMA-INDEX.json').read_text())
     assert all(x['file']!='colour-hex.schema.json' for x in index.get('valueSchemas',[]))
     helper=json.loads((ROOT/'reference'/'foundation'/'value-schemas'/'colour-hex.schema.json').read_text())
     assert '/reference/1.0.0/' in helper['$id']

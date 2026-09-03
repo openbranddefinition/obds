@@ -2,9 +2,178 @@
 
 ## Release
 
-**Version:** OBDS 2.0.0  
+**Version:** OBDS 3.0.0  
 **Status:** Stable  
-**Date:** 2026-09-01
+**Date:** 2026-09-03
+
+## 3.0.0
+
+**Semantic Closure. MAJOR.**
+
+3.0.0 is not a redesign. It adds no Brand State, no profile, no capability and
+no architecture. It closes five places where one governed semantic was stated
+once and implemented twice, so that two conforming readers, two entry points or
+two executors could reach different governed answers from the same approved
+bytes.
+
+Every one of the five is a breaking correction to an existing normative
+contract, which is what makes this MAJOR under section 27.1. Each was found by
+reproducing it on a clean checkout before any code was written, and each is
+closed by a test that fails when the correction is removed.
+
+### Breaking contract corrections
+
+**Class A, section 28.1: one governed input contract at every reader.** The rule
+that a governed document has an object root lived in one of five readers. The
+other four returned the sequence, the JavaScript reader refused it, and the
+declared conformance case `governed-input-sequence-root` said a sequence root is
+not governable. The rule now lives in the shared reader, so a file path and bytes
+already in hand are one contract with two doors. The nesting bound and the
+duplicate-key rule are stated where both formats reach them, so a document that
+arrived as JSON and one that arrived as YAML are bounded identically.
+
+**Class B, section 8.0b: identity positions and identity binding.** Two
+corrections in one class.
+
+`manifest.version` was an identity position in a received Model Input Package
+and not in the Manifest or the Build Plan that produced it. A `version`
+differing only in line ending therefore passed validation and build with an
+identical `contentHash`, `planHash` and `artifactHash`, and the runtime then
+refused what the compiler had approved. The four enumerations now speak one
+coordinate system, the position is the path in the document itself, and a
+position that bears identity in one artefact bears it in every artefact carrying
+the same path. CR and LF are rejected at an identity position because section
+14.3 step 2 folds them into one hash; NEL, LINE SEPARATOR and PARAGRAPH
+SEPARATOR are preserved, and the set is closed in both directions.
+
+Reproducing an artefact's hashes proves it is intact and nothing more. Where a
+governed artefact names the manifest another is about, `manifest.id`,
+`manifest.version` and `manifest.contentHash` MUST all agree before either is
+used. A Model Input Package naming another brand, another approved version or
+another target, with every one of its own hashes correctly recomputed, validated
+before this release.
+
+**Class C, sections 11.4, 11.5 and 11.5a: the RULE contract.** RULE-level
+`validatorRef` is removed. Foundation Validator Registry v1 is closed, has one
+entry, and that entry applies to value contracts of kind `colour` with the
+element value as its input, so the set of rule-level references that could
+resolve was empty and `validationMode: deterministic` with `checks: []` was a
+rule nothing enforced. A deterministic Foundation RULE now declares at least one
+registered Foundation check, in the published value contract as well as in the
+compiler, and `checks[]` is typed rather than an untyped array.
+
+`validate_check` gained a stage. The compiled-stage rule ran over the authored
+form and demanded a literal the author had deliberately deferred through
+`elementValueRef`, so a branch the published RULE contract admits was unusable
+through the governed build path while a direct compiler call materialised it.
+The authored stage now accepts the deferred form and validates the reference's
+own shape where it is written; the compiled stage still requires the resolved
+value, because nothing downstream will resolve it.
+
+`normalized_whitespace_ci` joins the registry as a distinct match mode, and the
+pinned invisible code points it removes are stripped there and nowhere else.
+`word_boundary_ci` is pinned to one declared Unicode version plus normative
+fixtures, and the version declared is the one the segmentation engine
+implements rather than the one section 14.3c pins for canonicalisation.
+
+**Class D, sections 13.0a, 13.5a, 14 and 15.11: runtime contract enforcement.**
+A 3.0 Build Plan declares `schemaVersion: 3.0.0` and every target states
+`stateMap` and `styleTexture`, because both decide what reaches the compiled
+context and an absent one is a governed decision made by whichever
+implementation supplied the default. The compiler materialises every
+decision-bearing check parameter, and the runtime refuses to invent a missing
+one.
+
+The 3.0 Compiled Brand Context contract constrains the fields consumers read.
+Two schema-valid artefacts crashed a consumer under the 1.1 contract: an element
+record with no `id`, and a validity timestamp that was not a timestamp.
+`elementRecords[]` items now require the nine fields consumers read, and
+`validFrom` and `validTo` carry an RFC 3339 pattern rather than a `format`
+annotation no validator is obliged to enforce.
+
+Every consumer that derives a governed decision from a Compiled Brand Context, a
+Model Input Package or a Review Result validates that document against its
+published contract before reading any field of it. A package declaring another
+`kind` at another `schemaVersion` was re-sealed and released with a model call
+before this release.
+
+**Class E, section 10.2a: one relevance model.** Conflict relevance is decided
+once, at build time, by the compiler. Context Assembly and the runtime consume
+that decision and MUST NOT re-derive it, and a projection cannot change it. The
+materialisation of section 13.5a happens afterwards and alters nothing.
+
+### Runtime fail-closed corrections
+
+- A validity window the runtime cannot read is not a window it may ignore. An
+  unparseable `validFrom` or `validTo` means the artefact is not valid,
+  independent of what the contract's pattern permitted.
+- The published contract is executed before the first field read, including the
+  fields a Runtime Decision Record copies as evidence. Asked afterwards, a
+  non-object artefact raised out of the runtime and the record section 15.9
+  requires was never written.
+- `run_assembled_with_model` executes the Model Input Package contract, and the
+  review validator executes all three: Compiled Brand Context, Model Input
+  Package and Review Result.
+
+### Interoperability fixes
+
+- The one deterministic Model Input renderer moved into Foundation, and the
+  assembler imports it. The runtime derives the expected bytes from the slots it
+  verified and compares them byte for byte, so the rendered text stopped being
+  an assertion the caller makes.
+- `governed_io.py`, `canonical.py` and `model_input.py` ship byte-identical in
+  every package, and the release gate proves it.
+- The governed writer will not emit a document its own reader would reinterpret.
+
+### Test and conformance expansion
+
+**Conformance.** 1067 cases pass, 0 fail, 0 skip. The declared Foundation
+conformance suite is green at 23 of 23 declared cases.
+
+| Suite | Cases |
+|---|---|
+| foundation | 961 |
+| context-delivery | 3 |
+| context-assembly | 24 |
+| design-space | 20 |
+| integration | 15 |
+| golden | 6 |
+| adversarial | 38 |
+
+Section 26.2 gained six requirements, each naming executed cases the release
+gate resolves against the run it performs itself.
+
+The suite gained five systemic mechanisms. Each enumerates a surface from a
+machine-readable registry and fails when a new code path joins the surface
+without an entry, so the *shape* of a defect is closed rather than one instance
+of it. The strongest is the call-site proof for governed hash verification: for
+each verifier call site the registry names the exact source line of its gate,
+the test neutralises that one gate in a copy of the release, runs that one
+driver against the copy in a subprocess, and requires the driver to stop
+refusing. A driver that does not reach its site does not notice, and fails
+there.
+
+### Packaging and documentation
+
+- `schemas/3.0.0/` publishes the Build Plan, Compiled Brand Context and Runtime
+  Decision Record contracts; `value-schemas/3.0.0/` publishes the RULE value
+  contract. The frozen 1.0.0 surface and the 1.1.0 contract beside it are
+  unchanged.
+- The three release-document readers in the suite derive the release from the
+  specification the package ships instead of naming a file that is renamed every
+  time.
+- Migration notes for 2.x are in `OBDS-3.0.0-MIGRATION.md`.
+
+### Non-blocking review finding, recorded not closed
+
+The independent approval of this implementation was
+`APPROVE WITH NON-BLOCKING FINDINGS`. The finding concerns a development label
+in the hash-proof registry, not a normative contract: the reseal expectation
+recorded for one `validate_review` hash boundary claims a stronger property than
+that boundary proves. No Class A to E invariant is affected, the boundary itself
+reproduces its hash correctly, and the identity binding described above holds
+under attack. It is recorded here so that no release document claims more than
+the reproducible evidence supports, and it is not a release blocker.
 
 ## 2.0.0
 

@@ -127,13 +127,35 @@ def ok(message: str) -> None:
     print(f"  ok    {message}")
 
 
+_GOVERNED_READER = None
+
+
+def load(path: Path):
+    """Section 28.1: release evidence is governed data, so it is read as such.
+
+    The release gate reads these same files under the governed contract. This
+    script read them with a raw parser, which accepts documents the contract
+    refuses — a smoke test that is more permissive than the gate reports green on
+    input the release would reject.
+    """
+    global _GOVERNED_READER
+    if _GOVERNED_READER is None:
+        source = ROOT / "reference" / "foundation" / "src"
+        if str(source) not in sys.path:
+            sys.path.insert(0, str(source))
+        from obds_ref.governed_io import load_data
+
+        _GOVERNED_READER = load_data
+    return _GOVERNED_READER(path)
+
+
 def release_version() -> str:
     return (ROOT / "VERSION").read_text(encoding="utf-8").strip()
 
 
 def check_counts(version: str) -> None:
     print("\n[1/4] declared pass counts")
-    result = json.loads((ROOT / f"OBDS-{version}-TEST-RESULT.json").read_text(encoding="utf-8"))
+    result = load(ROOT / f"OBDS-{version}-TEST-RESULT.json")
     expected = result["passedCount"]
     counts = result["suiteCounts"]
     if sum(counts.values()) != expected:
@@ -149,7 +171,7 @@ def check_counts(version: str) -> None:
              "Foundation conformance run was not published with this release")
         foundation_expected = None
     else:
-        foundation = json.loads(foundation_path.read_text(encoding="utf-8"))
+        foundation = load(foundation_path)
         if foundation.get("failedCount") or not foundation.get("passed"):
             fail("official Foundation conformance is not green in the published result")
         foundation_expected = str(foundation["passedCount"])
@@ -213,9 +235,7 @@ def run_cases(package: Path, python: str, label: str, step: str, version: str) -
 
     # The declared total lives in the release metadata, not in this script, so a
     # suite that grows does not need this file edited.
-    total = json.loads(
-        (package / f"OBDS-{version}-TEST-RESULT.json").read_text(encoding="utf-8")
-    )["passedCount"]
+    total = load(package / f"OBDS-{version}-TEST-RESULT.json")["passedCount"]
 
     already_run: set[str] = set()
     for _doc, command, code, needle in sorted(CASES, key=rank):

@@ -1,6 +1,6 @@
 id: urn:obds:build-plan:example-scoped
 kind: obds-build-plan
-schemaVersion: 1.0.0
+schemaVersion: 3.0.0
 manifestRef:
   id: urn:obds:brand:example-scoped
   version: 1.0.0

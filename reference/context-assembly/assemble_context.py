@@ -6,7 +6,12 @@ import json
 import re
 import uuid
 
-from canonical import identity_key, sha256_id, text_hash
+from pathlib import Path
+
+from canonical import (compiled_context_identity_positions, identity_admissibility_errors,
+                       identity_key, manifest_content_hash,
+                       model_input_package_identity_positions, sha256_id, text_hash)
+from governed_io import load_data as _load_governed
 
 
 
@@ -21,13 +26,77 @@ TRUTH_OUTCOMES = {
     "not_covered", "access_limited", "mixed", "unresolved"
 }
 
-SLOT_ORDER = [
-    ("HARD_BOUNDARIES", "hardBoundaries"),
-    ("FACT_GROUNDING", "factGrounding"),
-    ("STATE_MAP", "stateMap"),
-    ("GUIDANCE_CONTEXT", "guidanceContext"),
-    ("TASK_INPUT", "taskInput"),
-]
+# Section 15.10: one renderer, shared with the runtime, so the runtime can
+# reproduce exactly these bytes from the package it verified.
+from model_input import SLOT_ORDER, render_model_input  # noqa: F401
+
+
+# Section 14. Context Assembly consumes a Compiled Brand Context, so it executes
+# the published contract like every other executor. It verified `artifactHash`
+# and then a hand-picked set of properties, which is a summary of the contract
+# rather than the contract: a correctly re-sealed artefact carrying a property
+# the contract forbids was assembled from.
+_HERE = Path(__file__).resolve().parent
+_CONTEXT_SCHEMA_PATH = _HERE.parents[1] / "schemas" / "3.0.0" / "compiled-context.schema.json"
+_PACKAGE_SCHEMA_PATH = _HERE / "schemas" / "model-input-package.schema.json"
+_REVIEW_SCHEMA_PATH = _HERE / "schemas" / "review-result.schema.json"
+_VALIDATORS = {}
+
+
+def _validator_for(path):
+    key = str(path)
+    if key not in _VALIDATORS:
+        import jsonschema
+
+        _VALIDATORS[key] = jsonschema.Draft202012Validator(_load_governed(path))
+    return _VALIDATORS[key]
+
+
+def _contract_violations(document, path, what):
+    if not isinstance(document, dict):
+        return [f"<root>: a {what} is an object, not {type(document).__name__}"]
+    return [
+        ("/".join(str(part) for part in error.path) or "<root>") + ": " + error.message
+        for error in sorted(_validator_for(path).iter_errors(document), key=str)
+    ]
+
+
+def _identity_violations(positions):
+    return [
+        f"inadmissible governed identity: {error}"
+        for error in identity_admissibility_errors(positions)
+    ]
+
+
+def compiled_context_contract_errors(compiled_context):
+    """Every way the published contract refuses this artefact, worst first."""
+    violations = _contract_violations(
+        compiled_context, _CONTEXT_SCHEMA_PATH, "Compiled Brand Context"
+    )
+    if violations:
+        return violations
+    # Section 8.0a, the same rule the runtime applies to a received artefact:
+    # an identity the canonical form cannot tell apart from another one is not
+    # a governable identity, wherever the artefact is consumed.
+    return _identity_violations(compiled_context_identity_positions(compiled_context))
+
+
+def model_input_package_contract_errors(package):
+    """The published Model Input Package contract, then section 8.0a.
+
+    Three governed documents reach Context Assembly and the runtime. Only one of
+    them had its contract executed, so a package declaring another kind at
+    another schema version was consumed by both.
+    """
+    violations = _contract_violations(package, _PACKAGE_SCHEMA_PATH, "Model Input Package")
+    if violations:
+        return violations
+    return _identity_violations(model_input_package_identity_positions(package))
+
+
+def review_result_contract_errors(review):
+    """The published Review Result contract."""
+    return _contract_violations(review, _REVIEW_SCHEMA_PATH, "Review Result")
 
 
 def artifact_hash(artefact):
@@ -84,30 +153,61 @@ def render_rule_for_model(element):
     return " | ".join(parts)
 
 
-def _filtered_reference_chapter_content(chapter, excluded_ids):
+def _filtered_reference_chapter_content(chapter, excluded_ids, declared_universe):
+    """Section 14.3a / 10.2a seam, corrected in 3.0.0.
+
+    Until then this filtered against `excluded_ids` only — the elements already
+    rendered into another slot — and kept everything else. A block for an
+    element *outside* the compiled artefact's declared universe is not in
+    `excluded_ids`, so it was kept: an out-of-scope or expired element reached
+    the model through a Reasoning Chapter while the compiler's own
+    `availableElementIds` never named it. The filter ran the right way round for
+    "already said" and the wrong way round for "may be said at all".
+
+    A block is rendered exactly when its element is in the declared universe and
+    is not already present in another slot. A chapter whose renderer this code
+    does not recognise carries content it cannot attribute to elements, so it
+    cannot be admitted at all.
+    """
     renderer = chapter.get("renderer") or {}
     if renderer.get("id") != "org.openbranddefinition.reference-chapter-renderer":
-        return chapter.get("content", "")
+        raise ValueError(
+            "unrecognised Reasoning Chapter renderer, so its content cannot be "
+            f"attributed to the compiled artefact's declared universe: {renderer.get('id')}"
+        )
     blocks = re.split(r"(?m)(?=^## )", chapter.get("content", ""))
     kept = []
     for block in blocks:
         block = block.strip()
         if not block:
             continue
-        match = re.match(r"^##\s+([^\s]+)", block)
-        if match and match.group(1) in excluded_ids:
+        # The generator writes `## <elementId> [family/kind/state]`, so the id is
+        # everything before the bracket — not the first whitespace-delimited
+        # token. An element id may legitimately contain a space, and reading only
+        # the first token truncated `identity.value.innovation smuggled` to
+        # `identity.value.innovation`, which *is* in the universe. The block was
+        # then attributed to the wrong element and kept.
+        match = re.match(r"^##\s+(.+?)\s+\[[^\[\]]*\]\s*$", block.splitlines()[0])
+        if not match:
+            raise ValueError(
+                f"Reasoning Chapter {chapter.get('id')} carries a block whose heading "
+                f"does not name exactly one element: {block.splitlines()[0]!r}"
+            )
+        element_id = identity_key(match.group(1))
+        if element_id not in declared_universe:
+            continue
+        if element_id in excluded_ids:
             continue
         kept.append(block)
     return "\n\n".join(kept)
 
-def render_model_input(slots):
-    parts = []
-    for label, key in SLOT_ORDER:
-        parts.append(f"[{label}]\n{slots[key]}")
-    return "\n\n".join(parts)
-
-
 def _validate_compiled_context(compiled_context, request):
+    violations = compiled_context_contract_errors(compiled_context)
+    if violations:
+        raise ValueError(
+            "compiled context does not satisfy the published Compiled Brand Context "
+            f"3.0.0 contract: {violations[0]}"
+        )
     if compiled_context.get("kind") != "obds-compiled-brand-context":
         raise ValueError("Context Assembly requires a Compiled Brand Context")
     if compiled_context.get("artifactHash") != artifact_hash(compiled_context):
@@ -162,8 +262,31 @@ def _validate_resolution_manifest(compiled_context, retrieval, resolution_manife
             or actual_hash != expected.get("contentHash")
         ):
             raise ValueError("resolution manifest does not match compiled context")
+        # Section 7: comparing the *declared* hash only proves the snapshot says
+        # the right thing. A snapshot carrying a different governed identity set
+        # can say it too, simply by copying the expected value. So the snapshot
+        # has to reproduce the hash it claims — the same rule the derived views
+        # follow, applied to the one path that reads the manifest at runtime.
+        if manifest_content_hash(resolution_manifest) != actual_hash:
+            raise ValueError(
+                "resolution manifest does not reproduce its approval contentHash, so it "
+                "is not the approved manifest the compiled context names"
+            )
     elif resolution_manifest is not None:
         raise ValueError("manifest access is allowed only for manifest_checked no-hit resolution")
+
+
+def _assert_view_integrity(view, view_hash_key, collection_key, item_hash_key, label):
+    """Reproduce a derived view's own hashes, item by item and then as a whole."""
+    for item in view.get(collection_key, []):
+        declared = item.get(item_hash_key)
+        recomputed = sha256_id({k: v for k, v in item.items() if k != item_hash_key})
+        if declared != recomputed:
+            raise ValueError(f"{label} {item.get('id')} does not reproduce its {item_hash_key}")
+    declared = view.get(view_hash_key)
+    recomputed = sha256_id({k: v for k, v in view.items() if k != view_hash_key})
+    if declared != recomputed:
+        raise ValueError(f"derived view does not reproduce its {view_hash_key}")
 
 
 def assemble(compiled_context, search_index, chapter_set, request, *, resolution_manifest=None):
@@ -176,6 +299,17 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
             raise ValueError("derived view manifest mismatch")
         if identity_key(source["manifest"]["id"]) != identity_key(manifest_ref["id"]) or source["manifest"]["version"] != manifest_ref["version"]:
             raise ValueError("derived view manifest identity mismatch")
+
+    # The compiled artefact is checked against its own `artifactHash`; the
+    # derived views were not checked against theirs. So a Search Card or a
+    # Reasoning Chapter could be edited after generation and still be assembled,
+    # with the stale `cardHash`, `chapterHash`, `indexHash` and `chapterSetHash`
+    # carried into the Model Input Package as if they described what was sent.
+    # A block whose heading names an available element then delivered arbitrary
+    # text to the model. A hash a package publishes has to be a hash the
+    # assembler reproduced.
+    _assert_view_integrity(search_index, "indexHash", "cards", "cardHash", "Search Card")
+    _assert_view_integrity(chapter_set, "chapterSetHash", "chapters", "chapterHash", "Reasoning Chapter")
 
     cards = {item["id"]: item for item in search_index["cards"]}
     chapters = {item["id"]: item for item in chapter_set["chapters"]}
@@ -257,12 +391,43 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
             raise ValueError(f"rule cannot be active guidance: {element_id}")
         active_guidance.append(element)
 
+    # Section 14.3a: the compiled artefact's declared universe, established once
+    # and used by everything that renders. `_validate_compiled_context` has
+    # already proven this equals the `elementRecords` index.
+    declared_universe = {identity_key(item) for item in compiled_context.get("availableElementIds", [])}
+
     selected_chapters = [chapters[item] for item in selected["reasoningChapterIds"]]
     if request["deliveryMode"] == "reasoning" and not selected_chapters:
         raise ValueError("reasoning mode requires at least one chapter")
 
+    def _refuse_chapters_outside_the_universe(chapters_to_check):
+        """A chapter that *declares* elements outside the universe is reported.
+
+        Silently trimming them would move the defect from the model input into a
+        filter nobody reads. This runs on the chapters that are actually
+        rendered, which under `deliveryMode: full` is not the requested set: full
+        mode replaces the selection with every chapter, so checking only the
+        request's chapters left the expansion unchecked.
+        """
+        for chapter in chapters_to_check:
+            outside = sorted(
+                identity_key(item)
+                for item in chapter.get("elementIds", [])
+                if identity_key(item) not in declared_universe
+            )
+            if outside:
+                raise ValueError(
+                    f"Reasoning Chapter {chapter.get('id')} declares elements outside the "
+                    "compiled artefact's declared universe: " + ", ".join(outside)
+                )
+
+    _refuse_chapters_outside_the_universe(selected_chapters)
+
     if request["deliveryMode"] == "full":
         selected_chapters = list(chapters.values())
+        # Full mode is an expansion, so the universe check runs again over what
+        # the expansion produced.
+        _refuse_chapters_outside_the_universe(selected_chapters)
         fact_elements = [
             item for item in by_id.values()
             if item.get("nature") == "fact"
@@ -313,7 +478,7 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
         exact_ids.update(identity_key(item["id"]) for item in active_guidance)
         chapter_parts = []
         for item in selected_chapters:
-            content = _filtered_reference_chapter_content(item, exact_ids)
+            content = _filtered_reference_chapter_content(item, exact_ids, declared_universe)
             if content:
                 chapter_parts.append(f"{identity_key(item['id'])}: {content}")
         if chapter_parts:
@@ -323,6 +488,15 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
                 "Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\n"
                 + "\n\n".join(chapter_parts)
             )
+
+    # Section 14.3a / 10.2a seam. Every element rendered into a slot above is
+    # drawn from `by_id`, and `_validate_compiled_context` has already proven
+    # `by_id` equals `availableElementIds`, so the slot side of this seam holds
+    # by construction and an assertion here could not fail. The side that could
+    # fail — and did — is Reasoning Chapter content, which is text rather than an
+    # element lookup; it is filtered against `declared_universe` where it is
+    # rendered, and a chapter that declares an undeclared element is refused
+    # outright above.
 
     slots = {
         "hardBoundaries": "\n".join(render_rule_for_model(item) for item in hard_boundary_elements),

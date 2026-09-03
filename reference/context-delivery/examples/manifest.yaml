@@ -60,7 +60,6 @@ elements:
     enforcement: block
     validationMode: human
     checks: []
-    validatorRef: null
     condition: {}
     requirement: {}
     references:
@@ -86,7 +85,7 @@ elements:
 approval:
   approvedBy: role:brand-owner
   approvedAt: '2026-07-25T12:00:00Z'
-  contentHash: sha256:50f399ed18e8ce9db367e8e798e728011cbd97648d28594a1f54e2eba7461e74
+  contentHash: sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24
 profiles:
 - obds-foundation
 valueContracts:
@@ -107,7 +106,7 @@ valueContracts:
 - id: urn:obds:brand:example-context#value-contract:rules:rule:782241eb
   family: rules
   kind: rule
-  shapeHash: sha256:782241ebb0bac34d6a1675e6ec409419ac253a6da2a0d19a457d633d70b33f28
-  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json
-  schemaHash: sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787
+  shapeHash: sha256:21a23ecd689b575c1d05cfdbf0c90bab407395d0bdab41455261eaefba551caf
+  schemaRef: https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json
+  schemaHash: sha256:74cd72958ceb09a9001f938e2370c898e4669411d2ea2fe7bcc7f58f8f6e5bf3
   validatorRef: null

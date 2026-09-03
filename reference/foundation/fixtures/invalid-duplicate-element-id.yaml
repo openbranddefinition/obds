@@ -69,7 +69,6 @@ elements:
         - the best
         match: case_insensitive
         appliesTo: output
-    validatorRef: null
     condition: {}
     requirement: {}
     references: []
@@ -112,7 +111,7 @@ valueContracts:
 - id: urn:obds:brand:example-simple#value-contract:rules:rule:2b45a37e
   family: rules
   kind: rule
-  shapeHash: sha256:2b45a37ecf71908caf0b5c2de7f6f57363cf70f68cdef7872e79185eab1b4758
-  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json
-  schemaHash: sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787
+  shapeHash: sha256:1e3b56a8eacdc36465f5f251877162666cd965dc53f61bf01d5d4f86ed23eff9
+  schemaRef: https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json
+  schemaHash: sha256:74cd72958ceb09a9001f938e2370c898e4669411d2ea2fe7bcc7f58f8f6e5bf3
   validatorRef: null

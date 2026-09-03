@@ -1,12 +1,12 @@
 {
   "applicationMode": "create",
-  "assembledAt": "2026-08-27T09:19:53.181990+00:00",
-  "assemblyHash": "sha256:7d5dae235d709a955fd148f1a252c4120e1eaaad7a382132eb54a11c58b80c61",
+  "assembledAt": "2026-09-02T19:05:25.731680+00:00",
+  "assemblyHash": "sha256:200993ebdba3f4116873d4f7ca5d4724ecc483f4a3f9d07ab4be8854217ab8ba",
   "deliveryMode": "reasoning",
-  "id": "urn:obds:model-input:b31a5c77-bc42-4f07-bea6-7f410123647a",
+  "id": "urn:obds:model-input:4cfa607a-1832-4cc5-9c73-203ed2bfd957",
   "kind": "obds-model-input-package",
   "manifest": {
-    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
@@ -49,9 +49,9 @@
     "taskInput": "Create a concise product-launch headline."
   },
   "sources": {
-    "chapterSetHash": "sha256:a935116c82149714ad9b75293e623b2c6cba50d3be3e0ffa8bc5c8f9af6944ee",
-    "compiledContextHash": "sha256:b45b653e09a450e2a4f44054750af94b13b139998774bbc98fa84b3e7ed35331",
-    "searchIndexHash": "sha256:01324fafa8010675b913ad0faf19618ca789afd990a7432bad64e8d99f2f4483"
+    "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
+    "compiledContextHash": "sha256:b79d8199970569570a13e1e30558309fc6555207d4f0310a671b5f5b323508d4",
+    "searchIndexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab"
   },
   "targetId": "social-copy-global-en",
   "tokenBudget": {

@@ -1,7 +1,7 @@
 {
   "cases": [
     {
-      "description": "Two incomparable KNOWLEDGE elements collide on a subject the target neither requires nor selects: styleTexture none, stateMap none. The target cannot observe the resolution, so it must build.",
+      "description": "OBDS 3.0.0 inverts this case. Until then a target whose projection policies were both `none` built clean over an unresolved conflict inside its own applicable set. That reading is refuted twice: under deliveryMode full the assembler rebuilds FACT_GROUNDING and STATE_MAP from the whole element universe and ignores the policies, and section 14.3a forbids a projection policy from changing the selection at all — deciding whether a governed result exists is that prohibition violated more severely. Every candidate winner enters selection under its own elementId, so two candidates always produce two governed result hashes: an applicable conflict is always decision-relevant.",
       "elements": [
         {
           "id": "structure.brand",
@@ -30,11 +30,13 @@
           "traits": "knowledge"
         }
       ],
-      "expectedCodes": [],
+      "expectedCodes": [
+        "OBDS-BUILD-SUBJECT-CONFLICT"
+      ],
       "expectedConflictReported": true,
-      "expectedDecisionRelevant": false,
-      "expectedStatus": "ready",
-      "id": "irrelevant-conflict-does-not-fail-the-target",
+      "expectedDecisionRelevant": true,
+      "expectedStatus": "failed",
+      "id": "an-applicable-conflict-fails-whatever-the-projection",
       "requiresDefined": [
         "structure.brand"
       ],

@@ -8,7 +8,7 @@ import yaml
 import jsonschema
 
 from obds_ref.canonical import artefact_hash, canonical_json_bytes, sha256_id, value_shape_hash
-from obds_ref.compiler import build_all, load_data, validate_manifest, manifest_change_report
+from obds_ref.compiler import build_all, load_data, read_governed_text, validate_manifest, manifest_change_report
 from obds_ref.runtime import run_with_model, assembly_failed_record
 
 
@@ -76,15 +76,19 @@ def test_failed_build_means_no_model_call():
 def test_blocking_preflight_means_no_model_call():
     artefact = {
         "kind": "obds-compiled-brand-context",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "3.0.0",
         "id": "urn:test:context",
         "targetId": "test",
         "manifest": {"id": "urn:test:brand", "version": "1.0.0", "contentHash": "sha256:" + "0" * 64},
+        # 3.0.0 validates this fixture against the published Compiled Brand
+        # Context contract before executing it, so the fixture has to satisfy
+        # the contract rather than the subset the runtime used to read.
         "build": {
             "planId": "urn:test:plan",
             "planHash": "sha256:" + "1" * 64,
             "compilerId": "test",
             "compilerVersion": "1.0.0",
+            "asOf": "2026-08-27T00:00:00Z",
         },
         "scope": {},
         "tokenBudget": {"tokenizerId": "obds:whitespace-v1", "tokenizerVersion": "1.0.0", "max": 100, "actual": 0},
@@ -103,6 +107,27 @@ def test_blocking_preflight_means_no_model_call():
         "validFrom": None,
         "validTo": None,
         "includedElementIds": ["rule.block-input"],
+        "availableElementIds": ["rule.block-input"],
+        "elementRecords": [
+            {
+                "id": "rule.block-input",
+                "family": "rules",
+                "kind": "prohibition",
+                "nature": "rule",
+                "state": "unknown",
+                "scope": {},
+                "validity": {"from": None, "to": None},
+                "sourceRefs": [],
+                "annotations": [],
+            }
+        ],
+        "contextAssembly": {
+            "applicationMode": "create",
+            "deliveryMode": "reasoning",
+            "eligibleGuidanceIds": [],
+            "noHitPolicy": "resolve_before_answer",
+        },
+        "governedResultHash": "sha256:" + "2" * 64,
         "slots": {"hardBoundaries": "", "factGrounding": "", "stateMap": "", "styleTexture": ""},
     }
     artefact["artifactHash"] = artefact_hash(artefact)
@@ -226,9 +251,11 @@ def test_runtime_record_ndjson(tmp_path):
     assert record["modelCall"]["requestId"] == "req-1"
     assert record["assemblyHash"] is None
     assert record["modelInputHash"] is None
-    persisted = json.loads(path.read_text().splitlines()[0])
+    # Section 28.1: a Runtime Decision Record is governed evidence, one NDJSON
+    # line at a time.
+    persisted = read_governed_text(path.read_text().splitlines()[0], is_json=True)
     assert "output" not in persisted
-    schema = json.loads((ROOT / "schemas" / "runtime-decision-record.schema.json").read_text())
+    schema = load_data(ROOT / "schemas" / "runtime-decision-record.schema.json")
     jsonschema.validate(persisted, schema)
 
 
@@ -239,7 +266,7 @@ def test_assembly_failed_runtime_record_is_schema_valid():
         task_input="Test",
     )
     payload = {key: value for key, value in record.items() if key != "output"}
-    schema = json.loads((ROOT / "schemas" / "runtime-decision-record.schema.json").read_text())
+    schema = load_data(ROOT / "schemas" / "runtime-decision-record.schema.json")
     jsonschema.validate(payload, schema)
     assert payload["decision"] == "assembly_failed"
     assert payload["assemblyHash"] is None

@@ -6,7 +6,7 @@
         "claims",
         "register"
       ],
-      "cardHash": "sha256:322bd83945e58f69716ebbbeb7e24c6759cbe074f9d17007665a489ebdc5c4ce",
+      "cardHash": "sha256:3aea669291ccabbe76095363115d573a6077d7bf1515754792ab1d62d69026b7",
       "chapterRefs": [
         "chapter.claims"
       ],
@@ -19,7 +19,7 @@
       "kind": "obds-search-card",
       "label": "Approved Register",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -33,7 +33,7 @@
         "logo",
         "zone"
       ],
-      "cardHash": "sha256:90dbed7c597cdc8f518c9b6478903287702195572f67b50e306341ce1496c2d8",
+      "cardHash": "sha256:579e94d75269d5b451b31e90584be3727bd6886c6dffff10961adfa035f8b968",
       "chapterRefs": [
         "chapter.logo-system"
       ],
@@ -46,7 +46,7 @@
       "kind": "obds-search-card",
       "label": "Logo Clear Zone",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -59,7 +59,7 @@
         "innovation",
         "value"
       ],
-      "cardHash": "sha256:ca82bd1dad244b521872125624438634412c078796d496e28640a89ed5af0209",
+      "cardHash": "sha256:75fbbfe1ae40ac4e7a48071f7e3be72bd8a8c692d2294748cc1b010a39b54752",
       "chapterRefs": [
         "chapter.brand-expression"
       ],
@@ -72,7 +72,7 @@
       "kind": "obds-search-card",
       "label": "Innovation",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -85,7 +85,7 @@
         "reliability",
         "value"
       ],
-      "cardHash": "sha256:cd44edff1771aa75fd9044be22b3b7ac567f1f344b8e005a7bafe473f8fc579a",
+      "cardHash": "sha256:0c47cf7e743bf585573d8f66443e872d0f9365ce686cfc6e3aa8141e83c79ebf",
       "chapterRefs": [
         "chapter.brand-expression"
       ],
@@ -98,7 +98,7 @@
       "kind": "obds-search-card",
       "label": "Reliability",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -111,7 +111,7 @@
         "simplicity",
         "value"
       ],
-      "cardHash": "sha256:b3fee8adc336223534285b97a89b32bc7c9eac9cc9c6490623722977ff595713",
+      "cardHash": "sha256:2e502cdd265b63e741ea067b329d0fbee4da9336afdff40f0835f186602fa4bb",
       "chapterRefs": [
         "chapter.brand-expression"
       ],
@@ -124,7 +124,7 @@
       "kind": "obds-search-card",
       "label": "Simplicity",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -138,7 +138,7 @@
         "require",
         "rule"
       ],
-      "cardHash": "sha256:77a6953e2e0fd7806fa38ba3f035f5faaef9c72de5ce04a1095f638589a3a5a6",
+      "cardHash": "sha256:8b42b5d61269c3bd07113949d673e2f4cf151e576fe521ac4482954312fad2fc",
       "chapterRefs": [
         "chapter.claims"
       ],
@@ -151,7 +151,7 @@
       "kind": "obds-search-card",
       "label": "Require Approval",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -165,7 +165,7 @@
         "rule",
         "zone"
       ],
-      "cardHash": "sha256:5dd478638f2934663c1a4610e14ef6244fdff2ab0cc6e9e9c458bab81b899276",
+      "cardHash": "sha256:0f8d6eb84774420bb46768651983c41822721c5016f778bb29d6184d88100068",
       "chapterRefs": [
         "chapter.logo-system"
       ],
@@ -178,7 +178,7 @@
       "kind": "obds-search-card",
       "label": "Clear Zone",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -192,7 +192,7 @@
         "example",
         "structure"
       ],
-      "cardHash": "sha256:b4ca26958ba1855741af4f3328ae7c1e5b6a9a6e9912701fae2b193c3e574a62",
+      "cardHash": "sha256:e21c635e287ebf40d4508c82cee3cad1511ab3aed8805e9d87027b89fc3b390d",
       "chapterRefs": [],
       "elementId": "structure.brand",
       "generator": {
@@ -203,7 +203,7 @@
       "kind": "obds-search-card",
       "label": "Example Assembly Brand",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -211,10 +211,10 @@
       "summary": "Example Assembly Brand"
     }
   ],
-  "indexHash": "sha256:01324fafa8010675b913ad0faf19618ca789afd990a7432bad64e8d99f2f4483",
+  "indexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab",
   "kind": "obds-search-index",
   "manifest": {
-    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },

@@ -1,5 +1,5 @@
 {
-  "artifactHash": "sha256:b45b653e09a450e2a4f44054750af94b13b139998774bbc98fa84b3e7ed35331",
+  "artifactHash": "sha256:b79d8199970569570a13e1e30558309fc6555207d4f0310a671b5f5b323508d4",
   "availableElementIds": [
     "claims.approved-register",
     "design.logo.clear-zone",
@@ -14,7 +14,7 @@
     "asOf": "2026-08-27T00:00:00Z",
     "compilerId": "org.openbranddefinition.reference-compiler",
     "compilerVersion": "1.0.0",
-    "planHash": "sha256:4b61dbe905ff91c117036a87131c550b6894db859833d940018f4e0eaf31a5e6",
+    "planHash": "sha256:64ed73670ab5b0325a070d8a59490ad9f83cfb3859da45712f1fa74a62606076",
     "planId": "urn:obds:build-plan:example-assembly"
   },
   "checkRegistryVersion": 1,
@@ -140,8 +140,7 @@
         ],
         "requirement": {},
         "statement": "Unregistered performance claims require approval.",
-        "validationMode": "human",
-        "validatorRef": null
+        "validationMode": "human"
       },
       "valueContractRef": "urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb"
     },
@@ -168,8 +167,7 @@
         ],
         "requirement": {},
         "statement": "Preserve the approved logo clear zone.",
-        "validationMode": "human",
-        "validatorRef": null
+        "validationMode": "human"
       },
       "valueContractRef": "urn:obds:brand:example-assembly#value-contract:rules:rule:782241eb"
     },
@@ -192,6 +190,7 @@
       "valueContractRef": "urn:obds:brand:example-assembly#value-contract:structure:brand-identity:2b7196d8"
     }
   ],
+  "governedResultHash": "sha256:a467fa3cdf08e18bd02348eca6709f83ed633e7a96a5dfd4226db17a127de896",
   "id": "urn:obds:brand:example-assembly:context:social-copy-global-en",
   "includedElementIds": [
     "claims.approved-register",
@@ -202,11 +201,11 @@
   ],
   "kind": "obds-compiled-brand-context",
   "manifest": {
-    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "3.0.0",
   "scope": {},
   "slots": {
     "factGrounding": "- `design.logo.clear-zone` — {\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\n- `structure.brand` — {\"name\":\"Example Assembly Brand\"}",

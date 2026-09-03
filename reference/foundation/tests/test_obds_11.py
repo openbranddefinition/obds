@@ -18,6 +18,7 @@ from obds_ref.compiler import (
     build_target,
     governed_result_payload,
     load_data,
+    read_governed_text,
     scope_matches,
     validate_manifest,
 )
@@ -29,7 +30,9 @@ FIXTURES = ROOT / "fixtures" / "obds-1.1"
 
 
 def fixture(name):
-    return json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+    # Section 28.1: a fixture that decides a published conformance expectation is
+    # governed data, so it is read under the governed contract.
+    return load_data(FIXTURES / name)
 
 
 def example(name):
@@ -103,7 +106,10 @@ def test_compiled_context_carries_the_governed_result_hash():
     result = build_target(manifest, plan, plan["targets"][0])
     assert result.status == "ready", [e.code for e in result.errors]
     artefact = result.artefact
-    assert artefact["schemaVersion"] == "1.1.0"
+    # 3.0.0 republishes the Compiled Brand Context contract: `compiledChecks`
+    # carries a registered item schema per primitive, so a runtime can no longer
+    # supply a decision-bearing parameter the artefact left open.
+    assert artefact["schemaVersion"] == "3.0.0"
     assert artefact["governedResultHash"].startswith("sha256:")
     assert artefact["governedResultHash"] != artefact["artifactHash"]
 
@@ -499,11 +505,13 @@ def test_governed_payload_carries_as_of_verbatim():
 # --- 1.1.1 B2: the normative section 14 example is a valid 1.1 artefact ------
 
 def test_section_14_example_validates_against_the_published_contract():
-    """The spec's own Compiled Brand Context example must pass the 1.1 schema.
+    """The spec's own Compiled Brand Context example must pass the current schema.
 
     In 1.1.0 it carried `schemaVersion: 1.0.0` and no `governedResultHash`, so
     an implementer who followed the normative example emitted an artefact the
-    release's own contract rejected.
+    release's own contract rejected. The contract it is measured against moves
+    with the release: a 3.0 example measured against the frozen 1.1.0 contract
+    would prove nothing about the document a 3.0 consumer executes.
     """
     import re
 
@@ -517,16 +525,18 @@ def test_section_14_example_validates_against_the_published_contract():
     text = candidates[0].read_text(encoding="utf-8")
     section = text.split("## 14. Compiled Brand Context", 1)[1].split("### 14.0", 1)[0]
     block = re.search(r"```json\n(.*?)\n```", section, re.S).group(1)
-    example_artefact = json.loads(block)
+    # Section 28.1: the normative example is a Compiled Brand Context, not a
+    # schema, so the reader that blesses it is a governed reader.
+    example_artefact = read_governed_text(block, is_json=True)
 
-    assert example_artefact["schemaVersion"] == "1.1.0"
+    assert example_artefact["schemaVersion"] == "3.0.0"
     assert "governedResultHash" in example_artefact
     assert example_artefact["id"] == (
         f"{example_artefact['manifest']['id']}:context:{example_artefact['targetId']}"
     )
 
     # Both layouts keep the versioned contract in its own directory.
-    schema_path = PACKAGE_ROOT / "schemas" / "1.1.0" / "compiled-context.schema.json"
+    schema_path = PACKAGE_ROOT / "schemas" / "3.0.0" / "compiled-context.schema.json"
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
     # The example uses "sha256:..." placeholders for hashes; substitute a

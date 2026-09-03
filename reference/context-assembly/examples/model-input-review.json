@@ -1,16 +1,16 @@
 {
   "applicationMode": "review",
-  "assembledAt": "2026-08-27T09:19:53.183781+00:00",
-  "assemblyHash": "sha256:0f78c7f5f6b8de8423ffbfd1631d6446d0561962513a91814faedf6f76cb149b",
+  "assembledAt": "2026-09-02T19:05:25.727869+00:00",
+  "assemblyHash": "sha256:05e4cf2a03d2e84c96710522f9e717383547e6d065fe441c184595351337ea05",
   "deliveryMode": "reasoning",
-  "id": "urn:obds:model-input:d483bf3e-0b1e-4e11-aa59-22b8a94a024d",
+  "id": "urn:obds:model-input:2b842a66-9e79-43c6-858a-fb42e6c6d598",
   "kind": "obds-model-input-package",
   "manifest": {
-    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
-  "modelInputHash": "sha256:4490f0e2f3d3af88c002a530011af931168b408c398bf48ce2b9e2813ea569a1",
+  "modelInputHash": "sha256:7703578fe3ad1a2d9eb630fde47270a2331ee097cd4fcb307c74be4391d09386",
   "retrieval": {
     "resolution": "direct",
     "status": "hit",
@@ -44,15 +44,15 @@
   },
   "slots": {
     "factGrounding": "design.logo.clear-zone [defined]: {\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\nstructure.brand [defined]: {\"name\":\"Example Assembly Brand\"}",
-    "guidanceContext": "[ACTIVE_GUIDANCE]\nidentity.value.simplicity [defined]: {\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\nidentity.value.reliability [defined]: {\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}\n\n[REASONING_CHAPTERS]\nGenerated relationship context. Exact elements already present in other slots are omitted here. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\nchapter.brand-expression: ## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}",
+    "guidanceContext": "[ACTIVE_GUIDANCE]\nidentity.value.reliability [defined]: {\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}\nidentity.value.simplicity [defined]: {\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\n\n[REASONING_CHAPTERS]\nGenerated relationship context. Exact elements already present in other slots are omitted here. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\nchapter.brand-expression: ## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}",
     "hardBoundaries": "rule.claims.require-approval [require/require_approval]: Unregistered performance claims require approval. | refs=claims.approved-register\nrule.logo.clear-zone [require/block]: Preserve the approved logo clear zone. | refs=design.logo.clear-zone",
     "stateMap": "claims.approved-register [unknown]:",
     "taskInput": "Review: New technology. Simple to use."
   },
   "sources": {
-    "chapterSetHash": "sha256:a935116c82149714ad9b75293e623b2c6cba50d3be3e0ffa8bc5c8f9af6944ee",
-    "compiledContextHash": "sha256:bb56888ba2f3e88584e128f27121467f8084acc60eaae82fc23991cd445a410e",
-    "searchIndexHash": "sha256:01324fafa8010675b913ad0faf19618ca789afd990a7432bad64e8d99f2f4483"
+    "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
+    "compiledContextHash": "sha256:01802282658bea48aa810c3e9f11cfdb8172c4c31c8536312798afe226dcb778",
+    "searchIndexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab"
   },
   "targetId": "marketing-review-global-en",
   "tokenBudget": {

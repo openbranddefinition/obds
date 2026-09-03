@@ -5,9 +5,8 @@ import argparse
 import json
 from pathlib import Path
 import re
-import yaml
 
-from canonical import canonical_json_bytes, identity_key, sha256_id
+from canonical import identity_key, manifest_content_hash, sha256_id
 
 
 
@@ -18,86 +17,17 @@ def manifest_hash(manifest):
     return sha256_id(clone)
 
 
-class _StrictJSONDuplicate(ValueError):
-    pass
-
-
-def _strict_pairs(pairs):
-    import unicodedata
-    result = {}
-    seen = set()
-    for key, value in pairs:
-        nkey = unicodedata.normalize("NFC", key)
-        if nkey in seen:
-            raise _StrictJSONDuplicate(f"duplicate object key: {key}")
-        seen.add(nkey)
-        result[key] = value
-    return result
-
-
-class _OBDSSafeLoader(yaml.SafeLoader):
-    pass
-
-
-for ch, resolvers in list(_OBDSSafeLoader.yaml_implicit_resolvers.items()):
-    _OBDSSafeLoader.yaml_implicit_resolvers[ch] = [
-        item for item in resolvers if item[0] != "tag:yaml.org,2002:bool"
-    ]
-_OBDSSafeLoader.add_implicit_resolver(
-    "tag:yaml.org,2002:bool",
-    re.compile(r"^(?:true|false|True|False|TRUE|FALSE)$"),
-    list("tTfF"),
-)
-
-
-def _construct_mapping(loader, node, deep=False):
-    import unicodedata
-    mapping = {}
-    seen = set()
-    for key_node, value_node in node.value:
-        key = loader.construct_object(key_node, deep=deep)
-        if not isinstance(key, str):
-            raise yaml.constructor.ConstructorError(None, None, "mapping keys must be strings", key_node.start_mark)
-        nkey = unicodedata.normalize("NFC", key)
-        if nkey in seen:
-            raise yaml.constructor.ConstructorError(None, None, f"duplicate mapping key: {key}", key_node.start_mark)
-        seen.add(nkey)
-        mapping[key] = loader.construct_object(value_node, deep=deep)
-    return mapping
-
-
-_OBDSSafeLoader.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _construct_mapping)
-
-
-def _strict_parse_int(text):
-    import math
-    value = int(text)
-    try:
-        f = float(value)
-    except OverflowError as exc:
-        raise ValueError("integer is outside IEEE-754 binary64") from exc
-    if not math.isfinite(f) or int(f) != value:
-        raise ValueError("integer is not exactly representable as IEEE-754 binary64")
-    return value
-
-
-def _reject_constant(text):
-    raise ValueError(f"non-finite JSON number is invalid: {text}")
-
-
-def load(path):
-    text = Path(path).read_text(encoding="utf-8")
-    if str(path).lower().endswith(".json"):
-        data = json.loads(
-            text,
-            object_pairs_hook=_strict_pairs,
-            parse_int=_strict_parse_int,
-            parse_constant=_reject_constant,
-        )
-    else:
-        data = yaml.load(text, Loader=_OBDSSafeLoader)
-    canonical_json_bytes(data)
-    return data
+# Section 28.1. Until 3.0.0 this file carried its own approximation of the
+# governed reader — YAML 1.1 minus booleans — under which `017` bound 15 and
+# `12:30` bound 750 while the compiler bound 17 and the string. Every Search
+# Card claims exact binding to a `manifest.contentHash`; six of the seven
+# readers in the release could not compute the value that hash covers.
+#
+# It also derived its loader as a bare subclass and then item-assigned into
+# `yaml_implicit_resolvers`, which is inherited, so importing this module
+# mutated PyYAML for every consumer in the process, including the governed
+# writer. That is why the reader is imported here and no loader is built.
+from governed_io import load_data as load
 
 
 def words(value):
@@ -141,8 +71,26 @@ def build_views(manifest, chapter_map=None):
     if len(by_id) != len(elements):
         raise ValueError("duplicate element IDs")
 
+    # Section 8.0a: the manifest identity is an identity, so it goes through the
+    # identity rule before it is emitted into a governed view. Emitting it raw
+    # let two manifests differing only CR-vs-LF share one `approval.contentHash`,
+    # one `indexHash` and one `chapterSetHash` while the views declared two
+    # different governed identities — the Class B invariant, reached through a
+    # path Class B's tests never drove.
+    # Section 7: the views publish `approval.contentHash` as their claim of exact
+    # binding to an approved manifest, so they have to reproduce it. Copying it
+    # let a manifest be edited after approval and still be published under the
+    # old hash: two different governed identity sets in Search Cards, one claimed
+    # approved manifest.
+    declared_approval = (manifest.get("approval") or {}).get("contentHash")
+    if declared_approval is not None and declared_approval != manifest_content_hash(manifest):
+        raise ValueError(
+            "manifest does not reproduce its approval contentHash, so a derived view "
+            "cannot claim binding to it"
+        )
+
     manifest_ref = {
-        "id": manifest["id"],
+        "id": identity_key(manifest["id"]),
         "version": manifest["version"],
         "contentHash": manifest.get("approval", {}).get("contentHash") or manifest_hash(manifest),
     }

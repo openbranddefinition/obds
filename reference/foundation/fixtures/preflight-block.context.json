@@ -1,6 +1,10 @@
 {
-  "artifactHash": "sha256:0729d352075f3e7d16f29814a732774bef4b938b4f358bd6100512ba5566da5b",
+  "artifactHash": "sha256:bbcd03d07bb0cad0d2e3f11167b677f4e5372f2eba032dab412bfc3a033688e5",
+  "availableElementIds": [
+    "rule.block-secret"
+  ],
   "build": {
+    "asOf": "2026-08-27T00:00:00Z",
     "compilerId": "org.openbranddefinition.reference-compiler",
     "compilerVersion": "1.0.0",
     "planHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
@@ -22,6 +26,29 @@
       "ruleElementId": "rule.block-secret"
     }
   ],
+  "contextAssembly": {
+    "applicationMode": "create",
+    "deliveryMode": "reasoning",
+    "eligibleGuidanceIds": [],
+    "noHitPolicy": "resolve_before_answer"
+  },
+  "elementRecords": [
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "rule.block-secret",
+      "kind": "prohibition",
+      "nature": "rule",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    }
+  ],
+  "governedResultHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
   "id": "urn:obds:context:preflight-block",
   "includedElementIds": [
     "rule.block-secret"
@@ -32,7 +59,7 @@
     "id": "urn:obds:brand:fixture",
     "version": "1.0.0"
   },
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "3.0.0",
   "scope": {},
   "slots": {
     "factGrounding": "",

@@ -5,7 +5,7 @@
         "approved",
         "claims"
       ],
-      "cardHash": "sha256:fef1e996d72bfb311da619c3d547efd3c9d5bdf277836b4ecf5cccd6d0b0baae",
+      "cardHash": "sha256:127cf553cd60b7a5f8dc77c21a0da7c2445f016a620fa0633913c35fefa03b55",
       "chapterRefs": [
         "chapter.known-gaps"
       ],
@@ -18,7 +18,7 @@
       "kind": "obds-search-card",
       "label": "Approved",
       "manifest": {
-        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "contentHash": "sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24",
         "id": "urn:obds:brand:example-context",
         "version": "1.0.0"
       },
@@ -32,7 +32,7 @@
         "logo",
         "zone"
       ],
-      "cardHash": "sha256:165951e974ce508810e6384cac48403104ac5cb481d37f7faa557aeb1dedcaa5",
+      "cardHash": "sha256:8cfa3a147e005b4c40751da47c8b3d707fb46ac426f4edb4f106a9f984368ec7",
       "chapterRefs": [
         "chapter.logo-system"
       ],
@@ -45,7 +45,7 @@
       "kind": "obds-search-card",
       "label": "Logo Clear Zone",
       "manifest": {
-        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "contentHash": "sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24",
         "id": "urn:obds:brand:example-context",
         "version": "1.0.0"
       },
@@ -58,7 +58,7 @@
         "identity",
         "voice"
       ],
-      "cardHash": "sha256:65cdca2ec6fd2778eda70af2394ba682a9fce0db85b275f54e8d7f6ff6f8e82d",
+      "cardHash": "sha256:f97aef75dd08232574539a761552e64532b701c92de1fe3c429d75a1a76ff128",
       "chapterRefs": [
         "chapter.brand-foundation"
       ],
@@ -71,7 +71,7 @@
       "kind": "obds-search-card",
       "label": "Core Voice",
       "manifest": {
-        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "contentHash": "sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24",
         "id": "urn:obds:brand:example-context",
         "version": "1.0.0"
       },
@@ -85,7 +85,7 @@
         "rule",
         "zone"
       ],
-      "cardHash": "sha256:de50baedf5f1162be043a4371238cdd6ebd459e6325e1214771ca54d5a2fedca",
+      "cardHash": "sha256:7e36ded14b44941ebd2465405cca7f580051da42999ca4701a7f232f1bdabd6b",
       "chapterRefs": [
         "chapter.logo-system"
       ],
@@ -98,7 +98,7 @@
       "kind": "obds-search-card",
       "label": "Clear Zone",
       "manifest": {
-        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "contentHash": "sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24",
         "id": "urn:obds:brand:example-context",
         "version": "1.0.0"
       },
@@ -112,7 +112,7 @@
         "example",
         "structure"
       ],
-      "cardHash": "sha256:3d9f19ad8e04b454e1eace550be6e9f3af70b1384672fc27d441149f90f99e94",
+      "cardHash": "sha256:cde788dc55e04bd4cbcc4397f8ba47748b086b0067e30385ebc572183d60ce13",
       "chapterRefs": [
         "chapter.brand-foundation"
       ],
@@ -125,7 +125,7 @@
       "kind": "obds-search-card",
       "label": "Example Context Brand",
       "manifest": {
-        "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+        "contentHash": "sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24",
         "id": "urn:obds:brand:example-context",
         "version": "1.0.0"
       },
@@ -133,10 +133,10 @@
       "summary": "Example Context Brand"
     }
   ],
-  "indexHash": "sha256:9c700ce8deeb90778a04dcbc6e4d59046b952c7b20a33fd6834159c6b1970323",
+  "indexHash": "sha256:9299f0d4e69a016b70a2e68c7b5dd9f68c7df10ea8bf7358f65613739be9ae65",
   "kind": "obds-search-index",
   "manifest": {
-    "contentHash": "sha256:02d1bd6a2f5976b291763892532176855de81796739b55efde21f23da2b935e5",
+    "contentHash": "sha256:9a10f3fd422e25f5fd0b68f5e2c7715c10a9f1db6cdeccf546aad3664d00ef24",
     "id": "urn:obds:brand:example-context",
     "version": "1.0.0"
   },

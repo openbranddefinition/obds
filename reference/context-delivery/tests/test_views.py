@@ -10,10 +10,13 @@ spec = importlib.util.spec_from_file_location("build_views", ROOT / "build_views
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
+# Section 28.1: the governed reader, not a fourth data model.
+from governed_io import load_data  # noqa: E402
+
 
 def test_views_are_deterministic_and_traceable(tmp_path):
-    manifest = yaml.safe_load((ROOT / "examples" / "manifest.yaml").read_text(encoding="utf-8"))
-    chapter_map = yaml.safe_load((ROOT / "examples" / "chapter-map.yaml").read_text(encoding="utf-8"))
+    manifest = load_data(ROOT / "examples" / "manifest.yaml")
+    chapter_map = load_data(ROOT / "examples" / "chapter-map.yaml")
     first_index, first_chapters = module.build_views(manifest, chapter_map)
     second_index, second_chapters = module.build_views(manifest, chapter_map)
 
@@ -33,8 +36,8 @@ def test_views_are_deterministic_and_traceable(tmp_path):
 
 
 def test_schemas_validate():
-    manifest = yaml.safe_load((ROOT / "examples" / "manifest.yaml").read_text(encoding="utf-8"))
-    chapter_map = yaml.safe_load((ROOT / "examples" / "chapter-map.yaml").read_text(encoding="utf-8"))
+    manifest = load_data(ROOT / "examples" / "manifest.yaml")
+    chapter_map = load_data(ROOT / "examples" / "chapter-map.yaml")
     index, chapters = module.build_views(manifest, chapter_map)
 
     card_schema = json.loads((ROOT / "schemas" / "search-card.schema.json").read_text(encoding="utf-8"))
@@ -47,7 +50,7 @@ def test_schemas_validate():
 
 
 def test_missing_chapter_element_fails():
-    manifest = yaml.safe_load((ROOT / "examples" / "manifest.yaml").read_text(encoding="utf-8"))
+    manifest = load_data(ROOT / "examples" / "manifest.yaml")
     chapter_map = {
         "chapters": [{
             "id": "chapter.bad",

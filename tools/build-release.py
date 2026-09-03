@@ -50,16 +50,16 @@ PACKAGE_ROOT_FILES = (
 )
 PACKAGE_DIRS = ("LICENSES", "examples", "reference", "release-schemas")
 
-# Repository layout -> archive layout.
-# The frozen 1.0.0 contract surface flattens to schemas/ and value-schemas/, as
-# 1.0.0 through 1.0.4 shipped it. OBDS 1.1 adds one versioned contract beside it
-# and keeps its version in the path, so a consumer resolving by the version a
-# document declares finds it.
-SCHEMA_DIRS = {
-    "schemas/1.0.0": "schemas",
-    "value-schemas/1.0.0": "value-schemas",
-    "schemas/1.1.0": "schemas/1.1.0",
-}
+# Repository layout -> archive layout. Derived, not listed: see
+# `contract_directories()` in reference/release-gate.py, which owns the
+# definition for the same reason it owns the suite hash. This script kept its
+# own copy of that list, both copies went stale at 1.1.0, and a 3.0.0 archive
+# would have shipped without the contracts 3.0.0 publishes.
+def schema_dirs() -> dict[str, str]:
+    return {
+        directory.relative_to(ROOT).as_posix(): archive
+        for directory, _, archive in _gate().contract_directories()
+    }
 
 CACHE_DIRS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox", ".eggs", "node_modules"}
 CACHE_SUFFIXES = (".pyc", ".pyo")
@@ -161,6 +161,26 @@ COMPILED_RUNTIME_PROFILE = {
          "cases": ["foundation/tests.test_reference::test_blocking_postflight_withholds_output"]},
         {"requirement": "per-slot token reporting",
          "cases": ["foundation/tests.test_obds_200::test_per_slot_token_reporting_is_the_sum_of_its_slots"]},
+        # The six Semantic Closure requirements section 26.2 gained in 3.0.0.
+        # Same rule as above: each names an executed case the gate resolves
+        # against the run it performs itself.
+        {"requirement": "the governed input contract at every governed reader",
+         "cases": ["foundation/tests.test_obds_300_class_a::test_a1_every_governed_reader_is_the_one_governed_reader",
+                   "foundation/tests.test_obds_300_class_a::test_a2_readers_agree_on_every_shipped_governed_document"]},
+        {"requirement": "identity binding of the manifest triple wherever an artefact names a manifest",
+         "cases": ["foundation/tests.test_obds_300_class_b::test_b2_one_content_hash_cannot_resolve_to_two_governed_identities",
+                   "foundation/tests.test_obds_300_class_b::test_b1_a_shared_field_is_an_identity_position_in_every_artefact_that_carries_it"]},
+        {"requirement": "two-stage validation of Foundation RULE checks",
+         "cases": ["foundation/tests.test_obds_300_class_c::test_c10_a_deferred_literal_passes_the_stage_that_authors_it",
+                   "foundation/tests.test_obds_300_class_c::test_c10_a_deferred_literal_is_still_refused_once_it_should_have_been_resolved"]},
+        {"requirement": "exact task-input binding",
+         "cases": ["foundation/tests.test_obds_300_class_c::test_c9_a_forged_rendered_task_input_never_reaches_the_model",
+                   "foundation/tests.test_obds_300_class_c::test_c9_a_decoy_task_input_never_reaches_the_model"]},
+        {"requirement": "contract validation of every governed runtime document before governed field use",
+         "cases": ["foundation/tests.test_obds_300_systemic_executors::test_the_assembled_runtime_executes_the_model_input_package_contract[another kind]",
+                   "foundation/tests.test_obds_300_systemic_executors::test_mechanism_4_no_executor_accepts_a_resealed_schema_invalid_artefact[missing required property-reference/foundation/src/obds_ref/cli.py::command_validate]"]},
+        {"requirement": "governed hashes reproduced rather than declared",
+         "cases": ["foundation/tests.test_obds_300_class_b::test_b2_a_resolution_snapshot_must_reproduce_its_approval_hash"]},
     ],
 }
 
@@ -215,7 +235,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "1.1.6"
+PRIOR_RELEASE = "2.0.0"
 
 
 def _release_kind(release: str) -> str:
@@ -246,9 +266,7 @@ def release_notes(release: str, counts: dict[str, int]) -> list[str]:
     not exist. Nothing checked them because nothing generated them.
     """
     total = sum(counts.values())
-    record = json.loads(
-        (ROOT / "publication-record.json").read_text(encoding="utf-8")
-    )
+    record = load(ROOT / "publication-record.json")
     entry = record.get("releases", {}).get(release, {})
     note = entry.get("note")
     if not note:
@@ -318,7 +336,10 @@ def package_files(release: str) -> list[tuple[str, Path]]:
         for source in sorted(base.rglob("*")):
             if source.is_file() and not excluded(source):
                 pairs.append((source.relative_to(ROOT).as_posix(), source))
-    for repo_dir, archive_dir in SCHEMA_DIRS.items():
+    discovered = schema_dirs()
+    if not discovered:
+        sys.exit("no published contract directory found under schemas/ or value-schemas/")
+    for repo_dir, archive_dir in sorted(discovered.items()):
         base = ROOT / repo_dir
         if not base.is_dir():
             sys.exit(f"missing schema directory {repo_dir}/")
@@ -369,7 +390,7 @@ def run_official_foundation_conformance(release: str) -> dict:
     buffer = io.StringIO()
     with redirect_stdout(buffer):
         command_conformance(args)
-    result = json.loads(path.read_text(encoding="utf-8"))
+    result = load(path)
     if result.get("failedCount") or not result.get("passed"):
         failing = ", ".join(c["id"] for c in result.get("cases", []) if not c.get("passed"))
         sys.exit(f"official Foundation conformance failed ({failing}); not building a release")
@@ -383,6 +404,9 @@ def run_official_foundation_conformance(release: str) -> dict:
     return result
 
 
+_GATE = None
+
+
 def _gate():
     """The release gate, which owns the suite-hash definition.
 
@@ -390,14 +414,28 @@ def _gate():
     the definition lives there and is imported here. One definition, and anyone
     with the package can recompute the suite identity without this script.
     """
-    spec = importlib.util.spec_from_file_location(
-        "obds_release_gate", ROOT / "reference" / "release-gate.py"
-    )
-    if spec is None or spec.loader is None:
-        sys.exit("cannot load reference/release-gate.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    global _GATE
+    if _GATE is None:
+        spec = importlib.util.spec_from_file_location(
+            "obds_release_gate", ROOT / "reference" / "release-gate.py"
+        )
+        if spec is None or spec.loader is None:
+            sys.exit("cannot load reference/release-gate.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _GATE = module
+    return _GATE
+
+
+def load(path: Path):
+    """Section 28.1: release evidence is governed data, so it is read as such.
+
+    The gate reads every one of these files under the governed contract and this
+    script read them with a raw parser, in the one direction where it matters: a
+    duplicated `releases` key in `publication-record.json` was silently last-wins
+    here and refused there, and this is the script that rewrites that file.
+    """
+    return _gate().load(path)
 
 
 def suite_identity() -> tuple[str, int]:
@@ -441,7 +479,7 @@ def write_metadata(release: str, counts: dict[str, int], file_count: int,
 
     result_path = ROOT / f"OBDS-{release}-TEST-RESULT.json"
     declared_suite_hash, suite_file_count = suite_identity()
-    result = json.loads(result_path.read_text(encoding="utf-8"))
+    result = load(result_path)
     result.update(
         {
             "release": release,
@@ -469,7 +507,7 @@ def write_metadata(release: str, counts: dict[str, int], file_count: int,
     )
 
     audit_path = ROOT / f"OBDS-{release}-FINAL-AUDIT.json"
-    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+    audit = load(audit_path)
     audit.update(
         {
             "release": release,
@@ -544,13 +582,11 @@ def sync_publication_surface(release: str, counts: dict[str, int], archive: Path
     Generating them here means the release gate's cross-check in step 12 can
     never be satisfied by a stale copy, because there is no copy step left.
     """
-    result = json.loads(
-        (ROOT / f"OBDS-{release}-TEST-RESULT.json").read_text(encoding="utf-8")
-    )
+    result = load(ROOT / f"OBDS-{release}-TEST-RESULT.json")
     record_path = ROOT / "publication-record.json"
     if not record_path.is_file():
         return
-    record = json.loads(record_path.read_text(encoding="utf-8"))
+    record = load(record_path)
 
     record["currentRelease"] = release
     record["conformanceTestsPassed"] = result["passedCount"]

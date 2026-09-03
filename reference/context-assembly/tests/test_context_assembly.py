@@ -19,18 +19,25 @@ assembler = module("assembler_test", "assemble_context.py")
 reviewer = module("reviewer_test", "validate_review.py")
 canonical = module("canonical_test", "canonical.py")
 
+# Section 28.1: a test that produces or blesses published evidence is a governed
+# reader like any other. Reading the corpus with PyYAML defaults made this suite
+# one of the divergent contracts in the release.
+governed = module("governed_io_test", "governed_io.py")
+
 
 def load_yaml(name):
-    return yaml.safe_load((ROOT / "examples" / name).read_text(encoding="utf-8"))
+    return governed.load_data(ROOT / "examples" / name)
+
+
+def load_governed(name):
+    return governed.load_data(ROOT / "examples" / name)
 
 
 def setup(target_id="social-copy-global-en"):
     manifest = load_yaml("manifest.yaml")
     chapter_map = load_yaml("chapter-map.yaml")
     index, chapters = builder.build_views(manifest, chapter_map)
-    compiled = json.loads(
-        (ROOT / "examples" / f"compiled-{target_id}.json").read_text(encoding="utf-8")
-    )
+    compiled = load_governed(f"compiled-{target_id}.json")
     return manifest, compiled, index, chapters
 
 
@@ -169,9 +176,7 @@ def test_valid_rule_violation_can_fail():
     manifest, compiled, index, chapters = setup("marketing-review-global-en")
     request = load_yaml("assembly-request-review.yaml")
     package, _ = assembler.assemble(compiled, index, chapters, request)
-    review = json.loads(
-        (ROOT / "examples" / "review-result-blocking.json").read_text(encoding="utf-8")
-    )
+    review = load_governed("review-result-blocking.json")
     assert reviewer.validate_review(compiled, package, review) is True
 
 
@@ -191,7 +196,7 @@ def test_schemas_validate_reference_outputs():
         "model-input-review.json",
         "model-input-not-covered.json",
     ]:
-        payload = json.loads((ROOT / "examples" / name).read_text(encoding="utf-8"))
+        payload = load_governed(name)
         jsonschema.validate(payload, model_schema)
 
     for name in [
@@ -205,7 +210,7 @@ def test_schemas_validate_reference_outputs():
         "review-result-valid.json",
         "review-result-blocking.json",
     ]:
-        payload = json.loads((ROOT / "examples" / name).read_text(encoding="utf-8"))
+        payload = load_governed(name)
         jsonschema.validate(payload, review_schema)
 
 
@@ -239,9 +244,7 @@ def test_compiled_context_schema_validates_fixtures():
         "marketing-review-global-en",
         "brand-query-global-en",
     ]:
-        payload = json.loads(
-            (ROOT / "examples" / f"compiled-{target_id}.json").read_text(encoding="utf-8")
-        )
+        payload = load_governed(f"compiled-{target_id}.json")
         jsonschema.validate(payload, schema)
 
 
@@ -323,6 +326,11 @@ def test_build_views_accepts_a_canonically_equivalent_identity_1_1_6():
     element["id"] = "structure.cafe\u0301"
     element["subject"] = "structure.cafe\u0301"
     manifest["elements"].append(element)
+    # Section 7: a derived view publishes `approval.contentHash` as its claim of
+    # binding to an approved manifest, so the builder refuses a manifest that
+    # does not reproduce it. This test is about NFD identities, not about
+    # approval drift, so it presents a properly sealed manifest.
+    manifest["approval"]["contentHash"] = canonical.manifest_content_hash(manifest)
 
     index, chapters = builder.build_views(manifest)
 
@@ -344,19 +352,46 @@ def test_review_references_resolve_across_normalisation_forms_1_1_6():
     compiled["availableElementIds"] = sorted(
         compiled["availableElementIds"] + ["context.caf\u00e9"]
     )
+    # A Review Result is a review-mode document by contract, so the context it
+    # is derived from has to permit that mode.
+    compiled["contextAssembly"] = {**compiled["contextAssembly"], "applicationMode": "review"}
     compiled.pop("artifactHash", None)
     compiled["artifactHash"] = canonical.artefact_hash(compiled)
 
-    package = {
-        "sources": {"compiledContextHash": compiled["artifactHash"]},
-        "selection": {"activeGuidanceElementIds": ["context.caf\u0065\u0301"]},
-        "modelInputHash": "sha256:" + "0" * 64,
+    # 3.0.0 executes all three published contracts and binds their identities, so
+    # the package and the review have to be a package and a review — not the two
+    # hand-built fragments this test used to pass in. They are derived from the
+    # shipped examples and rebound to this compiled context; the subject of the
+    # test, identity normalisation in review references, is unchanged.
+    renderer = module("model_input_review_test", "model_input.py")
+    package = governed.load_data(ROOT / "examples" / "model-input-review.json")
+    package["manifest"] = copy.deepcopy(compiled["manifest"])
+    package["targetId"] = compiled["targetId"]
+    package["deliveryMode"] = compiled["contextAssembly"]["deliveryMode"]
+    package["applicationMode"] = compiled["contextAssembly"]["applicationMode"]
+    package["sources"] = {**package["sources"], "compiledContextHash": compiled["artifactHash"]}
+    package["selection"] = {
+        **package["selection"],
+        "activeGuidanceElementIds": ["context.caf\u0065\u0301"],
     }
-    review = {
-        "modelInputHash": package["modelInputHash"],
-        "decision": "pass",
-        "findings": [{"category": "opportunity", "elementIds": ["context.cafe\u0301"]}],
-    }
+    package["modelInputHash"] = canonical.text_hash(renderer.render_model_input(package["slots"]))
+    package["assemblyHash"] = canonical.sha256_id(
+        {key: value for key, value in package.items() if key != "assemblyHash"}
+    )
+
+    review = governed.load_data(ROOT / "examples" / "review-result-valid.json")
+    review["targetId"] = compiled["targetId"]
+    review["applicationMode"] = package["applicationMode"]
+    review["modelInputHash"] = package["modelInputHash"]
+    review["decision"] = "pass"
+    review["findings"] = [
+        {
+            "id": "finding-1",
+            "category": "opportunity",
+            "elementIds": ["context.cafe\u0301"],
+            "message": "The other normalisation form names the same element.",
+        }
+    ]
     review["reviewHash"] = canonical.sha256_id(
         {key: value for key, value in review.items() if key != "reviewHash"}
     )
@@ -479,17 +514,24 @@ def test_resolution_manifest_id_compares_on_the_canonical_identity_1_1_6():
     import copy
 
     manifest, compiled, index, chapters = setup()
+
+    # The snapshot is a real manifest, sealed, in the decomposed spelling. A stub
+    # carrying only id/version/approval no longer passes this path: section 7
+    # requires the snapshot to reproduce the hash it claims, because comparing
+    # the declared value alone only proves the snapshot *says* the right thing.
+    resolution_manifest = copy.deepcopy(manifest)
+    resolution_manifest["id"] = "urn:obds:brand:cafe\u0301"
+    resolution_manifest["approval"] = dict(resolution_manifest.get("approval") or {})
+    resolution_manifest["approval"]["contentHash"] = canonical.manifest_content_hash(
+        resolution_manifest
+    )
+
     compiled = copy.deepcopy(compiled)
     compiled["manifest"] = dict(compiled["manifest"])
     compiled["manifest"]["id"] = "urn:obds:brand:caf\u00e9"
+    compiled["manifest"]["contentHash"] = resolution_manifest["approval"]["contentHash"]
     compiled.pop("artifactHash", None)
     compiled["artifactHash"] = canonical.artefact_hash(compiled)
-
-    resolution_manifest = {
-        "id": "urn:obds:brand:cafe\u0301",
-        "version": compiled["manifest"]["version"],
-        "approval": {"contentHash": compiled["manifest"]["contentHash"]},
-    }
 
     assembler._validate_resolution_manifest(
         compiled,

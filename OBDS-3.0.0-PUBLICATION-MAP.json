@@ -199,6 +199,33 @@
       "sha256": "sha256:3b250092db0f5b7d2bf5bb7a422b9105ce91866367b03a7d56bde7e8cf5e789d"
     },
     {
+      "capability": "compiled-runtime",
+      "id": "https://openbranddefinition.org/schemas/3.0.0/build-plan.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/3.0.0/build-plan.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/3.0.0/build-plan.schema.json",
+      "releaseFile": "schemas/3.0.0/build-plan.schema.json",
+      "sha256": "sha256:dd9f0a74d96b00e80e283d7d28ceb2eadb1d8e37901bfdf7986024dc906d5e8c"
+    },
+    {
+      "capability": "compiled-runtime",
+      "id": "https://openbranddefinition.org/schemas/3.0.0/compiled-context.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/3.0.0/compiled-context.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/3.0.0/compiled-context.schema.json",
+      "releaseFile": "schemas/3.0.0/compiled-context.schema.json",
+      "sha256": "sha256:2ebbb9b870f13491ef27fec5c18b24d5513f7167963130368144df568b1554c5"
+    },
+    {
+      "capability": "compiled-runtime",
+      "id": "https://openbranddefinition.org/schemas/3.0.0/runtime-decision-record.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/3.0.0/runtime-decision-record.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/3.0.0/runtime-decision-record.schema.json",
+      "releaseFile": "schemas/3.0.0/runtime-decision-record.schema.json",
+      "sha256": "sha256:4130a1f2f695d45909543c145d39b2646759594f71775d6d47509195800a2404"
+    },
+    {
       "capability": "foundation",
       "id": "https://openbranddefinition.org/value-schemas/1.0.0/brand-group.schema.json",
       "kind": "value-schema",
@@ -251,6 +278,15 @@
       "publicUrl": "https://openbranddefinition.org/value-schemas/1.0.0/semantic-boundary.schema.json",
       "releaseFile": "value-schemas/semantic-boundary.schema.json",
       "sha256": "sha256:b45fd11c56bfdc72bc3b482d79b0e13932753b9d2cd2c99b786f5d8c7a4e2bf3"
+    },
+    {
+      "capability": "foundation",
+      "id": "https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json",
+      "kind": "value-schema",
+      "publicPath": "/value-schemas/3.0.0/rule.schema.json",
+      "publicUrl": "https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json",
+      "releaseFile": "value-schemas/3.0.0/rule.schema.json",
+      "sha256": "sha256:b148876b0e6396060f2799ef2689329d91f8d16f47bc9d34f812e00b1654dfbb"
     }
   ],
   "directories": [
@@ -265,9 +301,19 @@
       "releaseDirectory": "schemas/1.1.0/"
     },
     {
+      "count": 3,
+      "publicPrefix": "/schemas/3.0.0/",
+      "releaseDirectory": "schemas/3.0.0/"
+    },
+    {
       "count": 6,
       "publicPrefix": "/value-schemas/1.0.0/",
       "releaseDirectory": "value-schemas/"
+    },
+    {
+      "count": 1,
+      "publicPrefix": "/value-schemas/3.0.0/",
+      "releaseDirectory": "value-schemas/3.0.0/"
     }
   ],
   "kind": "obds-publication-map",
@@ -287,11 +333,11 @@
   "origin": "https://openbranddefinition.org",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
-  "release": "2.0.0",
+  "release": "3.0.0",
   "schemaContractVersion": "1.0.0",
   "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaVersion": "1.0.0",
   "status": "stable",
-  "totalPublicContracts": 28,
-  "versionedSchemaCount": 1
+  "totalPublicContracts": 32,
+  "versionedSchemaCount": 5
 }

@@ -1,12 +1,12 @@
 {
   "applicationMode": "create",
-  "assembledAt": "2026-08-27T09:19:53.185385+00:00",
-  "assemblyHash": "sha256:7ca4a56565a61f15035eba508e0894ddc11cfb981d2ea3bd38054eacebc53612",
+  "assembledAt": "2026-09-02T19:05:25.735476+00:00",
+  "assemblyHash": "sha256:0c0a4e674340c0c517656de885c52bfd7fd3830946387ec2b749ab385d139815",
   "deliveryMode": "lookup",
-  "id": "urn:obds:model-input:98136ca8-798d-4997-b1ef-607ff94d0f98",
+  "id": "urn:obds:model-input:bf606c53-ee4b-42d4-b1d4-eedb5dfa8c12",
   "kind": "obds-model-input-package",
   "manifest": {
-    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
@@ -41,9 +41,9 @@
     "taskInput": "What is the approved sonic logo duration?"
   },
   "sources": {
-    "chapterSetHash": "sha256:a935116c82149714ad9b75293e623b2c6cba50d3be3e0ffa8bc5c8f9af6944ee",
-    "compiledContextHash": "sha256:2a70a87ef804bbd92cf338409b982fa3e321f8b4002b637441f1f6fa48901427",
-    "searchIndexHash": "sha256:01324fafa8010675b913ad0faf19618ca789afd990a7432bad64e8d99f2f4483"
+    "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
+    "compiledContextHash": "sha256:563f393a21b22ca3e8b5fd812a65bfc4cb081c9f6d32ae96a6ad7eeac584a7d1",
+    "searchIndexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab"
   },
   "targetId": "brand-query-global-en",
   "tokenBudget": {

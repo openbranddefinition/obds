@@ -14,6 +14,20 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = ROOT.parent
+def _release() -> str:
+    """The release this package is, read from the specification it ships.
+
+    Naming the file made this test a document that has to be edited at every
+    release. The package carries exactly one `OBDS-<x.y.z>.md`.
+    """
+    import re as _release_re
+
+    names = sorted(
+        path.name for path in PACKAGE_ROOT.glob("OBDS-*.md")
+        if _release_re.fullmatch(r"OBDS-\d+\.\d+\.\d+\.md", path.name)
+    )
+    assert len(names) == 1, f"expected one normative specification, found {names}"
+    return names[0][len("OBDS-"):-len(".md")]
 
 
 def _schema_dir(root, name):
@@ -31,6 +45,7 @@ def _schema_dir(root, name):
 VALUE_SCHEMAS = _schema_dir(PACKAGE_ROOT, "value-schemas")
 sys.path.insert(0, str(ROOT / "foundation" / "src"))
 
+from obds_ref.governed_io import load_data
 from obds_ref.canonical import canonical_json_bytes, manifest_content_hash, sha256_id
 from obds_ref.checks import validate_check
 from obds_ref.compiler import (
@@ -89,7 +104,7 @@ def minimal_plan(manifest, scope):
     return {
         "id": "urn:obds:plan:adversarial",
         "kind": "obds-build-plan",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "3.0.0",
         "asOf": "2026-08-27T00:00:00Z",
         "manifestRef": {
             "id": manifest["id"], "version": manifest["version"],
@@ -164,7 +179,7 @@ def test_b3_integer_and_integral_float_canonicalise_identically():
 
 def test_b3_python_and_javascript_canonical_vectors_match():
     vector_path = Path(__file__).with_name("canonical-vectors.json")
-    raws = [case["input"] for case in json.loads(vector_path.read_text())["vectors"]]
+    raws = [case["input"] for case in load_data(vector_path)["vectors"]]
     py = [canonical_json_bytes(json.loads(raw)).decode() for raw in raws]
     proc = subprocess.run(
         ["node", str(Path(__file__).with_name("canonical_js.mjs")), str(vector_path)],
@@ -285,7 +300,7 @@ def test_rc5_all_public_canonical_copies_are_byte_identical():
 
 def test_rc5_canonical_boundary_numbers_and_astral_key_order_match_js():
     vector_path=Path(__file__).with_name("canonical-vectors.json")
-    raws=[case["input"] for case in json.loads(vector_path.read_text())["vectors"]]
+    raws=[case["input"] for case in load_data(vector_path)["vectors"]]
     py=[canonical_json_bytes(json.loads(raw)).decode() for raw in raws]
     proc=subprocess.run(
         ["node",str(Path(__file__).with_name("canonical_js.mjs")),str(vector_path)],
@@ -311,7 +326,7 @@ def test_rc5_unsupported_tokenizer_fails_closed():
 def test_rc5_legacy_colour_hex_schema_is_reference_internal():
     schema=json.loads((ROOT/"foundation"/"value-schemas"/"colour-hex.schema.json").read_text())
     assert "/reference/1.0.0/" in schema["$id"]
-    index=json.loads((PACKAGE_ROOT/"OBDS-2.0.0-SCHEMA-INDEX.json").read_text())
+    index=json.loads((PACKAGE_ROOT/f"OBDS-{_release()}-SCHEMA-INDEX.json").read_text())
     assert all(item["file"]!="colour-hex.schema.json" for item in index.get("valueSchemas",[]))
 
 
@@ -429,8 +444,10 @@ def test_b1_governed_result_hash_agrees_across_languages_on_cr_payloads(tmp_path
 # canonical text, the hex of its canonical UTF-8 bytes, and their SHA-256.
 
 def _vector_document():
+    # Section 28.1: the canonical vectors are published evidence, so the reader
+    # that blesses them is a governed reader.
     path = Path(__file__).with_name("canonical-vectors.json")
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_data(path)
 
 
 def test_b5_every_vector_carries_its_expected_output():

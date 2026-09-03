@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""OBDS 2.0.0 release gate.
+"""OBDS 3.0.0 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
 
 This is a package check. It is not an OBDS capability, not a profile and not
-part of the 107-case conformance suite.
+part of the conformance suite.
 
 Run from the package root, which in this repository is the repository root:
 
@@ -45,10 +45,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Section 28.1. The gate validates published examples and the declared
+# conformance suite, so it is a governed reader like any other and used to be
+# one of the divergent ones: it read both with PyYAML's YAML 1.1 defaults, so
+# it could bless an example the compiler refuses and refuse one the compiler
+# accepts.
+_FOUNDATION_SRC = ROOT / "reference" / "foundation" / "src"
+if str(_FOUNDATION_SRC) not in sys.path:
+    sys.path.insert(0, str(_FOUNDATION_SRC))
+from obds_ref.governed_io import (  # noqa: E402
+    ValidationFailure as _GovernedParseError,
+    load_data as _load_governed,
+    read_governed_text as _read_governed_text,
+)
+
 # Concrete expected values for THIS release. The generic schemas stay value-free;
 # the fixture lives here.
 EXPECTED_SUITE_COUNTS = {
-    "foundation": 323,
+    "foundation": 961,
     "context-delivery": 3,
     "context-assembly": 24,
     "design-space": 20,
@@ -56,8 +70,8 @@ EXPECTED_SUITE_COUNTS = {
     "golden": 6,
     "adversarial": 38,
 }
-EXPECTED_TOTAL = 429
-EXPECTED_RELEASE = "2.0.0"
+EXPECTED_TOTAL = 1067
+EXPECTED_RELEASE = "3.0.0"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -81,7 +95,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "1.1.6"
+PRIOR_RELEASE = "2.0.0"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -308,7 +322,60 @@ def sha256_file(path: Path) -> str:
 
 
 def load(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
+    """Section 28.1: release evidence is governed data, so it is read as such.
+
+    This was the eighth reader in the release and the most permissive of them:
+    a duplicated key in the publication map or the audit was silently
+    last-wins, in the one file whose job is to say what the release contains.
+    """
+    return _load_governed(path)
+
+
+# Section 28.1 is one contract, so the module that states it is one file. It is
+# copied next to each package's `canonical.py` because those packages are
+# imported flat rather than as a package, and the copies are pinned here: a
+# release cannot ship two spellings of the governed reader, which is the defect
+# 3.0.0 exists to close.
+GOVERNED_CONTRACT_COPIES = {
+    "governed_io.py": [
+        "reference/foundation/src/obds_ref/governed_io.py",
+        "reference/context-assembly/governed_io.py",
+        "reference/context-delivery/governed_io.py",
+        "reference/design-space/governed_io.py",
+    ],
+    "build_views.py": [
+        "reference/context-assembly/build_views.py",
+        "reference/context-delivery/build_views.py",
+    ],
+    "model_input.py": [
+        "reference/foundation/src/obds_ref/model_input.py",
+        "reference/context-assembly/model_input.py",
+        "reference/context-delivery/model_input.py",
+        "reference/design-space/model_input.py",
+    ],
+    "canonical.py": [
+        "reference/foundation/src/obds_ref/canonical.py",
+        "reference/context-assembly/canonical.py",
+        "reference/context-delivery/canonical.py",
+        "reference/design-space/canonical.py",
+    ],
+}
+
+
+def check_governed_contract_copies() -> None:
+    for name, paths in GOVERNED_CONTRACT_COPIES.items():
+        digests = {}
+        for rel in paths:
+            path = ROOT / rel
+            if not path.is_file():
+                check(False, f"{rel} is missing: the governed contract must ship in every package")
+                continue
+            digests.setdefault(sha256_file(path), []).append(rel)
+        check(
+            len(digests) <= 1,
+            f"{name} has diverged across packages: "
+            + "; ".join(f"{digest[:19]} -> {', '.join(files)}" for digest, files in sorted(digests.items())),
+        )
 
 
 def schema_dir(name: str) -> Path:
@@ -324,6 +391,45 @@ def schema_dir(name: str) -> Path:
 
 SCHEMAS_DIR = schema_dir("schemas")
 VALUE_SCHEMAS_DIR = schema_dir("value-schemas")
+
+# The archive flattens exactly one contract surface, the frozen 1.0.0 one,
+# because 1.0.0 through 1.0.4 shipped it that way and consumers resolve it at
+# that path. Every other version keeps its version in the path.
+FLATTENED_CONTRACT_VERSION = "1.0.0"
+_CONTRACT_VERSION_DIR = re.compile(r"^\d+\.\d+\.\d+$")
+
+
+def contract_directories() -> list[tuple[Path, str, str]]:
+    """Every published contract surface, discovered rather than listed.
+
+    This was a hand-kept list here and a second hand-kept copy in
+    `tools/build-release.py`. Both named 1.0.0 and 1.1.0. The repository had
+    since grown `schemas/3.0.0/` and `value-schemas/3.0.0/`, so cutting 3.0.0
+    would have produced an archive without the contracts the release publishes
+    — and this gate, reading the other copy of the same stale list, had no way
+    to notice the surface it was supposed to be inventorying.
+
+    Returns `(directory, published URL path, archive path)`. Both supported
+    layouts are covered: the working repository, where contracts sit at the path
+    their `$id` resolves to, and an unpacked archive, where the frozen surface is
+    flat.
+    """
+    found: list[tuple[Path, str, str]] = []
+    for family in ("schemas", "value-schemas"):
+        base = ROOT / family
+        if not base.is_dir():
+            continue
+        if any(base.glob("*.json")):
+            found.append((base, f"{family}/{FLATTENED_CONTRACT_VERSION}", family))
+        for directory in sorted(base.iterdir()):
+            if not directory.is_dir() or not _CONTRACT_VERSION_DIR.match(directory.name):
+                continue
+            if not any(directory.glob("*.json")):
+                continue
+            url = f"{family}/{directory.name}"
+            archive = family if directory.name == FLATTENED_CONTRACT_VERSION else url
+            found.append((directory, url, archive))
+    return found
 
 
 def is_generated_cache(path: Path) -> bool:
@@ -343,8 +449,8 @@ def package_paths() -> list[Path]:
         if candidate.is_file():
             found.append(candidate)
     found.extend(sorted(p for p in ROOT.glob("OBDS-*") if p.is_file()))
-    for directory in (*(ROOT / d for d in PACKAGE_DIRS), SCHEMAS_DIR, VALUE_SCHEMAS_DIR,
-                      ROOT / "schemas" / "1.1.0"):
+    contract_dirs = [directory for directory, _, _ in contract_directories()]
+    for directory in (*(ROOT / d for d in PACKAGE_DIRS), *contract_dirs):
         if directory.is_dir():
             found.extend(sorted(directory.rglob("*")))
     return found
@@ -399,7 +505,8 @@ def run_official_foundation_conformance() -> dict | None:
     try:
         with redirect_stdout(stdout):
             command_conformance(args)
-        result = json.loads(out.read_text(encoding="utf-8"))
+        # Section 28.1: the conformance result is published evidence.
+        result = load(out)
     except Exception as exc:  # pragma: no cover
         failures.append(f"official Foundation conformance did not execute: {exc}")
         return None
@@ -518,8 +625,8 @@ def published_yaml_elements(html: str) -> list[dict]:
         if not re.search(r"^\s*id:\s*\S", text, re.M) or "state:" not in text:
             continue
         try:
-            payload = yaml_mod.safe_load(textwrap.dedent(text))
-        except yaml_mod.YAMLError:
+            payload = _read_governed_text(textwrap.dedent(text), is_json=False)
+        except (yaml_mod.YAMLError, _GovernedParseError, ValueError):
             continue
         if isinstance(payload, dict) and "id" in payload and "state" in payload:
             elements.append(payload)
@@ -527,18 +634,26 @@ def published_yaml_elements(html: str) -> list[dict]:
 
 
 def manifest_path(rel: str) -> Path:
-    """Map a manifest path onto the current layout.
+    """Map a manifest path onto the current layout, from the discovered surface.
 
     The frozen 1.0.0 contracts are flat in the archive and under 1.0.0/ in the
-    repository. The 1.1 contract keeps its version in the path in both layouts,
-    so it needs no mapping.
+    repository; every other version keeps its version in the path in both.
+
+    This carried its own version logic — a third interpretation of the contract
+    surface beside the packager's and the gate's inventory. It named 1.1.0 and
+    stopped, so once packaging discovered `schemas/3.0.0/`, every 3.0.0 entry in
+    a regenerated manifest resolved to `schemas/1.0.0/3.0.0/…`, which does not
+    exist, and manifest verification failed for the whole new contract surface.
+    It now derives from `contract_directories()`, so a version directory that
+    discovery finds is a version directory this resolves. Longest archive prefix
+    first: `schemas/1.1.0/…` must not be read as the flat `schemas/` surface.
     """
-    if rel.startswith("schemas/1.1.0/"):
-        return ROOT / rel
-    if rel.startswith("schemas/"):
-        return SCHEMAS_DIR / rel.split("/", 1)[1]
-    if rel.startswith("value-schemas/"):
-        return VALUE_SCHEMAS_DIR / rel.split("/", 1)[1]
+    for directory, _, archive in sorted(
+        contract_directories(), key=lambda entry: len(entry[2]), reverse=True
+    ):
+        prefix = f"{archive}/"
+        if rel.startswith(prefix):
+            return directory / rel[len(prefix):]
     return ROOT / rel
 
 
@@ -698,18 +813,15 @@ def main() -> int:
 
     # 4c. the official declared Foundation conformance suite must be green.
     #
-    # This is separate from the 107-case run and must not be added to it: 14 of
-    # its 15 cases exercise the same fixtures and examples as the pytest suites,
-    # so counting both would double-count the same coverage. The decision and its
-    # evidence are recorded in answers/1.0.4-1.1/FOUNDATION-CONFORMANCE-REPAIR.md.
+    # This is separate from the aggregate run and must not be added to it: all
+    # but one of its declared cases exercise the same fixtures and examples as the
+    # pytest suites, so counting both would double-count the same coverage.
     suite_doc = None
     suite_yaml = ROOT / "reference" / "foundation" / "conformance-suite.yaml"
     declared_cases = 0
     if suite_yaml.is_file():
         try:
-            import yaml as _yaml
-
-            suite_doc = _yaml.safe_load(suite_yaml.read_text(encoding="utf-8"))
+            suite_doc = _load_governed(suite_yaml)
             declared_cases = len(suite_doc.get("cases", []))
         except Exception as exc:  # pragma: no cover
             failures.append(f"cannot read the declared conformance suite: {exc}")
@@ -888,6 +1000,7 @@ def main() -> int:
     check(audit["packageJunkFiles"] == len(junk), f"audit packageJunkFiles={audit['packageJunkFiles']} but found {len(junk)}")
 
     # 6b. the shipped file list must be complete, correct and cache-free.
+    check_governed_contract_copies()
     file_count = check_manifest(audit)
 
     # 7. no file may present this release as a pre-release. The scanner cannot be
@@ -1047,12 +1160,9 @@ def main() -> int:
     #     every indexed or mapped contract must be served. 1.1.0 served
     #     schemas/1.1.0/compiled-context.schema.json and listed it in neither.
     served: dict[str, Path] = {}
-    for path in sorted(SCHEMAS_DIR.glob("*.json")):
-        served[f"https://openbranddefinition.org/schemas/1.0.0/{path.name}"] = path
-    for path in sorted(VALUE_SCHEMAS_DIR.glob("*.json")):
-        served[f"https://openbranddefinition.org/value-schemas/1.0.0/{path.name}"] = path
-    for path in sorted((ROOT / "schemas" / "1.1.0").glob("*.json")):
-        served[f"https://openbranddefinition.org/schemas/1.1.0/{path.name}"] = path
+    for directory, url_path, _ in contract_directories():
+        for path in sorted(directory.glob("*.json")):
+            served[f"https://openbranddefinition.org/{url_path}/{path.name}"] = path
 
     indexed = {i["id"] for i in index["schemas"]} | {i["id"] for i in index["valueSchemas"]}
     indexed |= {i["id"] for i in versioned_index}
@@ -1159,14 +1269,16 @@ def main() -> int:
         _jsonschema = None
     if _jsonschema is not None:
         spec_candidates = sorted(ROOT.glob(f"OBDS-{EXPECTED_RELEASE}.md"))
-        v11_schema_path = ROOT / "schemas" / "1.1.0" / "compiled-context.schema.json"
-        if spec_candidates and v11_schema_path.is_file():
+        current_context_contract = ROOT / "schemas" / "3.0.0" / "compiled-context.schema.json"
+        if spec_candidates and current_context_contract.is_file():
             text = spec_candidates[0].read_text(encoding="utf-8")
             if "## 14. Compiled Brand Context" in text:
                 section = text.split("## 14. Compiled Brand Context", 1)[1].split("### 14.0", 1)[0]
                 block = re.search(r"```json\n(.*?)\n```", section, re.S)
                 if block:
-                    example = json.loads(block.group(1))
+                    # Section 28.1: the normative Compiled Brand Context example
+                    # is governed data, read under the governed contract.
+                    example = _read_governed_text(block.group(1), is_json=True)
                     placeholder = "sha256:" + "0" * 64
 
                     def _fill(node):
@@ -1178,14 +1290,14 @@ def main() -> int:
 
                     errors = sorted(
                         _jsonschema.Draft202012Validator(
-                            load(v11_schema_path)
+                            load(current_context_contract)
                         ).iter_errors(_fill(example)),
                         key=lambda e: list(e.path),
                     )
                     for err in errors[:5]:
                         failures.append(
                             "the section 14 normative example fails "
-                            f"schemas/1.1.0/compiled-context.schema.json: "
+                            f"schemas/3.0.0/compiled-context.schema.json: "
                             f"{list(err.path)} {err.message[:110]}"
                         )
                     expected_id = f"{example['manifest']['id']}:context:{example['targetId']}"

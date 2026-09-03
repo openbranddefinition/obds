@@ -1,0 +1,668 @@
+{
+  "$id": "https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "validationMode": {
+            "const": "deterministic"
+          }
+        },
+        "required": [
+          "validationMode"
+        ]
+      },
+      "then": {
+        "properties": {
+          "checks": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "description": "The Foundation RULE value contract as republished in OBDS 3.0.0. Two corrections, both of which the compiler now enforces and which the 1.0.0 contract could not state. First, RULE-level validatorRef is removed: Foundation Validator Registry v1 is closed, has one entry, and that entry applies to value contracts of kind colour with the element value as its input, so the set of rule-level references that could resolve was empty and the deterministic-plus-empty-checks branch was unsatisfiable by construction. Second, checks was an untyped array, so an authoring document could declare a check no registry primitive recognises and only the compiler would notice. A deterministic RULE now declares at least one registered Foundation check, in the schema as well as in the compiler.",
+  "properties": {
+    "canonicalWording": {
+      "description": "Display wording, read by the view builders as a label fallback.",
+      "type": "string"
+    },
+    "checks": {
+      "items": {
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "match": {
+                          "const": "word_boundary_ci"
+                        }
+                      },
+                      "required": [
+                        "match"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "terms": {
+                          "items": {
+                            "pattern": "^[^\\u0009-\\u000d\\u001c-\\u002f\\u003a-\\u0040\\u005b-\\u005e\\u0060\\u007b-\\u007e\\u0085\\u00a0\\u00ad\\u1680\\u2000-\\u2029\\u202f-\\u2060\\u3000\\ufeff]([\\s\\S]*[^\\u0009-\\u000d\\u001c-\\u002f\\u003a-\\u0040\\u005b-\\u005e\\u0060\\u007b-\\u007e\\u0085\\u00a0\\u00ad\\u1680\\u2000-\\u2029\\u202f-\\u2060\\u3000\\ufeff])?$"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            ],
+            "properties": {
+              "params": {
+                "additionalProperties": false,
+                "properties": {
+                  "appliesTo": {
+                    "enum": [
+                      "output",
+                      "task_input"
+                    ]
+                  },
+                  "match": {
+                    "enum": [
+                      "exact",
+                      "case_insensitive",
+                      "word_boundary_ci",
+                      "normalized_whitespace_ci"
+                    ]
+                  },
+                  "terms": {
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "terms"
+                ],
+                "type": "object"
+              },
+              "phase": {
+                "enum": [
+                  "preflight",
+                  "postflight"
+                ]
+              },
+              "primitive": {
+                "const": "term_prohibited"
+              }
+            },
+            "required": [
+              "primitive",
+              "params"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "match": {
+                          "const": "word_boundary_ci"
+                        }
+                      },
+                      "required": [
+                        "match"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "terms": {
+                          "items": {
+                            "pattern": "^[^\\u0009-\\u000d\\u001c-\\u002f\\u003a-\\u0040\\u005b-\\u005e\\u0060\\u007b-\\u007e\\u0085\\u00a0\\u00ad\\u1680\\u2000-\\u2029\\u202f-\\u2060\\u3000\\ufeff]([\\s\\S]*[^\\u0009-\\u000d\\u001c-\\u002f\\u003a-\\u0040\\u005b-\\u005e\\u0060\\u007b-\\u007e\\u0085\\u00a0\\u00ad\\u1680\\u2000-\\u2029\\u202f-\\u2060\\u3000\\ufeff])?$"
+                          }
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            ],
+            "properties": {
+              "params": {
+                "additionalProperties": false,
+                "properties": {
+                  "appliesTo": {
+                    "enum": [
+                      "output",
+                      "task_input"
+                    ]
+                  },
+                  "match": {
+                    "enum": [
+                      "exact",
+                      "case_insensitive",
+                      "word_boundary_ci",
+                      "normalized_whitespace_ci"
+                    ]
+                  },
+                  "mode": {
+                    "enum": [
+                      "all",
+                      "any"
+                    ]
+                  },
+                  "terms": {
+                    "items": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "terms"
+                ],
+                "type": "object"
+              },
+              "phase": {
+                "enum": [
+                  "preflight",
+                  "postflight"
+                ]
+              },
+              "primitive": {
+                "const": "term_required"
+              }
+            },
+            "required": [
+              "primitive",
+              "params"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ]
+                }
+              },
+              {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "params": {
+                        "required": [
+                          "literal"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "params"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "params": {
+                        "required": [
+                          "elementValueRef"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "params"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "properties": {
+              "params": {
+                "additionalProperties": false,
+                "properties": {
+                  "appliesTo": {
+                    "enum": [
+                      "output",
+                      "task_input"
+                    ]
+                  },
+                  "elementValueRef": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "elementId": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "path": {
+                        "minLength": 1,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "elementId",
+                      "path"
+                    ],
+                    "type": "object"
+                  },
+                  "literal": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "match": {
+                    "enum": [
+                      "exact",
+                      "normalized_whitespace",
+                      "normalized_whitespace_ci"
+                    ]
+                  }
+                },
+                "required": [],
+                "type": "object"
+              },
+              "phase": {
+                "enum": [
+                  "preflight",
+                  "postflight"
+                ]
+              },
+              "primitive": {
+                "const": "literal_required"
+              }
+            },
+            "required": [
+              "primitive",
+              "params"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "phase": {
+                      "const": "preflight"
+                    }
+                  },
+                  "required": [
+                    "phase"
+                  ],
+                  "type": "object"
+                },
+                "then": {
+                  "properties": {
+                    "params": {
+                      "properties": {
+                        "appliesTo": {
+                          "const": "task_input"
+                        }
+                      },
+                      "required": [
+                        "appliesTo"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "params"
+                  ]
+                }
+              }
+            ],
+            "properties": {
+              "params": {
+                "additionalProperties": false,
+                "properties": {
+                  "appliesTo": {
+                    "enum": [
+                      "output",
+                      "task_input"
+                    ]
+                  },
+                  "max": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "unit": {
+                    "const": "characters"
+                  }
+                },
+                "required": [
+                  "max"
+                ],
+                "type": "object"
+              },
+              "phase": {
+                "enum": [
+                  "preflight",
+                  "postflight"
+                ]
+              },
+              "primitive": {
+                "const": "length_max"
+              }
+            },
+            "required": [
+              "primitive",
+              "params"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "condition": {
+      "type": "object"
+    },
+    "enforcement": {
+      "enum": [
+        "block",
+        "require_approval",
+        "warn",
+        "inform"
+      ]
+    },
+    "expressions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Named expression strings the compiler resolves as internal references.",
+      "type": "object"
+    },
+    "obligation": {
+      "enum": [
+        "require",
+        "prohibit",
+        "permit",
+        "recommend"
+      ]
+    },
+    "references": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "requirement": {
+      "type": "object"
+    },
+    "requiresDefinedRefs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "statement": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "validationMode": {
+      "enum": [
+        "deterministic",
+        "semantic",
+        "human",
+        "external"
+      ]
+    }
+  },
+  "required": [
+    "statement",
+    "obligation",
+    "enforcement",
+    "validationMode",
+    "checks",
+    "condition",
+    "requirement",
+    "references"
+  ],
+  "title": "OBDS Rule Value 3.0.0",
+  "type": "object"
+}

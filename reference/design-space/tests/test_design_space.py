@@ -6,13 +6,19 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 
+import importlib.util as _ilu
+_spec = _ilu.spec_from_file_location("governed_io_ds", ROOT / "governed_io.py")
+_governed = _ilu.module_from_spec(_spec)
+_spec.loader.exec_module(_governed)
+
 spec = importlib.util.spec_from_file_location("ref", ROOT / "design_space_ref.py")
 ref = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ref)
 
 
 def data(name):
-    return json.loads((ROOT / "examples" / name).read_text(encoding="utf-8"))
+    # Section 28.1: governed examples go through the governed reader.
+    return _governed.load_data(ROOT / "examples" / name)
 
 
 def schema(name):

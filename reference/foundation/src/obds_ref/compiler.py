@@ -12,8 +12,23 @@ from typing import Any
 import yaml
 import jsonschema
 
-from .canonical import _utf16_sort_key, artefact_hash, canonical_json_bytes, identity_key, manifest_content_hash, sha256_id, value_shape_hash
+from .canonical import (_utf16_sort_key, artefact_hash, canonical_json_bytes,
+                        compiled_context_identity_positions, identity_admissibility_error,
+                        identity_admissibility_errors as _identity_admissibility_errors,
+                        identity_key, manifest_content_hash,
+                        model_input_package_identity_positions, sha256_id, value_shape_hash)
 from .checks import SUPPORTED_PRIMITIVES, validate_check
+# Section 28.1 lives in one module, used by every governed reader in the
+# release. It was inlined in this file until 3.0.0, which is how six other
+# readers came to carry six other approximations of it.
+from .governed_io import (
+    ValidationFailure,
+    load_data,
+    read_governed_document,
+    read_governed_text,
+    save_json,
+    save_yaml,
+)
 
 
 VALID_STATES = {"defined", "unknown", "not_defined", "not_applicable"}
@@ -61,472 +76,6 @@ class TargetResult:
     requirements: list[dict[str, Any]] = field(default_factory=list)
     conflicts: list[dict[str, Any]] = field(default_factory=list)
     errors: list[BuildError] = field(default_factory=list)
-
-
-class ValidationFailure(Exception):
-    def __init__(self, errors: list[str]):
-        super().__init__("\n".join(errors))
-        self.errors = errors
-
-
-class _StrictJSONDuplicate(ValueError):
-    pass
-
-
-def _strict_pairs(pairs):
-    result = {}
-    seen = set()
-    for key, value in pairs:
-        nkey = unicodedata.normalize("NFC", key)
-        if nkey in seen:
-            raise _StrictJSONDuplicate(f"duplicate object key: {key}")
-        seen.add(nkey)
-        result[key] = value
-    return result
-
-
-class _OBDSSafeLoader(yaml.SafeLoader):
-    """Section 28.1. Governed YAML is a JSON data model written in YAML.
-
-    Every implicit resolver is removed, so a plain scalar reaches one
-    constructor that owns the whole decision. An explicit tag is refused at
-    compose time, before any constructor runs, and the merge key `<<` is
-    refused where the mapping is built: each of them lets the same characters
-    produce a different data model, which is the defect this section closes.
-    `!!str 1e3` must not be a way to reach a value the plain rules would not
-    produce, and `<<` must not mean one thing here and another in every other
-    YAML reader.
-
-    Anchors and aliases are permitted, because an alias expands to the same
-    node in every YAML version. Their expansion is bounded by
-    `_reject_unbounded_alias_expansion`, which also rejects a recursive alias.
-    Nesting is bounded here, for the same reason and with the same argument: an
-    unstated limit is whatever the runtime's stack happens to be, which is not a
-    thing two implementations can agree on.
-    """
-
-    _depth = 0
-
-    def compose_node(self, parent, index):
-        event = self.peek_event()
-        tag = getattr(event, "tag", None)
-        if tag is not None:
-            # Including the non-specific "!": it suppresses resolution, so it is
-            # another way to reach a value the plain rules would not produce.
-            raise yaml.constructor.ConstructorError(
-                None, None,
-                f"governed YAML must not use an explicit tag: {tag}",
-                event.start_mark,
-            )
-        opens_collection = isinstance(
-            event, (yaml.events.SequenceStartEvent, yaml.events.MappingStartEvent)
-        )
-        if opens_collection:
-            if self._depth >= MAX_NESTING_DEPTH:
-                raise yaml.constructor.ConstructorError(
-                    None, None,
-                    f"nesting exceeds {MAX_NESTING_DEPTH} levels",
-                    event.start_mark,
-                )
-            self._depth += 1
-        try:
-            return super().compose_node(parent, index)
-        finally:
-            if opens_collection:
-                self._depth -= 1
-
-
-class _AmbiguousYAMLScalar(ValueError):
-    pass
-
-
-# Section 28.1. Governed YAML resolves plain scalars under the YAML 1.2 Core
-# Schema, and a plain scalar that resolves to null, a boolean or a number must
-# denote the same value read as a JSON literal. Everything else is a string.
-#
-# Before 2.0.0 the loader inherited PyYAML's YAML 1.1 implicit resolvers with
-# only the boolean set replaced, so the same bytes meant different things
-# depending on the file extension: `{"a": 1e3}` was the number 1000 as JSON and
-# the string "1e3" as YAML, and therefore had two canonical hashes.
-_YAML_NULL = re.compile(r"^(?:null|Null|NULL)$")
-_YAML_BOOL = re.compile(r"^(?:true|True|TRUE|false|False|FALSE)$")
-# The JSON number grammar, not a YAML one. A plain scalar that resolves to a
-# number therefore denotes what the same characters denote read as JSON.
-_JSON_NUMBER = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?$")
-
-# The YAML 1.1 int and float resolvers, in the shape PyYAML implements them.
-# They are here to be rejected against, not resolved with: a scalar that YAML
-# 1.1 reads as a number and the JSON grammar does not produce is exactly the
-# form whose meaning depends on the reader.
-_YAML11_INT = re.compile(r"""^(?:[-+]?0b[01_]+
-                             |[-+]?0[0-7_]+
-                             |[-+]?(?:0|[1-9][0-9_]*)
-                             |[-+]?0x[0-9a-fA-F_]+
-                             |[-+]?[1-9][0-9_]*(?::[0-5]?[0-9])+)$""", re.X)
-_YAML11_FLOAT = re.compile(r"""^(?:[-+]?[0-9][0-9_]*\.[0-9_]*(?:[eE][-+][0-9]+)?
-                               |\.[0-9][0-9_]*(?:[eE][-+][0-9]+)?
-                               |[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*
-                               |[-+]?\.(?:inf|Inf|INF)
-                               |\.(?:nan|NaN|NAN))$""", re.X)
-
-
-class _Yaml11NumberNotJson:
-    """A pattern object for the rejection table: matches on the class, not a spelling."""
-
-    def match(self, text: str):
-        if _JSON_NUMBER.match(text):
-            return None
-        return _YAML11_INT.match(text) or _YAML11_FLOAT.match(text)
-
-
-_YAML11_NUMBER_NOT_JSON = _Yaml11NumberNotJson()
-
-
-def _yaml11_reason(text: str) -> str:
-    """Name the YAML 1.1 spelling the author actually wrote."""
-    if "_" in text:
-        return "digit separator: a number in YAML 1.1, a string in YAML 1.2"
-    if ":" in text:
-        return "sexagesimal: a number in YAML 1.1, a string in YAML 1.2"
-    return "a number in YAML 1.1, not a JSON number"
-
-
-# Section 28.1, the rejection table. Each form is one some YAML version reads as
-# a value the JSON grammar does not produce, so resolving it either way would
-# make a governed document's meaning depend on which YAML version the reader
-# carries. Quoting always resolves the rejection.
-_YAML_AMBIGUOUS = (
-    (re.compile(r"^[-+]?0[0-9]+(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+)?$"), "leading zero: octal or a float in YAML 1.1, decimal in YAML 1.2, not a JSON number"),
-    (re.compile(r"^\+(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?$"), "leading plus: a number in YAML 1.2, not a JSON number"),
-    (re.compile(r"^[-+]?[0-9]+\.(?:[eE][-+]?[0-9]+)?$"), "bare decimal point: a float in YAML 1.2, not a JSON number"),
-    (re.compile(r"^[-+]?\.[0-9]+(?:[eE][-+]?[0-9]+)?$"), "bare decimal point: a float in YAML 1.2, not a JSON number"),
-    (re.compile(r"""^(?:[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]
-                     |[0-9][0-9][0-9][0-9]-[0-9][0-9]?-[0-9][0-9]?
-                      (?:[Tt]|[ \t]+)[0-9][0-9]?
-                      :[0-9][0-9]:[0-9][0-9](?:\.[0-9]*)?
-                      (?:[ \t]*(?:Z|[-+][0-9][0-9]?(?::[0-9][0-9])?))?)$""", re.X),
-     "date or timestamp shaped: a timestamp in YAML 1.1, a string in YAML 1.2"),
-    (re.compile(r"^[-+]?0b[01_]+$"), "alternative number base: JSON has none"),
-    (re.compile(r"^0o[0-7]+$"), "alternative number base: JSON has none"),
-    (re.compile(r"^[-+]?0x[0-9a-fA-F_]+$"), "alternative number base: JSON has none"),
-    (re.compile(r"^~$"), "YAML 1.1 null shorthand: write null"),
-    (re.compile(r"^(?:[-+]?\.(?:inf|Inf|INF)|\.(?:nan|NaN|NAN))$"), "non-finite number: outside the OBDS numeric domain"),
-    (re.compile(r"^$"), "empty plain scalar: null in YAML, absent in JSON; write null"),
-    # The rows above are the YAML 1.2 side: forms YAML 1.2 reads as a value the
-    # JSON grammar does not produce. This one is the YAML 1.1 side, and it is
-    # last so the specific messages win. It is stated as the class rather than
-    # as spellings because the spellings were enumerated once and missed every
-    # combination — `1_000.0`, `1_0:30`, `.5_0` — each a number in YAML 1.1 and
-    # a string here, which is a value that changes with no diagnostic. Stating
-    # the class also stops the table over-reaching: a hand-written digit
-    # separator or sexagesimal pattern rejected `0__8` and `0:07`, which no
-    # YAML version reads as anything but a string.
-    (_YAML11_NUMBER_NOT_JSON, _yaml11_reason),
-)
-
-
-def _resolve_plain_scalar(text: str):
-    """Section 28.1: resolve one plain YAML scalar, or reject it."""
-    for pattern, why in _YAML_AMBIGUOUS:
-        if pattern.match(text):
-            reason = why(text) if callable(why) else why
-            raise _AmbiguousYAMLScalar(
-                f"ambiguous plain scalar {text!r}: {reason}. Quote it, or write "
-                "it in a form JSON accepts."
-            )
-    if _YAML_NULL.match(text):
-        return None
-    if _YAML_BOOL.match(text):
-        return text.lower() == "true"
-    if _JSON_NUMBER.match(text):
-        if "." in text or "e" in text or "E" in text:
-            return float(text)
-        return _strict_parse_int(text)
-    return text
-
-
-def _construct_plain_scalar(loader, node):
-    if node.style is None:
-        try:
-            return _resolve_plain_scalar(node.value)
-        except _AmbiguousYAMLScalar as exc:
-            raise yaml.constructor.ConstructorError(
-                None, None, str(exc), node.start_mark
-            ) from exc
-        except ValueError as exc:
-            raise yaml.constructor.ConstructorError(
-                None, None, str(exc), node.start_mark
-            ) from exc
-    return node.value
-
-
-def _reject_non_plain_node(loader, node):
-    """Section 28.1: no explicit tag and no merge key.
-
-    No implicit resolver remains, so anything arriving at a typed constructor
-    got its tag explicitly.
-    """
-    raise yaml.constructor.ConstructorError(
-        None, None,
-        f"governed YAML must not use {node.tag!r}: an explicit tag or a merge "
-        "key lets the same characters produce different data",
-        node.start_mark,
-    )
-
-
-# Every implicit resolver is replaced, not subtracted from: a plain scalar now
-# reaches one constructor that owns the whole decision.
-_OBDSSafeLoader.yaml_implicit_resolvers = {}
-_OBDSSafeLoader.add_constructor(
-    yaml.resolver.BaseResolver.DEFAULT_SCALAR_TAG,
-    _construct_plain_scalar,
-)
-# Anything reaching a typed constructor did so through an explicit tag, since
-# no implicit resolver remains. Merge keys arrive as tag:yaml.org,2002:merge.
-for _tag in (
-    "tag:yaml.org,2002:bool",
-    "tag:yaml.org,2002:int",
-    "tag:yaml.org,2002:float",
-    "tag:yaml.org,2002:null",
-    "tag:yaml.org,2002:binary",
-    "tag:yaml.org,2002:timestamp",
-    "tag:yaml.org,2002:merge",
-    "tag:yaml.org,2002:set",
-    "tag:yaml.org,2002:omap",
-    "tag:yaml.org,2002:pairs",
-):
-    _OBDSSafeLoader.add_constructor(_tag, _reject_non_plain_node)
-
-
-def _construct_mapping(loader, node, deep=False):
-    mapping = {}
-    seen = set()
-    for key_node, value_node in node.value:
-        key = loader.construct_object(key_node, deep=deep)
-        if not isinstance(key, str):
-            raise yaml.constructor.ConstructorError(None, None, "mapping keys must be strings", key_node.start_mark)
-        if key == "<<" and key_node.style is None:
-            # Section 28.1: written plain, every other YAML reader merges this
-            # key, so keeping it literal would mean one document, two data
-            # models. Written quoted it is an ordinary string key everywhere,
-            # and that is what save_yaml emits.
-            raise yaml.constructor.ConstructorError(
-                None, None, "governed YAML must not use a merge key", key_node.start_mark
-            )
-        nkey = unicodedata.normalize("NFC", key)
-        if nkey in seen:
-            raise yaml.constructor.ConstructorError(None, None, f"duplicate mapping key: {key}", key_node.start_mark)
-        seen.add(nkey)
-        mapping[key] = loader.construct_object(value_node, deep=deep)
-    return mapping
-
-
-_OBDSSafeLoader.add_constructor(
-    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-    _construct_mapping,
-)
-
-
-def _strict_parse_int(text: str) -> int:
-    value = int(text)
-    try:
-        as_float = float(value)
-    except OverflowError as exc:
-        raise ValueError("integer is outside IEEE-754 binary64") from exc
-    if not __import__("math").isfinite(as_float) or int(as_float) != value:
-        raise ValueError("integer is not exactly representable as IEEE-754 binary64")
-    return value
-
-
-def _reject_constant(text: str):
-    raise ValueError(f"non-finite JSON number is invalid: {text}")
-
-
-# Section 28.1. YAML 1.1 counts these as line breaks and YAML 1.2 does not, so a
-# raw one inside a scalar reads as a break in one parser and as a character in
-# the other. PyYAML turns a raw U+0085 into a space; a YAML 1.2 parser keeps it.
-# They are legitimate governed content, and section 14.3b escapes two of them, so
-# they are not forbidden: they must be written as an escape in a double-quoted
-# scalar, where every YAML version agrees on what they are.
-_YAML_VERSION_SENSITIVE_BREAKS = {
-    "\u0085": "U+0085 NEXT LINE",
-    "\u2028": "U+2028 LINE SEPARATOR",
-    "\u2029": "U+2029 PARAGRAPH SEPARATOR",
-}
-
-
-def _reject_raw_version_sensitive_breaks(text: str) -> None:
-    for character, name in _YAML_VERSION_SENSITIVE_BREAKS.items():
-        if character in text:
-            raise ValidationFailure([
-                f"governed YAML must not contain a raw {name}: YAML 1.1 reads it "
-                "as a line break and YAML 1.2 does not. Write it as an escape in "
-                "a double-quoted scalar."
-            ])
-
-
-# Section 28.1. Anchors and aliases are permitted because an alias expands to
-# the same node in every YAML version, but "the same node" is not the same as
-# "the same amount of data": eight aliases per level, nine levels deep, is
-# 425 bytes of governed YAML and 175,304,795 nodes once expanded. A subset that
-# calls itself closed has to say where the expansion stops, so it stops here.
-MAX_EXPANDED_NODES = 1_000_000
-
-# Section 28.1. Nesting has the same problem as alias expansion: left unstated,
-# the limit is whatever the reader's stack allows, which differs per runtime and
-# per version of this file. A level is one nested collection, counting the
-# outermost, so `{"a": [1]}` is two and this bound accepts one hundred. The
-# deepest governed document this project ships nests ten.
-MAX_NESTING_DEPTH = 100
-
-
-def _reject_unbounded_alias_expansion(node) -> int:
-    """Section 28.1: reject a recursive alias, and bound alias expansion.
-
-    The count is over the expanded data model, so an aliased node is counted
-    once per use. Distinct nodes are memoised, so the walk itself stays linear
-    in the size of the document as written.
-    """
-
-    memo: dict[int, int] = {}
-    on_path: set[int] = set()
-
-    def size(current) -> int:
-        key = id(current)
-        cached = memo.get(key)
-        if cached is not None:
-            return cached
-        if key in on_path:
-            raise ValidationFailure([
-                "governed YAML must not use a recursive alias: it has no "
-                "expansion, so it has no canonical form"
-            ])
-        on_path.add(key)
-        if isinstance(current, yaml.MappingNode):
-            total = 1 + sum(size(k) + size(v) for k, v in current.value)
-        elif isinstance(current, yaml.SequenceNode):
-            total = 1 + sum(size(item) for item in current.value)
-        else:
-            total = 1
-        on_path.discard(key)
-        if total > MAX_EXPANDED_NODES:
-            raise ValidationFailure([
-                f"governed YAML alias expansion exceeds {MAX_EXPANDED_NODES} "
-                "nodes: write the document out rather than aliasing it"
-            ])
-        memo[key] = total
-        return total
-
-    return size(node)
-
-
-def _reject_excessive_nesting(data) -> None:
-    """Section 28.1: one bound for one data model, whichever format carried it.
-
-    The composer refuses a deep YAML document before it builds it; this is the
-    same rule stated where JSON arrives too, so the two formats cannot disagree
-    about which documents are governable.
-    """
-    stack = [(data, 0)]
-    while stack:
-        node, depth = stack.pop()
-        if isinstance(node, (dict, list)):
-            if depth >= MAX_NESTING_DEPTH:
-                raise ValidationFailure([
-                    f"parse error: nesting exceeds {MAX_NESTING_DEPTH} levels"
-                ])
-            children = node.values() if isinstance(node, dict) else node
-            stack.extend((child, depth + 1) for child in children)
-
-
-def _load_governed_yaml(text: str):
-    """Compose first, bound the expansion, then construct.
-
-    `yaml.load` does both in one step, which would build the expansion this
-    function exists to refuse.
-    """
-    loader = _OBDSSafeLoader(text)
-    try:
-        node = loader.get_single_node()
-        if node is None:
-            return None
-        _reject_unbounded_alias_expansion(node)
-        return loader.construct_document(node)
-    finally:
-        loader.dispose()
-
-
-def load_data(path: str | Path) -> dict[str, Any]:
-    path = Path(path)
-    try:
-        text = path.read_text(encoding="utf-8")
-        if path.suffix.lower() != ".json":
-            _reject_raw_version_sensitive_breaks(text)
-        if path.suffix.lower() == ".json":
-            data = json.loads(text, object_pairs_hook=_strict_pairs, parse_int=_strict_parse_int, parse_constant=_reject_constant)
-        else:
-            data = _load_governed_yaml(text)
-    except ValidationFailure as exc:
-        raise ValidationFailure([f"{path}: parse error: {error}" for error in exc.errors]) from exc
-    except RecursionError as exc:
-        raise ValidationFailure([
-            f"{path}: parse error: document nests too deeply to read"
-        ]) from exc
-    except (json.JSONDecodeError, _StrictJSONDuplicate, yaml.YAMLError, ValueError, OSError) as exc:
-        raise ValidationFailure([f"{path}: parse error: {exc}"]) from exc
-    if not isinstance(data, dict):
-        raise ValidationFailure([f"{path}: root must be an object"])
-    try:
-        _reject_excessive_nesting(data)
-    except ValidationFailure as exc:
-        raise ValidationFailure([f"{path}: {error}" for error in exc.errors]) from exc
-    try:
-        canonical_json_bytes(data)
-    except (TypeError, ValueError) as exc:
-        raise ValidationFailure([f"{path}: canonical data error: {exc}"]) from exc
-    return data
-
-
-def save_json(path: str | Path, data: dict[str, Any]) -> None:
-    Path(path).write_text(
-        json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-
-
-class _OBDSSafeDumper(yaml.SafeDumper):
-    """Section 28.1 applies to what this project writes, not only what it reads.
-
-    PyYAML's emitter decides whether a string needs quoting with YAML 1.1
-    resolvers, so it wrote the string "1e3" as a plain `1e3`, which the governed
-    reader now reads back as the number 1000. A writer and a reader that
-    disagree are the same defect in the other direction.
-    """
-
-
-def _represent_governed_str(dumper, value):
-    if any(character in value for character in _YAML_VERSION_SENSITIVE_BREAKS):
-        # Only the double-quoted style escapes them; raw, this reader refuses
-        # its own output.
-        return dumper.represent_scalar("tag:yaml.org,2002:str", value, style='"')
-    plain_is_faithful = False
-    try:
-        plain_is_faithful = _resolve_plain_scalar(value) == value
-    except (ValueError, TypeError):
-        plain_is_faithful = False
-    style = None if plain_is_faithful else "'"
-    return dumper.represent_scalar("tag:yaml.org,2002:str", value, style=style)
-
-
-_OBDSSafeDumper.add_representer(str, _represent_governed_str)
-
-
-def save_yaml(path: str | Path, data: dict[str, Any]) -> None:
-    Path(path).write_text(
-        yaml.dump(data, Dumper=_OBDSSafeDumper, sort_keys=False,
-                  allow_unicode=True, width=110, default_flow_style=False),
-        encoding="utf-8",
-    )
 
 
 def _normalised_scope_values(values: list[str]) -> set[str]:
@@ -616,6 +165,105 @@ def _manifest_internal_references(element: dict[str, Any]) -> list[tuple[str, st
     return refs
 
 
+# Section 8.0a, as corrected in 3.0.0. Every position below is compared through
+# `identity_key`, so every one of them behaves as an object key and inherits
+# section 14.3's rule for keys: a collision is rejected rather than silently
+# collapsed. `identity_key` refuses an inadmissible string outright, which is
+# the backstop; these two functions exist so that the normal path reports the
+# position and the reason instead of raising out of validation.
+#
+# The list is positional rather than structural on purpose. A blanket rule over
+# every governed string would reject the 26 multi-line generated strings the
+# corpus ships, which are values, not identities.
+# The four enumerations speak one coordinate system: the position is the path
+# inside its own document. They did not — the manifest's own id was labelled
+# `manifest.id` here and `manifest.id` in a Compiled Brand Context means the
+# *referenced* manifest — so no test could compare two enumerations and notice
+# one of them missing a position the other has.
+def _manifest_identity_positions(manifest: dict[str, Any]):
+    yield "id", manifest.get("id")
+    # `version` is half of the manifest identity everywhere it is compared —
+    # Context Assembly compares it, the assembled runtime binds it, and the
+    # received-artefact enumeration lists it. Here it was missing, so a CR in
+    # `manifest.version` validated, compiled `ready` and produced the same
+    # `contentHash`, `planHash` and `artifactHash` as its LF twin: two governed
+    # identities under one seal, with the compiler and the runtime disagreeing
+    # about whether they exist.
+    yield "version", manifest.get("version")
+    for index, contract in enumerate(manifest.get("valueContracts") or []):
+        if isinstance(contract, dict):
+            yield f"valueContracts[{index}].id", contract.get("id")
+    for index, element in enumerate(manifest.get("elements") or []):
+        if not isinstance(element, dict):
+            continue
+        prefix = f"elements[{index}]"
+        for field_name in ("id", "subject", "kind", "valueContractRef"):
+            if field_name in element:
+                yield f"{prefix}.{field_name}", element.get(field_name)
+        scope = element.get("scope")
+        if isinstance(scope, dict):
+            for dimension, values in scope.items():
+                yield f"{prefix}.scope.{dimension}", dimension
+                if isinstance(values, list):
+                    for position, value in enumerate(values):
+                        yield f"{prefix}.scope.{dimension}[{position}]", value
+        for where, reference in _manifest_internal_references(element):
+            yield f"{prefix}.{where}", reference
+
+
+def _plan_identity_positions(plan: dict[str, Any]):
+    yield "id", plan.get("id")
+    # `manifestRef.id` names the approved manifest this plan binds, and it is
+    # compared through `identity_key` when the binding is checked. Omitting it
+    # here let `validate_plan` call a plan with a CR in that reference valid,
+    # and the build then raised out of `identity_key` instead of reporting an
+    # invalid document — fail-closed by accident rather than by validation.
+    manifest_ref = plan.get("manifestRef")
+    if isinstance(manifest_ref, dict):
+        yield "manifestRef.id", manifest_ref.get("id")
+        yield "manifestRef.version", manifest_ref.get("version")
+    for index, target in enumerate(plan.get("targets") or []):
+        if not isinstance(target, dict):
+            continue
+        prefix = f"targets[{index}]"
+        yield f"{prefix}.id", target.get("id")
+        for position, value in enumerate(target.get("requiresDefined") or []):
+            yield f"{prefix}.requiresDefined[{position}]", value
+        scope = target.get("scope")
+        if isinstance(scope, dict):
+            for dimension, values in scope.items():
+                yield f"{prefix}.scope.{dimension}", dimension
+                if isinstance(values, list):
+                    for position, value in enumerate(values):
+                        yield f"{prefix}.scope.{dimension}[{position}]", value
+        assembly = target.get("contextAssembly")
+        if isinstance(assembly, dict):
+            for position, value in enumerate(assembly.get("eligibleGuidanceIds") or []):
+                yield f"{prefix}.contextAssembly.eligibleGuidanceIds[{position}]", value
+        style = target.get("styleTexture")
+        if isinstance(style, dict):
+            for position, value in enumerate(style.get("elementIds") or []):
+                yield f"{prefix}.styleTexture.elementIds[{position}]", value
+        state_map = target.get("stateMap")
+        if isinstance(state_map, dict):
+            for position, value in enumerate(state_map.get("kinds") or []):
+                yield f"{prefix}.stateMap.kinds[{position}]", value
+
+
+# Section 8.0a is one rule over one set of governed artefacts. The enumerations
+# for the two the compiler produces live here, next to the documents they
+# describe; the two a runtime receives live in `canonical`, where the flat
+# packages can reach them. This registry is what makes the set enumerable: a
+# governed artefact kind added without an entry fails the systemic identity
+# surface test rather than quietly having no identity positions at all.
+IDENTITY_POSITION_ENUMERATORS = {
+    "brand-manifest": _manifest_identity_positions,
+    "obds-build-plan": _plan_identity_positions,
+    "obds-compiled-brand-context": compiled_context_identity_positions,
+    "obds-model-input-package": model_input_package_identity_positions,
+}
+
+
 def validate_plan_against_manifest(plan: dict[str, Any], manifest: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     ids = {identity_key(element["id"]) for element in manifest.get("elements", []) if isinstance(element, dict) and isinstance(element.get("id"), str)}
@@ -653,14 +301,42 @@ def _element_contract(manifest: dict[str, Any], element: dict[str, Any]):
     return _value_contract_map(manifest).get(identity_key(ref))
 
 
+# Value schema versions this release resolves. 1.0.0 is the frozen surface and
+# lives flat, as it always has; 3.0.0 publishes corrected contracts beside it in
+# a version directory, exactly as `schemas/1.1.0/` did for compiled contexts. A
+# reference to any other version resolves to nothing and fails closed.
+VALUE_SCHEMA_ROOTS = {
+    "1.0.0": (),
+    "3.0.0": ("3.0.0",),
+}
+
+
 def _value_schema_path(schema_ref: str) -> Path | None:
-    prefix = "https://openbranddefinition.org/value-schemas/1.0.0/"
+    prefix = "https://openbranddefinition.org/value-schemas/"
     if not isinstance(schema_ref, str) or not schema_ref.startswith(prefix):
         return None
-    filename = schema_ref[len(prefix):]
+    remainder = schema_ref[len(prefix):]
+    version, separator, filename = remainder.partition("/")
+    if not separator or version not in VALUE_SCHEMA_ROOTS:
+        return None
     if not filename or "/" in filename or "\\" in filename:
         return None
-    return Path(__file__).resolve().parents[2] / "value-schemas" / filename
+    root = Path(__file__).resolve().parents[2] / "value-schemas"
+    return root.joinpath(*VALUE_SCHEMA_ROOTS[version], filename)
+
+
+# Foundation Validator Registry v1, written down in 3.0.0. It was a string
+# comparison at one call site with no namespace parsing, no version binding and
+# no applicability table, so "the registry" was not a data structure anyone
+# could inspect. It stays closed and it stays one entry: 3.0.0 removes the
+# rule-level branch rather than adding a rule-level registry.
+FOUNDATION_VALIDATORS = {
+    "obds:validator:colour-consistency-v1": {
+        "appliesTo": "value-contract",
+        "appliesToKind": "colour",
+        "input": "element-value",
+    },
+}
 
 
 def _validate_contract_value(contract: dict[str, Any], element_id: str, value: Any) -> list[str]:
@@ -671,15 +347,19 @@ def _validate_contract_value(contract: dict[str, Any], element_id: str, value: A
     if path is None or not path.is_file():
         return [f"{element_id}: unresolved value-contract schemaRef: {schema_ref}"]
     try:
-        schema = json.loads(path.read_text(encoding="utf-8"))
+        # Section 28.1: `schemaHash` is a governed hash, so the bytes behind it
+        # are read under the governed contract. A permissive reader accepted a
+        # schema with a duplicated property name and hashed whichever copy came
+        # last.
+        schema = load_data(path)
     except Exception as exc:
         return [f"{element_id}: cannot read value-contract schema {schema_ref}: {exc}"]
-    actual_schema_hash = sha256_id(schema)
-    if actual_schema_hash != schema_hash:
-        errors.append(
-            f"{element_id}: value-contract schemaHash mismatch for {schema_ref}: "
-            f"expected {schema_hash}, got {actual_schema_hash}"
-        )
+    # `validate_manifest` has already reproduced this contract's `schemaHash` from
+    # the same file and reported any mismatch; a contract that failed there never
+    # reaches here. Reproducing it a second time made one responsibility two
+    # implementations: neither could be tested in isolation, because whichever was
+    # disabled the other still answered — so neither was ever really proved.
+
         return errors
     try:
         jsonschema.validate(value, schema)
@@ -689,7 +369,21 @@ def _validate_contract_value(contract: dict[str, Any], element_id: str, value: A
 
     validator_ref = contract.get("validatorRef")
     if validator_ref == "obds:validator:colour-consistency-v1":
-        errors.extend(_validate_colour_value(element_id, value))
+        # Section 11.5a, gated in 3.0.0. Foundation Validator Registry v1 has
+        # one entry and it declares an applicability: value contracts of kind
+        # `colour`, with the element value as its input. Without the gate the
+        # entry resolved on any contract and verified nothing — a resolvable
+        # validator reporting success while checking a value it was never
+        # written for, which is worse than an unresolved one because section
+        # 15.9 renders both as `decision: released`.
+        if contract.get("kind") != FOUNDATION_VALIDATORS[validator_ref]["appliesToKind"]:
+            errors.append(
+                f"{element_id}: validator {validator_ref} applies to value contracts of kind "
+                f"{FOUNDATION_VALIDATORS[validator_ref]['appliesToKind']!r}, "
+                f"not {contract.get('kind')!r}"
+            )
+        else:
+            errors.extend(_validate_colour_value(element_id, value))
     elif validator_ref not in {None, ""}:
         errors.append(f"{element_id}: unresolved value-contract validatorRef: {validator_ref}")
     return errors
@@ -1006,99 +700,59 @@ def governed_result_hash(
     return sha256_id(governed_result_payload(manifest, target, as_of, applicable))
 
 
-def _conflict_is_decision_relevant(
-    conflict: dict[str, Any],
-    by_id: dict[str, Any],
-    target: dict[str, Any],
-    rule_required_ids: set[str],
-) -> bool:
-    """Section 10.2a: would resolving this conflict change what the target gets?
+# Section 10.2a, replaced in 3.0.0 by one algorithm.
+#
+# The enumerated list it replaces was wrong at its premise. That premise —
+# "a target that selects narrowly is not failed by a conflict it never reads" —
+# is false as implemented: under `deliveryMode: full` Context Assembly rebuilds
+# FACT_GROUNDING and STATE_MAP from the whole element universe, ignoring both
+# projection policies and `includedElementIds`, and through Reasoning Chapters
+# the model receives both losing candidates as active contradictory guidance in
+# a build the compiler declared clean.
+#
+# The class also has a closed form, and it is a theorem rather than another
+# list. Every candidate winner enters `selection` under its own unique
+# `elementId`; section 14.3a keys `selection` on `elementId`; sections 8.6 and
+# 8.0a make element ids unique under canonical comparison. Two distinct
+# candidates therefore always produce two distinct payloads and two distinct
+# `governedResultHash` values. Measured across all 21 channels: not one where
+# the two candidate winners produce the same governed result. So "could
+# choosing a different winner change the governed result?" is answered yes for
+# every target-applicable conflict, and there is no third possibility.
+#
+# What survives is a real preserved-irrelevance class, and it is principled: a
+# subject whose incomparable maximal elements are not all applicable to this
+# target — out of scope, or not valid at `asOf` — cannot change this target's
+# governed result, because at most one of them is in `applicable(T)` at all.
+# Section 10.2a requires those to be reported rather than discarded, and the
+# 2.0.0 reference discarded exactly them.
+#
+# What is eliminated is the claim that a rendering knob can make an applicable
+# conflict irrelevant. `styleTexture`, `stateMap`, the Context Assembly policy
+# and the delivery mode do not enter this decision, which is section 14.3a's
+# own MUST.
+def _annotated_conflicts(
+    elements: list[dict[str, Any]],
+    applicable_conflicts: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Decision-relevant conflicts, plus the preserved-irrelevance class.
 
-    A hard conflict is a property of a subject. It fails a target only when one
-    of its incomparable maximal elements would, if it won, reach that target's
-    requirements or its compiled context. Before 1.1.3 every conflict anywhere in
-    the scope-matching set failed every target, so a manifest defect on a subject
-    a target never reads blocked that target — fail-arbitrary rather than
-    fail-closed.
+    `applicable_conflicts` comes from `_resolve_subject_precedence` over the
+    elements that match the target's scope and are valid at `asOf`, taken before
+    subject precedence — which is `applicable(T)` exactly. Every conflict in it
+    is by construction a subject with two or more incomparable maximal elements
+    of `applicable(T)`, so every one of them is decision-relevant.
     """
-    required = {identity_key(item) for item in target.get("requiresDefined", [])} | rule_required_ids
-    # Guidance the target declares itself eligible to activate is part of what
-    # this target reads, so a conflict on that subject changes its governed
-    # result: the artefact would otherwise declare eligible guidance that is
-    # not in availableElementIds.
-    assembly = target.get("contextAssembly") or {}
-    if isinstance(assembly, dict):
-        required |= {
-            identity_key(item)
-            for item in assembly.get("eligibleGuidanceIds", [])
-            if isinstance(item, str) and item
-        }
-    style = target.get("styleTexture", {"mode": "all", "elementIds": []})
-    style_mode = style.get("mode", "all")
-    style_ids = {identity_key(item) for item in style.get("elementIds", [])}
-    state_policy = target.get("stateMap", {"mode": "none", "kinds": []})
-    state_mode = state_policy.get("mode", "none")
-    state_kinds = {identity_key(item) for item in state_policy.get("kinds", [])}
-
-    for raw_element_id in conflict.get("elementIds", []):
-        element_id = identity_key(raw_element_id)
-        element = by_id.get(element_id)
-        if element is None:
-            continue
-
-        # 1. named in requiresDefined. A target cannot opt out of its own
-        #    requirements.
-        if element_id in required:
-            return True
-
-        state = element.get("state")
-        family = element.get("family")
-        nature = element.get("nature")
-
-        # 2. a defined RULE that would govern this build if it won. Until 1.1.6
-        #    only `block` and `require_approval` counted here, which read the
-        #    concrete list of section 10.2a rather than the principle that
-        #    introduces it. A RULE also governs when it carries its own
-        #    dependencies, contributes a compiled check, or states a prohibition:
-        #    resolving the conflict the other way then changes the requirements,
-        #    the compiled checks or the applicable prohibitions of this target.
-        #    Leaving those out let an unresolved conflict between two
-        #    non-blocking RULES silently cancel a declared dependency, so
-        #    repairing the manifest turned a passing build into a failing one.
-        if family == "rules" and state == "defined":
-            value = element.get("value") or {}
-            if value.get("enforcement") in {"block", "require_approval"}:
-                return True
-            if value.get("requiresDefinedRefs"):
-                return True
-            if value.get("checks"):
-                return True
-            # Section 14.1 puts every applicable prohibition in HARD_BOUNDARIES,
-            # whatever its enforcement, so a prohibition always reaches the
-            # compiled context of every target and a conflict over one is always
-            # decision-relevant.
-            if value.get("obligation") == "prohibit":
-                return True
-
-        # 3. a defined non-rules fact belongs in FACT_GROUNDING, unconditionally.
-        if state == "defined" and nature == "fact" and family != "rules":
-            return True
-
-        # 4. carried into STATE_MAP by the target's declared policy.
-        if state in {"unknown", "not_defined", "not_applicable"}:
-            if state_mode == "all_applicable":
-                return True
-            if state_mode == "kinds" and identity_key(element.get("kind") or "") in state_kinds:
-                return True
-
-        # 5. carried into STYLE_TEXTURE by the target's declared policy.
-        if state == "defined" and (nature == "knowledge" or family == "stance"):
-            if style_mode == "all":
-                return True
-            if style_mode == "selected" and element_id in style_ids:
-                return True
-
-    return False
+    relevant_subjects = {conflict["subject"] for conflict in applicable_conflicts}
+    annotated = [{**conflict, "decisionRelevant": True} for conflict in applicable_conflicts]
+    _, manifest_level = _resolve_subject_precedence(elements)
+    annotated += [
+        {**conflict, "decisionRelevant": False}
+        for conflict in manifest_level
+        if conflict["subject"] not in relevant_subjects
+    ]
+    annotated.sort(key=lambda conflict: (conflict["subject"], conflict["elementIds"]))
+    return annotated
 
 
 def _selection_validity_window(scope_matching: list[dict[str, Any]], as_of: datetime):
@@ -1118,6 +772,14 @@ def _selection_validity_window(scope_matching: list[dict[str, Any]], as_of: date
 
 def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> list[str]:
     errors: list[str] = []
+
+    # Section 8.0a first: every later check compares through `identity_key`, and
+    # an inadmissible identity has no comparison key. Reporting stops here so a
+    # curator sees the character rule rather than a duplicate-id error about a
+    # collision the canonical form created.
+    identity_errors = _identity_admissibility_errors(_manifest_identity_positions(manifest))
+    if identity_errors:
+        return identity_errors
 
     for key in ("id", "kind", "name", "schemaVersion", "version", "status", "owner", "elements"):
         if key not in manifest:
@@ -1144,6 +806,13 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
     if not isinstance(contracts, list):
         errors.append("valueContracts must be an array")
         contracts = []
+    # Section 11.4: a Foundation RULE value contract binds the corrected 3.0.0
+    # rule contract. Leaving the frozen 1.0.0 contract usable here would leave
+    # exactly the divergence 3.0.0 closes: 1.0.0 permits a rule-level
+    # `validatorRef` and an untyped `checks` array, so schema validation and the
+    # compiler would give two conforming answers to one question.
+    RULE_VALUE_SCHEMA_REF = "https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json"
+
     contract_ids: set[str] = set()
     contract_map: dict[str, dict[str, Any]] = {}
     for index, contract in enumerate(contracts):
@@ -1153,6 +822,11 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
             continue
         contract_id = contract.get("id")
         family = contract.get("family")
+        if family == "rules" and contract.get("schemaRef") != RULE_VALUE_SCHEMA_REF:
+            errors.append(
+                f"{prefix}: a rules value contract must bind {RULE_VALUE_SCHEMA_REF}, "
+                f"not {contract.get('schemaRef')}"
+            )
         kind = contract.get("kind")
         shape_hash = contract.get("shapeHash")
         schema_ref = contract.get("schemaRef")
@@ -1180,7 +854,8 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
                 errors.append(f"{prefix}.schemaRef is unresolved: {schema_ref}")
             else:
                 try:
-                    schema_payload = json.loads(schema_path.read_text(encoding="utf-8"))
+                    # Section 28.1, same reason as `_validate_contract_value`.
+                    schema_payload = load_data(schema_path)
                     actual_schema_hash = sha256_id(schema_payload)
                     if actual_schema_hash != schema_hash:
                         errors.append(
@@ -1299,9 +974,33 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
                 continue
             mode = value.get("validationMode")
             checks = value.get("checks", [])
-            validator_ref = value.get("validatorRef")
-            if mode == "deterministic" and not checks and not validator_ref:
-                errors.append(f"{element_id}: deterministic rule requires checks or validatorRef")
+            # Section 11.4 / 11.5a, corrected in 3.0.0. `deterministic` could be
+            # satisfied by "one resolvable, versioned validatorRef", but
+            # Foundation Validator Registry v1 is closed, has one entry, and
+            # that entry applies to value contracts of kind `colour` with the
+            # element value as its input. A RULE element's value is a rule
+            # object, so the set of rule-level `validatorRef` values that could
+            # resolve was empty: the branch was unsatisfiable by construction.
+            #
+            # It was also unenforced. S4 accepted the reference as a substitute
+            # for checks; S7 (`_materialise_checks`) compiled only checks and
+            # never read it, so six shapes of bad reference — nonexistent,
+            # wrong-applicability, foreign namespace, versioned-nonexistent,
+            # unversioned and whitespace-only — all built `ready` with an empty
+            # `compiledChecks` and a HARD_BOUNDARIES line claiming
+            # `[deterministic, block]`.
+            #
+            # 3.0.0 removes the branch rather than adding a rule-level registry.
+            # A deterministic Foundation RULE contains at least one registered
+            # Foundation check, and `_materialise_checks` asserts that the check
+            # actually reached the artefact.
+            if "validatorRef" in value:
+                errors.append(
+                    f"{element_id}: rule-level validatorRef is not part of Foundation. "
+                    "A deterministic rule declares at least one registered Foundation check."
+                )
+            if mode == "deterministic" and not checks:
+                errors.append(f"{element_id}: deterministic rule requires at least one check")
             if checks:
                 if not isinstance(checks, list):
                     errors.append(f"{element_id}: checks must be an array")
@@ -1310,7 +1009,10 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
                         if not isinstance(check, dict):
                             errors.append(f"{element_id}: check must be an object")
                             continue
-                        errors.extend(f"{element_id}: {err}" for err in validate_check(check))
+                        errors.extend(
+                            f"{element_id}: {err}"
+                            for err in validate_check(check, stage="authored")
+                        )
 
     ids = {identity_key(element["id"]) for element in manifest.get("elements", []) if isinstance(element, dict) and isinstance(element.get("id"), str)}
     for element in manifest.get("elements", []):
@@ -1322,15 +1024,50 @@ def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> 
     return errors
 
 
+_BUILD_PLAN_SCHEMA_PATH = Path(__file__).resolve().parents[2] / "schemas" / "build-plan.schema.json"
+
+
+def _build_plan_schema_errors(plan: dict[str, Any]) -> list[str]:
+    """Execute the shipped Build Plan contract.
+
+    Nothing in the 2.0.0 release ever ran this schema: the plan's only
+    enforcement was the hand-written `validate_plan`, which is how a missing
+    `default` survived a release gate. A published contract that no code
+    executes is a claim, not a check.
+    """
+    if not _BUILD_PLAN_SCHEMA_PATH.is_file():  # pragma: no cover - packaging guard
+        return []
+    schema = load_data(_BUILD_PLAN_SCHEMA_PATH)
+    validator = jsonschema.Draft202012Validator(schema)
+    return [
+        "build plan schema: "
+        + ("/".join(str(part) for part in error.path) or "<root>")
+        + ": "
+        + error.message
+        for error in sorted(validator.iter_errors(plan), key=str)
+    ]
+
+
 def validate_plan(plan: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    identity_errors = _identity_admissibility_errors(_plan_identity_positions(plan))
+    if identity_errors:
+        return identity_errors
+    errors.extend(_build_plan_schema_errors(plan))
     for key in ("id", "kind", "schemaVersion", "asOf", "manifestRef", "compiler", "tokenizer", "targets"):
         if key not in plan:
             errors.append(f"build plan missing: {key}")
     if plan.get("kind") != "obds-build-plan":
         errors.append("build plan kind must be obds-build-plan")
-    if plan.get("schemaVersion") != "1.0.0":
-        errors.append("build plan schemaVersion must be 1.0.0")
+    if plan.get("schemaVersion") != "3.0.0":
+        # The corrected Build Plan contract is a breaking change, so the document
+        # version moves with it. A 1.0.0 plan resolves to the frozen 1.0.0 schema,
+        # which accepts exactly the modeless projections 3.0.0 rejects; accepting
+        # both versions here would be two conforming answers to one question.
+        errors.append(
+            "build plan schemaVersion must be 3.0.0: styleTexture and stateMap are "
+            "required with a mode, and the 1.0.0 contract does not state that"
+        )
     try:
         _parse_timestamp(plan.get("asOf"), field_name="build plan asOf")
     except ValueError as exc:
@@ -1367,16 +1104,36 @@ def validate_plan(plan: dict[str, Any]) -> list[str]:
         if not isinstance(requirements, list) or not all(isinstance(item, str) and item for item in requirements):
             errors.append(f"{target_id}: requiresDefined must be a string array")
 
-        style = target.get("styleTexture", {"mode": "all", "elementIds": []})
-        if not isinstance(style, dict) or style.get("mode", "all") not in {"all", "selected", "none"}:
+        # Section 13.2, closed in 3.0.0 by requiring presence rather than by
+        # stating a default. Neither object declared `required` inside itself,
+        # so `{}`, `{elementIds: []}` and `{kinds: []}` all validated and all
+        # behaved as omitted, and the implicit defaults lived only in code, in
+        # three places each, at opposite polarities: `styleTexture` defaulted to
+        # `all` (opens) while `stateMap` defaulted to `none` (closes).
+        #
+        # Stating the defaults would have fixed the decision and left the hash
+        # split: section 14.3a hashes `target` verbatim and forbids inserting a
+        # default before hashing, so two Build Plans — one omitting the field,
+        # one stating the default explicitly — would resolve identically and
+        # hash differently. `governedResultHash` would then identify the
+        # governed request *as spelled* rather than the governed request.
+        # Requiring presence gives one spelling per governed request and is the
+        # only option that also retires that spelling-sensitivity. Measured
+        # migration cost against the shipped corpus: zero.
+        style = target.get("styleTexture")
+        if not isinstance(style, dict) or "mode" not in style:
+            errors.append(f"{target_id}: styleTexture is required and must declare mode")
+        elif style.get("mode") not in {"all", "selected", "none"}:
             errors.append(f"{target_id}: invalid styleTexture.mode")
         elif style.get("mode") == "selected":
             ids = style.get("elementIds")
             if not isinstance(ids, list) or not ids or not all(isinstance(item, str) and item for item in ids):
                 errors.append(f"{target_id}: selected styleTexture requires non-empty elementIds")
 
-        state_map = target.get("stateMap", {"mode": "none", "kinds": []})
-        if not isinstance(state_map, dict) or state_map.get("mode", "none") not in {"none", "kinds", "all_applicable"}:
+        state_map = target.get("stateMap")
+        if not isinstance(state_map, dict) or "mode" not in state_map:
+            errors.append(f"{target_id}: stateMap is required and must declare mode")
+        elif state_map.get("mode") not in {"none", "kinds", "all_applicable"}:
             errors.append(f"{target_id}: invalid stateMap.mode")
         elif state_map.get("mode") == "kinds":
             kinds = state_map.get("kinds")
@@ -1524,9 +1281,56 @@ def _materialise_checks(
                 "primitive": check["primitive"],
                 "phase": check.get("phase", "postflight"),
                 "enforcement": value.get("enforcement", "block"),
-                "params": params,
+                "params": _materialise_check_params(check["primitive"], params),
             })
+
+    # Section 11.4, asserted where it can actually be proven. Validation says a
+    # deterministic rule declares a check; this says the check reached the
+    # artefact. The two are not the same claim, and in 2.0.0 the gap between
+    # them was the whole defect: nothing downstream noticed that a rule whose
+    # HARD_BOUNDARIES line reads `[deterministic, block]` contributed no
+    # compiled check at all.
+    contributing = {entry["ruleElementId"] for entry in compiled}
+    for element in applicable:
+        if element.get("family") != "rules" or element.get("state") != "defined":
+            continue
+        value = element.get("value") or {}
+        if value.get("validationMode") != "deterministic":
+            continue
+        if _element_id(element) not in contributing:
+            errors.append(BuildError(
+                "OBDS-RULE-DETERMINISTIC-NO-CHECK",
+                "a deterministic rule must contribute at least one compiled Foundation check",
+                element["id"],
+            ))
     return compiled, errors
+
+
+# Section 13.2 / 14.3a, closed in 3.0.0. `phase` was materialised into the
+# artefact and `params` was copied verbatim, so `match`, `appliesTo`, `mode` and
+# `unit` were defaulted at execution time by whichever runtime loaded the
+# artefact. On one byte-identical artefact with one `artifactHash`, a runtime
+# defaulting `match=case_insensitive` blocked the output and a runtime
+# defaulting `match=exact` released it. Two conformant runtimes, one governed
+# artefact, opposite governed decisions.
+#
+# The defaults themselves are unchanged — this writes down the ones the registry
+# already specified, at the one point where writing them down makes the artefact
+# self-contained. A runtime must not invent a default for a parameter the
+# artefact states.
+CHECK_PARAM_DEFAULTS = {
+    "term_prohibited": {"match": "case_insensitive", "appliesTo": "output"},
+    "term_required": {"match": "case_insensitive", "mode": "all", "appliesTo": "output"},
+    "literal_required": {"match": "exact", "appliesTo": "output"},
+    "length_max": {"unit": "characters", "appliesTo": "output"},
+}
+
+
+def _materialise_check_params(primitive: str, params: dict[str, Any]) -> dict[str, Any]:
+    materialised = dict(params)
+    for name, default in CHECK_PARAM_DEFAULTS.get(primitive, {}).items():
+        materialised.setdefault(name, default)
+    return materialised
 
 
 def _whitespace_tokens(text: str) -> int:
@@ -1596,16 +1400,15 @@ def build_target(
         item for item in rule_value_refs if item not in rule_requirements
     ]
     rule_required_ids = {required_id for required_id, _ in rule_requirements}
-    # Section 10.2a: a conflict fails this target only when the subject is
-    # decision-relevant to it. An irrelevant conflict is still reported, marked,
-    # so a manifest defect is never silently discarded.
-    annotated_conflicts = []
-    for conflict in conflicts:
-        relevant = _conflict_is_decision_relevant(
-            conflict, by_id, target, rule_required_ids
-        )
-        annotated_conflicts.append({**conflict, "decisionRelevant": relevant})
-        if relevant:
+    # Section 10.2a: one relevance rule, applied here, in the projections and at
+    # runtime, so all three reach the same governed decision. A conflict inside
+    # `applicable(T)` fails this target; a conflict whose maximal elements are
+    # not all applicable to this target is reported and marked, so a manifest
+    # defect is never silently discarded — which is what section 10.2a says and
+    # what the 2.0.0 reference did the opposite of.
+    annotated_conflicts = _annotated_conflicts(elements, conflicts)
+    for conflict in annotated_conflicts:
+        if conflict["decisionRelevant"]:
             result.errors.append(BuildError(
                 "OBDS-BUILD-SUBJECT-CONFLICT",
                 f"semantic subject {conflict['subject']} has incomparable maximal elements: "
@@ -1665,7 +1468,8 @@ def build_target(
                 element_id,
             ))
 
-    style = target.get("styleTexture", {"mode": "all", "elementIds": []})
+    # Presence is required by `validate_plan`, so nothing is defaulted here.
+    style = target["styleTexture"]
     if style.get("mode") == "selected":
         for raw_style_id in style.get("elementIds", []):
             element_id = identity_key(raw_style_id)
@@ -1717,7 +1521,7 @@ def build_target(
         )
     ]
 
-    state_policy = target.get("stateMap", {"mode": "none", "kinds": []})
+    state_policy = target["stateMap"]
     if state_policy.get("mode") == "all_applicable":
         state_elements = [
             element for element in applicable
@@ -1805,7 +1609,12 @@ def build_target(
     plan_hash = sha256_id(plan)
     artefact: dict[str, Any] = {
         "kind": "obds-compiled-brand-context",
-        "schemaVersion": "1.1.0",
+        # 3.0.0 publishes a corrected Compiled Brand Context contract beside the
+        # frozen surfaces: `compiledChecks` carries a registered item schema per
+        # primitive, requiring every parameter the compiler materialises. An
+        # artefact that leaves one open is not a valid artefact, and a runtime
+        # has nothing left to invent.
+        "schemaVersion": "3.0.0",
         "id": f"{manifest['id']}:context:{target['id']}",
         "targetId": target["id"],
         "manifest": {

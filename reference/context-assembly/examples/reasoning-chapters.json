@@ -1,8 +1,8 @@
 {
-  "chapterSetHash": "sha256:a935116c82149714ad9b75293e623b2c6cba50d3be3e0ffa8bc5c8f9af6944ee",
+  "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
   "chapters": [
     {
-      "chapterHash": "sha256:5d41daaa9f2c84e0afef76e7b1455ca6999993cc5479141e2f59d31868751f40",
+      "chapterHash": "sha256:aa37465c76bb6eb93f2a3cf34fa4338669c386bc56838f509105c865aa2c338a",
       "content": "## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}\n\n## identity.value.simplicity [identity/core-value/defined]\n{\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\n\n## identity.value.reliability [identity/core-value/defined]\n{\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}",
       "elementIds": [
         "identity.value.innovation",
@@ -12,7 +12,7 @@
       "id": "chapter.brand-expression",
       "kind": "obds-reasoning-chapter",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -24,8 +24,8 @@
       "title": "Brand expression"
     },
     {
-      "chapterHash": "sha256:77fe2d0cadead6628b4f39130fc72d3ed0e1d6308d6e649f81c5d6f36fac01e9",
-      "content": "## design.logo.clear-zone [design/clear-zone/defined]\n{\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\n\n## rule.logo.clear-zone [rules/rule/defined]\n{\"checks\":[],\"condition\":{},\"enforcement\":\"block\",\"obligation\":\"require\",\"references\":[\"design.logo.clear-zone\"],\"requirement\":{},\"statement\":\"Preserve the approved logo clear zone.\",\"validationMode\":\"human\",\"validatorRef\":null}",
+      "chapterHash": "sha256:c2c6210b407ed1c1ad2bddd7b4ccb43d09c97ccdca37cc5cc947d2b7b8e4e986",
+      "content": "## design.logo.clear-zone [design/clear-zone/defined]\n{\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\n\n## rule.logo.clear-zone [rules/rule/defined]\n{\"checks\":[],\"condition\":{},\"enforcement\":\"block\",\"obligation\":\"require\",\"references\":[\"design.logo.clear-zone\"],\"requirement\":{},\"statement\":\"Preserve the approved logo clear zone.\",\"validationMode\":\"human\"}",
       "elementIds": [
         "design.logo.clear-zone",
         "rule.logo.clear-zone"
@@ -33,7 +33,7 @@
       "id": "chapter.logo-system",
       "kind": "obds-reasoning-chapter",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -45,8 +45,8 @@
       "title": "Logo system"
     },
     {
-      "chapterHash": "sha256:a1568fc1c8711a50bf4820585055b5829b46366a863c859f5eda8848be5ae091",
-      "content": "## rule.claims.require-approval [rules/rule/defined]\n{\"checks\":[],\"condition\":{},\"enforcement\":\"require_approval\",\"obligation\":\"require\",\"references\":[\"claims.approved-register\"],\"requirement\":{},\"statement\":\"Unregistered performance claims require approval.\",\"validationMode\":\"human\",\"validatorRef\":null}\n\n## claims.approved-register [rules/claims-register/unknown]\nNo value.",
+      "chapterHash": "sha256:ac3f81ab7382ed2f0c783ded83991c293b168aa1a4c0dcc1686b46e1b94d7e31",
+      "content": "## rule.claims.require-approval [rules/rule/defined]\n{\"checks\":[],\"condition\":{},\"enforcement\":\"require_approval\",\"obligation\":\"require\",\"references\":[\"claims.approved-register\"],\"requirement\":{},\"statement\":\"Unregistered performance claims require approval.\",\"validationMode\":\"human\"}\n\n## claims.approved-register [rules/claims-register/unknown]\nNo value.",
       "elementIds": [
         "rule.claims.require-approval",
         "claims.approved-register"
@@ -54,7 +54,7 @@
       "id": "chapter.claims",
       "kind": "obds-reasoning-chapter",
       "manifest": {
-        "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+        "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
         "id": "urn:obds:brand:example-assembly",
         "version": "1.0.0"
       },
@@ -68,7 +68,7 @@
   ],
   "kind": "obds-reasoning-chapter-set",
   "manifest": {
-    "contentHash": "sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5",
+    "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },

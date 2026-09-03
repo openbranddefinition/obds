@@ -1,6 +1,13 @@
 {
-  "artifactHash": "sha256:ef17abe5608f2994468f881c1d215202d58e4a85171f07fb6e4246a9cdfbc63a",
+  "artifactHash": "sha256:70605b02b6bbccf212f24e0626d170faa75e500158f7465f24f5b13040a15f66",
+  "availableElementIds": [
+    "design.primary-colour",
+    "identity.voice",
+    "rule.no-best",
+    "structure.brand"
+  ],
   "build": {
+    "asOf": "2026-08-27T00:00:00Z",
     "compilerId": "org.openbranddefinition.reference-compiler",
     "compilerVersion": "1.0.0",
     "planHash": "sha256:9cf7cf1a2477288eef4342118a84256e2aeacb03642d99248e99832a757eb23c",
@@ -22,6 +29,71 @@
       "ruleElementId": "rule.no-best"
     }
   ],
+  "contextAssembly": {
+    "applicationMode": "create",
+    "deliveryMode": "reasoning",
+    "eligibleGuidanceIds": [],
+    "noHitPolicy": "resolve_before_answer"
+  },
+  "elementRecords": [
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "design.primary-colour",
+      "kind": "prohibition",
+      "nature": "rule",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "identity.voice",
+      "kind": "prohibition",
+      "nature": "rule",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "rule.no-best",
+      "kind": "prohibition",
+      "nature": "rule",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "rules",
+      "id": "structure.brand",
+      "kind": "prohibition",
+      "nature": "rule",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    }
+  ],
+  "governedResultHash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
   "id": "urn:obds:brand:example-simple:context:brand-query-global-en",
   "includedElementIds": [
     "design.primary-colour",
@@ -35,7 +107,7 @@
     "id": "urn:obds:brand:example-simple",
     "version": "1.0.0"
   },
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "3.0.0",
   "scope": {
     "locales": [
       "en"
@@ -45,8 +117,8 @@
     ]
   },
   "slots": {
-    "factGrounding": "- `design.primary-colour` \u2014 {\"hex\":\"#246BFD\",\"name\":\"Primary\",\"rgb\":[36,107,253]}\n- `structure.brand` \u2014 {\"name\":\"Example Simple Brand\"}",
-    "hardBoundaries": "- `rule.no-best` \u2014 Do not describe the brand as the best. [deterministic, block]",
+    "factGrounding": "- `design.primary-colour` — {\"hex\":\"#246BFD\",\"name\":\"Primary\",\"rgb\":[36,107,253]}\n- `structure.brand` — {\"name\":\"Example Simple Brand\"}",
+    "hardBoundaries": "- `rule.no-best` — Do not describe the brand as the best. [deterministic, block]",
     "stateMap": "",
     "styleTexture": "`identity.voice`\n\nClear, direct and useful. Avoid hype."
   },

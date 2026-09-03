@@ -17,9 +17,9 @@ from pathlib import Path
 import pytest
 
 from obds_ref.canonical import manifest_content_hash, sha256_id
+from obds_ref.governed_io import _resolve_plain_scalar
 from obds_ref.compiler import (
     ValidationFailure,
-    _resolve_plain_scalar,
     build_target,
     load_data,
     validate_manifest,
@@ -27,6 +27,25 @@ from obds_ref.compiler import (
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = ROOT.parents[1]
+def _release() -> str:
+    """The release this package is, read from the specification it ships.
+
+    Naming `OBDS-2.0.0.md` here made this test a document that has to be edited
+    at every release, which is the drift class the release gate was built for.
+    The package carries exactly one `OBDS-<x.y.z>.md`, so the release is derived
+    from it.
+    """
+    import re as _release_re
+
+    names = sorted(
+        path.name for path in PACKAGE_ROOT.glob("OBDS-*.md")
+        if _release_re.fullmatch(r"OBDS-\d+\.\d+\.\d+\.md", path.name)
+    )
+    assert len(names) == 1, f"expected one normative specification, found {names}"
+    return names[0][len("OBDS-"):-len(".md")]
+
+
+RELEASE = _release()
 
 
 def example(name):
@@ -137,7 +156,7 @@ def test_plain_scalars_resolve_under_the_core_schema(tmp_path, text, expected):
 
 # --- G-C: section 14.3a, conflicts and the governed result hash -------------
 
-def _two_elements_on_one_subject(*, second_element):
+def _two_elements_on_one_subject(*, second_element, second_out_of_scope=False):
     """Two incomparable elements on one subject, optionally only one of them.
 
     Deliberately CONTEXT rather than RULES: a defined RULES element must carry a
@@ -157,7 +176,11 @@ def _two_elements_on_one_subject(*, second_element):
             "kind": "guidance",
             "nature": "knowledge",
             "state": "defined",
-            "scope": {"locales": ["en"]} if index == 0 else {"outputTypes": ["brand-query"]},
+            "scope": (
+                {"locales": ["en"]}
+                if index == 0
+                else ({"locales": ["de"]} if second_out_of_scope else {"outputTypes": ["brand-query"]})
+            ),
             "validity": {"from": None, "to": None},
             "value": {"text": f"tone {index}"},
         })
@@ -189,38 +212,52 @@ def test_a_decision_relevant_conflict_has_no_governed_result_hash():
     assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [True]
 
 
-def test_a_non_decision_relevant_conflict_still_yields_a_governed_result_hash():
-    """Case B. Section 14.3a, second bullet, and it stays visible as evidence."""
+def test_an_applicable_conflict_has_no_governed_result_whatever_the_projection():
+    """Case B, inverted in 3.0.0.
+
+    This asserted that a target reading neither candidate through its
+    projections still produced a governed result. Section 14.3a's own MUST is
+    that a projection policy must not change `selection`; deciding whether a
+    `selection` exists at all is that prohibition violated more severely. Both
+    candidates are applicable, so the conflict is decision-relevant and the
+    target fails — with the conflict reported, as before.
+    """
     manifest, plan = _two_elements_on_one_subject(second_element=True)
     result = build(manifest, plan, **NO_PROJECTION)
 
-    assert result.status == "ready", [error.code for error in result.errors]
-    assert result.artefact["governedResultHash"].startswith("sha256:")
-    assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [False]
+    assert result.status == "failed"
+    assert "OBDS-BUILD-SUBJECT-CONFLICT" in [error.code for error in result.errors]
+    assert result.artefact is None
+    assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [True]
     assert result.conflicts[0]["subject"] == "subject:tone"
 
 
-def test_an_irrelevant_conflict_and_an_absent_subject_share_the_governed_result_hash():
-    """Cases B and C. The hash answers a narrower question than the report.
+def test_a_preserved_irrelevant_conflict_and_an_absent_subject_share_the_hash():
+    """Cases B and C, restated in 3.0.0 on the class that actually survives.
 
-    Section 14.3a states this deliberately: `governedResultHash` identifies the
-    governed result, not the diagnostic history that produced it. Both builds
-    apply exactly the same truth, so both must hash the same. The distinction
-    survives in the Build Report, which carries the conflict in one case and
-    nothing in the other.
+    The preserved-irrelevance class is non-empty and principled: a subject whose
+    incomparable maximal elements are not all in `applicable(T)` — here because
+    the second candidate's scope does not match the target — cannot change this
+    target's governed result, because at most one of them is applicable at all.
+    Such a conflict must still appear in `conflicts[]`, marked, which is what
+    section 10.2a says and what the 2.0.0 reference did the opposite of: it
+    reported only the conflicts that *were* applicable and silently discarded
+    exactly the class the paragraph exists for.
+
+    `governedResultHash` identifies the governed result, not the diagnostic
+    history that produced it, so both builds must hash the same.
     """
-    conflicted, plan_b = _two_elements_on_one_subject(second_element=True)
+    conflicted, plan_b = _two_elements_on_one_subject(second_element=True, second_out_of_scope=True)
     absent, plan_c = _two_elements_on_one_subject(second_element=False)
-    absent["elements"] = [element for element in absent["elements"]
-                          if not element["id"].startswith("context.tone")]
-    reseal(absent)
 
     result_b = build(conflicted, plan_b, **NO_PROJECTION)
     result_c = build(absent, plan_c, **NO_PROJECTION)
 
-    assert result_b.status == "ready" and result_c.status == "ready"
+    assert result_b.status == "ready", [error.code for error in result_b.errors]
+    assert result_c.status == "ready", [error.code for error in result_c.errors]
     assert result_b.artefact["governedResultHash"] == result_c.artefact["governedResultHash"]
-    assert result_b.conflicts and not result_c.conflicts
+    assert [conflict["decisionRelevant"] for conflict in result_b.conflicts] == [False]
+    assert not result_c.conflicts
 
 
 # --- G-B: section 26.2 evidence that names these cases ----------------------
@@ -398,9 +435,7 @@ def test_canonical_json_artefacts_are_written_canonically(tmp_path):
     # carries. Reading it back and canonicalising it has to reproduce the hash
     # the artefact carries, or the artefact does not identify itself.
     assert on_disk["artifactHash"] == artefact_hash(on_disk)
-    assert canonical_json_bytes(on_disk) == canonical_json_bytes(json.loads(
-        written[0].read_text(encoding="utf-8")
-    ))
+    assert canonical_json_bytes(on_disk) == canonical_json_bytes(load_data(written[0]))
     assert b"\r" not in written[0].read_bytes()
 
 
@@ -481,6 +516,10 @@ def test_the_shipped_governed_documents_all_load(tmp_path):
         path for path in PACKAGE_ROOT.rglob("*.yaml")
         if "answers" not in path.parts and "spec" not in path.parts
         and "__pycache__" not in path.parts and ".venv" not in str(path)
+        # `fixtures/governed-input/` is the official section 28.1 conformance
+        # corpus: every document in it exists to be refused, and the suite
+        # asserts the refusal. Loading them here would assert the opposite.
+        and "governed-input" not in path.parts
     )
     assert len(roots) >= 25, len(roots)
     for path in roots:
@@ -703,7 +742,7 @@ def test_every_yaml_block_in_the_specification_obeys_section_28_1():
     conforming when it loads, or when the only thing stopping it is an empty
     plain scalar. Anything else is the specification contradicting itself.
     """
-    spec = (PACKAGE_ROOT / "OBDS-2.0.0.md").read_text(encoding="utf-8")
+    spec = (PACKAGE_ROOT / f"OBDS-{RELEASE}.md").read_text(encoding="utf-8")
     blocks, current = [], None
     for number, line in enumerate(spec.split("\n"), 1):
         if current is None and line.strip().startswith("```yaml"):
@@ -757,14 +796,14 @@ def test_every_yaml_block_in_the_specification_obeys_section_28_1():
 
 
 def test_the_release_notes_state_the_release_kind_they_actually_are():
-    """OBDS-2.0.0-TEST-RESULT.json is the published conformance artefact.
+    """The published conformance artefact states the release kind it is.
 
     The generator hardcoded "maintenance release. No normative contract
     change", which is what 1.1.0 shipped by copying 1.0.4, and it survived into
     a MAJOR release that exists precisely because it breaks a contract.
     """
     result = json.loads(
-        (PACKAGE_ROOT / "OBDS-2.0.0-TEST-RESULT.json").read_text(encoding="utf-8")
+        (PACKAGE_ROOT / f"OBDS-{RELEASE}-TEST-RESULT.json").read_text(encoding="utf-8")
     )
     notes = " ".join(result["notes"])
     assert "MAJOR release" in notes

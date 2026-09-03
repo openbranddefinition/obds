@@ -618,12 +618,18 @@ def test_conflict_is_relevant_when_only_one_winner_prohibits():
     assert result.status == "failed"
 
 
-def test_conflict_that_changes_nothing_stays_non_blocking():
-    """Not every conflict is a blocker. It must still be reported.
+def test_an_applicable_conflict_blocks_even_between_two_advisory_rules():
+    """Inverted in 3.0.0. This test used to assert the enumerated list.
 
-    Two advisory RULES with no dependency, no check and no prohibition change
-    nothing this target reads, so section 10.2a still allows the build. The
-    conflict is recorded so a manifest defect is never silently discarded.
+    Two advisory RULES with no dependency, no check and no prohibition were
+    treated as changing nothing the target reads, so the build was allowed.
+    That is false: both candidates are in `applicable(T)`, both would enter
+    `selection` under their own `elementId`, and section 14.3a keys `selection`
+    on `elementId` — so the two candidate winners produce two different
+    `governedResultHash` values. There is no third possibility, which is why
+    3.0.0 replaces the list with one algorithm.
+
+    The conflict is still reported, as it always was.
     """
     manifest, plan = _conflicting_rules(_rule_value(), _rule_value())
     plan = copy.deepcopy(plan)
@@ -631,9 +637,10 @@ def test_conflict_that_changes_nothing_stays_non_blocking():
     plan["targets"][0]["stateMap"] = {"mode": "none", "kinds": []}
     result, flags = _relevance(manifest, plan)
 
-    assert flags == [False]
-    assert result.status == "ready", [error.code for error in result.errors]
-    assert result.conflicts, "an irrelevant conflict must still be reported"
+    assert flags == [True]
+    assert result.status == "failed"
+    assert "OBDS-BUILD-SUBJECT-CONFLICT" in [error.code for error in result.errors]
+    assert result.conflicts, "a conflict must be reported whatever the outcome"
 
 
 # --- G-05: section 10.1, the half-open validity interval --------------------
@@ -968,16 +975,30 @@ def test_conflict_element_ids_are_ordered_on_the_canonical_identity():
     assert orders[0] == orders[1], orders
 
 
-def test_identity_equality_is_nfc_only_not_line_ending_folding():
-    """Section 8.0a says NFC, and only NFC.
+def test_identity_equality_is_nfc_only_and_line_separators_are_not_identities():
+    """Section 8.0a as corrected in 3.0.0.
 
-    identity_key reused the canonicalisation helper, which also folds CR and
-    CRLF to LF for the serialised bytes. That is a serialisation rule, not an
-    identity rule: folding here merged `a\rb` and `a\nb`, which NFC keeps
-    distinct, so two separate elements were rejected as one duplicate.
+    This test previously asserted that `a\rb` and `a\nb` are two identities,
+    which is what 2.0.0 shipped and what section 8.0a said. It is inverted here
+    rather than deleted, because the old expectation was the defect: the
+    canonical form is structurally incapable of carrying that distinction —
+    section 14.3b says `\r` cannot occur in canonical output — so a manifest
+    declaring both canonicalised to a manifest declaring one, with the
+    `contentHash` unchanged and the CR element's value surviving under the LF
+    identity. Two documents, one `approval.contentHash`, two governed truths.
+
+    Section 14.3 already rejects that collision for object keys. Identity
+    strings behave as keys, so they inherit the rule. NFC equality is unchanged
+    and still the whole of identity equality for every admissible string.
     """
-    assert identity_key("context.a\rb") != identity_key("context.a\nb")
     assert identity_key("context.caf\u0065\u0301") == identity_key("context.caf\u00e9")
+    for separator in ("\r", "\n"):
+        with pytest.raises(ValueError):
+            identity_key(f"context.a{separator}b")
+    # And no wider. Step 2 does not touch these, they survive canonicalisation,
+    # and no collision was demonstrated for them.
+    for preserved in ("\u0085", "\u2028", "\u2029"):
+        assert identity_key(f"context.a{preserved}b") == f"context.a{preserved}b"
 
     manifest, _ = example("foundation-minimal")
     template = copy.deepcopy(manifest["elements"][0])
@@ -988,4 +1009,6 @@ def test_identity_equality_is_nfc_only_not_line_ending_folding():
     manifest["elements"] = [manifest["elements"][0], first, second]
 
     errors = validate_manifest(manifest, verify_hash=False)
+    assert any("CARRIAGE RETURN" in error for error in errors), errors
+    assert any("LINE FEED" in error for error in errors), errors
     assert not any("duplicate element id" in error for error in errors), errors

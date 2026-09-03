@@ -73,7 +73,6 @@ elements:
           elementId: identity.phantom
           path: text
         match: exact
-    validatorRef: null
     condition: {}
     requirement: {}
     references:
@@ -103,7 +102,7 @@ valueContracts:
 - id: urn:obds:brand:example-simple#value-contract:rules:rule:3ebe07b0
   family: rules
   kind: rule
-  shapeHash: sha256:3ebe07b05f0062f53fc51e5a1f19b4a622da9070a1d13371597a1bad047e6282
-  schemaRef: https://openbranddefinition.org/value-schemas/1.0.0/rule.schema.json
-  schemaHash: sha256:90aa06969781a1414562a745a23803a1c7805942e3194e8d7bcb523cb9fa4787
+  shapeHash: sha256:7f9bf4d0b9d160d783b7164e524ede1504d18394fec6b5173ad1f0da18f13de6
+  schemaRef: https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json
+  schemaHash: sha256:74cd72958ceb09a9001f938e2370c898e4669411d2ea2fe7bcc7f58f8f6e5bf3
   validatorRef: null

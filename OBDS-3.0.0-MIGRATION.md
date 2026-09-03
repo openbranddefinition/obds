@@ -1,4 +1,9 @@
-# OBDS 0.9.9 to 1.0.0 Migration
+# OBDS Migration Notes
+
+Start at the section for the release you are on. Coming from 2.x, that is
+"2.0.0 to 3.0.0".
+
+## 0.9.9 to 1.0.0
 
 1. Set `schemaVersion` to `1.0.0`.
 2. Use the single current specification document.
@@ -53,6 +58,145 @@ Before publishing 1.0:
 7. confirm every declared Brand Profile is supported by the consuming implementation;
 8. reclassify any PATCH containing value, subject, state, scope, validity, classification, addition or removal changes as MINOR or MAJOR as appropriate; and
 9. regenerate approval, plan, compiled-context and derived-view hashes after migration.
+
+## 2.0.0 to 3.0.0
+
+3.0.0 is the Semantic Closure release. It changes five normative contracts, and
+four of the five cannot invalidate anything you already have: they close paths
+that produced a governed answer nobody intended. The one that touches your files
+is the Build Plan.
+
+Work through it in this order.
+
+### 1. Build Plans: `schemaVersion` and two required target fields
+
+**This is the change every 2.x project has to make.**
+
+```yaml
+schemaVersion: 3.0.0        # was 1.0.0
+
+targets:
+  - id: brand-assistant-de-at
+    scope: { ... }
+    maxTokens: 2400
+
+    stateMap:                 # now required on every target
+      mode: all_applicable    # none | kinds | all_applicable
+      kinds: []               # required only when mode = kinds
+
+    styleTexture:             # now required on every target
+      mode: all               # all | selected | none
+      elementIds: []          # required only when mode = selected
+```
+
+Both decide what reaches the compiled context, so an absent one was a governed
+decision made by whichever implementation supplied the default. Write the values
+your build already had; if you never declared them, the values above are the
+defaults 2.x applied.
+
+Nothing else in the Build Plan changes. `requiresDefined`, `contextAssembly` and
+`releasePolicy` stay optional, because an absent one denies rather than grants.
+
+Validate against `schemas/3.0.0/build-plan.schema.json`. Do not validate a 3.0
+Build Plan against the frozen 1.0.0 contract.
+
+### 2. Brand Manifests: check your RULE values
+
+A RULE value may no longer carry `validatorRef`, and `validationMode:
+deterministic` now requires at least one registered Foundation check.
+
+```text
+grep -n "validatorRef" your-manifest.yaml
+```
+
+Every hit inside an `elements[].value` of `family: rules` has to go. A hit inside
+`valueContracts[]` is a value-contract `validatorRef` and stays: that is where
+Foundation Validator Registry v1 has always applied.
+
+If a rule was `validationMode: deterministic` with `checks: []`, it enforced
+nothing. Decide which it is:
+
+- it should enforce something mechanically: add a Foundation check;
+- it is a judgement: change `validationMode` to `semantic`, `human` or
+  `external`.
+
+Every `checks[]` entry is now validated where it is written, not only where it is
+compiled. An unregistered primitive, an unregistered `match` mode, an
+unregistered `term_required` mode, or `phase: preflight` without
+`appliesTo: task_input`, fails manifest validation instead of surfacing later as
+a build error.
+
+A `literal_required` check that defers its literal through `elementValueRef` no
+longer has to carry a placeholder `literal` beside it. If you added one to get
+past 2.x validation, you can remove it.
+
+### 3. Identity strings: CR and LF
+
+An identity string may no longer contain a carriage return or a line feed. NEL,
+LINE SEPARATOR and PARAGRAPH SEPARATOR are unaffected.
+
+```text
+grep -nP "\r" your-manifest.yaml your-build-plan.yaml
+```
+
+In practice this finds a CRLF file ending, not an identity, and CRLF line endings
+in the file itself are fine. What is refused is a line break inside an `id`, a
+`version`, a `subject`, a `kind`, a `valueContractRef`, a scope value or a
+reference. If you have one, it was already ambiguous: canonicalisation folds CR
+and LF into the same bytes, so two such identities were one hash and two strings.
+
+### 4. Governed input: an object root
+
+A governed JSON or YAML document whose root is an array, a scalar or null is
+refused, at every reader and every entry point. In 2.x one reader refused it and
+four returned it.
+
+If a tool of yours fed OBDS a sequence-rooted document, wrap it in an object. No
+manifest, Build Plan or compiled artefact this project ships was ever
+sequence-rooted.
+
+### 5. If you consume Compiled Brand Contexts, Model Input Packages or Review Results
+
+Nothing in your documents changes, but what a conforming consumer does with them
+does.
+
+- A 3.0 Compiled Brand Context declares `schemaVersion: 3.0.0` and is validated
+  against `schemas/3.0.0/compiled-context.schema.json`.
+- `elementRecords[]` items must carry `id`, `family`, `kind`, `nature`, `state`,
+  `scope`, `validity`, `sourceRefs` and `annotations`. Records the reference
+  compiler produced already do.
+- `validFrom` and `validTo` must be `null` or an RFC 3339 date-time.
+- A consumer validates the published contract, reproduces the required hashes and
+  binds the required identities **before** reading any field. A Model Input
+  Package or Review Result naming a different manifest `id`, `version` or
+  `contentHash`, or a different `targetId`, is now refused however correctly its
+  own hashes were recomputed.
+- A compiled check must carry every parameter that changes its outcome. A runtime
+  no longer supplies a missing one; it refuses the check.
+
+If you built your own runtime against 2.x, the practical work is: run the
+contract first, reproduce rather than compare, and stop filling in absent check
+parameters.
+
+### 6. Rebuild and re-hash
+
+```text
+python -m obds_ref.cli validate <manifest>
+python -m obds_ref.cli build <manifest> <build-plan> --out <dir>
+python reference/run_all.py
+```
+
+The Build Plan change moves `planHash`, which moves `artifactHash`. Regenerate
+compiled contexts, derived views and any stored hashes downstream of them.
+Approval hashes on the manifest move only if you changed the manifest.
+
+### What does not change
+
+No Brand State, no profile, no capability, no architecture. The frozen OBDS 1.0.0
+contract surface and the 1.1.0 contract beside it are byte-identical to what 2.0.0
+published. Manifest `schemaVersion` stays `1.0.0`. The Model Input Package and
+Review Result contracts stay at their published 1.0.0 versions; 3.0 enforces them
+rather than republishing them.
 
 ## 1.1.6 to 2.0.0
 

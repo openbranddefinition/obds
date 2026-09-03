@@ -23,7 +23,26 @@ def _schema_dir(root, name):
     return flat
 SCHEMAS = _schema_dir(ROOT, "schemas")
 VALUE_SCHEMAS = _schema_dir(ROOT, "value-schemas")
-SPEC = (ROOT / "OBDS-2.0.0.md").read_text(encoding="utf-8")
+def _release() -> str:
+    """The release this package is, read from the specification it ships.
+
+    Naming `OBDS-2.0.0.md` here made this test a document that has to be edited
+    at every release, which is the drift class the release gate was built for.
+    The package carries exactly one `OBDS-<x.y.z>.md`, so the release is derived
+    from it.
+    """
+    import re as _release_re
+
+    names = sorted(
+        path.name for path in ROOT.glob("OBDS-*.md")
+        if _release_re.fullmatch(r"OBDS-\d+\.\d+\.\d+\.md", path.name)
+    )
+    assert len(names) == 1, f"expected one normative specification, found {names}"
+    return names[0][len("OBDS-"):-len(".md")]
+
+
+RELEASE = _release()
+SPEC = (ROOT / f"OBDS-{RELEASE}.md").read_text(encoding="utf-8")
 
 FOUNDATION_SRC = ROOT / "reference" / "foundation" / "src"
 CA_ROOT = ROOT / "reference" / "context-assembly"
@@ -32,6 +51,7 @@ sys.path.insert(0, str(CA_ROOT))
 
 from obds_ref.compiler import (
     build_target,
+    load_data,
     validate_manifest,
     validate_plan,
     validate_plan_against_manifest,
@@ -79,10 +99,13 @@ def schema_for(document, name="compiled-context.schema.json"):
 
 def test_golden_manifest_to_runtime_decision():
     examples = CA_ROOT / "examples"
-    manifest = yaml.safe_load((examples / "manifest.yaml").read_text(encoding="utf-8"))
-    plan = yaml.safe_load((examples / "build-plan.yaml").read_text(encoding="utf-8"))
-    request = yaml.safe_load((examples / "assembly-request-review.yaml").read_text(encoding="utf-8"))
-    chapter_map = yaml.safe_load((examples / "chapter-map.yaml").read_text(encoding="utf-8"))
+    # Section 28.1: a test that produces published evidence is a governed
+    # reader. Reading the golden corpus with PyYAML defaults made this test
+    # the fourth data model in the release.
+    manifest = load_data(examples / "manifest.yaml")
+    plan = load_data(examples / "build-plan.yaml")
+    request = load_data(examples / "assembly-request-review.yaml")
+    chapter_map = load_data(examples / "chapter-map.yaml")
 
     assert validate_manifest(manifest) == []
     assert validate_plan(plan) == []
@@ -132,13 +155,13 @@ def test_golden_manifest_to_runtime_decision():
     assert record["assemblyHash"] == package["assemblyHash"]
     assert record["modelInputHash"] == package["modelInputHash"]
     persisted = {key: value for key, value in record.items() if key != "output"}
-    jsonschema.validate(persisted, schema("runtime-decision-record.schema.json"))
+    jsonschema.validate(persisted, schema_for(persisted, "runtime-decision-record.schema.json"))
 
 
 def test_tampered_assembly_fails_before_model_call():
     examples = CA_ROOT / "examples"
-    compiled = json.loads((examples / "compiled-marketing-review-global-en.json").read_text(encoding="utf-8"))
-    package = json.loads((examples / "model-input-review.json").read_text(encoding="utf-8"))
+    compiled = load_data(examples / "compiled-marketing-review-global-en.json")
+    package = load_data(examples / "model-input-review.json")
     model_input = "tampered"
     calls = []
     record = run_assembled_with_model(

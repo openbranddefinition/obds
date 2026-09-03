@@ -1,6 +1,6 @@
 id: urn:obds:build-plan:example-fail-closed
 kind: obds-build-plan
-schemaVersion: 1.0.0
+schemaVersion: 3.0.0
 manifestRef:
   id: urn:obds:brand:example-fail-closed
   version: 1.0.0

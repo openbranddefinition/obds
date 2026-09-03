@@ -1,7 +1,7 @@
 {
   "kind": "obds-schema-index",
   "note": "`schemas` and `valueSchemas` are the frozen OBDS 1.0.0 contract surface, unchanged since 1.0.0. `versionedSchemas` carries the contracts published beside it at their own version.",
-  "release": "2.0.0",
+  "release": "3.0.0",
   "schemaContractVersion": "1.0.0",
   "schemaVersion": "1.0.0",
   "schemas": [
@@ -156,6 +156,34 @@
       "file": "1.1.0/compiled-context.schema.json",
       "id": "https://openbranddefinition.org/schemas/1.1.0/compiled-context.schema.json",
       "schemaHash": "sha256:8ac36e921e7e03532fbebe6a0ce0e584adc55a6c72a794c862681a29d4a5ef99"
+    },
+    {
+      "capability": "compiled-runtime",
+      "file": "3.0.0/build-plan.schema.json",
+      "id": "https://openbranddefinition.org/schemas/3.0.0/build-plan.schema.json",
+      "schemaHash": "sha256:14a45cff5fa6bf33f3d509ed846afe9d6c3f3df85090f182c4b35a24d45397b3",
+      "surface": "schemas"
+    },
+    {
+      "capability": "compiled-runtime",
+      "file": "3.0.0/compiled-context.schema.json",
+      "id": "https://openbranddefinition.org/schemas/3.0.0/compiled-context.schema.json",
+      "schemaHash": "sha256:5f43178efbc09c0671c3b51bf5bf4bee48aaf0b046ace448f4bde4994826e16b",
+      "surface": "schemas"
+    },
+    {
+      "capability": "compiled-runtime",
+      "file": "3.0.0/runtime-decision-record.schema.json",
+      "id": "https://openbranddefinition.org/schemas/3.0.0/runtime-decision-record.schema.json",
+      "schemaHash": "sha256:f882e08c643c45fad774a06a29c6207b6c20193851ae0e4f36bb6b64e6b815d4",
+      "surface": "schemas"
+    },
+    {
+      "capability": "foundation",
+      "file": "3.0.0/rule.schema.json",
+      "id": "https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json",
+      "schemaHash": "sha256:74cd72958ceb09a9001f938e2370c898e4669411d2ea2fe7bcc7f58f8f6e5bf3",
+      "surface": "value-schemas"
     }
   ]
 }

@@ -1,10 +1,10 @@
 # Open Brand Definition Specification (OBDS)
 
-## OBDS 2.0: Stable Specification
+## OBDS 3.0: Stable Specification
 
-**Version:** 2.0.0  
+**Version:** 3.0.0  
 **Status:** Stable  
-**Date:** 2026-09-01  
+**Date:** 2026-09-03  
 **Project home:** https://openbranddefinition.org  
 
 ---
@@ -59,6 +59,32 @@ OBDS may define measurements, relations, roles, hierarchy, omission priority and
 At release time, OBDS builds the declared runtime views. At runtime, Context Assembly selects, resolves and hashes the exact model input before the model call. Visual runtimes may additionally emit geometry evidence and run deterministic visual checks.
 
 OBDS guarantees that the same approved inputs can produce the same compiled payload. It does not guarantee that an approved value is factually correct, that every relevant value has been entered or that a model will follow every semantic instruction.
+
+3.0.0 is the Semantic Closure release. It adds no Brand State, no profile, no
+capability and no architecture. It closes five places where one governed
+semantic was stated once and implemented twice, so that two conforming readers,
+two entry points or two executors could reach different governed answers from
+the same approved bytes:
+
+- **A. Governed input.** One interchange contract at every governed reader,
+  including the rule that a governed document has an object root (section 28.1).
+- **B. Governed identity.** Where an artefact names a manifest it binds the
+  manifest's `id`, `version` and `contentHash` together, and identity-bearing
+  positions reject the characters that a canonical hash cannot tell apart
+  (section 8.0b).
+- **C. RULE enforcement.** A deterministic Foundation RULE declares at least one
+  registered Foundation check, RULE-level `validatorRef` is removed, and a check
+  is validated at the stage it is written as well as at the stage it is executed
+  (sections 11.4, 11.5, 11.5a).
+- **D. Runtime contract enforcement.** Every governed document is validated
+  against its published 3.0 contract before any of its fields is read, and every
+  required hash is reproduced from the payload rather than compared between two
+  supplied claims (sections 14.3d, 15.11).
+- **E. Conflict relevance.** One relevance model governs the compiler, Context
+  Assembly and the runtime (section 10.2a).
+
+Each of these is a breaking correction to an existing normative contract, which
+is why 3.0.0 is MAJOR under section 27.1.
 
 ### 1.1 Project name
 
@@ -563,6 +589,84 @@ from it. It is governed metadata: section 13.6 change reports track it and
 section 27.2 forbids changing it in a PATCH release. A runtime MAY consume it for
 access policy, which OBDS does not define.
 
+### 8.0b Identity-bearing positions and identity binding
+
+Section 8.0a says how two identity strings are compared. This section says
+**where** an identity string appears and **what an artefact that names another
+artefact's identity has to bind**. Both were left to the implementation, and
+both are places where the same approved bytes reached two governed answers.
+
+**One coordinate system.** A governed document position is written as the path
+to it inside that document, and the same path means the same thing in every
+governed artefact that carries it. `manifest.id` is the identity of the manifest
+this document is about, in a Compiled Brand Context, in a Model Input Package and
+in a Brand Manifest alike. Naming the manifest's own identity `id` in one
+artefact and `manifest.id` in another is what made the four enumerations below
+impossible to compare.
+
+The identity-bearing positions are:
+
+| Artefact | Positions |
+|---|---|
+| Brand Manifest | `id`, `version`, `valueContracts[].id`, `elements[].id`, `elements[].subject`, `elements[].kind`, `elements[].valueContractRef`, `elements[].scope`, `elements[].value.references[]`, `elements[].value.requiresDefinedRefs[]`, `elements[].value.checks[].params.elementValueRef.elementId` |
+| Build Plan | `id`, `version`, `manifestRef.id`, `manifestRef.version`, `targets[].id`, `targets[].requiresDefined[]`, `targets[].scope`, `targets[].contextAssembly.eligibleGuidanceIds[]`, `targets[].styleTexture.elementIds[]`, `targets[].stateMap.kinds[]` |
+| Compiled Brand Context | `id`, `targetId`, `manifest.id`, `manifest.version`, `build.planId`, `build.compilerId`, `includedElementIds[]`, `availableElementIds[]`, `elementRecords[].id`, `elementRecords[].kind` |
+| Model Input Package | `id`, `targetId`, `manifest.id`, `manifest.version`, `selection.*[]` |
+
+**A position that bears identity in one artefact bears identity in every
+artefact that carries the same path.** `manifest.version` decides which approved
+brand release a governed decision was made against; it was an identity position
+in a received Model Input Package and not in the Manifest or the Build Plan that
+produced it, so a `version` differing only in line ending passed validation and
+build with an identical `contentHash`, `planHash` and `artifactHash`, and the
+runtime then refused what the compiler had approved.
+
+**Admissible characters.** An identity string MUST NOT contain U+000D CARRIAGE
+RETURN or U+000A LINE FEED. Section 14.3 step 2 folds line endings when it
+computes canonical bytes, so two identities differing only there are one hash
+and two strings: whichever way an implementation compares them, one of the two
+comparisons is wrong. Rejecting them is the only answer that is right in both.
+
+U+0085 NEXT LINE, U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR are
+**preserved**. They survive step 2 unchanged, they are ordinary characters under
+section 28.1, and section 14.3b escapes two of them. They are admissible in an
+identity and MUST NOT be rejected or folded.
+
+```text
+CR   rejected
+LF   rejected
+NEL  preserved
+LS   preserved
+PS   preserved
+```
+
+This set is closed. An implementation MUST NOT reject a further character at an
+identity position, because doing so would refuse a manifest another conforming
+implementation accepts.
+
+**Identity binding.** Where a governed artefact names the manifest another
+artefact is about, naming it is not enough. All three of
+
+```text
+manifest.id
+manifest.version
+manifest.contentHash
+```
+
+MUST agree between the two artefacts before either is used for a governed
+decision, and `manifest.id` is compared on its canonical form under section 8.0a.
+
+```text
+same approval.contentHash
+→ cannot resolve to different governed identity
+```
+
+Reproducing the hashes of two documents proves each is intact. It does not tie
+them to each other: a Model Input Package naming another brand, another approved
+version or another target, with every one of its own hashes correctly recomputed,
+is internally perfect and about something else. Section 15.11 states where the
+binding is enforced.
+
 ### 8.1 What each state means
 
 | State | Meaning | `value` | Production behaviour |
@@ -826,6 +930,21 @@ Failing a target on a conflict it cannot observe is not fail-closed, it is
 fail-arbitrary: the same manifest would block or build depending on which
 unrelated subject a curator happened to leave unresolved.
 
+**One relevance model.** The rule above is the only conflict-relevance model in
+OBDS, and it is decided once, at build time, by the compiler. A Compiled Brand
+Context therefore cannot carry an unresolved decision-relevant conflict: either
+the subject was decision-relevant to the target and no artefact was written, or
+it was not and the artefact is complete. Context Assembly and the runtime
+consume that decision and MUST NOT re-derive it, re-weigh it or relax it. A
+projection of the compiled artefact, a Search Card, a Reasoning Chapter or a
+rendered slot, cannot change relevance, because relevance was settled before
+the projection existed.
+
+The materialisation of section 13.5a happens after this decision and MUST NOT
+alter it. A default that a compiler writes into a compiled check is a value the
+target already had; it never makes a subject decision-relevant that was not, and
+never removes relevance from one that was.
+
 ### 10.3 Missing or conflicting content
 
 The compiler MUST distinguish:
@@ -883,7 +1002,6 @@ obligation: require | prohibit | permit | recommend
 enforcement: block | require_approval | warn | inform
 validationMode: deterministic | semantic | human | external
 checks: []
-validatorRef:
 condition: {}
 requirement: {}
 references: []
@@ -898,10 +1016,22 @@ requiresDefinedRefs: []
 
 This is intentionally separate from `references[]`: explanation does not create dependency, but an explicitly declared dependency does.
 
-- `deterministic` requires at least one registered `check` or one resolvable, versioned `validatorRef`.
-- When both are declared, all checks and the validator MUST pass.
+- `deterministic` requires at least one registered Foundation `check`. The
+  published RULE value contract states this, and the compiler enforces it.
+- A RULE value MUST NOT carry `validatorRef`. Foundation Validator Registry v1
+  is closed, has one entry, and that entry applies to value contracts of kind
+  `colour` with the element value as its input (section 11.5a), so the set of
+  rule-level references that could ever resolve was empty. A contract whose
+  `deterministic`-with-no-checks branch depends on an unsatisfiable alternative
+  is not a branch, it is a hole: `validationMode: deterministic` with
+  `checks: []` validated in 1.x and 2.x and produced a rule nothing enforced.
+  The property is removed in 3.0; a value that carries it is rejected.
+- `checks[]` is typed. Every entry MUST name a registered Foundation Check
+  Registry v1 primitive with parameters that primitive accepts. An unregistered
+  primitive or an unregistered parameter value is refused where the rule is
+  written, not only where it is compiled.
 - A structured `condition` alone is not a validator.
-- Rules without a registered check or executable validator MUST use `semantic`, `human` or `external`.
+- Rules without a registered check MUST use `semantic`, `human` or `external`.
 - A semantic or human-reviewed rule MAY block output, but tooling MUST NOT report it as mechanically proven.
 
 Qualitative principles without a defined violation belong in STANCE or KNOWLEDGE.
@@ -912,19 +1042,82 @@ Qualitative principles without a defined violation belong in STANCE or KNOWLEDGE
 
 The Foundation registry is deliberately small and closed. Rule authors write data, not code.
 
-Every check is a pure function of its declared phase input and parameters. Implementations MUST use Unicode NFC normalization before text comparison. `case_insensitive` uses Unicode default case folding. `word_boundary_ci` uses Unicode word segmentation pinned by registry fixtures.
+Every check is a pure function of its declared phase input and parameters. Implementations MUST use Unicode NFC normalization before text comparison. `case_insensitive` uses Unicode default case folding.
 
 | Primitive | Default phase | Fails when | Parameters |
 |---|---|---|---|
-| `term_prohibited` | postflight | a prohibited term occurs | `terms[]`, `match: exact \| case_insensitive \| word_boundary_ci`, `appliesTo: output \| task_input` |
+| `term_prohibited` | postflight | a prohibited term occurs | `terms[]`, `match: exact \| case_insensitive \| word_boundary_ci \| normalized_whitespace_ci`, `appliesTo: output \| task_input` |
 | `term_required` | postflight | required terms are absent | `terms[]`, `mode: any \| all`, `match` |
-| `literal_required` | postflight | a required literal is absent | `literal` or `elementValueRef`, `match: exact \| normalized_whitespace` |
+| `literal_required` | postflight | a required literal is absent | `literal` or `elementValueRef`, `match: exact \| normalized_whitespace \| normalized_whitespace_ci` |
 | `length_max` | postflight | text exceeds the limit | `max`, `unit: characters`, `appliesTo: output \| task_input` |
+
+**Match modes.** The registry defines five, and each is a different question:
+
+| Mode | Comparison |
+|---|---|
+| `exact` | NFC substring |
+| `case_insensitive` | NFC, then Unicode default case folding |
+| `word_boundary_ci` | NFC, case-insensitive, anchored at Unicode word boundaries |
+| `normalized_whitespace` | NFC, then whitespace collapsed to a single space |
+| `normalized_whitespace_ci` | NFC, then the pinned invisible code points removed, then whitespace collapsed, then case folded |
+
+`word_boundary_ci` and `normalized_whitespace_ci` are distinct modes and neither
+is a relaxation of the other. `word_boundary_ci` answers "does this term occur as
+a word"; it does not see a term whose separator was widened. `normalized_whitespace_ci`
+answers "does this term occur once separators and invisible characters are
+disregarded"; it has no word boundary. An author picks the one that matches the
+obligation.
+
+**Pinned word segmentation.** `word_boundary_ci` is the one mode whose meaning is
+delegated to a segmentation implementation, so the contract is *one declared
+Unicode version plus normative fixtures*, not the name of an algorithm. An
+implementation MUST declare the Unicode version its segmentation implements. That
+is the version the *engine* implements, which is a different question from the
+canonicalisation version section 14.3c pins and may have a different answer. It
+MUST reproduce the normative fixtures published with the release. A dependency
+that supplies the segmentation tables MUST be pinned exactly; an unbounded
+dependency is an unpinned normative contract, because two conforming installs
+could then disagree about what the mode means.
+
+A term whose first or last character is not a word character makes the
+corresponding boundary anchor vacuous, so such a term MUST be refused where it is
+written rather than compiled into a check that behaves unpredictably. The
+forbidden edge set is a closed set of code points, published in the RULE value
+contract and enforced by the compiler from the same definition. `_` LOW LINE is a
+word character under every reading and is deliberately admissible.
+
+**Pinned invisible code points.** `normalized_whitespace_ci` removes exactly this
+closed set before comparing:
+
+```text
+U+00AD SOFT HYPHEN            U+200E LEFT-TO-RIGHT MARK
+U+200B ZERO WIDTH SPACE       U+200F RIGHT-TO-LEFT MARK
+U+200C ZERO WIDTH NON-JOINER  U+2060 WORD JOINER
+U+200D ZERO WIDTH JOINER      U+FEFF ZERO WIDTH NO-BREAK SPACE
+```
+
+The set is written down rather than expressed as the Unicode
+`Default_Ignorable_Code_Point` property, which moves between Unicode versions and
+would make the mode's meaning depend on the host database again. **The stripping
+applies to this mode and to no other.** Extending it to `exact`,
+`case_insensitive`, `word_boundary_ci` or `normalized_whitespace` would
+reinterpret checks authors have already written.
 
 Rules:
 
 - `elementValueRef` is resolved during the build against the governed selection for this target and this `asOf`, not against the raw approved manifest snapshot. A check binds truth that this execution is entitled to use, so the referenced element MUST resolve to the one applicable `defined` element of its subject, under the same resolution as `requiresDefinedRefs`: it MUST exist, match the target scope, be valid at the Build Plan `asOf`, win its semantic subject, be free of an unresolved subject conflict, and be `defined`. If it does not, the target fails with the section 13.1a cause that applies and no production artefact is written. The check is never silently omitted, and a value that has expired, does not apply to this target, or lost its subject is never compiled into an active check.
-- Unsupported primitives, invalid parameters or unsupported registry versions fail the target build.
+- **A check is validated at two stages, under one contract.** The *authored*
+  stage is the Brand Manifest. There, a `literal_required` check MAY carry
+  `elementValueRef` instead of `literal`, because the build is what resolves it,
+  and the reference's own shape, `elementId` and `path` both present and
+  non-empty, MUST be validated where it is written rather than surfacing first
+  as a build failure. The *compiled* stage is the Compiled Brand Context. There,
+  the resolved value MUST be present, because nothing downstream will resolve it.
+  Running the compiled-stage rule over the authored form demands a literal the
+  author deliberately deferred, which made a branch the published RULE contract
+  admits unusable through the governed build path while a direct compiler call
+  materialised it: one contract, two answers.
+- Unsupported primitives, invalid parameters or unsupported registry versions fail the target build, and are refused at the authored stage as well.
 - Runtime MUST execute every compiled Foundation check natively or reject the artefact.
 - Foundation Check Registry v1 excludes regex, general expression languages and token-length checks.
 - More complex deterministic logic uses `validatorRef` or an optional namespaced profile.
@@ -935,8 +1128,11 @@ Canonical Rule values retain explicit empty structural fields such as `checks`, 
 ### 11.5a Foundation Validator Registry v1
 
 `validatorRef` names a deterministic invariant that JSON Schema alone cannot
-prove. The registry is closed, like the Foundation Check Registry, and contains
-one entry in OBDS 1.1.
+prove. It is a **value contract** property. It is not a RULE value property, and
+since 3.0 a RULE value that carries one is rejected (section 11.4).
+
+The registry is closed, like the Foundation Check Registry, and contains one
+entry.
 
 | Validator | Applies to | Rule |
 |---|---|---|
@@ -1118,7 +1314,7 @@ A Build Plan is configuration, not brand truth. It lists only the contexts the i
 ```yaml
 id: urn:obds:build-plan:example
 kind: obds-build-plan
-schemaVersion: 1.0.0
+schemaVersion: 3.0.0
 asOf: '2026-08-27T00:00:00Z'
 manifestRef:
   id: urn:obds:brand:example
@@ -1158,6 +1354,31 @@ targets:
     releasePolicy: build_only
     maxTokens: 2400
 ```
+
+### 13.0a The 3.0 Build Plan contract
+
+A 3.0 Build Plan declares `schemaVersion: 3.0.0` and is validated against
+`schemas/3.0.0/build-plan.schema.json`. It MUST NOT be validated against a
+frozen historical contract: the 1.0.0 contract is published, immutable and
+describes a different document.
+
+Every target MUST declare `stateMap` and `styleTexture`. Both decide what reaches
+the compiled context, so an absent one is a governed decision made by whichever
+implementation supplied the default. Stating them is one line per target and
+removes the question.
+
+```yaml
+stateMap:
+  mode: all_applicable   # none | kinds | all_applicable
+  kinds: []              # required only when mode = kinds
+
+styleTexture:
+  mode: all              # all | selected | none
+  elementIds: []         # required only when mode = selected
+```
+
+`requiresDefined`, `contextAssembly` and `releasePolicy` remain optional: an
+absent one denies rather than grants, so it carries no hidden decision.
 
 ### 13.0 Build time is explicit
 
@@ -1295,6 +1516,25 @@ For each release, the compiler:
 17. fails rather than truncating content or changing target policy; and
 18. emits a canonical JSON artefact only when the target is valid.
 
+### 13.5a Decision-bearing parameters are materialised
+
+A compiled check MUST carry every parameter that changes its outcome, with the
+value this build decided. Where the Foundation Check Registry names a default for
+`match`, `mode`, `appliesTo` or `unit`, the compiler MUST write the effective
+value into `compiledChecks[].params` rather than leave the field absent.
+
+**The runtime MUST NOT supply a missing parameter.** A runtime that fills an
+absent `match` with `case_insensitive` is not applying a default, it is making a
+governed decision the artefact never stated, and two runtimes filling it
+differently reach two governed answers from one artefact. A compiled check whose
+outcome depends on a parameter that is not present in the artefact MUST be
+refused, and the runtime MUST fail closed as section 15.11 requires.
+
+This is one sentence in two halves and neither half is worth anything alone:
+the compiler materialises, and the runtime refuses to invent. Materialisation
+happens after the selection of section 10 and after the relevance decision of
+section 10.2a, and changes neither.
+
 ### 13.6 Manifest change report
 
 A conforming toolchain MUST compare two manifest snapshots and produce a deterministic change report.
@@ -1399,7 +1639,7 @@ The normative artefact is JSON. A Markdown view MAY be generated for people and 
 ```json
 {
   "kind": "obds-compiled-brand-context",
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "3.0.0",
   "id": "urn:obds:brand:example:context:brand-assistant-de-at",
   "targetId": "brand-assistant-de-at",
   "manifest": {
@@ -1457,6 +1697,29 @@ and otherwise unaltered.
 Neither part is escaped, trimmed or case-folded, and a target `id` that itself
 contains a colon is carried through unchanged. Two implementations given the
 same manifest and Build Plan therefore produce the same context `id`.
+
+**The 3.0 contract.** A 3.0 Compiled Brand Context declares
+`schemaVersion: 3.0.0` and is validated against
+`schemas/3.0.0/compiled-context.schema.json`. Frozen historical contracts remain
+published and immutable and MUST NOT be used to validate a 3.0 artefact.
+
+The 3.0 contract constrains the fields consumers actually read, because a
+contract that stops where the code starts is a contract that proves nothing about
+the document a consumer is about to execute. Two schema-valid artefacts crashed a
+consumer under the 1.1 contract: `elementRecords[0]` with no `id`, and a validity
+timestamp that was not a timestamp.
+
+- `elementRecords[]` items MUST carry `id`, `family`, `kind`, `nature`, `state`,
+  `scope`, `validity`, `sourceRefs` and `annotations`. These are the nine fields
+  governed consumers read. Further properties are permitted, because an element
+  record carries its `value` and its `valueContractRef` beside them.
+- `validFrom` and `validTo` are `null` or an RFC 3339 date-time, constrained by a
+  pattern in the contract itself rather than by a `format` annotation, which no
+  validator is obliged to enforce. A self-carrying pattern needs no optional
+  format checker and no additional dependency.
+- A pattern constrains shape, not the calendar. `2026-13-45T99:99:99Z` satisfies
+  it and is still not a time, so section 15.11 requires the runtime to treat a
+  validity window it cannot read as a window that has not opened.
 
 ### 14.0 Artefact validity
 
@@ -1518,6 +1781,11 @@ Runtime task data is not part of the Compiled Brand Context.
 ```
 
 Runtime executes compiled Foundation checks without reading the Brand Manifest.
+
+Every parameter that changes the outcome is present, with the value this build
+decided (section 13.5a). `match` and `appliesTo` above are written out even
+though the registry names a default for both, because the artefact, not the
+runtime that reads it, is where a governed decision is recorded.
 
 ### 14.3 Canonical hash
 
@@ -1745,6 +2013,40 @@ move it.
 `governedResultHash` is present in the Compiled Brand Context and is inside the
 `artifactHash` payload, like every other artefact field. It does not replace
 `artifactHash` and does not change its meaning.
+
+### 14.3d A declared hash is not verified integrity
+
+Every hash in OBDS is written into a document by whoever produced that document.
+Reading it back proves nothing at all: a caller who can edit a payload can also
+edit the hash printed beside it. Two documents each declaring the same value, and
+neither of them checked, is not verification either. It is agreement between two
+claims.
+
+Where this specification requires a hash to be **verified**, the sequence is:
+
+```text
+canonical governed payload
+→ recompute the hash from that payload
+→ compare with the supplied hash
+→ only then trust the binding
+```
+
+An implementation MUST NOT describe a comparison between two supplied values as
+verification. Where a document merely repeats a value some other boundary has
+already reproduced from its payload, that is a **comparison**, and the boundary
+that did reproduce it MUST be identifiable; where nothing reproduced it, the
+value is a **declaration** and carries no integrity claim.
+
+Reproduction proves the payload is intact. It does not prove the payload is the
+one this decision is about. That is what section 8.0b binds. A governed decision
+needs both, and they are two questions:
+
+| Question | Answered by |
+|---|---|
+| Is this document intact? | recomputing its hash from its own payload |
+| Is it the document this decision is about? | binding its identity to the artefact upstream |
+
+Section 15.11 lists where each is required.
 
 ### 14.4 Token budget
 
@@ -1993,6 +2295,40 @@ The exact model input is rendered in this fixed order:
 
 `assemblyHash` covers the complete Model Input Package except `assemblyHash`.
 
+**The rendering is derived, not asserted.** The five slots render in the fixed
+order above, by one deterministic renderer, and the renderer is total: a missing
+slot is refused, not rendered as an empty string. A slot that renders as empty
+because nobody supplied it is a governed decision made by whichever
+implementation happened to render it.
+
+**Exact task-input binding.** These four are one value, not two pairs:
+
+```text
+checked task input
+=
+package.slots.taskInput
+=
+deterministically rendered TASK_INPUT
+=
+bytes covered by modelInputHash
+```
+
+A runtime MUST derive the model input from the slots it has verified and compare
+it byte for byte against the text it is about to send. It MUST NOT accept the
+rendered text as a parameter it merely hashes.
+
+Verifying `modelInputHash` against the text the caller supplied, and
+`slots.taskInput` against the preflight argument, is two independent pairs and
+leaves the middle open: edit the `[TASK_INPUT]` block inside the rendered text,
+recompute `modelInputHash` and `assemblyHash`, leave the slot and the preflight
+argument benign, and every check passes while the model receives text that was
+never checked. The chain closes only when one renderer produces the bytes both
+ends agree on.
+
+The Model Input Package is validated against its published contract,
+`schemas/1.0.0/model-input-package.schema.json`, before any of its fields is
+read (section 15.11).
+
 The rendered model input is a deterministic runtime projection, not a second source of Brand Truth. It SHOULD omit validator-only plumbing that does not help the model act correctly, MAY render equivalent structures compactly, and MAY omit repeated chapter blocks when the same full element is already present in HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP or ACTIVE_GUIDANCE. Any such projection is covered by `modelInputHash`; the complete governed element remains available in the Compiled Brand Context for audit and validation.
 
 ### 15.4 Assembly invariants
@@ -2211,6 +2547,82 @@ Compiled Runtime and Context Assembly add value when a system must:
 - apply the complete rule set without turning every value into a checklist;
 - run mechanical checks; or
 - prove that an unsafe task did not reach a model.
+
+### 15.11 Governed runtime documents are contract-validated before use
+
+A governed runtime document is any document a consumer derives a governed
+decision from:
+
+```text
+Compiled Brand Context
+Model Input Package
+Review Result
+```
+
+**Every consumer that derives a governed decision from one of these MUST run the
+full sequence, in this order, before it reads any field of it:**
+
+```text
+governed parse                    (section 28.1)
+→ the published contract for that document
+→ every required hash reproduced   (section 14.3d)
+→ every required identity bound    (section 8.0b)
+→ governed field access / decision
+```
+
+"Every consumer" is the whole surface, not the entry point an implementation
+thinks of first. A runtime that validated the published contract while the
+command-line validator beside it did not reported the same re-sealed
+schema-invalid artefact as valid from one path and refused it from the other.
+
+The contracts are:
+
+| Document | Contract |
+|---|---|
+| Compiled Brand Context | `schemas/3.0.0/compiled-context.schema.json` |
+| Model Input Package | `schemas/1.0.0/model-input-package.schema.json` |
+| Review Result | `schemas/1.0.0/review-result.schema.json` |
+
+**Order matters.** The contract decides whether the document is that kind of
+document at all, so it runs before the first field read, including the fields a
+Runtime Decision Record copies as evidence. Asked afterwards, a non-object
+artefact raises out of the runtime and the record section 15.9 requires for that
+attempt is never written.
+
+**Fail closed, with a record.** An invalid governed document produces a governed
+rejection, never an uncontrolled exception, and never a model call:
+
+```text
+invalid governed document
+→ governed rejection
+→ no uncontrolled exception
+→ no model call
+```
+
+A validity window the runtime cannot read is not a window it may ignore. An
+unparseable `validFrom` or `validTo` means the artefact is not valid, whatever
+the contract's pattern permitted.
+
+**Where identity is bound.** A Review Result validator reproduces
+`artifactHash`, `compiledContextHash`, `assemblyHash`, `modelInputHash` and
+`reviewHash` from their own payloads, and binds the manifest triple of section
+8.0b and `targetId` between the package, the review and the compiled context it
+claims to be about. Reproducing five hashes without binding those identities
+accepts a package naming another brand, another approved version or another
+target, correctly re-sealed throughout.
+
+The runtime additionally binds what the package declares about the build it came
+from: `sources.compiledContextHash` against the loaded artefact, and `targetId`,
+`deliveryMode` and `applicationMode` against the artefact's own
+`contextAssembly` policy. Verifying only hashes leaves those declarations
+unchecked, so a re-sealed package could claim a mode the artefact does not permit
+and the Runtime Decision Record would carry the claim as governed evidence.
+
+**What this does not claim.** OBDS defines no signature. A caller holding every
+document of a decision can produce a mutually consistent set of them, and no
+boundary inside that set can tell. What section 15.11 guarantees is that a
+document is intact, is the kind it says it is, and is about the artefact it says
+it is about. Provenance beyond that is an operational control, not an OBDS one.
 
 ---
 
@@ -2706,9 +3118,14 @@ Requires unique element IDs, exact internal reference resolution, explicit `valu
 
 When an implementation claims source-to-manifest curation support, it also retains a source-to-disposition report and demonstrates the Ground Rules in §5 through the published Curation Review Fixtures. Semantic curation judgement is not represented as fully parser-proven.
 
+From 3.0 it also requires the governed input contract of section 28.1 at every
+governed reader and every entry point of each, the identity rules of section
+8.0b, and a RULE value contract that refuses `validatorRef` and refuses
+`validationMode: deterministic` with no registered check.
+
 ### 26.2 OBDS Compiled Runtime
 
-Additionally requires exact Build Plans, `requiresDefined`, every required element present in the produced context, explicit context selection, no artefact for a failed target, canonical JSON artefacts, reproducible hashes, a `governedResultHash` that matches section 14.3a for the same manifest and Build Plan, Foundation Check Registry v1, exact target loading, Runtime Decision Records, zero instrumented model calls after failed build or blocking preflight, withheld output after blocking postflight and per-slot token reporting.
+Additionally requires exact Build Plans, `requiresDefined`, every required element present in the produced context, explicit context selection, no artefact for a failed target, canonical JSON artefacts, reproducible hashes, a `governedResultHash` that matches section 14.3a for the same manifest and Build Plan, Foundation Check Registry v1, exact target loading, Runtime Decision Records, zero instrumented model calls after failed build or blocking preflight, withheld output after blocking postflight, per-slot token reporting, the governed input contract at every governed reader, identity binding of the manifest triple wherever an artefact names a manifest, two-stage validation of Foundation RULE checks, exact task-input binding, contract validation of every governed runtime document before governed field use and governed hashes reproduced rather than declared.
 
 An implementation claiming OBDS Context Delivery additionally verifies generated Search Cards and Reasoning Chapters, keeps them non-authoritative and demonstrates that final answers use full selected elements rather than Search Card summaries alone.
 
@@ -2782,7 +3199,23 @@ Specification releases use Semantic Versioning:
 
 A 1.x implementation MUST NOT silently reinterpret an existing 1.0 field with incompatible meaning. Breaking semantics require OBDS 2.0.
 
-OBDS 2.0 is that release, and it is deliberately narrow. It corrects one interchange defect, stated in section 28.1: governed YAML had no pinned reading, so the same bytes could produce two different governed values and two different canonical hashes depending on which YAML version the reader carried. Closing that rejects documents 1.x accepted and changes how one form resolves, which is a breaking change to an existing normative contract and therefore MAJOR by the rule above. Nothing else in 2.0 is new: no Brand State, no profile, no capability, no architecture. Section 30 lists what a 1.x manifest has to change, which for almost every manifest is nothing.
+OBDS 2.0 was that release, and it was deliberately narrow. It corrected one interchange defect, stated in section 28.1: governed YAML had no pinned reading, so the same bytes could produce two different governed values and two different canonical hashes depending on which YAML version the reader carried. Closing that rejects documents 1.x accepted and changes how one form resolves, which is a breaking change to an existing normative contract and therefore MAJOR by the rule above.
+
+OBDS 3.0 is the Semantic Closure release and is MAJOR for the same reason,
+five times over. Each of the five closures listed in section 1 rejects a document
+or an execution path an earlier release accepted:
+
+| Closure | What 3.0 now rejects |
+|---|---|
+| A, section 28.1 | a governed document with a non-object root, at every reader rather than one |
+| B, section 8.0b | CR or LF at an identity position; an artefact that names a manifest without binding all three of `id`, `version` and `contentHash` |
+| C, sections 11.4 and 11.5 | a RULE value carrying `validatorRef`; `validationMode: deterministic` with no registered check; an unregistered check primitive or parameter at the authored stage |
+| D, sections 13.0a, 13.5a, 15.11 | a 3.0 Build Plan target without `stateMap` or `styleTexture`; a compiled check missing a decision-bearing parameter; a governed runtime document used before its contract is validated |
+| E, section 10.2a | a consumer that re-derives conflict relevance after the compiler decided it |
+
+Nothing else in 3.0 is new: no Brand State, no profile, no capability, no
+architecture. The migration notes list what a 2.x manifest and Build Plan have to
+change, which for most manifests is the Build Plan and nothing else.
 
 ### 27.2 Brand and runtime versioning
 
@@ -2823,13 +3256,46 @@ Pre-1.0 manifests that used `state: prohibited` MUST migrate that meaning to an 
 - Runtime projections MAY use a more compact serialisation than the canonical manifest when they are deterministically derived, preserve the selected semantics and identify the authoritative source hash.
 - A compact projection is never a second source of Brand Truth.
 
-### 28.1 Governed YAML scalar resolution
+### 28.1 Governed input contract
 
 Section 28 makes JSON the canonical interchange format and allows YAML where it
 produces an equivalent JSON document. Which JSON document a YAML file produces
 depends on how it is read, and that was left to the implementation. It is pinned
 here, because a governed document whose meaning depends on the reader has no
 canonical hash.
+
+**One contract, every reader.** This section is the whole governed input
+contract. It applies to every governed reader in an implementation, and to every
+entry point of every one of them:
+
+```text
+same governed bytes
+→ same governed interpretation
+independent of entry point
+```
+
+A reader that takes a file path and a reader that takes bytes already in hand are
+one contract with two doors, not two contracts. A release gate that scrapes
+governed YAML out of published HTML, a conformance runner that reads a fixture, a
+packaging tool that reads its own metadata and the compiler itself all read under
+this section. So does a test that produces or blesses published evidence: a suite
+that reads the corpus with a different reader can bless a document the compiler
+refuses and refuse one it accepts.
+
+Each rule below is stated once, where every entry point reaches it. A rule
+enforced in one entry point and not in another is the defect this section exists
+to close. The root rule in the paragraph that follows was stated in one of five
+readers, and the other four returned a document the first one refuses.
+
+**A governed document has an object root.** A JSON or YAML document whose root is
+an array, a scalar or null is not a governed document and MUST be rejected. An
+empty document has no object root and is rejected for the same reason.
+
+**The bounds are the contract's, not the format's.** The nesting bound and the
+duplicate-key rule below apply to the data model, so they apply identically to a
+document that arrived as JSON and to one that arrived as YAML. Stated in the YAML
+path alone, the same data model had two answers depending on which format carried
+it.
 
 **Governed YAML is a subset of YAML 1.2, defined by this section.** Where YAML
 1.1 and YAML 1.2 disagree, YAML 1.2 governs; where this section restricts YAML
@@ -2931,7 +3397,15 @@ the Unicode version.
 
 A conforming implementation MUST reach the same JSON data model, and therefore
 the same canonical bytes and the same hashes, for a governed document whether it
-reads it as JSON or as YAML.
+reads it as JSON or as YAML, and whether it reads it from a file or from bytes it
+already holds.
+
+**Writing.** The rules above apply to what an implementation writes as well as to
+what it reads. An emitter that decides quoting with YAML 1.1 resolvers writes the
+string `1e3` as a plain `1e3`, which this reader reads back as the number 1000. A
+writer and a reader that disagree are the same defect in the other direction, so
+a conforming implementation MUST NOT emit a governed document its own reader
+would refuse or reinterpret.
 
 ---
 
@@ -3027,11 +3501,11 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 ---
 
-## 33. Release files for 1.0
+## 33. Release files
 
-A credible OBDS 1.0 release includes:
+A credible OBDS release includes:
 
-1. one normative specification: `OBDS-2.0.0.md`;
+1. one normative specification: `OBDS-3.0.0.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

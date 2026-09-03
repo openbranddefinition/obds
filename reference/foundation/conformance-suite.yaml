@@ -91,3 +91,39 @@ cases:
   modelOutput: We are the best choice.
   expectedDecision: postflight_blocked
   expectedModelCalls: 1
+- id: governed-input-duplicate-json-key
+  type: governed-input
+  document: fixtures/governed-input/duplicate-json-key.json
+  expectedGovernable: false
+  errorContains: duplicate object key
+- id: governed-input-duplicate-yaml-key
+  type: governed-input
+  document: fixtures/governed-input/duplicate-yaml-key.yaml
+  expectedGovernable: false
+  errorContains: duplicate mapping key
+- id: governed-input-ambiguous-scalar
+  type: governed-input
+  document: fixtures/governed-input/ambiguous-scalar.yaml
+  expectedGovernable: false
+- id: governed-input-explicit-tag
+  type: governed-input
+  document: fixtures/governed-input/explicit-tag.yaml
+  expectedGovernable: false
+  errorContains: explicit tag
+- id: governed-input-sequence-root
+  type: governed-input
+  document: fixtures/governed-input/sequence-root.yaml
+  expectedGovernable: false
+  errorContains: root must be an object
+- id: governed-input-excessive-nesting
+  type: governed-input
+  document: fixtures/governed-input/excessive-nesting.json
+  expectedGovernable: false
+  errorContains: nesting exceeds
+- id: governed-input-alias-expansion
+  type: governed-input
+  document: fixtures/governed-input/alias-expansion.yaml
+  expectedGovernable: false
+  errorContains: alias expansion exceeds
+- id: governed-input-parser-isolation
+  type: parser-isolation

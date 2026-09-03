@@ -10,8 +10,12 @@ from typing import Any
 import yaml
 
 from .canonical import artefact_hash, sha256_id
-from .checks import execute_checks
-from .runtime import run_with_model
+from .checks import CompiledCheckContractError, UnicodeAdmissibilityError, execute_checks
+from .runtime import (
+    COMPILED_CONTEXT_SCHEMA_VERSION,
+    _governed_artefact_errors,
+    run_with_model,
+)
 from .compiler import (
     ValidationFailure,
     build_all,
@@ -23,29 +27,107 @@ from .compiler import (
 
 
 def _load_conformance_fixture(path):
-    """A canonical fixture is read raw, so it never met the section 28.1 bound.
+    """Section 28.1: the conformance runner reads under the governed contract.
 
-    A deep document crashed the runner with a RecursionError instead of failing
-    the case, which is the one failure mode a conformance runner must not have.
+    A canonical fixture decides a published conformance result, so a reader
+    that is more permissive than the specification can pass a case the
+    specification fails. It also never met the section 28.1 bound, so a deep
+    document crashed the runner with a RecursionError instead of failing the
+    case, which is the one failure mode a conformance runner must not have.
     """
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, ValueError, RecursionError) as exc:
-        raise ValidationFailure([f"{path}: parse error: {exc}"]) from exc
+    return load_data(path)
+
+
+def _parser_isolation_case(base):
+    """Import every shipped module in a fresh interpreter; PyYAML must not move.
+
+    The 2.0.0 release derived a loader as a bare subclass and item-assigned into
+    the inherited resolver table, so importing one view builder changed what
+    `yaml.safe_load` meant for every consumer in the process — and what the
+    governed *writer* emitted, which made `load_data` refuse its own output.
+    """
+    import subprocess, sys, textwrap
+
+    root = Path(base).resolve()
+    package_root = root.parents[1]
+    script = textwrap.dedent(
+        f"""
+        import sys, json, importlib.util
+        from pathlib import Path
+        sys.path.insert(0, {str(root / "src")!r})
+        import yaml
+
+        def snapshot():
+            return json.dumps({{
+                "resolver": sorted((ch or "", [t for t, _ in items])
+                                   for ch, items in yaml.resolver.Resolver.yaml_implicit_resolvers.items()),
+                "safe": sorted((ch or "", [t for t, _ in items])
+                               for ch, items in yaml.SafeLoader.yaml_implicit_resolvers.items()),
+                "probe": repr(yaml.safe_load("a: true")) + repr(yaml.safe_load("a: 1e3")),
+                "dump": yaml.safe_dump({{"b": "true", "c": "1e3"}}, sort_keys=True),
+            }}, sort_keys=True)
+
+        before = snapshot()
+        import obds_ref.governed_io, obds_ref.canonical, obds_ref.compiler
+        import obds_ref.checks, obds_ref.runtime, obds_ref.model_input, obds_ref.cli
+        for directory in ["context-assembly", "context-delivery", "design-space"]:
+            path = Path({str(package_root)!r}) / directory
+            if not path.is_dir():
+                continue
+            sys.path.insert(0, str(path))
+            for name in ("canonical", "governed_io", "model_input", "build_views",
+                         "assemble_context", "design_space_ref"):
+                target = path / (name + ".py")
+                if not target.is_file():
+                    continue
+                spec = importlib.util.spec_from_file_location(directory.replace("-", "_") + "_" + name, target)
+                module = importlib.util.module_from_spec(spec)
+                sys.modules[spec.name] = module
+                spec.loader.exec_module(module)
+        print("SAME" if snapshot() == before else "CHANGED")
+        """
+    )
+    completed = subprocess.run([sys.executable, "-c", script], capture_output=True, text=True)
+    unchanged = completed.returncode == 0 and completed.stdout.startswith("SAME")
+    return unchanged, {"parserTablesUnchanged": unchanged, "stderr": completed.stderr[-400:]}
 
 
 def _print_json(value: Any) -> None:
     print(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True))
 
 
+def _compiled_context_errors(document) -> list[str]:
+    """Section 14: the CLI is a Compiled Brand Context executor like any other.
+
+    It validated by `artifactHash` alone and then read fields, so a correctly
+    re-sealed artefact carrying a property the published contract forbids was
+    reported valid — and `compiledChecks` was read with `.get(..., [])`, which
+    turns a missing required property into "this artefact enforces nothing", the
+    exact default the runtime refuses to invent.
+
+    The order is the contract's: governed parse, then schema, then integrity,
+    then fields. The hash is asked second because a payload that is not a
+    Compiled Brand Context has nothing worth sealing.
+    """
+    violations = _governed_artefact_errors(document)
+    if violations:
+        return violations
+    if document.get("artifactHash") != artefact_hash(document):
+        return ["artifactHash mismatch"]
+    return []
+
+
 def command_validate(args: argparse.Namespace) -> int:
     data = load_data(args.file)
+    if not isinstance(data, dict):
+        _print_json({"valid": False, "errors": ["unsupported document kind"]})
+        return 1
     if data.get("kind") == "brand-manifest":
         errors = validate_manifest(data)
     elif data.get("kind") == "obds-build-plan":
         errors = validate_plan(data)
     elif data.get("kind") == "obds-compiled-brand-context":
-        errors = [] if data.get("artifactHash") == artefact_hash(data) else ["artifactHash mismatch"]
+        errors = _compiled_context_errors(data)
     else:
         errors = ["unsupported document kind"]
 
@@ -68,12 +150,20 @@ def command_build(args: argparse.Namespace) -> int:
 
 def command_check(args: argparse.Namespace) -> int:
     artefact = load_data(args.artifact)
-    if artefact.get("artifactHash") != artefact_hash(artefact):
-        _print_json({"valid": False, "errors": ["artifactHash mismatch"]})
+    errors = _compiled_context_errors(artefact)
+    if errors:
+        _print_json({"valid": False, "errors": errors})
         return 1
 
     text = Path(args.text_file).read_text(encoding="utf-8") if args.text_file else args.text
-    findings = execute_checks(artefact.get("compiledChecks", []), phase=args.phase, text=text or "")
+    # The contract has been executed, so the property is there to index. An
+    # unmaterialised check or inadmissible text is a governed refusal here too,
+    # not a traceback out of the command.
+    try:
+        findings = execute_checks(artefact["compiledChecks"], phase=args.phase, text=text or "")
+    except (CompiledCheckContractError, UnicodeAdmissibilityError) as exc:
+        _print_json({"valid": False, "errors": [str(exc)]})
+        return 1
     payload = [
         {
             "ruleElementId": item.rule_element_id,
@@ -123,9 +213,13 @@ def command_diff(args):
     _print_json(report); return 0
 
 def _validate_document(data):
+    # The official conformance runner's `validate` case type. It answered the
+    # same question as `command_validate` with a weaker rule, so a re-sealed
+    # schema-invalid artefact passed a declared conformance case.
+    if not isinstance(data, dict): return ["unsupported document kind"]
     if data.get("kind")=="brand-manifest": return validate_manifest(data,verify_hash=False)
     if data.get("kind")=="obds-build-plan": return validate_plan(data)
-    if data.get("kind")=="obds-compiled-brand-context": return [] if data.get("artifactHash")==artefact_hash(data) else ["artifactHash mismatch"]
+    if data.get("kind")=="obds-compiled-brand-context": return _compiled_context_errors(data)
     return ["unsupported document kind"]
 
 def command_conformance(args):
@@ -148,6 +242,22 @@ def command_conformance(args):
             artefact=load_data(base/case["artifact"]) if case.get("artifact") else None; calls=[]
             def model(prompt): calls.append(prompt); return case.get("modelOutput",""),"conformance-request-1"
             record=run_with_model(artefact,task_input=case.get("taskInput",""),model=model,target_id=case.get("targetId"),provider="conformance-adapter",model_id="instrumented-model"); passed=record["decision"]==case["expectedDecision"] and len(calls)==case["expectedModelCalls"]; details={"decision":record["decision"],"modelCalls":len(calls)}
+        elif typ=="governed-input":
+            # Section 26 / 28.1, added in 3.0.0. Until then the official suite
+            # had no governed-input case at all, so an implementation could pass
+            # every case while violating every section 28.1 MUST — which is
+            # exactly what the 2.0.0 release did.
+            try:
+                load_data(base/case["document"]); errors=[]
+            except ValidationFailure as err:
+                errors=err.errors
+            passed=((not errors)==case["expectedGovernable"])
+            if case.get("errorContains"): passed=passed and any(case["errorContains"] in x for x in errors)
+            details={"errors":errors}
+        elif typ=="parser-isolation":
+            # No module changes another module's parser. A process-level property,
+            # so it is executed in a fresh interpreter.
+            passed,details=_parser_isolation_case(base)
         elif typ=="canonical":
             fixture=_load_conformance_fixture(base/case["document"]); from .canonical import manifest_content_hash; m=fixture["manifest"]["expectedContentHash"]==manifest_content_hash(fixture["manifest"]["input"]); a=fixture["artefact"]["expectedArtifactHash"]==artefact_hash(fixture["artefact"]["input"]); passed=m and a; details={"manifestHash":m,"artifactHash":a}
         results.append({"id":case["id"],"type":typ,"passed":passed,**details})

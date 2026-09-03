@@ -1,0 +1,134 @@
+{
+  "cases": [
+    {
+      "matches": true,
+      "note": "plain word, both boundaries real",
+      "term": "cheap",
+      "text": "Buy cheap now."
+    },
+    {
+      "matches": false,
+      "note": "prefix of a longer word does not match",
+      "term": "cheap",
+      "text": "cheaper than ever"
+    },
+    {
+      "matches": false,
+      "note": "underscore is a word character, so no boundary",
+      "term": "cheap",
+      "text": "very_cheap_now"
+    },
+    {
+      "matches": false,
+      "note": "apostrophe is a boundary",
+      "term": "cheap",
+      "text": "cheap's best"
+    },
+    {
+      "matches": true,
+      "note": "case folding, per the ci in the name",
+      "term": "cheap",
+      "text": "CHEAP"
+    },
+    {
+      "matches": true,
+      "note": "punctuation on both sides",
+      "term": "cheap",
+      "text": "(cheap)"
+    },
+    {
+      "matches": true,
+      "note": "the whole text",
+      "term": "cheap",
+      "text": "cheap"
+    },
+    {
+      "matches": false,
+      "note": "embedded, no boundary either side",
+      "term": "cheap",
+      "text": "acheapb"
+    },
+    {
+      "matches": true,
+      "note": "non-ASCII word characters",
+      "term": "café",
+      "text": "the café opens"
+    },
+    {
+      "matches": true,
+      "note": "NFC applies before segmentation",
+      "term": "café",
+      "text": "the café opens"
+    },
+    {
+      "matches": true,
+      "note": "digits are word characters",
+      "term": "B2B",
+      "text": "a B2B offer"
+    },
+    {
+      "matches": false,
+      "note": "digits are word characters, so no boundary",
+      "term": "B2B",
+      "text": "aB2Bc"
+    },
+    {
+      "matches": true,
+      "note": "full case folding, ß",
+      "term": "straße",
+      "text": "die straße hier"
+    },
+    {
+      "matches": true,
+      "note": "FULLCASE maps ß to ss",
+      "term": "straße",
+      "text": "die STRASSE hier"
+    },
+    {
+      "matches": true,
+      "note": "no word boundary between Han characters",
+      "term": "本",
+      "text": "この本です"
+    },
+    {
+      "matches": true,
+      "note": "spaces make both boundaries",
+      "term": "本",
+      "text": "a 本 b"
+    },
+    {
+      "matches": false,
+      "note": "U+00B8 CEDILLA: Word_Break=ALetter from Unicode 17, Other before",
+      "term": "a",
+      "text": "a¸"
+    },
+    {
+      "matches": false,
+      "note": "the same code point on the leading edge",
+      "term": "a",
+      "text": "¸a"
+    },
+    {
+      "matches": false,
+      "note": "between two letters",
+      "term": "a",
+      "text": "a¸b"
+    },
+    {
+      "matches": false,
+      "note": "soft hyphen inside a word",
+      "term": "co",
+      "text": "co­op"
+    },
+    {
+      "matches": false,
+      "note": "word joiner between letters",
+      "term": "x",
+      "text": "x⁠y"
+    }
+  ],
+  "kind": "obds-word-boundary-ci-fixtures",
+  "note": "Section 11.5 promised that word_boundary_ci is pinned by registry fixtures. No such fixture shipped in 2.0.0, so two implementations could not agree on the one mode whose meaning is delegated to a segmentation implementation. These are that fixture set: the normative contract is the declared Unicode version plus these cases. The declared version is the one the pinned segmentation engine implements, which is not section 14.3c's canonicalisation pin — those are two questions with two answers, and conflating them made the declaration false. An implementation that reproduces these cases agrees with the reference; one that does not, does not, whatever segmentation library it uses.",
+  "schemaVersion": "3.0.0",
+  "unicodeVersion": "17.0.0"
+}

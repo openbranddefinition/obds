@@ -49,8 +49,22 @@ _assert_host_unicode_is_at_least_pinned()
 
 
 def _load_unicode_pin() -> tuple[list[int], list[int]]:
-    with _UNICODE_PIN_PATH.open(encoding="utf-8") as handle:
-        document = json.load(handle)
+    """Section 28.1 governs this table too, and it governs it first.
+
+    The pin decides which code points `canonical_json_bytes` admits, so every
+    hash in the system rests on it. Until 3.0.0 it was read with a permissive
+    `json.load`, under which a duplicated `assignedRanges` key is silently
+    last-wins — a governed reader with no governed reader behind it. It goes
+    through `read_governed_document` rather than `load_data` because
+    `canonical_json_bytes` does not exist yet at this point in the import.
+    """
+    try:
+        from .governed_io import read_governed_document
+    except ImportError:
+        from governed_io import read_governed_document
+    document = read_governed_document(_UNICODE_PIN_PATH)
+    if not isinstance(document, dict):
+        raise ValueError("unicode pin table root must be an object")
     if document.get("unicodeVersion") != UNICODE_PIN_VERSION:
         raise ValueError(
             f"unicode pin table declares {document.get('unicodeVersion')!r}, "
@@ -98,6 +112,158 @@ def _normalise_string(value: str) -> str:
     return unicodedata.normalize("NFC", value)
 
 
+# Section 8.0a, as corrected in 3.0.0. Canonicalisation is a strict coarsening
+# of identity, and the coarsening is exactly the section 14.3 step-2 line-ending
+# fold: `_normalise_string = fold_LF . NFC` while `identity_key = NFC`. Verified
+# over 2,299,296 strings — every code point assigned in the pinned version, in
+# eight positions adjacent to CR, LF and CRLF — that `fold` and `NFC` commute
+# with zero exceptions. So every collision in this class is a CR/CRLF-vs-LF
+# collision and every such pair in an identity position is a collision: the
+# class is closed, and closing it is one rule rather than a list of patches.
+#
+# Until 3.0.0 section 8.0a asserted that `a\rb` and `a\nb` are two identities.
+# The canonical form is structurally incapable of carrying that distinction —
+# section 14.3b: "`\r` cannot occur in canonical output" — so a conforming
+# two-identity manifest canonicalised to a one-identity manifest that validation
+# then rejects as a duplicate, with the `contentHash` unchanged. Two documents
+# with one `approval.contentHash` resolved to two different governed truths.
+#
+# Section 14.3 already prescribes the remedy for object *keys*: reject the
+# collision rather than silently collapse it. Element `id`, `subject`, `kind`
+# and scope values behave as keys; key-versus-value is a JSON-serialisation
+# accident, not a governance principle. So the rule is extended, not invented.
+# Measured impact on the shipped corpus: zero.
+#
+# The set is exactly CR and LF, and no wider. CR is the character the fold
+# rewrites; LF is what it rewrites CR into, so LF is the collision counterpart
+# and section 14.3's rule for keys refuses both sides of a collision rather than
+# picking one. NEL, LINE SEPARATOR and PARAGRAPH SEPARATOR are **not** in this
+# set: step 2 does not touch them, they survive canonicalisation unchanged, and
+# no collision was ever demonstrated for them. Refusing them would narrow the
+# accepted input space for a reason this closure cycle does not have.
+IDENTITY_FORBIDDEN_CHARACTERS = {
+    "\r": "U+000D CARRIAGE RETURN",
+    "\n": "U+000A LINE FEED",
+}
+
+
+def identity_admissibility_error(value: Any) -> str | None:
+    """Why this string may not carry a governed identity, or None."""
+    if not isinstance(value, str):
+        return "must be a string"
+    for character, name in IDENTITY_FORBIDDEN_CHARACTERS.items():
+        if character in value:
+            return (
+                f"must not contain {name}: a line separator does not survive "
+                "section 14.3 canonicalisation, so two identities that differ "
+                "only there are one identity in canonical form"
+            )
+    return None
+
+
+def assert_identity_admissible(value: Any) -> None:
+    reason = identity_admissibility_error(value)
+    if reason is not None:
+        raise ValueError(f"governed identity {reason}")
+
+
+# Section 8.0a applied to the artefacts a runtime *receives* rather than the
+# ones a compiler produces. `validate_manifest` and `validate_plan` enumerated
+# their identity positions and refused CR and LF there; a Compiled Brand Context
+# and a Model Input Package arriving from outside were never enumerated at all.
+# So `manifest.id` could carry a CR in a received artefact, and `a\rb` and
+# `a\nb` — two identities the canonical form cannot tell apart — sealed to one
+# `artifactHash` under one `approval.contentHash` and both ran.
+#
+# These live here rather than beside the manifest and plan enumerations because
+# the flat packages need them too, and one rule stated twice is two rules.
+def compiled_context_identity_positions(artefact: Any):
+    """Every position in a received Compiled Brand Context that carries an identity.
+
+    Positional rather than structural, exactly as the manifest and plan
+    enumerations are: a blanket rule over every governed string would refuse the
+    generated multi-line slot text, which is a value, not an identity.
+    """
+    if not isinstance(artefact, dict):
+        return
+    yield "id", artefact.get("id")
+    yield "targetId", artefact.get("targetId")
+    manifest = artefact.get("manifest")
+    if isinstance(manifest, dict):
+        yield "manifest.id", manifest.get("id")
+        yield "manifest.version", manifest.get("version")
+    build = artefact.get("build")
+    if isinstance(build, dict):
+        yield "build.planId", build.get("planId")
+        yield "build.compilerId", build.get("compilerId")
+    for field_name in ("includedElementIds", "availableElementIds"):
+        values = artefact.get(field_name)
+        if isinstance(values, list):
+            for position, value in enumerate(values):
+                yield f"{field_name}[{position}]", value
+    records = artefact.get("elementRecords")
+    if isinstance(records, list):
+        for index, record in enumerate(records):
+            if not isinstance(record, dict):
+                continue
+            prefix = f"elementRecords[{index}]"
+            for field_name in ("id", "subject", "kind"):
+                if field_name in record:
+                    yield f"{prefix}.{field_name}", record.get(field_name)
+            scope = record.get("scope")
+            if isinstance(scope, dict):
+                for dimension, values in scope.items():
+                    yield f"{prefix}.scope.{dimension}", dimension
+                    if isinstance(values, list):
+                        for position, value in enumerate(values):
+                            yield f"{prefix}.scope.{dimension}[{position}]", value
+    checks = artefact.get("compiledChecks")
+    if isinstance(checks, list):
+        for index, check in enumerate(checks):
+            if isinstance(check, dict):
+                yield f"compiledChecks[{index}].ruleElementId", check.get("ruleElementId")
+    assembly = artefact.get("contextAssembly")
+    if isinstance(assembly, dict):
+        values = assembly.get("eligibleGuidanceIds")
+        if isinstance(values, list):
+            for position, value in enumerate(values):
+                yield f"contextAssembly.eligibleGuidanceIds[{position}]", value
+
+
+def model_input_package_identity_positions(package: Any):
+    """Every position in a received Model Input Package that carries an identity."""
+    if not isinstance(package, dict):
+        return
+    yield "id", package.get("id")
+    yield "targetId", package.get("targetId")
+    manifest = package.get("manifest")
+    if isinstance(manifest, dict):
+        yield "manifest.id", manifest.get("id")
+        yield "manifest.version", manifest.get("version")
+    selection = package.get("selection")
+    if isinstance(selection, dict):
+        for field_name, values in selection.items():
+            if isinstance(values, list):
+                for position, value in enumerate(values):
+                    yield f"selection.{field_name}[{position}]", value
+
+
+def identity_admissibility_errors(positions) -> list[str]:
+    """`where: why` for every inadmissible identity among these positions.
+
+    Shape is somebody else's error to report; this rule is about the characters
+    in a string that is already a string.
+    """
+    errors: list[str] = []
+    for where, value in positions:
+        if not isinstance(value, str):
+            continue
+        reason = identity_admissibility_error(value)
+        if reason is not None:
+            errors.append(f"{where}: {reason}")
+    return errors
+
+
 def identity_key(value: str) -> str:
     """Section 8.0a: the canonical comparison key for a semantic identity.
 
@@ -107,15 +273,19 @@ def identity_key(value: str) -> str:
     canonically equivalent identities counted as two identities and one approved
     manifest could produce two governed results. The stored representation is
     left untouched: this key exists for comparison, grouping and ordering.
+
+    A line separator is refused here as well as at validation. Validation states
+    the position and the reason; this is the backstop that makes it impossible
+    for any other path — a projection, a report, a gate — to build a comparison
+    key from a string whose canonical form is a different identity.
     """
     if not isinstance(value, str):
         raise TypeError("semantic identity must be a string")
     assert_pinned_code_points(value)
-    # NFC only. Section 14.3 step 2 folds CR and CRLF to LF for canonical bytes,
-    # which is a serialisation rule; section 8.0a says two identities are equal
-    # exactly when their NFC forms are equal. Folding here as well would merge
-    # `a\rb` and `a\nb`, which NFC keeps distinct, and reject two separate
-    # elements as one duplicate.
+    assert_identity_admissible(value)
+    # NFC only, and now that is safe: no admissible identity contains a
+    # character the step-2 fold touches, so `identity_key` and
+    # `_normalise_string` agree on every string either of them accepts.
     if value.isascii():
         return value
     return unicodedata.normalize("NFC", value)

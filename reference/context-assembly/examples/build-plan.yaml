@@ -1,10 +1,10 @@
 id: urn:obds:build-plan:example-assembly
 kind: obds-build-plan
-schemaVersion: 1.0.0
+schemaVersion: 3.0.0
 manifestRef:
   id: urn:obds:brand:example-assembly
   version: 1.0.0
-  contentHash: sha256:5c9eaa21591e082b8d36e991f30db4dd6eda17a626e98fcef536c7c7d7b024c5
+  contentHash: sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6
 compiler:
   id: org.openbranddefinition.reference-compiler
   version: 1.0.0

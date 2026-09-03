@@ -1,4 +1,4 @@
-# OBDS 2.0.0 Implementer Quickstart
+# OBDS 3.0.0 Implementer Quickstart
 
 ## Start with five concepts
 
@@ -64,9 +64,41 @@ A PATCH release is limited to source-reference or annotation corrections. Value,
 ## Strict interchange
 
 - Governed JSON and YAML reject duplicate keys.
-- YAML uses YAML 1.2 boolean semantics.
+- A governed document has an object root. A sequence, a scalar or an empty
+  document is not governable.
+- YAML uses YAML 1.2 boolean semantics, and the ambiguous plain-scalar forms of
+  section 28.1 are rejected rather than resolved either way.
 - Scope values are strings.
 - OBDS Canonical Number v1 makes integral values such as `1` and `1.0` hash identically and pins non-integral binary64 serialisation.
+- **One reader, every entry point.** A path-taking reader and a bytes-taking
+  reader are one contract with two doors. If your release gate, your conformance
+  runner or your test suite reads governed documents with a different parser than
+  your compiler, you have two contracts and one of them will bless a document the
+  other refuses.
+
+## Governed decisions from received documents
+
+Before reading any field of a Compiled Brand Context, a Model Input Package or a
+Review Result:
+
+1. parse it under the governed input contract;
+2. validate it against its published contract;
+3. reproduce every required hash from the payload it describes; and
+4. bind every required identity to the artefact upstream.
+
+Reproducing a hash proves the document is intact. It does not prove the document
+is the one this decision is about: bind `manifest.id`, `manifest.version`,
+`manifest.contentHash` and `targetId` as well. Comparing two supplied values is
+neither, and must not be described as verification.
+
+Fail closed: an invalid governed document produces a governed rejection with a
+Runtime Decision Record, never an uncontrolled exception and never a model call.
+
+## Do not invent a missing parameter
+
+A compiled check carries every parameter that changes its outcome. If one is
+absent, refuse the check. Supplying `case_insensitive` for a missing `match` is
+not a default, it is a governed decision the artefact never stated.
 
 ## Canonical and token safety
 

@@ -43,7 +43,6 @@
     },
     {
       "errors": [
-        "rule.no-best: compiled literal_required needs a non-empty literal",
         "rule.no-best: internal element reference not found at value.checks[0].params.elementValueRef.elementId: identity.phantom"
       ],
       "id": "dead-check-reference",
@@ -82,7 +81,7 @@
       },
       "id": "manifest-diff",
       "passed": true,
-      "reportHash": "sha256:5a95a368bf3c412b2845d1855f164550e5b6103e58154ac3d2ccdcdc5d5afeed",
+      "reportHash": "sha256:2e05649a2d946190aa348e27a2d478762c048889f41a8059c1317a53b8173a29",
       "type": "diff"
     },
     {
@@ -121,20 +120,83 @@
       "modelCalls": 1,
       "passed": true,
       "type": "runtime"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/duplicate-json-key.json: parse error: duplicate object key: value"
+      ],
+      "id": "governed-input-duplicate-json-key",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/duplicate-yaml-key.yaml: parse error: duplicate mapping key: value\n  in \"<unicode string>\", line 3, column 1:\n    value: 2\n    ^"
+      ],
+      "id": "governed-input-duplicate-yaml-key",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/ambiguous-scalar.yaml: parse error: ambiguous plain scalar '017': leading zero: octal or a float in YAML 1.1, decimal in YAML 1.2, not a JSON number. Quote it, or write it in a form JSON accepts.\n  in \"<unicode string>\", line 2, column 8:\n    value: 017\n           ^"
+      ],
+      "id": "governed-input-ambiguous-scalar",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/explicit-tag.yaml: parse error: governed YAML must not use an explicit tag: tag:yaml.org,2002:str\n  in \"<unicode string>\", line 2, column 8:\n    value: !!str 5\n           ^"
+      ],
+      "id": "governed-input-explicit-tag",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/sequence-root.yaml: root must be an object"
+      ],
+      "id": "governed-input-sequence-root",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/excessive-nesting.json: parse error: nesting exceeds 100 levels"
+      ],
+      "id": "governed-input-excessive-nesting",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "errors": [
+        "/Users/max/development/obds/reference/foundation/fixtures/governed-input/alias-expansion.yaml: parse error: governed YAML alias expansion exceeds 1000000 nodes: write the document out rather than aliasing it"
+      ],
+      "id": "governed-input-alias-expansion",
+      "passed": true,
+      "type": "governed-input"
+    },
+    {
+      "id": "governed-input-parser-isolation",
+      "parserTablesUnchanged": true,
+      "passed": true,
+      "stderr": "",
+      "type": "parser-isolation"
     }
   ],
   "claimScope": "Result of the official OBDS Foundation Conformance Suite declared in reference/foundation/conformance-suite.yaml, profile `foundation`, executed against the reference implementation. Every declared case ran and passed; none was skipped or changed. This run is deliberately not added to the aggregate suiteCounts: 14 of its 15 cases exercise the same fixtures and examples as the pytest suites, so aggregating both would double-count the same coverage.",
-  "executedAt": "2026-09-01T18:18:01.430663+00:00",
+  "executedAt": "2026-09-03T18:51:46.680299+00:00",
   "failedCount": 0,
   "implementation": {
     "name": "obds-reference",
     "version": "1.0.0"
   },
   "kind": "obds-conformance-result",
-  "obdsRelease": "2.0.0",
+  "obdsRelease": "3.0.0",
   "passed": true,
-  "passedCount": 15,
+  "passedCount": 23,
   "profile": "foundation",
   "schemaVersion": "1.0.0",
-  "suiteHash": "sha256:b2d8c17ebcd73b7802b4167ab610365c2e6fd017b6135e58c41396b0a06b170c"
+  "suiteHash": "sha256:aa40518545bc53eccd4945759130a97ed0c1e7e285db1ae2fff9c88b20245e7e"
 }

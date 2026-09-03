@@ -93,9 +93,8 @@ def _rule(
 
 
 def _rule_contract(rule):
-    schema = json.loads(
-        (ROOT / "value-schemas" / "rule.schema.json").read_text(encoding="utf-8")
-    )
+    # Section 11.4: a rules value contract binds the corrected 3.0.0 contract.
+    schema = load_data(ROOT / "value-schemas" / "3.0.0" / "rule.schema.json")
     return {
         "id": rule["valueContractRef"],
         "family": "rules",
