@@ -1,4 +1,4 @@
-# OBDS 3.0.1 Implementer Quickstart
+# OBDS 3.0.2 Implementer Quickstart
 
 ## Start with five concepts
 

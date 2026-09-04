@@ -618,18 +618,20 @@ def test_conflict_is_relevant_when_only_one_winner_prohibits():
     assert result.status == "failed"
 
 
-def test_an_applicable_conflict_blocks_even_between_two_advisory_rules():
-    """Inverted in 3.0.0. This test used to assert the enumerated list.
+def test_conflict_that_changes_nothing_stays_non_blocking():
+    """Not every conflict is a blocker. It must still be reported.
 
-    Two advisory RULES with no dependency, no check and no prohibition were
-    treated as changing nothing the target reads, so the build was allowed.
-    That is false: both candidates are in `applicable(T)`, both would enter
-    `selection` under their own `elementId`, and section 14.3a keys `selection`
-    on `elementId` — so the two candidate winners produce two different
-    `governedResultHash` values. There is no third possibility, which is why
-    3.0.0 replaces the list with one algorithm.
+    Two advisory RULES with no dependency, no check and no prohibition change
+    nothing this target reads, so section 10.2a still allows the build. The
+    conflict is recorded so a manifest defect is never silently discarded.
 
-    The conflict is still reported, as it always was.
+    3.0.0 inverted this and 3.0.2 restores it. Neither of these rules enters
+    HARD_BOUNDARIES — section 14.1 admits a RULE there on `block`,
+    `require_approval` or `obligation: prohibit`, and these carry none — neither
+    contributes a compiled check, and neither declares a dependency. With both
+    projections `none` there is no slot they reach. A conflict this target
+    cannot observe must not fail it; the four tests above prove the other side
+    of the same boundary.
     """
     manifest, plan = _conflicting_rules(_rule_value(), _rule_value())
     plan = copy.deepcopy(plan)
@@ -637,10 +639,9 @@ def test_an_applicable_conflict_blocks_even_between_two_advisory_rules():
     plan["targets"][0]["stateMap"] = {"mode": "none", "kinds": []}
     result, flags = _relevance(manifest, plan)
 
-    assert flags == [True]
-    assert result.status == "failed"
-    assert "OBDS-BUILD-SUBJECT-CONFLICT" in [error.code for error in result.errors]
-    assert result.conflicts, "a conflict must be reported whatever the outcome"
+    assert flags == [False]
+    assert result.status == "ready", [error.code for error in result.errors]
+    assert result.conflicts, "an irrelevant conflict must still be reported"
 
 
 # --- G-05: section 10.1, the half-open validity interval --------------------

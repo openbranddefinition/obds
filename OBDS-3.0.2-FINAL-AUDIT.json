@@ -10,7 +10,7 @@
   "packageJunkFiles": 0,
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
-  "release": "3.0.1",
+  "release": "3.0.2",
   "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaSurfaceUnchangedSince": "1.0.0",
   "schemaVersion": "1.0.0",
@@ -21,13 +21,13 @@
     "context-assembly": 24,
     "context-delivery": 3,
     "design-space": 20,
-    "foundation": 962,
+    "foundation": 973,
     "golden": 6,
     "integration": 15
   },
-  "testOutputHash": "sha256:4152abe21af46c2271e137cb77f3723d9024b3f2a4b375bc457843f37c15078a",
+  "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0",
   "testsFailed": 0,
-  "testsPassed": 1068,
+  "testsPassed": 1079,
   "testsSkipped": 0,
   "unsupportedTokenizerFailsClosed": true
 }

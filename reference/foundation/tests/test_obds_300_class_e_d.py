@@ -113,28 +113,44 @@ def _conflicted(*, family="context", nature="knowledge", state="defined",
 # --------------------------------------------------------------------------
 
 @pytest.mark.parametrize("projection", ALL_PROJECTIONS, ids=["none-none", "style-all", "state-all", "state-kinds"])
-def test_e_an_applicable_conflict_fails_under_every_projection(projection):
-    """§14.3a: a projection policy MUST NOT change the selection.
+def test_e_an_unconditionally_read_conflict_fails_under_every_projection(projection):
+    """§10.2a criteria 1–3 are unconditional: no projection can opt out of them.
 
-    The 2.0.0 list let it decide whether a selection exists at all — the same
-    prohibition, violated more severely. Under the one algorithm the projection
-    is a rendering choice and never a governance decision.
+    A `defined` non-rules FACT belongs in FACT_GROUNDING, and a target cannot
+    declare itself out of its own fact grounding. So this conflict fails under
+    every projection policy, which is the half of the boundary a target does not
+    control. Criteria 4 and 5 are the half it does — see the matrix below.
     """
-    manifest, plan = _conflicted()
+    manifest, plan = _conflicted(family="context", nature="fact")
     result = build(manifest, plan, **projection)
     assert result.status == "failed", projection
     assert "OBDS-BUILD-SUBJECT-CONFLICT" in [error.code for error in result.errors]
     assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [True]
 
 
-def test_e_two_targets_differing_only_in_projection_agree():
-    """The §14.3a pin against the relevance predicate, stated as a comparison."""
-    manifest, plan = _conflicted()
+def test_e_a_projection_policy_decides_only_what_it_declares_it_reads():
+    """§10.2a: a target that selects narrowly is not failed by what it never reads.
+
+    3.0.0 asserted the opposite here — that all four projections must agree —
+    and derived it from §14.3a's prohibition on a projection changing
+    `selection`. A conflicted subject changes `selection` under no projection at
+    all: it contributes no winner, so it is absent from every one of the four.
+    What the projection changes is whether this target *reads* the subject, and
+    §10.2a makes that, and only that, the relevance question.
+
+    So `defined` KNOWLEDGE fails under `styleTexture: all` and builds under
+    `styleTexture: none`, and both are the same rule applied to two different
+    declared requests.
+    """
+    manifest, plan = _conflicted(family="context", nature="knowledge", state="defined")
     outcomes = {
         json.dumps(projection, sort_keys=True): build(manifest, plan, **projection).status
         for projection in ALL_PROJECTIONS
     }
-    assert len(set(outcomes.values())) == 1, outcomes
+    assert set(outcomes.values()) == {"ready", "failed"}, outcomes
+    style_all = json.dumps(ALL_PROJECTIONS[1], sort_keys=True)
+    assert outcomes[style_all] == "failed", "styleTexture all reads every defined knowledge element"
+    assert outcomes[json.dumps(ALL_PROJECTIONS[0], sort_keys=True)] == "ready"
 
 
 def test_e_a_clean_manifest_agrees_across_projections_too():
@@ -190,12 +206,53 @@ def test_e_an_expired_conflict_is_preserved_and_reported():
     assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [False]
 
 
-def test_e_the_preserved_irrelevance_class_is_non_empty_and_principled():
-    """It does not collapse to "all conflicts fail"; the class has members."""
-    preserved = _conflicted(second_scope={"locales": ["de"]})
-    applicable = _conflicted()
-    assert build(*preserved, **ALL_PROJECTIONS[0]).status == "ready"
-    assert build(*applicable, **ALL_PROJECTIONS[0]).status == "failed"
+def test_e_the_irrelevance_class_is_non_empty_and_principled():
+    """It collapses to neither "all fail" nor "all build"; both members exist.
+
+    Two ways to be irrelevant, and one way to be relevant, measured side by
+    side. Out-of-scope: at most one candidate is in `applicable(T)`. Never read:
+    both are, and this target's declared projections reach neither. Read: the
+    target declared `styleTexture: all`, so it reads them and must fail.
+    """
+    out_of_scope = _conflicted(second_scope={"locales": ["de"]})
+    never_read = _conflicted(family="context", nature="knowledge", state="defined")
+    read = _conflicted(family="context", nature="knowledge", state="defined")
+
+    assert build(*out_of_scope, **ALL_PROJECTIONS[0]).status == "ready"
+    assert build(*never_read, **ALL_PROJECTIONS[0]).status == "ready"
+    assert build(*read, **ALL_PROJECTIONS[1]).status == "failed"
+
+    for manifest, plan in (out_of_scope, never_read):
+        result = build(manifest, plan, **ALL_PROJECTIONS[0])
+        assert result.conflicts, "an irrelevant conflict must still be reported"
+        assert [c["decisionRelevant"] for c in result.conflicts] == [False]
+
+
+def test_e_an_irrelevant_conflict_puts_neither_candidate_in_the_artefact():
+    """The measurement that retires the 3.0.0 first argument.
+
+    3.0.0 widened relevance because a full-mode assembler was said to rebuild
+    FACT_GROUNDING and STATE_MAP from the whole element universe, so a narrow
+    projection would not actually keep a losing candidate from the model. It
+    cannot: neither candidate is in the artefact to be rebuilt from. A
+    conflicted subject contributes no winner to `applicable`, so it appears in
+    neither `availableElementIds` nor `elementRecords`, and `assemble` reads
+    only those two and refuses manifest access outside `manifest_checked`.
+    """
+    manifest, plan = _conflicted(family="context", nature="knowledge", state="defined")
+    result = build(manifest, plan, **ALL_PROJECTIONS[0])
+
+    assert result.status == "ready", [error.code for error in result.errors]
+    conflicted_ids = set(result.conflicts[0]["elementIds"])
+    assert conflicted_ids, "the fixture no longer produces a conflict"
+    assert conflicted_ids.isdisjoint(result.artefact["availableElementIds"])
+    assert conflicted_ids.isdisjoint(result.artefact["includedElementIds"])
+    assert conflicted_ids.isdisjoint(
+        {record["id"] for record in result.artefact["elementRecords"]}
+    )
+    for slot in result.artefact["slots"].values():
+        for element_id in conflicted_ids:
+            assert element_id not in slot, f"{element_id} reached a rendered slot"
 
 
 E_CHANNELS = [
@@ -210,19 +267,80 @@ E_CHANNELS = [
 ]
 
 
+def _expected_relevance(shape, projection):
+    """Section 10.2a, read straight from the specification, not from the code.
+
+    Written independently of `_conflict_is_decision_relevant` so the matrix
+    below is an oracle rather than a restatement. The fixture never names an
+    element in `requiresDefined`, in `eligibleGuidanceIds` or in a RULE
+    dependency, and it never builds a RULES element, so criteria 1 and 2 cannot
+    fire here and criteria 3, 4 and 5 decide.
+    """
+    state = shape.get("state", "defined")
+    family = shape.get("family", "context")
+    nature = shape.get("nature", "knowledge")
+    style = projection["styleTexture"]
+    state_map = projection["stateMap"]
+
+    # 3. a defined non-rules fact belongs in FACT_GROUNDING, unconditionally.
+    if state == "defined" and nature == "fact" and family != "rules":
+        return True
+    # 4. carried into STATE_MAP by the target's declared policy. Every fixture
+    #    element carries `kind: guidance`.
+    if state in {"unknown", "not_defined", "not_applicable"}:
+        if state_map["mode"] == "all_applicable":
+            return True
+        if state_map["mode"] == "kinds" and "guidance" in state_map["kinds"]:
+            return True
+    # 5. carried into STYLE_TEXTURE by the target's declared policy.
+    if state == "defined" and (nature == "knowledge" or family == "stance"):
+        if style["mode"] == "all":
+            return True
+        if style["mode"] == "selected" and style["elementIds"]:
+            return True
+    return False
+
+
 @pytest.mark.parametrize("shape", E_CHANNELS)
 @pytest.mark.parametrize("projection", ALL_PROJECTIONS, ids=["none-none", "style-all", "state-all", "state-kinds"])
-def test_e_every_channel_decides_the_same_way(shape, projection):
-    """One rule, every channel. 7 of 21 channels disagreed with it in 2.0.0.
+def test_e_every_channel_decides_by_the_section_10_2a_rule(shape, projection):
+    """One rule, every channel, both answers. 32 combinations, each pinned.
 
-    5 of the 10 `return True` branches it replaces were never exercised: a
-    mutation that disabled them left the suite green. There are no branches to
-    leave untested now — the decision is one predicate over `applicable(T)`.
+    3.0.0 asserted `failed` for all 32 and thereby tested one branch of the
+    predicate. This asserts the section 10.2a outcome for each, against an
+    oracle written from the specification text, so a change that widens
+    relevance and a change that narrows it both fail here. 5 of the 10
+    `return True` branches in the 2.0.0 predicate were never exercised — a
+    mutation that disabled them left the suite green. Every branch is reachable
+    from this matrix, and so is every `return False`.
     """
     manifest, plan = _conflicted(**shape)
     result = build(manifest, plan, **projection)
-    assert result.status == "failed", (shape, projection)
-    assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [True]
+    expected = _expected_relevance(shape, projection)
+
+    assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [expected], (
+        shape, projection
+    )
+    assert result.status == ("failed" if expected else "ready"), (shape, projection)
+    if expected:
+        assert "OBDS-BUILD-SUBJECT-CONFLICT" in [error.code for error in result.errors]
+    else:
+        assert "OBDS-BUILD-SUBJECT-CONFLICT" not in [error.code for error in result.errors]
+    assert result.conflicts, "the conflict must be reported whatever the outcome"
+
+
+def test_e_the_channel_matrix_exercises_both_answers():
+    """A matrix that only ever expects one answer proves one branch.
+
+    3.0.0's version expected `failed` 32 times out of 32. This guards the guard.
+    """
+    outcomes = [
+        _expected_relevance(shape.values[0], projection)
+        for shape in E_CHANNELS
+        for projection in ALL_PROJECTIONS
+    ]
+    assert outcomes.count(True) >= 8, outcomes
+    assert outcomes.count(False) >= 8, outcomes
 
 
 def test_e_no_losing_candidate_reaches_the_model():
@@ -557,22 +675,41 @@ def test_s4_the_new_mode_is_materialised_like_every_other_parameter():
     )
 
 
-def test_s5_class_e_dissolves_class_d_s_governance_question():
-    """S5: after E, `styleTexture` is a rendering choice, not a governance one.
+def test_s5_class_e_answers_class_d_s_governance_question():
+    """S5: `styleTexture` is a governance input, which is why D1 requires it.
 
-    Under 2.0.0 the default decided fail-closed versus released *because* the
-    relevance predicate read the projection policy. It no longer does, so the
-    two policies cannot move a governed decision in either direction.
+    Section 10.2a criterion 5 makes the projection policy part of the relevance
+    decision, so an *omitted* policy would be a governance decision nobody
+    stated. D1 answers that by refusing the omission rather than defaulting it:
+    there is exactly one spelling of a governed request, and it is explicit.
+    3.0.0 answered it by deleting the policy from the predicate instead, which
+    contradicted section 10.2a; 3.0.2 restores the predicate and keeps D1, which
+    is the answer that needs no default.
+
+    A clean manifest still resolves identically under every projection —
+    §14.3a's actual MUST, that a projection does not change `selection`.
     """
     clean_manifest, plan = example("foundation-minimal")
-    conflicted_manifest, conflicted_plan = _conflicted()
 
     clean = [build(clean_manifest, plan, **projection) for projection in ALL_PROJECTIONS]
     assert {result.status for result in clean} == {"ready"}
     assert len({tuple(result.artefact["availableElementIds"]) for result in clean}) == 1
 
-    conflicted = [build(conflicted_manifest, conflicted_plan, **projection) for projection in ALL_PROJECTIONS]
-    assert {result.status for result in conflicted} == {"failed"}
+    # And the conflicted manifest resolves identically too: the conflicted
+    # subject is in no selection under any projection. Only whether this target
+    # reads it differs, which is the whole of section 10.2a.
+    conflicted_manifest, conflicted_plan = _conflicted(nature="knowledge", state="defined")
+    conflicted = [
+        build(conflicted_manifest, conflicted_plan, **projection)
+        for projection in ALL_PROJECTIONS
+    ]
+    assert {result.status for result in conflicted} == {"ready", "failed"}
+    available = {
+        tuple(result.artefact["availableElementIds"])
+        for result in conflicted
+        if result.artefact is not None
+    }
+    assert len(available) == 1, "a projection policy changed the governed selection"
 
 
 def test_s6_the_assembly_boundary_re_checks_the_artefact_s_declarations():

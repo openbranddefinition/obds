@@ -1,7 +1,7 @@
 {
   "cases": [
     {
-      "description": "OBDS 3.0.0 inverts this case. Until then a target whose projection policies were both `none` built clean over an unresolved conflict inside its own applicable set. That reading is refuted twice: under deliveryMode full the assembler rebuilds FACT_GROUNDING and STATE_MAP from the whole element universe and ignores the policies, and section 14.3a forbids a projection policy from changing the selection at all — deciding whether a governed result exists is that prohibition violated more severely. Every candidate winner enters selection under its own elementId, so two candidates always produce two governed result hashes: an applicable conflict is always decision-relevant.",
+      "description": "Two incomparable KNOWLEDGE elements collide on a subject the target neither requires nor selects: styleTexture none, stateMap none. The target cannot observe the resolution, so it must build. OBDS 3.0.0 inverted this case on two arguments and 3.0.2 restores it because both are false against this release. The assembler does not rebuild from the element universe: it reads elementRecords and availableElementIds from the compiled artefact and refuses manifest access outside the declared manifest_checked resolution, and a conflicted subject appears in neither list. And a conflicted subject contributes no winner to selection at all, so section 14.3a is not engaged: two implementations hash a payload the subject is absent from and agree. Section 10.2a is unchanged and says a conflict a target never reads must not fail it.",
       "elements": [
         {
           "id": "structure.brand",
@@ -30,13 +30,11 @@
           "traits": "knowledge"
         }
       ],
-      "expectedCodes": [
-        "OBDS-BUILD-SUBJECT-CONFLICT"
-      ],
+      "expectedCodes": [],
       "expectedConflictReported": true,
-      "expectedDecisionRelevant": true,
-      "expectedStatus": "failed",
-      "id": "an-applicable-conflict-fails-whatever-the-projection",
+      "expectedDecisionRelevant": false,
+      "expectedStatus": "ready",
+      "id": "irrelevant-conflict-does-not-fail-the-target",
       "requiresDefined": [
         "structure.brand"
       ],

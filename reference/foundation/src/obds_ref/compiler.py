@@ -700,56 +700,162 @@ def governed_result_hash(
     return sha256_id(governed_result_payload(manifest, target, as_of, applicable))
 
 
-# Section 10.2a, replaced in 3.0.0 by one algorithm.
-#
-# The enumerated list it replaces was wrong at its premise. That premise —
-# "a target that selects narrowly is not failed by a conflict it never reads" —
-# is false as implemented: under `deliveryMode: full` Context Assembly rebuilds
-# FACT_GROUNDING and STATE_MAP from the whole element universe, ignoring both
-# projection policies and `includedElementIds`, and through Reasoning Chapters
-# the model receives both losing candidates as active contradictory guidance in
-# a build the compiler declared clean.
-#
-# The class also has a closed form, and it is a theorem rather than another
-# list. Every candidate winner enters `selection` under its own unique
-# `elementId`; section 14.3a keys `selection` on `elementId`; sections 8.6 and
-# 8.0a make element ids unique under canonical comparison. Two distinct
-# candidates therefore always produce two distinct payloads and two distinct
-# `governedResultHash` values. Measured across all 21 channels: not one where
-# the two candidate winners produce the same governed result. So "could
-# choosing a different winner change the governed result?" is answered yes for
-# every target-applicable conflict, and there is no third possibility.
-#
-# What survives is a real preserved-irrelevance class, and it is principled: a
-# subject whose incomparable maximal elements are not all applicable to this
-# target — out of scope, or not valid at `asOf` — cannot change this target's
-# governed result, because at most one of them is in `applicable(T)` at all.
-# Section 10.2a requires those to be reported rather than discarded, and the
-# 2.0.0 reference discarded exactly them.
-#
-# What is eliminated is the claim that a rendering knob can make an applicable
-# conflict irrelevant. `styleTexture`, `stateMap`, the Context Assembly policy
-# and the delivery mode do not enter this decision, which is section 14.3a's
-# own MUST.
+def _conflict_is_decision_relevant(
+    conflict: dict[str, Any],
+    by_id: dict[str, Any],
+    target: dict[str, Any],
+    rule_required_ids: set[str],
+) -> bool:
+    """Section 10.2a: would resolving this conflict change what the target gets?
+
+    A hard conflict is a property of a subject. It fails a target only when one
+    of its incomparable maximal elements would, if it won, reach that target's
+    requirements or its compiled context.
+
+    3.0.0 replaced this test with "every target-applicable conflict is
+    decision-relevant", on two arguments. 3.0.2 restores it because both
+    arguments are false against this release, and section 10.2a — unchanged
+    since — says the opposite of what the compiler did.
+
+    The first argument was that Context Assembly rebuilds FACT_GROUNDING and
+    STATE_MAP from the whole element universe, so a narrow projection policy
+    does not actually keep a losing candidate away from the model. That path no
+    longer exists. `assemble` reads `elementRecords` and `availableElementIds`
+    from the compiled artefact and refuses manifest access outside the declared
+    `manifest_checked` no-hit resolution. A conflicted subject contributes no
+    element to `applicable`, so it is in neither list, so neither candidate is
+    reachable from the artefact at all.
+
+    The second argument was that two candidate winners always produce two
+    governed result hashes, so section 14.3a forces relevance. That reads
+    `_resolve_subject_precedence` backwards. A subject with two or more
+    incomparable maximal elements contributes *nothing* to `selected`; there is
+    no winner to differ over. Both implementations hash a payload the subject is
+    absent from, and they agree. The theorem was true only of a code path that
+    picks a winner, which is exactly the path a conflict does not take.
+
+    So the enumeration below is restored as section 10.2a states it, with the
+    rule above the list governing where the two disagree: if resolving the
+    conflict the other way would change what this target requires, blocks,
+    prohibits or checks, the subject is decision-relevant. Failing a target on a
+    conflict it cannot observe is not fail-closed, it is fail-arbitrary.
+    """
+    required = {identity_key(item) for item in target.get("requiresDefined", [])} | rule_required_ids
+    # Guidance the target declares itself eligible to activate is part of what
+    # this target reads, so a conflict on that subject changes its governed
+    # result: the artefact would otherwise declare eligible guidance that is
+    # not in availableElementIds.
+    assembly = target.get("contextAssembly") or {}
+    if isinstance(assembly, dict):
+        required |= {
+            identity_key(item)
+            for item in assembly.get("eligibleGuidanceIds", [])
+            if isinstance(item, str) and item
+        }
+    style = target.get("styleTexture", {"mode": "all", "elementIds": []})
+    style_mode = style.get("mode", "all")
+    style_ids = {identity_key(item) for item in style.get("elementIds", [])}
+    state_policy = target.get("stateMap", {"mode": "none", "kinds": []})
+    state_mode = state_policy.get("mode", "none")
+    state_kinds = {identity_key(item) for item in state_policy.get("kinds", [])}
+
+    for raw_element_id in conflict.get("elementIds", []):
+        element_id = identity_key(raw_element_id)
+        element = by_id.get(element_id)
+        if element is None:
+            continue
+
+        # 1. named in requiresDefined. A target cannot opt out of its own
+        #    requirements.
+        if element_id in required:
+            return True
+
+        state = element.get("state")
+        family = element.get("family")
+        nature = element.get("nature")
+
+        # 2. a defined RULE that would govern this build if it won. Until 1.1.6
+        #    only `block` and `require_approval` counted here, which read the
+        #    concrete list of section 10.2a rather than the principle that
+        #    introduces it. A RULE also governs when it carries its own
+        #    dependencies, contributes a compiled check, or states a prohibition:
+        #    resolving the conflict the other way then changes the requirements,
+        #    the compiled checks or the applicable prohibitions of this target.
+        #    Leaving those out let an unresolved conflict between two
+        #    non-blocking RULES silently cancel a declared dependency, so
+        #    repairing the manifest turned a passing build into a failing one.
+        if family == "rules" and state == "defined":
+            value = element.get("value") or {}
+            if value.get("enforcement") in {"block", "require_approval"}:
+                return True
+            if value.get("requiresDefinedRefs"):
+                return True
+            if value.get("checks"):
+                return True
+            # Section 14.1 puts every applicable prohibition in HARD_BOUNDARIES,
+            # whatever its enforcement, so a prohibition always reaches the
+            # compiled context of every target and a conflict over one is always
+            # decision-relevant.
+            if value.get("obligation") == "prohibit":
+                return True
+
+        # 3. a defined non-rules fact belongs in FACT_GROUNDING, unconditionally.
+        if state == "defined" and nature == "fact" and family != "rules":
+            return True
+
+        # 4. carried into STATE_MAP by the target's declared policy.
+        if state in {"unknown", "not_defined", "not_applicable"}:
+            if state_mode == "all_applicable":
+                return True
+            if state_mode == "kinds" and identity_key(element.get("kind") or "") in state_kinds:
+                return True
+
+        # 5. carried into STYLE_TEXTURE by the target's declared policy.
+        if state == "defined" and (nature == "knowledge" or family == "stance"):
+            if style_mode == "all":
+                return True
+            if style_mode == "selected" and element_id in style_ids:
+                return True
+
+    return False
+
+
+# The preserved-irrelevance class 3.0.0 added is kept: a subject whose
+# incomparable maximal elements are not all applicable to this target — out of
+# scope, or not valid at `asOf` — cannot change this target's governed result,
+# because at most one of them is in `applicable(T)` at all. Section 10.2a
+# requires those to be reported rather than discarded, and the 2.0.0 reference
+# discarded exactly them.
 def _annotated_conflicts(
     elements: list[dict[str, Any]],
     applicable_conflicts: list[dict[str, Any]],
+    by_id: dict[str, Any],
+    target: dict[str, Any],
+    rule_required_ids: set[str],
 ) -> list[dict[str, Any]]:
-    """Decision-relevant conflicts, plus the preserved-irrelevance class.
+    """Conflicts with their section 10.2a relevance, plus the preserved class.
 
     `applicable_conflicts` comes from `_resolve_subject_precedence` over the
     elements that match the target's scope and are valid at `asOf`, taken before
-    subject precedence — which is `applicable(T)` exactly. Every conflict in it
-    is by construction a subject with two or more incomparable maximal elements
-    of `applicable(T)`, so every one of them is decision-relevant.
+    subject precedence — which is `applicable(T)` exactly. Each is judged by the
+    section 10.2a test. A conflict outside `applicable(T)` is reported and marked
+    not decision-relevant, so a manifest defect is never silently discarded.
     """
-    relevant_subjects = {conflict["subject"] for conflict in applicable_conflicts}
-    annotated = [{**conflict, "decisionRelevant": True} for conflict in applicable_conflicts]
+    annotated = [
+        {
+            **conflict,
+            "decisionRelevant": _conflict_is_decision_relevant(
+                conflict, by_id, target, rule_required_ids
+            ),
+        }
+        for conflict in applicable_conflicts
+    ]
+    applicable_subjects = {conflict["subject"] for conflict in applicable_conflicts}
     _, manifest_level = _resolve_subject_precedence(elements)
     annotated += [
         {**conflict, "decisionRelevant": False}
         for conflict in manifest_level
-        if conflict["subject"] not in relevant_subjects
+        if conflict["subject"] not in applicable_subjects
     ]
     annotated.sort(key=lambda conflict: (conflict["subject"], conflict["elementIds"]))
     return annotated
@@ -1400,13 +1506,15 @@ def build_target(
         item for item in rule_value_refs if item not in rule_requirements
     ]
     rule_required_ids = {required_id for required_id, _ in rule_requirements}
-    # Section 10.2a: one relevance rule, applied here, in the projections and at
-    # runtime, so all three reach the same governed decision. A conflict inside
-    # `applicable(T)` fails this target; a conflict whose maximal elements are
-    # not all applicable to this target is reported and marked, so a manifest
-    # defect is never silently discarded — which is what section 10.2a says and
-    # what the 2.0.0 reference did the opposite of.
-    annotated_conflicts = _annotated_conflicts(elements, conflicts)
+    # Section 10.2a: one relevance rule, decided here, once, and consumed
+    # unchanged by the projections and the runtime. A conflict inside
+    # `applicable(T)` fails this target when the subject is decision-relevant to
+    # it; a conflict that is not, and a conflict whose maximal elements are not
+    # all applicable to this target, are reported and marked, so a manifest
+    # defect is never silently discarded.
+    annotated_conflicts = _annotated_conflicts(
+        elements, conflicts, by_id, target, rule_required_ids
+    )
     for conflict in annotated_conflicts:
         if conflict["decisionRelevant"]:
             result.errors.append(BuildError(

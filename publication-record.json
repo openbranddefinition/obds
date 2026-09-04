@@ -1,11 +1,11 @@
 {
  "canonicalUrl": "https://openbranddefinition.org/",
  "conformanceTestsFailed": 0,
- "conformanceTestsPassed": 1068,
+ "conformanceTestsPassed": 1079,
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "3.0.1",
+ "currentRelease": "3.0.2",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:de26a34d30c6d7e16f5c7adaeeb4e2fff3ac9ee2071e283d458bcbfdaf053ed7",
- "previousRelease": "3.0.0",
+ "packageZipSha256": "sha256:affc8729c331e8a3a483da9a0782b5362c253fab1d4a17e8eb24d20ea186583c",
+ "previousRelease": "3.0.1",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -161,6 +161,14 @@
    "packageZipSha256": "sha256:de26a34d30c6d7e16f5c7adaeeb4e2fff3ac9ee2071e283d458bcbfdaf053ed7",
    "status": "stable",
    "testOutputHash": "sha256:4152abe21af46c2271e137cb77f3723d9024b3f2a4b375bc457843f37c15078a"
+  },
+  "3.0.2": {
+   "baseUrl": "https://openbranddefinition.org/spec/3.0.2/",
+   "date": "2026-09-04",
+   "note": "outreach-gate correction; PATCH under section 27.1 because no normative contract changed and the compiler and the runtime were brought back to contracts section 10.2a and section 26.2 already published; 3.0.0 replaced the section 10.2a relevance test with the claim that every target-applicable conflict is decision-relevant, on two arguments that are false against this release, so a conflict a target never read failed that target and section 10.2a said it must not; the runtime bound the package targetId to the artefact and never the requested one, so a caller naming another target was answered from the artefact it held, the model was called and the Runtime Decision Record named a governed decision that never ran; and the README quickstart published an artifactHash that stopped reproducing at 3.0.0 because the only assertion on it was that the artefact agreed with itself; the specification differs from 3.0.1 in its own version stamp and the release-file name in section 33 and in nothing else",
+   "packageZipSha256": "sha256:affc8729c331e8a3a483da9a0782b5362c253fab1d4a17e8eb24d20ea186583c",
+   "status": "stable",
+   "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -169,13 +177,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/3.0.1/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/3.0.2/",
  "specificationFilesPublished": true,
- "specificationPublishedAt": "2026-09-03",
- "stableReleaseDate": "2026-09-03",
- "testOutputHash": "sha256:4152abe21af46c2271e137cb77f3723d9024b3f2a4b375bc457843f37c15078a",
+ "specificationPublishedAt": "2026-09-04",
+ "stableReleaseDate": "2026-09-04",
+ "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0",
  "totalPublicContracts": 32,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 5,
- "websiteIndexSha256": "sha256:28f9bb3713046f2c47c7702c91e03364acf2c59aaed66385e21fe7736c39404e"
+ "websiteIndexSha256": "sha256:a6f501bb488052060666ee3772176a81331831e89530c0e42ffddb27a7668feb"
 }

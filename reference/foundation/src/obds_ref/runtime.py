@@ -271,6 +271,31 @@ def _comparable_identity(value):
         return value
 
 
+def _requested_target_is_bound(target_id, artefact):
+    """Section 26.2 exact target loading, at the runtime end of the seam.
+
+    A caller names the target it believes it is running. The runtime answered
+    from whatever artefact it was handed and copied the *requested* id into the
+    Runtime Decision Record, so a caller asking for `different-target` while
+    holding the artefact for `social-copy-global-en` released, called the model
+    once, and produced a record naming a governed decision that never ran. The
+    build side of exact target loading was enforced and this side was not.
+
+    `targetId` is an identity position under section 8.0b, so it is compared on
+    the canonical form of section 8.0a, through the same `_comparable_identity`
+    the package binding beside it already uses. Two spellings that are one
+    identity are one target here too; no second comparison rule enters the
+    release.
+
+    `None` means the caller named no target and accepts the artefact's own.
+    """
+    if target_id is None:
+        return True
+    return _comparable_identity(target_id) == _comparable_identity(
+        artefact.get("targetId") if isinstance(artefact, dict) else None
+    )
+
+
 def _governed_artefact_errors(artefact):
     """Everything that disqualifies a received artefact before a field is used.
 
@@ -396,6 +421,15 @@ def run_with_model(
         if record_path:
             append_runtime_record(record_path, record)
         return record
+    if not _requested_target_is_bound(target_id, artefact):
+        record["decision"] = "no_valid_artifact"
+        if record_path:
+            append_runtime_record(record_path, record)
+        return record
+    # Bound, so the two are one identity. The record carries the artefact's own
+    # spelling from here, because the record must name the target that actually
+    # executed rather than the one the caller happened to type.
+    record["targetId"] = artefact.get("targetId")
 
     try:
         preflight = _execute_governed_checks(artefact, phase="preflight", text=task_input)
@@ -512,6 +546,15 @@ def run_assembled_with_model(
         if record_path:
             append_runtime_record(record_path, record)
         return record
+    if not _requested_target_is_bound(target_id, artefact):
+        record["decision"] = "no_valid_artifact"
+        if record_path:
+            append_runtime_record(record_path, record)
+        return record
+    # Bound, so the two are one identity. The record carries the artefact's own
+    # spelling from here, because the record must name the target that actually
+    # executed rather than the one the caller happened to type.
+    record["targetId"] = artefact.get("targetId")
 
     # Section 8.0a over the other received artefact. The package carries element
     # identities and a manifest identity of its own, and none of them was ever

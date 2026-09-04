@@ -1,21 +1,21 @@
-# OBDS 3.0.1 Test and Runtime Requirements
+# OBDS 3.0.2 Test and Runtime Requirements
 
-This file declares every dependency needed to reproduce the official 1068/1068 conformance run.
+This file declares every dependency needed to reproduce the official 1079/1079 conformance run.
 It separates what a consumer of OBDS needs from what the reference conformance suite needs.
 
 ## 1. OBDS consumer requirements
 
 **None imposed by the specification.**
 
-OBDS 3.0.1 is a data and contract specification. A conforming implementation may be written in
+OBDS 3.0.2 is a data and contract specification. A conforming implementation may be written in
 any language. The normative artefacts are plain text:
 
-- `OBDS-3.0.1.md` (normative specification);
+- `OBDS-3.0.2.md` (normative specification);
 - `schemas/*.json` (21 public JSON Schemas, draft 2020-12) plus the versioned
   contracts beside them under `schemas/1.1.0/` and `schemas/3.0.0/`;
 - `value-schemas/*.json` (6 public value-contract JSON Schemas, draft 2020-12) plus
   `value-schemas/3.0.0/rule.schema.json`;
-- `OBDS-3.0.1-SCHEMA-INDEX.json` and `OBDS-3.0.1-CAPABILITY-REGISTRY.json`.
+- `OBDS-3.0.2-SCHEMA-INDEX.json` and `OBDS-3.0.2-CAPABILITY-REGISTRY.json`.
 
 To consume OBDS you need a JSON Schema validator for your platform, a JSON reader and, if you
 accept governed YAML, a YAML 1.2 reader that rejects duplicate keys. Nothing in this package is
@@ -85,7 +85,7 @@ refused a release the repository had passed. `tools/` is part of the package fro
 packaging test asserts the invariant directly.
 
 ```bash
-unzip OBDS-3.0.1-FINAL.zip && cd OBDS-3.0.1-FINAL
+unzip OBDS-3.0.2-FINAL.zip && cd OBDS-3.0.2-FINAL
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python reference/run_all.py
 .venv/bin/python reference/release-gate.py
@@ -94,7 +94,7 @@ python -m venv .venv && .venv/bin/pip install -r requirements.txt
 Expected outcome:
 
 ```text
-1068 passed, 0 failed, 0 skipped
+1079 passed, 0 failed, 0 skipped
 ```
 
 The suite contains no `skipif`, no `pytest.skip` and no `xfail`. Every case runs on every
@@ -139,14 +139,14 @@ python reference/release-gate.py
 
 | Suite | Cases |
 |---|---:|
-| foundation | 962 |
+| foundation | 973 |
 | context-delivery | 3 |
 | context-assembly | 24 |
 | design-space | 20 |
 | integration | 15 |
 | golden | 6 |
 | adversarial | 38 |
-| **Total** | **1068** |
+| **Total** | **1079** |
 
 The foundation suite grew from 27 to 43 in OBDS 1.1, to 49 in 1.1.1 with the `requiresDefined`
 precedence cases, the `asOf` verbatim case and the section 14 example check, to 75 in 1.1.2

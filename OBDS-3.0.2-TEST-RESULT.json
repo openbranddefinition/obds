@@ -155,7 +155,7 @@
       "context-assembly": 24,
       "context-delivery": 3,
       "design-space": 20,
-      "foundation": 962,
+      "foundation": 973,
       "golden": 6,
       "integration": 15
     },
@@ -170,21 +170,21 @@
   },
   "kind": "obds-release-test-result",
   "notes": [
-    "OBDS 3.0.1 is a PATCH release: packaging correction; PATCH under section 27.1 because no normative contract changed; the 3.0.0 archive omitted tools/, which the Semantic Closure surface registries name, so the two commands documented for the archive layout did not run and eight enumeration guards refused a release the repository had passed; tools/ is part of the package from 3.0.1 on, the directory list has one definition in reference/release-gate.py, and one packaging test asserts that every path a surface registry names is a path the packager ships; the specification differs from 3.0.0 in its own version stamp and the release-file name in section 33 and in nothing else.",
-    "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0 and 3.0.0.",
+    "OBDS 3.0.2 is a PATCH release: outreach-gate correction; PATCH under section 27.1 because no normative contract changed and the compiler and the runtime were brought back to contracts section 10.2a and section 26.2 already published; 3.0.0 replaced the section 10.2a relevance test with the claim that every target-applicable conflict is decision-relevant, on two arguments that are false against this release, so a conflict a target never read failed that target and section 10.2a said it must not; the runtime bound the package targetId to the artefact and never the requested one, so a caller naming another target was answered from the artefact it held, the model was called and the Runtime Decision Record named a governed decision that never ran; and the README quickstart published an artifactHash that stopped reproducing at 3.0.0 because the only assertion on it was that the artefact agreed with itself; the specification differs from 3.0.1 in its own version stamp and the release-file name in section 33 and in nothing else.",
+    "The public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0 and 3.0.1.",
     "The specification and the documentation are licensed under CC BY 4.0. The schemas, release metadata, reference implementation, conformance suite and examples are licensed under the Apache License 2.0.",
     "This file carries the section 26 identifiers: implementation, obdsVersion, suiteHash, conformanceProfiles, the counts and requiredCasesSkippedOrChanged.",
     "suiteHash covers the suite runner and the seven suite directories with their fixtures. It excludes reference/foundation/src/, which is the implementation under test and is identified by the implementation field.",
     "A profile is listed under conformanceProfiles because the executed suite contains cases for that conformance section. It is evidence for the section, not an independent certification.",
-    "This release runs 1068 cases, adversarial 38, context-assembly 24, context-delivery 3, design-space 20, foundation 962, golden 6, integration 15.",
+    "This release runs 1079 cases, adversarial 38, context-assembly 24, context-delivery 3, design-space 20, foundation 973, golden 6, integration 15.",
     "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
-    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-3.0.1-TEST-REQUIREMENTS.md."
+    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-3.0.2-TEST-REQUIREMENTS.md."
   ],
-  "obdsVersion": "3.0.1",
+  "obdsVersion": "3.0.2",
   "passed": true,
-  "passedCount": 1068,
-  "promotedFrom": "3.0.0",
-  "release": "3.0.1",
+  "passedCount": 1079,
+  "promotedFrom": "3.0.1",
+  "release": "3.0.2",
   "requiredCasesSkippedOrChanged": false,
   "schemaVersion": "1.0.0",
   "skippedCount": 0,
@@ -194,11 +194,11 @@
     "context-assembly": 24,
     "context-delivery": 3,
     "design-space": 20,
-    "foundation": 962,
+    "foundation": 973,
     "golden": 6,
     "integration": 15
   },
   "suiteFileCount": 154,
-  "suiteHash": "sha256:c2e1da72822dd087b748a44b25bceea88bdb2b72aa5dcd89a4846c3c49b9ac86",
-  "testOutputHash": "sha256:4152abe21af46c2271e137cb77f3723d9024b3f2a4b375bc457843f37c15078a"
+  "suiteHash": "sha256:06454913adf42d4581d0b5db3fc9821be32f7d5aa131431a8392f2d7cc018bcb",
+  "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0"
 }

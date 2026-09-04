@@ -212,24 +212,50 @@ def test_a_decision_relevant_conflict_has_no_governed_result_hash():
     assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [True]
 
 
-def test_an_applicable_conflict_has_no_governed_result_whatever_the_projection():
-    """Case B, inverted in 3.0.0.
+def test_a_non_decision_relevant_conflict_still_yields_a_governed_result_hash():
+    """Case B. Section 14.3a, second bullet, and it stays visible as evidence.
 
-    This asserted that a target reading neither candidate through its
-    projections still produced a governed result. Section 14.3a's own MUST is
-    that a projection policy must not change `selection`; deciding whether a
-    `selection` exists at all is that prohibition violated more severely. Both
-    candidates are applicable, so the conflict is decision-relevant and the
-    target fails — with the conflict reported, as before.
+    3.0.0 inverted this case, arguing that two candidate winners always produce
+    two governed result hashes and that section 14.3a therefore forces
+    relevance. 3.0.2 restores it, because the argument reads
+    `_resolve_subject_precedence` backwards: a subject with two incomparable
+    maximal elements contributes no winner to `selected` at all, so there is no
+    pair of hashes to differ over. The test below this one measures exactly
+    that — the conflicted build and the absent-subject build hash the same.
     """
     manifest, plan = _two_elements_on_one_subject(second_element=True)
     result = build(manifest, plan, **NO_PROJECTION)
 
-    assert result.status == "failed"
-    assert "OBDS-BUILD-SUBJECT-CONFLICT" in [error.code for error in result.errors]
-    assert result.artefact is None
-    assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [True]
+    assert result.status == "ready", [error.code for error in result.errors]
+    assert result.artefact["governedResultHash"].startswith("sha256:")
+    assert [conflict["decisionRelevant"] for conflict in result.conflicts] == [False]
     assert result.conflicts[0]["subject"] == "subject:tone"
+
+
+def test_an_irrelevant_conflict_and_an_absent_subject_share_the_governed_result_hash():
+    """Cases B and C. The measurement that refutes the 3.0.0 relevance theorem.
+
+    Section 14.3a states this deliberately: `governedResultHash` identifies the
+    governed result, not the diagnostic history that produced it. A conflicted
+    subject enters `selection` under neither candidate's `elementId`, so a build
+    carrying the conflict and a build where the subject is absent apply exactly
+    the same truth and must hash the same. Two independent implementations
+    therefore agree on an irrelevant conflict, which is what 3.0.0 believed
+    impossible. The distinction survives in the Build Report, which carries the
+    conflict in one case and nothing in the other.
+    """
+    conflicted, plan_b = _two_elements_on_one_subject(second_element=True)
+    absent, plan_c = _two_elements_on_one_subject(second_element=False)
+    absent["elements"] = [element for element in absent["elements"]
+                          if not element["id"].startswith("context.tone")]
+    reseal(absent)
+
+    result_b = build(conflicted, plan_b, **NO_PROJECTION)
+    result_c = build(absent, plan_c, **NO_PROJECTION)
+
+    assert result_b.status == "ready" and result_c.status == "ready"
+    assert result_b.artefact["governedResultHash"] == result_c.artefact["governedResultHash"]
+    assert result_b.conflicts and not result_c.conflicts
 
 
 def test_a_preserved_irrelevant_conflict_and_an_absent_subject_share_the_hash():
@@ -464,6 +490,136 @@ def test_exact_target_loading_builds_only_the_named_target(tmp_path):
     for entry in report["targets"]:
         assert entry["status"] == "ready", entry["targetId"]
         assert entry["artifactRef"] == f"{entry['targetId']}.context.json"
+
+
+# --- 3.0.2: exact target loading at the runtime end of the seam -------------
+#
+# The build side of section 26.2 exact target loading was enforced above and the
+# runtime side was not. A caller naming one target while holding the artefact
+# for another was answered from the artefact it held, the model was called, and
+# the Runtime Decision Record recorded the target that was *asked for* — so the
+# record named a governed decision that never ran.
+
+def _assembled_fixture():
+    root = PACKAGE_ROOT / "reference" / "context-assembly" / "examples"
+    return (
+        load_data(root / "compiled-social-copy-global-en.json"),
+        load_data(root / "model-input-create.json"),
+        (root / "rendered-input-create.txt").read_text(encoding="utf-8"),
+    )
+
+
+def _run_assembled(target_id):
+    from obds_ref.runtime import run_assembled_with_model
+
+    compiled, package, model_input = _assembled_fixture()
+    calls = []
+    record = run_assembled_with_model(
+        compiled,
+        package,
+        model_input,
+        task_input=package["slots"]["taskInput"],
+        target_id=target_id,
+        model=lambda prompt: calls.append(prompt) or "never",
+    )
+    return record, calls
+
+
+def test_a_requested_target_the_artefact_is_not_for_never_reaches_the_model():
+    """The blocker: `different-target` released with one model call."""
+    record, calls = _run_assembled("different-target")
+
+    assert record["decision"] == "no_valid_artifact"
+    assert record["modelCall"]["called"] is False
+    assert calls == []
+
+
+def test_the_matching_target_takes_the_normal_governed_path():
+    compiled, _, _ = _assembled_fixture()
+    record, calls = _run_assembled(compiled["targetId"])
+
+    assert record["decision"] == "released"
+    assert record["modelCall"]["called"] is True
+    assert len(calls) == 1
+
+
+def test_a_canonically_equivalent_target_is_the_same_target():
+    """Section 8.0a decides this comparison, as it decides every other one.
+
+    An NFD spelling of the artefact's own `targetId` is one identity with it, so
+    it must reach the same governed decision rather than a second comparison
+    rule at this seam.
+    """
+    import unicodedata
+
+    compiled, _, _ = _assembled_fixture()
+    equivalent = unicodedata.normalize("NFD", compiled["targetId"])
+    record, calls = _run_assembled(equivalent)
+
+    assert record["decision"] == "released"
+    assert len(calls) == 1
+
+
+def test_an_omitted_target_accepts_the_artefacts_own():
+    record, calls = _run_assembled(None)
+    compiled, _, _ = _assembled_fixture()
+
+    assert record["decision"] == "released"
+    assert record["targetId"] == compiled["targetId"]
+    assert len(calls) == 1
+
+
+def test_the_record_cannot_claim_a_target_the_artefact_did_not_execute():
+    """A released record names the artefact's target, never the caller's word.
+
+    Both spellings of one identity produce a record carrying the artefact's own,
+    so the evidence identifies what ran rather than what was typed. A rejected
+    request records the target that was refused, which is the other thing an
+    operator needs to see.
+    """
+    import unicodedata
+
+    compiled, _, _ = _assembled_fixture()
+    for requested in (None, compiled["targetId"], unicodedata.normalize("NFD", compiled["targetId"])):
+        record, _ = _run_assembled(requested)
+        assert record["decision"] == "released"
+        assert record["targetId"] == compiled["targetId"], requested
+
+    rejected, _ = _run_assembled("different-target")
+    assert rejected["decision"] == "no_valid_artifact"
+    assert rejected["targetId"] == "different-target"
+
+
+def test_the_unassembled_runtime_binds_the_requested_target_too():
+    """One rule, both entry points. A gap at either is a gap.
+
+    `run_with_model` and `run_assembled_with_model` are one contract with two
+    doors, exactly as the governed reader is.
+    """
+    from obds_ref.runtime import run_with_model
+
+    compiled, _, _ = _assembled_fixture()
+    calls = []
+    record = run_with_model(
+        compiled,
+        task_input="a task",
+        target_id="different-target",
+        model=lambda prompt: calls.append(prompt) or "never",
+    )
+    assert record["decision"] == "no_valid_artifact"
+    assert record["modelCall"]["called"] is False
+    assert calls == []
+
+    calls = []
+    accepted = run_with_model(
+        compiled,
+        task_input="a task",
+        target_id=compiled["targetId"],
+        model=lambda prompt: calls.append(prompt) or "ok",
+    )
+    assert accepted["decision"] == "released"
+    assert accepted["targetId"] == compiled["targetId"]
+    assert len(calls) == 1
 
 
 @pytest.mark.parametrize("name,character", [

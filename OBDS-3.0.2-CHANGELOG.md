@@ -2,9 +2,124 @@
 
 ## Release
 
-**Version:** OBDS 3.0.1  
+**Version:** OBDS 3.0.2  
 **Status:** Stable  
-**Date:** 2026-09-03
+**Date:** 2026-09-04
+
+## 3.0.2
+
+**Outreach-gate correction. PATCH.**
+
+OBDS 3.0.2 closes three reproducible findings from an independent outreach gate
+run against the published 3.0.1 release. No normative OBDS contract changed. Two
+of the three are the implementation being brought back to contracts 3.0 already
+publishes; the third is a published number that stopped reproducing.
+
+The specification differs from 3.0.1 in its own version stamp and the
+release-file name in section 33, and in nothing else.
+
+### 1. Conflict relevance contradicted section 10.2a
+
+**What was wrong.** Section 10.2a states that a hard conflict fails a target
+only when the conflicted subject is decision-relevant to it, lists the five ways
+a subject becomes decision-relevant, and says in as many words that "a target
+that selects narrowly is not failed by a conflict it never reads" and that
+failing a target on a conflict it cannot observe "is not fail-closed, it is
+fail-arbitrary". 3.0.0 replaced that test in the compiler with the claim that
+every target-applicable conflict is decision-relevant. Two `unknown` elements
+sharing a subject with incomparable scopes, neither required nor referenced,
+with `stateMap.mode: none`, `styleTexture.mode: none` and no Context Assembly,
+failed the build with `OBDS-BUILD-SUBJECT-CONFLICT` and `decisionRelevant:
+true`, against a specification paragraph that was never changed.
+
+**Why the 3.0.0 reasoning does not hold.** It rested on two arguments and this
+release refutes both.
+
+The first was that Context Assembly rebuilds FACT_GROUNDING and STATE_MAP from
+the whole element universe under `deliveryMode: full`, so a narrow projection
+policy would not actually keep a losing candidate away from the model. That path
+does not exist here. `assemble()` reads `elementRecords` and
+`availableElementIds` from the compiled artefact and refuses manifest access
+outside the declared `manifest_checked` no-hit resolution. A conflicted subject
+contributes no element to `applicable`, so it appears in neither list, and
+neither candidate is reachable from the artefact at all. There is a test for
+exactly that now.
+
+The second was that two candidate winners always produce two
+`governedResultHash` values, so section 14.3a forces relevance. That reads
+`_resolve_subject_precedence` backwards. A subject with two or more incomparable
+maximal elements contributes *nothing* to the selection; there is no winner to
+differ over. Two implementations hash a payload the subject is absent from and
+agree. 2.0.0 measured this directly and the measurement is restored: an
+irrelevant conflict and an absent subject share one `governedResultHash`.
+
+**What changed.** `_conflict_is_decision_relevant` is restored and the compiler
+decides relevance by the section 10.2a rule, with the rule above the list
+governing where the two disagree. The preserved-irrelevance class 3.0.0 added —
+a subject whose incomparable maximal elements are not all applicable to this
+target — is kept. An irrelevant conflict is still reported in `conflicts[]`,
+marked `decisionRelevant: false`; it is never silently discarded.
+
+**Regression protection.** The Class E channel matrix asserted `failed` for all
+32 combinations, which tests one branch of a two-branch predicate. It now
+asserts the section 10.2a outcome for each combination against an oracle written
+from the specification text rather than from the code, so a change that widens
+relevance and a change that narrows it both fail. The fixture case 3.0.0
+inverted is restored, as is the advisory-RULES case, and one new test measures
+that neither candidate of an irrelevant conflict reaches
+`availableElementIds`, `includedElementIds`, `elementRecords` or a rendered slot.
+
+### 2. The runtime did not bind the requested target
+
+**What was wrong.** Section 26.2 requires exact target loading. The build side
+enforced it — one plan with three targets produces exactly three artefacts — and
+the runtime side did not. Loading the artefact for `social-copy-global-en` and
+calling the runtime with `target_id="different-target"` released, called the
+model once, and wrote a Runtime Decision Record naming `different-target`: a
+record for a governed decision that never ran. The package-to-artefact
+`targetId` binding beside it was already correct; the caller's own request was
+never asked about.
+
+**What changed.** Both runtime entry points bind the requested identity to
+`artefact.targetId` before any model call, through the same
+`_comparable_identity` the package binding uses, so section 8.0a decides this
+comparison as it decides every other one. A mismatch is `no_valid_artifact` with
+zero model calls. `target_id=None` still accepts the artefact's own, and a
+canonically equivalent spelling is the same target. Once bound, the record
+carries the artefact's own spelling, so a released record names what executed
+rather than what the caller typed.
+
+**Regression protection.** Six cases: the mismatch, the exact match, the
+NFD-equivalent match, the omitted target, the record's target under all four,
+and the same pair through `run_with_model`, because two entry points are one
+contract with two doors.
+
+### 3. The README quickstart published a hash it does not produce
+
+**What was wrong.** `README.md` publishes the output of the first command an
+external implementer runs, including
+`artifactHash sha256:193b760d…`. That value was correct through 2.0.0 and
+stopped reproducing at 3.0.0, when the compiled-context payload changed. The
+command produces `sha256:101537ac…`. Every other value in the block — the
+target, the status, the artefact reference, the requirement row, the exit code,
+the three files on disk and `governedResultHash` — reproduces exactly.
+
+**Why nothing caught it.** The only assertion on that value was
+`artefact["artifactHash"] == artefact_hash(artefact)`, which holds for every
+artefact ever sealed and therefore proves nothing about the literal a reader
+compares.
+
+**What changed.** The published value is corrected, and one test parses the
+block out of `README.md` and checks every field in it against a real build, so
+correcting the page and correcting the test are one edit. A copy of the expected
+values inside the test would drift from the page exactly as the page drifted
+from the compiler.
+
+### Not in this release
+
+The sustainability communication benchmark is not part of 3.0.2. Public
+benchmark availability remains a Research Package and outreach-package concern,
+not a release blocker.
 
 ## 3.0.1
 

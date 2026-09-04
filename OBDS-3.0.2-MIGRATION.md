@@ -1,7 +1,9 @@
 # OBDS Migration Notes
 
 Start at the section for the release you are on. Coming from 2.x, that is
-"2.0.0 to 3.0.0"; coming from 3.0.0 there is nothing to do.
+"2.0.0 to 3.0.0"; coming from 3.0.x there is nothing to change in your files,
+though 3.0.2 changes two governed outcomes — read that section before you rely
+on a stored build report.
 
 ## 0.9.9 to 1.0.0
 
@@ -79,6 +81,41 @@ python reference/release-gate.py
 run from an unpacked `OBDS-3.0.1-FINAL.zip` as well as from a clone. Under 3.0.0
 they did not, because the surface registries named files the archive did not
 carry.
+
+## 3.0.1 to 3.0.2
+
+Nothing to change in your files.
+
+No normative contract changed. `schemaVersion` stays `3.0.0` in Build Plans and
+compiled contexts, the published 3.0.0 contracts are byte-identical, and no
+stored hash moves for any build that succeeded under 3.0.1.
+
+Two governed outcomes do change, because the compiler and the runtime were
+brought back to contracts 3.0 already publishes. Both changes are the same
+shape: a decision that was wrong against the specification is now right.
+
+**1. A conflict this target never reads no longer fails it.** Section 10.2a has
+said since 1.1.3 that a hard conflict fails a target only when the conflicted
+subject is decision-relevant to it. 3.0.0 replaced that test with "every
+target-applicable conflict is decision-relevant", so a manifest defect on a
+subject a target neither requires, nor references, nor carries into STATE_MAP or
+STYLE_TEXTURE failed that target. If you have a build that failed under 3.0.1
+with `OBDS-BUILD-SUBJECT-CONFLICT` and none of the five section 10.2a criteria
+applies to it, that build now succeeds. The conflict is still reported in
+`conflicts[]`, marked `decisionRelevant: false`, because it is still a manifest
+defect worth repairing. A conflict the target *does* read still fails it, as it
+always has.
+
+**2. A runtime call naming a target the artefact is not for now fails closed.**
+Section 26.2 requires exact target loading. The build side enforced it and the
+runtime side did not: a caller passing `target_id` was answered from whatever
+artefact it held, the model was called, and the Runtime Decision Record recorded
+the target that was *asked for*. The requested identity is now bound to
+`artefact.targetId` before any model call, on the canonical form of section
+8.0a, and a mismatch produces `no_valid_artifact` with zero model calls. Passing
+no `target_id` still accepts the artefact's own, and a canonically equivalent
+spelling is the same target. If any of your code passes a `target_id` that does
+not match the artefact it loads, that call is a bug this release surfaces.
 
 ## 2.0.0 to 3.0.0
 

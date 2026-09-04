@@ -793,6 +793,9 @@ COMPILED_CONTEXT_CONSUMERS = {
         "internal to assemble(), reached only after _validate_compiled_context",
     "reference/foundation/src/obds_ref/runtime.py::_artifact_valid_at":
         "internal to the runtime executors, after their contract gate",
+    "reference/foundation/src/obds_ref/runtime.py::_requested_target_is_bound":
+        "internal to the runtime executors, after their contract gate; binds the "
+        "requested targetId to the artefact's own and decides nothing else",
     "reference/foundation/src/obds_ref/runtime.py::_assert_artefact_identity":
         "internal to the runtime executors, after their contract gate",
     "reference/foundation/src/obds_ref/runtime.py::_compiled_checks":
@@ -807,6 +810,9 @@ COMPILED_CONTEXT_CONSUMERS = {
         "is the contract execution the runtime executors call",
     "reference/foundation/src/obds_ref/runtime.py::_governed_artefact_errors":
         "is the gate itself: the published contract plus section 8.0a identity admissibility",
+    "reference/foundation/src/obds_ref/compiler.py::_conflict_is_decision_relevant":
+        "decides section 10.2a relevance from manifest elements and the build target, "
+        "before any compiled context exists; the marker it matches is in a comment",
     "reference/foundation/src/obds_ref/compiler.py::_manifest_identity_positions":
         "enumerates identity positions in a manifest; it reads no compiled context and decides nothing",
     "reference/foundation/src/obds_ref/canonical.py::compiled_context_identity_positions":
