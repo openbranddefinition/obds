@@ -1,0 +1,33 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:20.409277+00:00'
+planId: urn:obds:build-plan:case-12
+planHash: sha256:b8382dde129dcc0ae5c41faacb9bfdde8d451f1d55336299369f4a002a003430
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-12
+  status: ready
+  artifactRef: case-12.context.json
+  artifactHash: sha256:5adbc8e7ddf1962a46b7a9aed614cab8a698098d620095d34ecdb59434c95d83
+  tokenCounts:
+    hardBoundaries: 0
+    factGrounding: 7
+    stateMap: 12
+    styleTexture: 74
+    total: 93
+    max: 4000
+  budgetStatus: within_budget
+  requirements:
+  - elementId: claim.taxonomy.eligible-revenue-share
+    expectedState: defined
+    actualState: defined
+    result: pass
+  - elementId: evidence.taxonomy.turnover-kpi
+    expectedState: defined
+    actualState: defined
+    result: pass
+  conflicts: []
+  errors: []

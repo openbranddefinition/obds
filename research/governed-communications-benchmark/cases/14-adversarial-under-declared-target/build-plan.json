@@ -1,0 +1,45 @@
+{
+  "id": "urn:obds:build-plan:case-14",
+  "kind": "obds-build-plan",
+  "schemaVersion": "3.0.0",
+  "manifestRef": {
+    "id": "urn:obds:brand:gcb-research-fixture",
+    "version": "1.0.0",
+    "contentHash": "sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992"
+  },
+  "compiler": {
+    "id": "org.openbranddefinition.reference-compiler",
+    "version": "1.0.0"
+  },
+  "tokenizer": {
+    "id": "obds:whitespace-v1",
+    "version": "1.0.0"
+  },
+  "targets": [
+    {
+      "id": "case-14",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ],
+        "outputTypes": [
+          "marketing-copy"
+        ]
+      },
+      "requiresDefined": [
+        "structure.brand"
+      ],
+      "styleTexture": {
+        "mode": "none",
+        "elementIds": []
+      },
+      "stateMap": {
+        "mode": "all_applicable",
+        "kinds": []
+      },
+      "releasePolicy": "build_only",
+      "maxTokens": 4000
+    }
+  ],
+  "asOf": "2025-12-01T00:00:00Z"
+}

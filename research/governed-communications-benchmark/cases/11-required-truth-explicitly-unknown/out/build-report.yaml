@@ -1,0 +1,29 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:20.282366+00:00'
+planId: urn:obds:build-plan:case-11
+planHash: sha256:75a363e02859ed8f9d9efa1fef1ffb9c0295fe2bd9c80d2ad201e2450b6b2f72
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-11
+  status: failed
+  artifactRef: null
+  artifactHash: null
+  tokenCounts: {}
+  budgetStatus: not_measured
+  requirements:
+  - elementId: claim.waste.value-chain-recycling-rate
+    expectedState: defined
+    actualState: not_defined
+    result: fail
+  conflicts: []
+  errors:
+  - code: OBDS-BUILD-REQUIRED-NOT-DEFINED
+    message: 'claim.waste.value-chain-recycling-rate: expected defined, got not_defined'
+    elementId: claim.waste.value-chain-recycling-rate
+  - code: OBDS-BUILD-STYLE-SELECTION
+    message: 'selected style element is not applicable defined KNOWLEDGE: claim.waste.value-chain-recycling-rate'
+    elementId: claim.waste.value-chain-recycling-rate

@@ -1,0 +1,33 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:19.795180+00:00'
+planId: urn:obds:build-plan:case-07
+planHash: sha256:60ff965ffd32830ddb6fa8c6959ba7e624583a236ee6aa3a6719dfd5bf44400c
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-07
+  status: failed
+  artifactRef: null
+  artifactHash: null
+  tokenCounts: {}
+  budgetStatus: not_measured
+  requirements:
+  - elementId: claim.scope3.target
+    expectedState: defined
+    actualState: defined
+    result: pass
+  - elementId: evidence.assurance.scope3-progress
+    expectedState: defined
+    actualState: not_applicable
+    result: fail
+  conflicts: []
+  errors:
+  - code: OBDS-BUILD-REQUIRED-NOT-DEFINED
+    message: 'evidence.assurance.scope3-progress: expected defined, got not_applicable'
+    elementId: evidence.assurance.scope3-progress
+  - code: OBDS-BUILD-STYLE-SELECTION
+    message: 'selected style element is not applicable defined KNOWLEDGE: evidence.assurance.scope3-progress'
+    elementId: evidence.assurance.scope3-progress

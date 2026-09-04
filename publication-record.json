@@ -5,7 +5,7 @@
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "3.0.2",
+ "currentRelease": "3.0.3",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:affc8729c331e8a3a483da9a0782b5362c253fab1d4a17e8eb24d20ea186583c",
- "previousRelease": "3.0.1",
+ "packageZipSha256": "sha256:962fb46b9adc5e0d6bf6cc8ee777ae861ce53772f10a40f18c71bba0674bb7ab",
+ "previousRelease": "3.0.2",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -169,6 +169,14 @@
    "packageZipSha256": "sha256:affc8729c331e8a3a483da9a0782b5362c253fab1d4a17e8eb24d20ea186583c",
    "status": "stable",
    "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0"
+  },
+  "3.0.3": {
+   "baseUrl": "https://openbranddefinition.org/spec/3.0.3/",
+   "date": "2026-09-04",
+   "note": "documentation and public-surface neutrality patch; PATCH under section 27.1 because no normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed; one sector-specific example value in the section 9 Scope example became the neutral placeholder productFamilies: [example-family], which is an example-value substitution and leaves productFamilies, scope construction, applicability, precedence, selection and conflict relevance untouched; the suite and its result are identical to 3.0.2, testOutputHash and suiteHash unchanged and all 32 published contracts byte-identical, so only the version stamp, the release-file name, the specification's own document hash and the archive hash move; 3.0.2 is not withdrawn and its published bytes, hashes, archive and tag are unchanged; the public Research Package is published under research/ alongside this release as documentation and evidence, adding no specification content, no schema and no runtime behaviour",
+   "packageZipSha256": "sha256:962fb46b9adc5e0d6bf6cc8ee777ae861ce53772f10a40f18c71bba0674bb7ab",
+   "status": "stable",
+   "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -185,5 +193,5 @@
  "totalPublicContracts": 32,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 5,
- "websiteIndexSha256": "sha256:a6f501bb488052060666ee3772176a81331831e89530c0e42ffddb27a7668feb"
+ "websiteIndexSha256": "sha256:3c49417a12a0323f908840a4a01063cd6c9033c2478fc16944b3042ff68273f1"
 }

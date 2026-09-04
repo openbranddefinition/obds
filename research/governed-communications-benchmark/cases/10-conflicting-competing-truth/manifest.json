@@ -1,0 +1,395 @@
+{
+  "id": "urn:obds:brand:gcb-research-fixture",
+  "kind": "brand-manifest",
+  "name": "Governed Communications Research Fixture",
+  "owner": "OBDS research fixture, de-identified, not a real organisation",
+  "schemaVersion": "1.0.0",
+  "version": "1.0.0",
+  "status": "approved",
+  "createdAt": "2026-09-04T09:00:00+02:00",
+  "updatedAt": "2026-09-04T09:00:00+02:00",
+  "profiles": [
+    "obds-foundation"
+  ],
+  "elements": [
+    {
+      "id": "structure.brand",
+      "family": "structure",
+      "kind": "brand-identity",
+      "nature": "fact",
+      "state": "defined",
+      "scope": {},
+      "sourceRefs": [],
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "annotations": [],
+      "value": {
+        "name": "Governed Communications Research Fixture"
+      },
+      "valueContractRef": "urn:obds:brand:gcb-research-fixture#value-contract:structure:brand-identity:2b7196d8"
+    },
+    {
+      "id": "claim.taxonomy.eligible-revenue-share",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, taxonomy KPI section"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "canonicalWording": "84.6% of the group's consolidated revenue in fiscal year 2025 was taxonomy-eligible.",
+        "claimType": "environmental",
+        "riskLevel": "regulated",
+        "conditions": [
+          "applies to consolidated revenue, not to a product count",
+          "eligible is not aligned",
+          "2.4 pp taxonomy-ineligible",
+          "13.0 pp unclassified for lack of data"
+        ],
+        "evidenceRefs": [
+          "evidence.taxonomy.turnover-kpi"
+        ],
+        "prohibitedVariants": [
+          "85% of the group's products are environmentally sustainable under the taxonomy.",
+          "85% of the group's products are taxonomy-aligned."
+        ]
+      }
+    },
+    {
+      "id": "claim.recycled-input.process-emissions",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ],
+        "productFamilies": [
+          "product-line-a"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, recycled-input section"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "canonicalWording": "Manufacturing the recycled input material results in a 62% saving in carbon emissions compared with virgin raw material.",
+        "claimType": "comparative",
+        "riskLevel": "regulated",
+        "conditions": [
+          "system boundary is the manufacturing process for the input material",
+          "comparison baseline is virgin raw material",
+          "not a whole-product lifecycle figure"
+        ],
+        "evidenceRefs": [
+          "evidence.recycled-input.process-data"
+        ]
+      }
+    },
+    {
+      "id": "claim.scope2.market-based-reduction",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, climate section"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "canonicalWording": "Market-based Scope 2 emissions fell 19% from 2024 to 2025.",
+        "claimType": "factual",
+        "riskLevel": "regulated",
+        "conditions": [
+          "market-based Scope 2 only",
+          "Scope 1 rose 11% in the same period",
+          "material Scope 3 rose 2% in the same period"
+        ],
+        "evidenceRefs": [
+          "evidence.assurance.limited-fy25"
+        ]
+      }
+    },
+    {
+      "id": "evidence.taxonomy.turnover-kpi",
+      "family": "context",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, taxonomy KPI tables"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "type": "dataset",
+        "title": "Taxonomy turnover KPI, fiscal year 2025",
+        "issuer": "Reporting entity",
+        "methodologySummary": "Turnover KPI per the applicable taxonomy regulation.",
+        "limitations": [
+          "eligibility only; alignment assessment still in progress",
+          "13.0 pp unclassified for lack of data"
+        ]
+      }
+    },
+    {
+      "id": "evidence.recycled-input.process-data",
+      "family": "context",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ],
+        "productFamilies": [
+          "product-line-a"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, recycled-input section"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "type": "study",
+        "title": "Recycled input material manufacturing comparison versus virgin raw material",
+        "issuer": "Reporting entity",
+        "methodologySummary": "Process comparison over the manufacturing stage of the input material only.",
+        "limitations": [
+          "manufacturing process only",
+          "not a product lifecycle assessment"
+        ]
+      }
+    },
+    {
+      "id": "evidence.assurance.limited-fy25",
+      "family": "context",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, independent assurance report"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "type": "approval",
+        "title": "Independent limited assurance report, fiscal year 2025",
+        "issuer": "Independent auditor",
+        "methodologySummary": "Limited assurance engagement.",
+        "limitations": [
+          "materially lower than reasonable assurance",
+          "excludes the transition plan disclosure",
+          "excludes the actions and resources disclosure",
+          "excludes progress against greenhouse-gas reduction targets",
+          "forward-looking disclosures are not assured as achievable"
+        ]
+      }
+    },
+    {
+      "id": "claim.scope3.target",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, climate targets"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "value": {
+        "canonicalWording": "The group targets a 55% reduction in material Scope 3 emissions by 2032 against a 2019 base year; 2025 progress is stated as 61%.",
+        "claimType": "environmental",
+        "riskLevel": "regulated",
+        "conditions": [
+          "forward-looking target",
+          "progress disclosure is outside the limited assurance conclusion"
+        ],
+        "evidenceRefs": [
+          "evidence.assurance.scope3-progress"
+        ]
+      }
+    },
+    {
+      "id": "claim.taxonomy.aligned-revenue-share",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "unknown",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Alignment assessment still in progress; no aligned share reported"
+      ],
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "annotations": []
+    },
+    {
+      "id": "claim.recycled-input.whole-product-carbon-reduction",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "unknown",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ],
+        "productFamilies": [
+          "product-line-a"
+        ]
+      },
+      "sourceRefs": [
+        "No whole-product lifecycle figure is reported"
+      ],
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "annotations": []
+    },
+    {
+      "id": "evidence.assurance.scope3-progress",
+      "family": "context",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "state": "not_applicable",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Progress against greenhouse-gas reduction targets is explicitly excluded from the limited assurance conclusion"
+      ],
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "annotations": []
+    },
+    {
+      "id": "claim.waste.value-chain-recycling-rate",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "not_defined",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Waste collection covers the entity's own sites only, not the full value chain"
+      ],
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "annotations": []
+    },
+    {
+      "id": "claim.taxonomy.eligible-revenue-share.competing",
+      "family": "context",
+      "kind": "claim",
+      "nature": "knowledge",
+      "state": "defined",
+      "scope": {
+        "outputTypes": [
+          "marketing-copy"
+        ]
+      },
+      "sourceRefs": [
+        "Competing internal summary, executive deck"
+      ],
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "annotations": [],
+      "subject": "claim.taxonomy.eligible-revenue-share",
+      "value": {
+        "canonicalWording": "85% of the portfolio was classified as taxonomy-eligible.",
+        "claimType": "environmental",
+        "riskLevel": "regulated",
+        "conditions": []
+      }
+    }
+  ],
+  "valueContracts": [
+    {
+      "id": "urn:obds:brand:gcb-research-fixture#value-contract:structure:brand-identity:2b7196d8",
+      "family": "structure",
+      "kind": "brand-identity",
+      "shapeHash": "sha256:2b7196d853bac7cea83330be9c2073848dedc10746eaf403bb5f73687531baf2",
+      "schemaRef": "https://openbranddefinition.org/value-schemas/1.0.0/brand-identity.schema.json",
+      "schemaHash": "sha256:c99a47a601388f9a855a4a6b006f10a3e5709bcfb1ab3073f7c5d63114c24c51",
+      "validatorRef": null
+    }
+  ],
+  "approval": {
+    "approvedBy": "role:brand-owner",
+    "approvedAt": "2026-09-04T09:00:00+02:00",
+    "contentHash": "sha256:6b051677f45e4e835e3f0a43f507975f8ca5b89c9b8cf5c7b3a47738a38f5f32"
+  }
+}

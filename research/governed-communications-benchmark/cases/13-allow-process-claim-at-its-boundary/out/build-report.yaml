@@ -1,0 +1,33 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:20.534921+00:00'
+planId: urn:obds:build-plan:case-13
+planHash: sha256:ac57d80fa07dac682d612e97f6ef0e6c7db6eb609554ae4b87512503079f094a
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-13
+  status: ready
+  artifactRef: case-13.context.json
+  artifactHash: sha256:d8e71916da102c1295096143efafe2824a23b5ea5e8a4f9201fc37732f1bd576
+  tokenCounts:
+    hardBoundaries: 0
+    factGrounding: 7
+    stateMap: 16
+    styleTexture: 64
+    total: 87
+    max: 4000
+  budgetStatus: within_budget
+  requirements:
+  - elementId: claim.recycled-input.process-emissions
+    expectedState: defined
+    actualState: defined
+    result: pass
+  - elementId: evidence.recycled-input.process-data
+    expectedState: defined
+    actualState: defined
+    result: pass
+  conflicts: []
+  errors: []

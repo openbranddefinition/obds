@@ -1,0 +1,29 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:19.425114+00:00'
+planId: urn:obds:build-plan:case-04
+planHash: sha256:0eba6632c9509b2a14155d1abeb55f46d28b5bf1ceb6ea65a3ac0b819b73c4ed
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-04
+  status: failed
+  artifactRef: null
+  artifactHash: null
+  tokenCounts: {}
+  budgetStatus: not_measured
+  requirements:
+  - elementId: claim.recycled-input.whole-product-carbon-reduction
+    expectedState: defined
+    actualState: unknown
+    result: fail
+  conflicts: []
+  errors:
+  - code: OBDS-BUILD-REQUIRED-NOT-DEFINED
+    message: 'claim.recycled-input.whole-product-carbon-reduction: expected defined, got unknown'
+    elementId: claim.recycled-input.whole-product-carbon-reduction
+  - code: OBDS-BUILD-STYLE-SELECTION
+    message: 'selected style element is not applicable defined KNOWLEDGE: claim.recycled-input.whole-product-carbon-reduction'
+    elementId: claim.recycled-input.whole-product-carbon-reduction

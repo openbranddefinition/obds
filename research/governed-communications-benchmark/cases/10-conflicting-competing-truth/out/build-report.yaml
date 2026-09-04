@@ -1,0 +1,39 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:20.158882+00:00'
+planId: urn:obds:build-plan:case-10
+planHash: sha256:e234266c39bf45f74fa69b54c056ff06cbd25e8137935181c3aa2fea10099abe
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:6b051677f45e4e835e3f0a43f507975f8ca5b89c9b8cf5c7b3a47738a38f5f32
+compilerVersion: 1.0.0
+targets:
+- targetId: case-10
+  status: failed
+  artifactRef: null
+  artifactHash: null
+  tokenCounts: {}
+  budgetStatus: not_measured
+  requirements:
+  - elementId: claim.taxonomy.eligible-revenue-share
+    expectedState: defined
+    actualState: not_applicable
+    result: fail
+  conflicts:
+  - subject: claim.taxonomy.eligible-revenue-share
+    elementIds:
+    - claim.taxonomy.eligible-revenue-share
+    - claim.taxonomy.eligible-revenue-share.competing
+    reason: incomparable_maximal_elements
+    decisionRelevant: true
+  errors:
+  - code: OBDS-BUILD-SUBJECT-CONFLICT
+    message: 'semantic subject claim.taxonomy.eligible-revenue-share has incomparable maximal elements: claim.taxonomy.eligible-revenue-share,
+      claim.taxonomy.eligible-revenue-share.competing'
+    elementId: null
+  - code: OBDS-BUILD-REQUIRED-NOT-DEFINED
+    message: 'claim.taxonomy.eligible-revenue-share: expected defined, got not_applicable'
+    elementId: claim.taxonomy.eligible-revenue-share
+  - code: OBDS-BUILD-STYLE-SELECTION
+    message: 'selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.eligible-revenue-share'
+    elementId: claim.taxonomy.eligible-revenue-share

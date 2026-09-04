@@ -7,6 +7,12 @@
 # Local working notes, research and internal reports.
 answers/
 
+# Internal tooling source. `tools/` ships in the release package because the
+# archive has to be able to verify itself, but the website never serves it: the
+# deploy smoke test lists the private paths it asserts are absent, so serving it
+# published that inventory. Git and the release ZIP keep it; the site does not.
+tools/
+
 # Withdrawn drafts and local-only material, mirrored from .gitignore.
 md/
 licensing/

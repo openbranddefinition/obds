@@ -1,0 +1,29 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:20.661341+00:00'
+planId: urn:obds:build-plan:case-14
+planHash: sha256:ad8f981e124550e2ca261f6d78546bb93e623cd2dbe1bfee80787b8799cc31cd
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-14
+  status: ready
+  artifactRef: case-14.context.json
+  artifactHash: sha256:daf3f87483ccc1130258925064d1ffb5df74bedd0cffc155f063fb623081b1bb
+  tokenCounts:
+    hardBoundaries: 0
+    factGrounding: 7
+    stateMap: 12
+    styleTexture: 0
+    total: 19
+    max: 4000
+  budgetStatus: within_budget
+  requirements:
+  - elementId: structure.brand
+    expectedState: defined
+    actualState: defined
+    result: pass
+  conflicts: []
+  errors: []

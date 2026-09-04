@@ -1,0 +1,212 @@
+[
+  {
+    "case": "01",
+    "slug": "metric-transformation-revenue-vs-products",
+    "title": "Metric transformation: a revenue share becomes a product share",
+    "category": "numerical achievement",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 1,
+    "stdout": "{\n  \"errors\": [\n    \"case-01: requiresDefined reference not found: claim.product.share-environmentally-sustainable\",\n    \"case-01: styleTexture reference not found: claim.product.share-environmentally-sustainable\"\n  ],\n  \"valid\": false\n}",
+    "stderr": "",
+    "artefacts": []
+  },
+  {
+    "case": "02",
+    "slug": "status-eligible-vs-aligned",
+    "title": "Regulatory status: eligible presented as aligned",
+    "category": "certification or rating",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:19.178366+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:2142a233d6c9b821713a8ef76fc94b21e71fb99f0ee2245ee8a1aa3f774b4130\",\n  \"planId\": \"urn:obds:build-plan:case-02\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-NOT-DEFINED\",\n          \"elementId\": \"claim.taxonomy.aligned-revenue-share\",\n          \"message\": \"claim.taxonomy.aligned-revenue-share: expected defined, got unknown\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.taxonomy.aligned-revenue-share\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.aligned-revenue-share\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"unknown\",\n          \"elementId\": \"claim.taxonomy.aligned-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-02\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "03",
+    "slug": "semantic-inflation-eligible-to-sustainable",
+    "title": "Semantic inflation: eligible presented as environmentally sustainable",
+    "category": "environmental claim",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:19.301355+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:a3fc25bc8c17c88f2eef6296e76389a2ea35b077ae83644c140247eb52bc53f8\",\n  \"planId\": \"urn:obds:build-plan:case-03\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-NOT-DEFINED\",\n          \"elementId\": \"claim.taxonomy.aligned-revenue-share\",\n          \"message\": \"claim.taxonomy.aligned-revenue-share: expected defined, got unknown\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.taxonomy.aligned-revenue-share\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.aligned-revenue-share\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        },\n        {\n          \"actualState\": \"unknown\",\n          \"elementId\": \"claim.taxonomy.aligned-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-03\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "04",
+    "slug": "system-boundary-process-to-whole-product",
+    "title": "System boundary: a process saving becomes a whole-product claim",
+    "category": "environmental claim",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:19.425114+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:0eba6632c9509b2a14155d1abeb55f46d28b5bf1ceb6ea65a3ac0b819b73c4ed\",\n  \"planId\": \"urn:obds:build-plan:case-04\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-NOT-DEFINED\",\n          \"elementId\": \"claim.recycled-input.whole-product-carbon-reduction\",\n          \"message\": \"claim.recycled-input.whole-product-carbon-reduction: expected defined, got unknown\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.recycled-input.whole-product-carbon-reduction\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.recycled-input.whole-product-carbon-reduction\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"unknown\",\n          \"elementId\": \"claim.recycled-input.whole-product-carbon-reduction\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-04\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "05",
+    "slug": "entity-scope-mismatch",
+    "title": "Entity scope: a group KPI applied to a non-consolidated entity",
+    "category": "numerical achievement",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:19.548820+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:636992bf894fb799c580dce36eea5aae238d475375026d1042db0e58de4e09f6\",\n  \"planId\": \"urn:obds:build-plan:case-05\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-OUT-OF-SCOPE\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"message\": \"claim.taxonomy.eligible-revenue-share: expected defined, got not_applicable\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.eligible-revenue-share\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"not_applicable\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-05\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "06",
+    "slug": "validity-period-asof-mismatch",
+    "title": "Validity period: a fiscal-year KPI presented as a current fact",
+    "category": "validity period",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:19.672662+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:d1543a3e70cd41413f6a0e31334005555eaaea3efa7c71bb0ab235331ed402f9\",\n  \"planId\": \"urn:obds:build-plan:case-06\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-EXPIRED\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"message\": \"claim.taxonomy.eligible-revenue-share: expected defined, got not_applicable\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.eligible-revenue-share\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"not_applicable\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-06\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "07",
+    "slug": "assurance-scope-mismatch",
+    "title": "Assurance scope: report-level assurance projected onto an excluded disclosure",
+    "category": "required qualification",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:19.795180+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:60ff965ffd32830ddb6fa8c6959ba7e624583a236ee6aa3a6719dfd5bf44400c\",\n  \"planId\": \"urn:obds:build-plan:case-07\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-NOT-DEFINED\",\n          \"elementId\": \"evidence.assurance.scope3-progress\",\n          \"message\": \"evidence.assurance.scope3-progress: expected defined, got not_applicable\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"evidence.assurance.scope3-progress\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: evidence.assurance.scope3-progress\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"claim.scope3.target\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        },\n        {\n          \"actualState\": \"not_applicable\",\n          \"elementId\": \"evidence.assurance.scope3-progress\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-07\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "08",
+    "slug": "disclosure-outside-assurance-presented-as-assured",
+    "title": "Disclosure outside limited assurance presented as assured",
+    "category": "required qualification",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 1,
+    "stdout": "{\n  \"errors\": [\n    \"case-08: requiresDefined reference not found: evidence.assurance.transition-plan\",\n    \"case-08: styleTexture reference not found: evidence.assurance.transition-plan\"\n  ],\n  \"valid\": false\n}",
+    "stderr": "",
+    "artefacts": []
+  },
+  {
+    "case": "09",
+    "slug": "missing-evidence-dependency",
+    "title": "Missing evidence dependency: a claim whose evidence element is absent",
+    "category": "certification or rating",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 1,
+    "stdout": "{\n  \"errors\": [\n    \"case-09: requiresDefined reference not found: evidence.product-line-a.climate-neutral-certificate\",\n    \"case-09: styleTexture reference not found: evidence.product-line-a.climate-neutral-certificate\"\n  ],\n  \"valid\": false\n}",
+    "stderr": "",
+    "artefacts": []
+  },
+  {
+    "case": "10",
+    "slug": "conflicting-competing-truth",
+    "title": "Conflicting source: two incomparable elements govern one subject",
+    "category": "numerical achievement",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:20.158882+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:6b051677f45e4e835e3f0a43f507975f8ca5b89c9b8cf5c7b3a47738a38f5f32\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:e234266c39bf45f74fa69b54c056ff06cbd25e8137935181c3aa2fea10099abe\",\n  \"planId\": \"urn:obds:build-plan:case-10\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [\n        {\n          \"decisionRelevant\": true,\n          \"elementIds\": [\n            \"claim.taxonomy.eligible-revenue-share\",\n            \"claim.taxonomy.eligible-revenue-share.competing\"\n          ],\n          \"reason\": \"incomparable_maximal_elements\",\n          \"subject\": \"claim.taxonomy.eligible-revenue-share\"\n        }\n      ],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-SUBJECT-CONFLICT\",\n          \"elementId\": null,\n          \"message\": \"semantic subject claim.taxonomy.eligible-revenue-share has incomparable maximal elements: claim.taxonomy.eligible-revenue-share, claim.taxonomy.eligible-revenue-share.competing\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-NOT-DEFINED\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"message\": \"claim.taxonomy.eligible-revenue-share: expected defined, got not_applicable\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.eligible-revenue-share\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"not_applicable\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-10\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "11",
+    "slug": "required-truth-explicitly-unknown",
+    "title": "Required truth not_defined, and it does not substitute",
+    "category": "historical status",
+    "expected": "BLOCK",
+    "actual": "BLOCK",
+    "match": true,
+    "exitCode": 2,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:20.282366+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:75a363e02859ed8f9d9efa1fef1ffb9c0295fe2bd9c80d2ad201e2450b6b2f72\",\n  \"planId\": \"urn:obds:build-plan:case-11\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": null,\n      \"artifactRef\": null,\n      \"budgetStatus\": \"not_measured\",\n      \"conflicts\": [],\n      \"errors\": [\n        {\n          \"code\": \"OBDS-BUILD-REQUIRED-NOT-DEFINED\",\n          \"elementId\": \"claim.waste.value-chain-recycling-rate\",\n          \"message\": \"claim.waste.value-chain-recycling-rate: expected defined, got not_defined\"\n        },\n        {\n          \"code\": \"OBDS-BUILD-STYLE-SELECTION\",\n          \"elementId\": \"claim.waste.value-chain-recycling-rate\",\n          \"message\": \"selected style element is not applicable defined KNOWLEDGE: claim.waste.value-chain-recycling-rate\"\n        }\n      ],\n      \"requirements\": [\n        {\n          \"actualState\": \"not_defined\",\n          \"elementId\": \"claim.waste.value-chain-recycling-rate\",\n          \"expectedState\": \"defined\",\n          \"result\": \"fail\"\n        }\n      ],\n      \"status\": \"failed\",\n      \"targetId\": \"case-11\",\n      \"tokenCounts\": {}\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml"
+    ]
+  },
+  {
+    "case": "12",
+    "slug": "allow-faithful-taxonomy-claim",
+    "title": "ALLOW: the faithful claim, correctly scoped and dated",
+    "category": "numerical achievement",
+    "expected": "ALLOW",
+    "actual": "ALLOW",
+    "match": true,
+    "exitCode": 0,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:20.409277+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:b8382dde129dcc0ae5c41faacb9bfdde8d451f1d55336299369f4a002a003430\",\n  \"planId\": \"urn:obds:build-plan:case-12\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": \"sha256:5adbc8e7ddf1962a46b7a9aed614cab8a698098d620095d34ecdb59434c95d83\",\n      \"artifactRef\": \"case-12.context.json\",\n      \"budgetStatus\": \"within_budget\",\n      \"conflicts\": [],\n      \"errors\": [],\n      \"requirements\": [\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"claim.taxonomy.eligible-revenue-share\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        },\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"evidence.taxonomy.turnover-kpi\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        }\n      ],\n      \"status\": \"ready\",\n      \"targetId\": \"case-12\",\n      \"tokenCounts\": {\n        \"factGrounding\": 7,\n        \"hardBoundaries\": 0,\n        \"max\": 4000,\n        \"stateMap\": 12,\n        \"styleTexture\": 74,\n        \"total\": 93\n      }\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml",
+      "case-12.context.json",
+      "case-12.context.md"
+    ]
+  },
+  {
+    "case": "13",
+    "slug": "allow-process-claim-at-its-boundary",
+    "title": "ALLOW: the process claim stated at its real system boundary",
+    "category": "environmental claim",
+    "expected": "ALLOW",
+    "actual": "ALLOW",
+    "match": true,
+    "exitCode": 0,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:20.534921+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:ac57d80fa07dac682d612e97f6ef0e6c7db6eb609554ae4b87512503079f094a\",\n  \"planId\": \"urn:obds:build-plan:case-13\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": \"sha256:d8e71916da102c1295096143efafe2824a23b5ea5e8a4f9201fc37732f1bd576\",\n      \"artifactRef\": \"case-13.context.json\",\n      \"budgetStatus\": \"within_budget\",\n      \"conflicts\": [],\n      \"errors\": [],\n      \"requirements\": [\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"claim.recycled-input.process-emissions\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        },\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"evidence.recycled-input.process-data\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        }\n      ],\n      \"status\": \"ready\",\n      \"targetId\": \"case-13\",\n      \"tokenCounts\": {\n        \"factGrounding\": 7,\n        \"hardBoundaries\": 0,\n        \"max\": 4000,\n        \"stateMap\": 16,\n        \"styleTexture\": 64,\n        \"total\": 87\n      }\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml",
+      "case-13.context.json",
+      "case-13.context.md"
+    ]
+  },
+  {
+    "case": "14",
+    "slug": "adversarial-under-declared-target",
+    "title": "ADVERSARIAL: an under-declared target that requires nothing the false claim depends on",
+    "category": "required qualification",
+    "expected": "ALLOW",
+    "actual": "ALLOW",
+    "match": true,
+    "exitCode": 0,
+    "stdout": "{\n  \"builtAt\": \"2026-09-04T07:05:20.661341+00:00\",\n  \"compilerVersion\": \"1.0.0\",\n  \"kind\": \"obds-build-report\",\n  \"manifestContentHash\": \"sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992\",\n  \"manifestId\": \"urn:obds:brand:gcb-research-fixture\",\n  \"manifestVersion\": \"1.0.0\",\n  \"planHash\": \"sha256:ad8f981e124550e2ca261f6d78546bb93e623cd2dbe1bfee80787b8799cc31cd\",\n  \"planId\": \"urn:obds:build-plan:case-14\",\n  \"schemaVersion\": \"1.0.0\",\n  \"targets\": [\n    {\n      \"artifactHash\": \"sha256:daf3f87483ccc1130258925064d1ffb5df74bedd0cffc155f063fb623081b1bb\",\n      \"artifactRef\": \"case-14.context.json\",\n      \"budgetStatus\": \"within_budget\",\n      \"conflicts\": [],\n      \"errors\": [],\n      \"requirements\": [\n        {\n          \"actualState\": \"defined\",\n          \"elementId\": \"structure.brand\",\n          \"expectedState\": \"defined\",\n          \"result\": \"pass\"\n        }\n      ],\n      \"status\": \"ready\",\n      \"targetId\": \"case-14\",\n      \"tokenCounts\": {\n        \"factGrounding\": 7,\n        \"hardBoundaries\": 0,\n        \"max\": 4000,\n        \"stateMap\": 12,\n        \"styleTexture\": 0,\n        \"total\": 19\n      }\n    }\n  ]\n}",
+    "stderr": "",
+    "artefacts": [
+      "build-report.yaml",
+      "case-14.context.json",
+      "case-14.context.md"
+    ]
+  }
+]

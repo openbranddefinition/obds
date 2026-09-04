@@ -1,0 +1,312 @@
+{
+  "artifactHash": "sha256:5adbc8e7ddf1962a46b7a9aed614cab8a698098d620095d34ecdb59434c95d83",
+  "availableElementIds": [
+    "claim.scope2.market-based-reduction",
+    "claim.scope3.target",
+    "claim.taxonomy.aligned-revenue-share",
+    "claim.taxonomy.eligible-revenue-share",
+    "claim.waste.value-chain-recycling-rate",
+    "evidence.assurance.limited-fy25",
+    "evidence.assurance.scope3-progress",
+    "evidence.taxonomy.turnover-kpi",
+    "structure.brand"
+  ],
+  "build": {
+    "asOf": "2025-12-01T00:00:00Z",
+    "compilerId": "org.openbranddefinition.reference-compiler",
+    "compilerVersion": "1.0.0",
+    "planHash": "sha256:b8382dde129dcc0ae5c41faacb9bfdde8d451f1d55336299369f4a002a003430",
+    "planId": "urn:obds:build-plan:case-12"
+  },
+  "checkRegistryVersion": 1,
+  "compiledChecks": [],
+  "contextAssembly": null,
+  "elementRecords": [
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "claim.scope2.market-based-reduction",
+      "kind": "claim",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, climate section"
+      ],
+      "state": "defined",
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "value": {
+        "canonicalWording": "Market-based Scope 2 emissions fell 19% from 2024 to 2025.",
+        "claimType": "factual",
+        "conditions": [
+          "market-based Scope 2 only",
+          "Scope 1 rose 11% in the same period",
+          "material Scope 3 rose 2% in the same period"
+        ],
+        "evidenceRefs": [
+          "evidence.assurance.limited-fy25"
+        ],
+        "riskLevel": "regulated"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "claim.scope3.target",
+      "kind": "claim",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, climate targets"
+      ],
+      "state": "defined",
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "value": {
+        "canonicalWording": "The group targets a 55% reduction in material Scope 3 emissions by 2032 against a 2019 base year; 2025 progress is stated as 61%.",
+        "claimType": "environmental",
+        "conditions": [
+          "forward-looking target",
+          "progress disclosure is outside the limited assurance conclusion"
+        ],
+        "evidenceRefs": [
+          "evidence.assurance.scope3-progress"
+        ],
+        "riskLevel": "regulated"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "claim.taxonomy.aligned-revenue-share",
+      "kind": "claim",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Alignment assessment still in progress; no aligned share reported"
+      ],
+      "state": "unknown",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "claim.taxonomy.eligible-revenue-share",
+      "kind": "claim",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, taxonomy KPI section"
+      ],
+      "state": "defined",
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "value": {
+        "canonicalWording": "84.6% of the group's consolidated revenue in fiscal year 2025 was taxonomy-eligible.",
+        "claimType": "environmental",
+        "conditions": [
+          "applies to consolidated revenue, not to a product count",
+          "eligible is not aligned",
+          "2.4 pp taxonomy-ineligible",
+          "13.0 pp unclassified for lack of data"
+        ],
+        "evidenceRefs": [
+          "evidence.taxonomy.turnover-kpi"
+        ],
+        "prohibitedVariants": [
+          "85% of the group's products are environmentally sustainable under the taxonomy.",
+          "85% of the group's products are taxonomy-aligned."
+        ],
+        "riskLevel": "regulated"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "claim.waste.value-chain-recycling-rate",
+      "kind": "claim",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Waste collection covers the entity's own sites only, not the full value chain"
+      ],
+      "state": "not_defined",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "evidence.assurance.limited-fy25",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, independent assurance report"
+      ],
+      "state": "defined",
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "value": {
+        "issuer": "Independent auditor",
+        "limitations": [
+          "materially lower than reasonable assurance",
+          "excludes the transition plan disclosure",
+          "excludes the actions and resources disclosure",
+          "excludes progress against greenhouse-gas reduction targets",
+          "forward-looking disclosures are not assured as achievable"
+        ],
+        "methodologySummary": "Limited assurance engagement.",
+        "title": "Independent limited assurance report, fiscal year 2025",
+        "type": "approval"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "evidence.assurance.scope3-progress",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Progress against greenhouse-gas reduction targets is explicitly excluded from the limited assurance conclusion"
+      ],
+      "state": "not_applicable",
+      "validity": {
+        "from": null,
+        "to": null
+      }
+    },
+    {
+      "annotations": [],
+      "family": "context",
+      "id": "evidence.taxonomy.turnover-kpi",
+      "kind": "evidence",
+      "nature": "knowledge",
+      "scope": {
+        "brands": [
+          "entity-group"
+        ]
+      },
+      "sourceRefs": [
+        "Reporting entity, FY25 disclosure, taxonomy KPI tables"
+      ],
+      "state": "defined",
+      "validity": {
+        "from": "2025-01-01T00:00:00Z",
+        "to": "2026-01-01T00:00:00Z"
+      },
+      "value": {
+        "issuer": "Reporting entity",
+        "limitations": [
+          "eligibility only; alignment assessment still in progress",
+          "13.0 pp unclassified for lack of data"
+        ],
+        "methodologySummary": "Turnover KPI per the applicable taxonomy regulation.",
+        "title": "Taxonomy turnover KPI, fiscal year 2025",
+        "type": "dataset"
+      }
+    },
+    {
+      "annotations": [],
+      "family": "structure",
+      "id": "structure.brand",
+      "kind": "brand-identity",
+      "nature": "fact",
+      "scope": {},
+      "sourceRefs": [],
+      "state": "defined",
+      "validity": {
+        "from": null,
+        "to": null
+      },
+      "value": {
+        "name": "Governed Communications Research Fixture"
+      },
+      "valueContractRef": "urn:obds:brand:gcb-research-fixture#value-contract:structure:brand-identity:2b7196d8"
+    }
+  ],
+  "governedResultHash": "sha256:abba34614d0097ffc952534f1090d23fce1e2807d4203e72b5a7356e1ce424bb",
+  "id": "urn:obds:brand:gcb-research-fixture:context:case-12",
+  "includedElementIds": [
+    "claim.taxonomy.aligned-revenue-share",
+    "claim.taxonomy.eligible-revenue-share",
+    "claim.waste.value-chain-recycling-rate",
+    "evidence.assurance.scope3-progress",
+    "evidence.taxonomy.turnover-kpi",
+    "structure.brand"
+  ],
+  "kind": "obds-compiled-brand-context",
+  "manifest": {
+    "contentHash": "sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992",
+    "id": "urn:obds:brand:gcb-research-fixture",
+    "version": "1.0.0"
+  },
+  "schemaVersion": "3.0.0",
+  "scope": {
+    "brands": [
+      "entity-group"
+    ],
+    "outputTypes": [
+      "marketing-copy"
+    ]
+  },
+  "slots": {
+    "factGrounding": "- `structure.brand` — {\"name\":\"Governed Communications Research Fixture\"}",
+    "hardBoundaries": "",
+    "stateMap": "- `claim.taxonomy.aligned-revenue-share` — unknown.\n- `claim.waste.value-chain-recycling-rate` — not_defined.\n- `evidence.assurance.scope3-progress` — not_applicable.",
+    "styleTexture": "`claim.taxonomy.eligible-revenue-share`\n\n{\"canonicalWording\":\"84.6% of the group's consolidated revenue in fiscal year 2025 was taxonomy-eligible.\",\"claimType\":\"environmental\",\"conditions\":[\"applies to consolidated revenue, not to a product count\",\"eligible is not aligned\",\"2.4 pp taxonomy-ineligible\",\"13.0 pp unclassified for lack of data\"],\"evidenceRefs\":[\"evidence.taxonomy.turnover-kpi\"],\"prohibitedVariants\":[\"85% of the group's products are environmentally sustainable under the taxonomy.\",\"85% of the group's products are taxonomy-aligned.\"],\"riskLevel\":\"regulated\"}\n\n`evidence.taxonomy.turnover-kpi`\n\n{\"issuer\":\"Reporting entity\",\"limitations\":[\"eligibility only; alignment assessment still in progress\",\"13.0 pp unclassified for lack of data\"],\"methodologySummary\":\"Turnover KPI per the applicable taxonomy regulation.\",\"title\":\"Taxonomy turnover KPI, fiscal year 2025\",\"type\":\"dataset\"}"
+  },
+  "stateMapCoverage": "complete",
+  "stateMapEntryCount": 3,
+  "targetId": "case-12",
+  "tokenBudget": {
+    "actual": 93,
+    "max": 4000,
+    "tokenizerId": "obds:whitespace-v1",
+    "tokenizerVersion": "1.0.0"
+  },
+  "validFrom": "2025-01-01T00:00:00Z",
+  "validTo": "2026-01-01T00:00:00Z"
+}

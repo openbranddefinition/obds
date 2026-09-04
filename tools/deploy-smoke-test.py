@@ -51,6 +51,8 @@ MUST_BE_ABSENT = [
     ("/answers/1.1.1/OUTREACH-GATE.md", "internal gate report"),
     ("/answers/1.1.2/RC-REPORT.md", "an internal pre-publication report"),
     ("/answers/1.0.4-1.1/KNOWN-ISSUE-1.0.4-testOutputHash.md", "internal note"),
+    ("/tools/deploy-smoke-test.py",
+     "this file. `tools/` ships in the release package so the archive can verify\n     itself, but serving it publishes the inventory of private paths it exists to\n     keep private. .vercelignore excludes tools/ from the deployment only."),
     ("/md/", "withdrawn drafts"),
     ("/licensing/", "withdrawn licensing drafts"),
     ("/archive/", "local archive"),
@@ -75,6 +77,10 @@ MUST_BE_PRESENT = [
     "/robots.txt",
     "/authoring/",
     "/examples/README.md",
+    # The public Research Package. Published with 3.0.3; asserted here so a
+    # deployment that drops it fails loudly instead of leaving outreach links dead.
+    "/research/README.md",
+    "/research/limits/README.md",
     "/LICENSE.md",
     "/GOVERNANCE.md",
     "/CONTRIBUTING.md",

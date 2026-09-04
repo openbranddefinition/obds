@@ -1,0 +1,33 @@
+kind: obds-build-report
+schemaVersion: 1.0.0
+builtAt: '2026-09-04T07:05:19.301355+00:00'
+planId: urn:obds:build-plan:case-03
+planHash: sha256:a3fc25bc8c17c88f2eef6296e76389a2ea35b077ae83644c140247eb52bc53f8
+manifestId: urn:obds:brand:gcb-research-fixture
+manifestVersion: 1.0.0
+manifestContentHash: sha256:35d962261898ba314a4963458c5750e26b50f3598b6a4bfcfcb607e21583a992
+compilerVersion: 1.0.0
+targets:
+- targetId: case-03
+  status: failed
+  artifactRef: null
+  artifactHash: null
+  tokenCounts: {}
+  budgetStatus: not_measured
+  requirements:
+  - elementId: claim.taxonomy.eligible-revenue-share
+    expectedState: defined
+    actualState: defined
+    result: pass
+  - elementId: claim.taxonomy.aligned-revenue-share
+    expectedState: defined
+    actualState: unknown
+    result: fail
+  conflicts: []
+  errors:
+  - code: OBDS-BUILD-REQUIRED-NOT-DEFINED
+    message: 'claim.taxonomy.aligned-revenue-share: expected defined, got unknown'
+    elementId: claim.taxonomy.aligned-revenue-share
+  - code: OBDS-BUILD-STYLE-SELECTION
+    message: 'selected style element is not applicable defined KNOWLEDGE: claim.taxonomy.aligned-revenue-share'
+    elementId: claim.taxonomy.aligned-revenue-share
