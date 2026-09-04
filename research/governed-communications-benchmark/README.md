@@ -17,8 +17,8 @@ correct. The claim built from it is not.
 
 ```text
 The benchmark cases are de-identified from real-world communication-governance
-research. Source material is withheld from the public package to preserve
-organisational confidentiality.
+research. Source mapping is intentionally omitted from the public package to
+preserve organisational and sector neutrality.
 ```
 
 Organisation, sector, products, source titles and every figure have been
@@ -34,7 +34,7 @@ the expected decision
 the OBDS behaviour
 ```
 
-but **not** the confidential source mapping. This package does not claim that a
+but **not** the omitted source mapping. This package does not claim that a
 reviewer can independently verify the underlying corporate facts of the
 original research.
 
