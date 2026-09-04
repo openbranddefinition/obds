@@ -131,6 +131,19 @@ example in section 9 now reads `productFamilies: [example-family]` instead of a
 sector-specific value. `productFamilies` is unchanged; the example value was
 never normative.
 
+## 3.0.3 to 3.0.4
+
+Nothing to do.
+
+3.0.4 is a documentation and public-positioning patch. No normative contract
+changed, so no manifest, Build Plan, compiled artefact or stored hash moves.
+`schemaVersion` stays `3.0.0` in Build Plans and compiled contexts, and the
+published 3.0.0 contracts are byte-identical.
+
+The difference is public wording only: the project describes itself as an open
+specification rather than an open standard. Nothing in the specification text
+changed except its own version stamp and the release-file name in section 33.
+
 ## 2.0.0 to 3.0.0
 
 3.0.0 is the Semantic Closure release. It changes five normative contracts, and

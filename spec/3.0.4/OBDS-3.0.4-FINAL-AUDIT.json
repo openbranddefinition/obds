@@ -1,0 +1,33 @@
+{
+  "canonicalCopiesIdentical": true,
+  "kind": "obds-release-audit",
+  "legacyColourHexPublic": false,
+  "modelInputExampleBytesAfter": 1272,
+  "modelInputExampleBytesBefore": 2338,
+  "modelInputExampleReductionPercent": 45.6,
+  "nodeRequiredForInteropTests": true,
+  "packageFileCount": 230,
+  "packageJunkFiles": 0,
+  "publicSchemaCount": 21,
+  "publicValueSchemaCount": 6,
+  "release": "3.0.4",
+  "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
+  "schemaSurfaceUnchangedSince": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "stablePromotionRetested": true,
+  "status": "stable",
+  "suiteCounts": {
+    "adversarial": 38,
+    "context-assembly": 24,
+    "context-delivery": 3,
+    "design-space": 20,
+    "foundation": 973,
+    "golden": 6,
+    "integration": 15
+  },
+  "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0",
+  "testsFailed": 0,
+  "testsPassed": 1079,
+  "testsSkipped": 0,
+  "unsupportedTokenizerFailsClosed": true
+}

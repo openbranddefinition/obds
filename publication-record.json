@@ -5,7 +5,7 @@
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "3.0.3",
+ "currentRelease": "3.0.4",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:962fb46b9adc5e0d6bf6cc8ee777ae861ce53772f10a40f18c71bba0674bb7ab",
- "previousRelease": "3.0.2",
+ "packageZipSha256": "sha256:f40766e73c9f104070b21f9576f3a35751f66b722a392d0130822414a4108c88",
+ "previousRelease": "3.0.3",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -177,6 +177,14 @@
    "packageZipSha256": "sha256:962fb46b9adc5e0d6bf6cc8ee777ae861ce53772f10a40f18c71bba0674bb7ab",
    "status": "stable",
    "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0"
+  },
+  "3.0.4": {
+   "baseUrl": "https://openbranddefinition.org/spec/3.0.4/",
+   "date": "2026-09-04",
+   "note": "documentation and public-positioning patch; PATCH under section 27.1 because no normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed; the current public wording calls OBDS an open specification rather than an open standard and the opening positioning sentence of the README and llms.txt now reads \"An open, implementation-ready specification for governed brand truth and AI creation\"; \"standard\" is not a defined term in OBDS and appears in no schema, identifier, error code or normative sentence, so nothing a conforming implementation can observe moved; the suite and its result are identical to 3.0.3, testOutputHash and suiteHash unchanged and all 32 published contracts byte-identical, so only the version stamp, the release-file name, the specification's own document hash and the archive hash move; 3.0.3 is not withdrawn and its published bytes, hashes, archive and tag are unchanged",
+   "packageZipSha256": "sha256:f40766e73c9f104070b21f9576f3a35751f66b722a392d0130822414a4108c88",
+   "status": "stable",
+   "testOutputHash": "sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -193,5 +201,5 @@
  "totalPublicContracts": 32,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 5,
- "websiteIndexSha256": "sha256:3c49417a12a0323f908840a4a01063cd6c9033c2478fc16944b3042ff68273f1"
+ "websiteIndexSha256": "sha256:1341add14661e4d2de1018a9d641d92da8d777d74ba6c4682fcdc24960f0cfc5"
 }

@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 3.0.3** is the stable Open Brand Definition Specification.
+**OBDS 3.0.4** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,7 +21,7 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 3.0.3. Stable. 2026-09-04.**
+**OBDS 3.0.4. Stable. 2026-09-04.**
 
 OBDS 3.0 is the Semantic Closure release.
 
@@ -33,7 +33,7 @@ It adds no Brand State, no profile, no capability and no architecture. It closes
 - **Runtime contract enforcement.** Every governed document is validated against its published 3.0 contract before any field of it is read, and every required hash is reproduced from its payload rather than compared between two supplied claims.
 - **Conflict relevance.** One relevance model, decided once by the compiler and consumed downstream rather than re-derived.
 
-3.0.1 is a packaging correction on top of it: the release archive now carries the tooling needed to reproduce the documented standalone checks. 3.0.2 is an outreach-gate correction on top of that: the compiler and the runtime were brought back to two contracts 3.0 already publishes, section 10.2a conflict relevance and section 26.2 exact target loading, and the README quickstart publishes a hash the documented command reproduces. 3.0.3 is a documentation and public-surface neutrality patch on top of that: one sector-specific example value in the section 9 Scope example became a neutral placeholder. No normative contract changed in any of the three.
+3.0.1 is a packaging correction on top of it: the release archive now carries the tooling needed to reproduce the documented standalone checks. 3.0.2 is an outreach-gate correction on top of that: the compiler and the runtime were brought back to two contracts 3.0 already publishes, section 10.2a conflict relevance and section 26.2 exact target loading, and the README quickstart publishes a hash the documented command reproduces. 3.0.3 is a documentation and public-surface neutrality patch on top of that: one sector-specific example value in the section 9 Scope example became a neutral placeholder. 3.0.4 is a documentation and public-positioning patch on top of that: the current public wording calls OBDS an open specification rather than an open standard. No normative contract changed in any of the four.
 
 Each of the five closures is a breaking correction to an existing normative contract, which is why 3.0.0 is MAJOR. For most projects the migration is the Build Plan and nothing else: `schemaVersion: 3.0.0`, and `stateMap` and `styleTexture` stated on every target.
 

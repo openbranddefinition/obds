@@ -2,9 +2,58 @@
 
 ## Release
 
-**Version:** OBDS 3.0.3  
+**Version:** OBDS 3.0.4  
 **Status:** Stable  
 **Date:** 2026-09-04
+
+## 3.0.4
+
+**Documentation and public-positioning patch. PATCH.**
+
+OBDS 3.0.4 is a documentation and public-positioning patch.
+
+It updates current public wording from "open standard" to "open specification"
+and describes OBDS as an "open, implementation-ready specification".
+
+No normative OBDS contract, schema, runtime behaviour, conformance behaviour or
+interoperability contract changed.
+
+### The change
+
+The public surface only.
+
+- `index.html`: the two meta descriptions, the JSON-LD description, the "Form"
+  fact row in English and German, and the section lead.
+- `README.md` and `llms.txt`: the opening positioning sentence now reads "An
+  open, implementation-ready specification for governed brand truth and AI
+  creation."
+
+"Standard" is not a defined term in OBDS. It appears in no schema, no
+identifier, no error code and no normative sentence, so replacing it in the
+public positioning changes nothing a conforming implementation can observe.
+
+The normative specification differs from 3.0.3 in its own version stamp and the
+release-file name in section 33, and in nothing else.
+
+### Contract identity vs 3.0.3
+
+The suite and its result are identical, which is the mechanical proof that only
+the public wording moved:
+
+```text
+testOutputHash  sha256:945472238d80d0ed9efba9fcbbde59bebe369046e1119b29f1ddfdc0d2b3dee0
+suiteHash       sha256:06454913adf42d4581d0b5db3fc9821be32f7d5aa131431a8392f2d7cc018bcb
+schema surface  unchanged since 1.0.0 (517683bb3496867d)
+contracts       all 32 published contracts byte-identical
+tests           1079 passed, 0 failed, 0 skipped
+conformance     23 of 23, profile foundation
+```
+
+Only the release version stamp, the release-file name, the specification's own
+document hash and the archive hash move.
+
+3.0.3 is not withdrawn and is not defective. Its published bytes, hashes,
+archive and tag are unchanged and remain reproducible.
 
 ## 3.0.3
 
