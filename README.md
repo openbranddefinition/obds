@@ -1,6 +1,6 @@
 # Open Brand Definition Specification
 
-**An open standard for governed brand truth and AI creation.**
+**An open, implementation-ready specification for governed brand truth and AI creation.**
 
 Retrieval finds relevant information. OBDS determines what applies.
 

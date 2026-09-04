@@ -8,7 +8,7 @@ Canonical address: https://openbranddefinition.org/
 
 ## Purpose
 
-An open standard for governed brand truth and AI creation.
+An open, implementation-ready specification for governed brand truth and AI creation.
 
 OBDS is a governed brand control layer for AI systems. It is a standard for
 brand specifically, not a general policy, compliance or enterprise-governance
