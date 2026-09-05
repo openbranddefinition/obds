@@ -1,5 +1,9 @@
 # Examples
 
+A rendered walkthrough of both examples is published at
+<https://openbranddefinition.org/examples/>. Authoring guidance is at
+<https://openbranddefinition.org/authoring/>.
+
 Two minimal, runnable examples, both verified against the reference
 implementation shipped in the release package.
 
@@ -53,10 +57,18 @@ It compiles:
 
 ```
 status             ready
-artifactRef        brand-query-global-en.context.json
+targetId           brand-query-global-en
+generationId       sha256:6e051b97cd804fee753a1e71ccc695a0a00d936d08b789f8bc193c18e81b1a06
+artifactRef        generations/6e051b97cd804fee753a1e71ccc695a0a00d936d08b789f8bc193c18e81b1a06/
+                   target-bea1c8bf6e2f0c8c990e7ec685b2f67a98bc8fe1111aaaae278176477cb8f123.context.json
 artifactHash       valid, and reproducible across runs
 requirements       structure.brand  defined  pass
 ```
+
+Since 4.0 the file name is a deterministic mapping of the target's canonical
+identity rather than the identity itself, and the artefact lives under its build
+generation. Do not construct the path from `targetId`; read `artifactRef` from
+the build report. Section 13.4.
 
 The manifest is the whole Foundation minimum: one element and its value
 contract, nothing else. Beyond the single build target there is no Context
@@ -74,7 +86,7 @@ The build fails, and that is the correct result:
 
 ```
 status             failed
-artifactRef        None
+artifactRef        null
 context files      none written
 requirements       structure.brand         defined  pass
                    context.efficacy-claim  unknown  fail

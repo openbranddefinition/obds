@@ -2,7 +2,7 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 4.0.0 (stable, 5 September 2026)
+Current release: 4.0.1 (stable, 5 September 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
@@ -82,7 +82,7 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0.md
+https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1.md
 
 ## Authoring and curation
 
@@ -96,17 +96,17 @@ what it requires: both build successfully with valid hashes.
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0-CHANGELOG.md
-Migration: https://openbranddefinition.org/spec/4.0.0/OBDS-4.0.0-MIGRATION.md
+Complete package: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-CHANGELOG.md
+Migration: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-MIGRATION.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 
@@ -139,13 +139,23 @@ the underlying ideas, principles, methods and formats is not restricted.
 The smallest manifest, and a fail-closed example in which required truth is
 unresolved, no compiled context is produced and no model is called. Both carry a
 Foundation manifest and exercise Compiled Runtime: the build plan,
-requiresDefined and the withheld artefact are section 26.2, not Foundation:
-https://openbranddefinition.org/examples/README.md
+requiresDefined and the withheld artefact are section 26.2, not Foundation.
+
+Rendered walkthrough:  https://openbranddefinition.org/examples/
+Written walkthrough:   https://openbranddefinition.org/examples/README.md
 
 ## Previous releases
 
 Published as released, not modified, historical.
 
+OBDS 3.0.4  https://openbranddefinition.org/spec/3.0.4/OBDS-3.0.4.md
+OBDS 3.0.3  https://openbranddefinition.org/spec/3.0.3/OBDS-3.0.3.md
+OBDS 3.0.2  https://openbranddefinition.org/spec/3.0.2/OBDS-3.0.2.md
+OBDS 3.0.1  https://openbranddefinition.org/spec/3.0.1/OBDS-3.0.1.md
+OBDS 3.0.0  https://openbranddefinition.org/spec/3.0.0/OBDS-3.0.0.md
+OBDS 2.0.0  https://openbranddefinition.org/spec/2.0.0/OBDS-2.0.0.md
+OBDS 1.1.6  https://openbranddefinition.org/spec/1.1.6/OBDS-1.1.6.md
+OBDS 1.1.5  https://openbranddefinition.org/spec/1.1.5/OBDS-1.1.5.md
 OBDS 1.1.4  https://openbranddefinition.org/spec/1.1.4/OBDS-1.1.4.md
 OBDS 1.1.3  https://openbranddefinition.org/spec/1.1.3/OBDS-1.1.3.md
 OBDS 1.1.2  https://openbranddefinition.org/spec/1.1.2/OBDS-1.1.2.md
@@ -158,17 +168,25 @@ OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 4.0.0 is
+the licensing wording that was current at the time. Section 32.1 of 4.0.1 is
 the operative one, unchanged from 1.0.2.
 
-OBDS 1.1 is the independent-implementability release. It adds governedResultHash, the value two
-implementations must agree on for the same manifest and build plan, and leaves artifactHash and
-its meaning untouched. Precedence, the scope vocabulary, the tokenizer, the validator registry
-and the build failure codes are now defined rather than inferred.
+OBDS 4.0 closes five production-boundary failures found after 3.x: filesystem containment,
+build-generation binding, model-input provenance, schema-first manifest validation and explicit
+model-failure evidence. It is MAJOR because the Runtime Decision Record 3.0.0 contract has a
+closed decision enum and additionalProperties false, so the new model_failed outcome cannot be
+expressed by any existing extension mechanism. The core architecture is unchanged. 4.0.1 is a
+documentation and public-surface consistency release on top of it; no normative contract moved.
 
-The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3 and 4.0.0. OBDS 1.1 added one versioned contract beside it and OBDS 3.0 adds four more, changing none of the frozen surface.
-That contract is schemas/1.1.0/compiled-context.schema.json. Manifests stay at
-schemaVersion 1.0.0; compiled contexts move to 1.1.0.
+Historical, for context: OBDS 1.1 was the independent-implementability release. It added
+governedResultHash, the value two implementations must agree on for the same manifest and build
+plan, and left artifactHash and its meaning untouched. Precedence, the scope vocabulary, the
+tokenizer, the validator registry and the build failure codes became defined rather than
+inferred.
+
+The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 4.0.0 and 4.0.1. OBDS 1.1 added one versioned contract beside it, OBDS 3.0 added four more and OBDS 4.0 adds three, changing none of the frozen surface.
+Eight versioned contracts stand beside the frozen 21 schemas and 6 value schemas, 35 public
+contracts in total. Manifests stay at schemaVersion 1.0.0.
 
 
 

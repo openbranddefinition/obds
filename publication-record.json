@@ -5,7 +5,7 @@
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "4.0.0",
+ "currentRelease": "4.0.1",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:555f3f04da9596fca3ff880729901df197b0f8f3ff587aca07c867e637f60a1c",
- "previousRelease": "3.0.4",
+ "packageZipSha256": "sha256:3f471d03bd67703568f1226b1dd7d572ea32303487ce52172f4bc633abd7fb84",
+ "previousRelease": "4.0.0",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -193,6 +193,14 @@
    "packageZipSha256": "sha256:555f3f04da9596fca3ff880729901df197b0f8f3ff587aca07c867e637f60a1c",
    "status": "stable",
    "testOutputHash": "sha256:d4ba70b507012caaf9a173a9f700044306cbce237e83653a4f7611ad1705454f"
+  },
+  "4.0.1": {
+   "baseUrl": "https://openbranddefinition.org/spec/4.0.1/",
+   "date": "2026-09-05",
+   "note": "Documentation and public-surface consistency release. It corrects current release metadata, removes a stale OBDS 1.1 narrative from the current-release section, corrects the pre-4.0 artefact name in the examples README and publishes a rendered examples page. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.",
+   "packageZipSha256": "sha256:3f471d03bd67703568f1226b1dd7d572ea32303487ce52172f4bc633abd7fb84",
+   "status": "stable",
+   "testOutputHash": "sha256:a7c11f1d94bd01bdf06474d448103822afaaecfa9294a3d4898e4a52464683ea"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -201,13 +209,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/3.0.2/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/4.0.1/",
  "specificationFilesPublished": true,
  "specificationPublishedAt": "2026-09-05",
  "stableReleaseDate": "2026-09-05",
- "testOutputHash": "sha256:d4ba70b507012caaf9a173a9f700044306cbce237e83653a4f7611ad1705454f",
+ "testOutputHash": "sha256:a7c11f1d94bd01bdf06474d448103822afaaecfa9294a3d4898e4a52464683ea",
  "totalPublicContracts": 35,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 8,
- "websiteIndexSha256": "sha256:3a74c2ac80704361bf0397dc1881f50f26dc591dbca47fff0c401fce928433c4"
+ "websiteIndexSha256": "sha256:46a8d98226cb80ca507f7ca1fb3b451d36714603fb14c55ce42a2e9651881eb3"
 }

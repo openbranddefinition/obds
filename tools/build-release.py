@@ -255,7 +255,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "3.0.4"
+PRIOR_RELEASE = "4.0.0"
 
 
 def _release_kind(release: str) -> str:

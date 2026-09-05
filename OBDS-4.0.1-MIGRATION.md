@@ -1,3 +1,21 @@
+# Migrating 4.0.0 to 4.0.1
+
+5 September 2026.
+
+Nothing to do. OBDS 4.0.1 is a documentation and public-surface consistency release. It corrects current release metadata and improves access to existing examples. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed. Every contract, hash and conformance result is
+identical to 4.0.0; only the version stamp, the release-file names and the
+public-surface documents move. An implementation that conforms to 4.0.0 conforms
+to 4.0.1 without changing a line.
+
+If you read the examples: `examples/README.md` previously showed the pre-4.0
+flat artefact name for the `foundation-minimal` build. The real 4.0 output is
+`generations/<generation digest>/target-<identity digest>.context.json`. Read
+`artifactRef` from the build report rather than constructing a path from
+`targetId`. Section 13.4. The rendered walkthrough is at
+<https://openbranddefinition.org/examples/>.
+
+---
+
 # Migrating 3.0.4 to 4.0.0
 
 5 September 2026.

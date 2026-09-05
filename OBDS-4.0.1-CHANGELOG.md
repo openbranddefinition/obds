@@ -1,3 +1,58 @@
+# OBDS 4.0.1 — Documentation and public-surface consistency
+
+## 4.0.1
+
+5 September 2026.
+
+**Documentation and public-surface consistency release. PATCH.**
+
+OBDS 4.0.1 is a documentation and public-surface consistency release. It corrects current release metadata and improves access to existing examples. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.
+
+### What moved
+
+The current-facing public surface only.
+
+- `index.html`: the release date was 01.09.2026 in the publication record, the
+  JSON-LD `datePublished`/`dateModified` and `article:modified_time`; it is
+  05.09.2026, the date 4.0.0 was published. The current-release section still
+  carried the OBDS 1.1 independent-implementability paragraph as though 1.1 were
+  current; it now describes 4.0. "Previous release" pointed at OBDS 1.1.5; it
+  points at OBDS 3.0.4. The public-schema row now names the eight versioned
+  contracts alongside the frozen 21 schemas and 6 value schemas, which is how
+  21 + 6 reconciles with the 35 public contracts stated elsewhere on the page.
+- `examples/index.html`: new. `/examples/` returned 404 and only the raw
+  `examples/README.md` was served. The page renders the two existing examples
+  and their real output. It introduces no new example and no new fixture.
+- `examples/README.md`: the `foundation-minimal` output block still showed the
+  pre-4.0 flat artefact name `brand-query-global-en.context.json`. Since 4.0 the
+  file name is a deterministic mapping of the target's canonical identity and
+  the artefact lives under its build generation, so the block now shows the real
+  `generations/<digest>/target-<digest>.context.json` path and says not to
+  construct it from `targetId`. `artifactRef: None` is written `null`, which is
+  what the report contains.
+- `authoring/index.html`: the three section links pointed at
+  `/spec/2.0.0/OBDS-2.0.0.md`; they point at the current specification. The
+  English-only note explained itself as a choice "for OBDS 1.1.3". Version
+  stamps advanced to 4.0.1, and the page links to `/examples/`.
+- `llms.txt`: the previous-release list stopped at 1.1.4 and is now complete
+  through 3.0.4. The release-character paragraph led with OBDS 1.1; it leads
+  with 4.0 and keeps the 1.1 text marked historical. The versioned-contract
+  count said one plus four; there are eight. `/examples/` is listed.
+- `OBDS-4.0.1.md`: the document headline read "OBDS 3.0: Stable Specification"
+  above a 4.0.0 version stamp. It reads "OBDS 4.0". The version stamp and the
+  section 33 release-file name advance to 4.0.1.
+
+### What did not move
+
+No schema, no reference implementation source, no test assertion about OBDS
+behaviour, no conformance case and no historical release. `spec/4.0.0/` is
+byte-identical and the `v4.0.0` tag is unchanged. 4.0.0 is not withdrawn and is
+not defective.
+
+---
+
+Previous release history follows unchanged.
+
 # OBDS 4.0.0 — Production Boundary Closure
 
 ## 4.0.0
