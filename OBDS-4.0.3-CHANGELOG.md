@@ -1,3 +1,52 @@
+# OBDS 4.0.3 - Public surface
+
+## 4.0.3
+
+5 September 2026.
+
+**Public-surface release. PATCH.**
+
+OBDS 4.0.3 is a public-surface release. It corrects the language annotation of the homepage, separates the search weight of the raw specification files from the pages written for readers, and adds one verified row to the comparison page. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.
+
+### What moved
+
+- `index.html`: the homepage declared `hreflang` for `en` and `de` but no `x-default`, so a
+  visitor whose language matches neither had no declared target. `x-default` now points at
+  the canonical root. The `en` and `de` references are unchanged and still reciprocal.
+- `sitemap.xml`: the raw normative specification sat at priority 0.9, level with
+  `/what-is-obds/` and above every other explanatory page. It is 165 KB of the same
+  vocabulary those pages are written in, so it competed with them for the same queries.
+  Every raw file now sits at 0.4 or 0.5 and every HTML page at 0.7 or above. The raw files
+  stay in the sitemap and stay crawlable; they no longer carry the weight.
+- `/compare/machine-readable-brand-specifications/`: adds Brando Schema 1.3, read from
+  brandoschema.com on 5 September 2026. It is the one other project in this set whose
+  specification names a controls layer over rule strength, so the coverage table gains a row
+  for that dimension as well.
+
+### What was considered and left out
+
+`brand.json`, part of the Advertising Context Protocol, was a candidate for the comparison
+table. Its own page and the project root were both read. Neither states a version number or
+a licence for the format. A row that cannot be pinned to a version describes a moving
+target, so it was omitted rather than published with a hedge, and the page says so with a
+link to the source.
+
+### What did not move
+
+No schema, no reference implementation source, no test assertion about OBDS behaviour, no
+conformance case and no historical release. `spec/4.0.2/`, `spec/4.0.1/` and `spec/4.0.0/`
+are byte-identical and their tags are unchanged.
+
+### Open
+
+The homepage has no dedicated German URL. English and German are one document with a
+client-side toggle, so `?lang=de` canonicalises to the root like every other variant and
+there is no second URL to annotate. See the open item in the migration notes.
+
+---
+
+Previous release history follows unchanged.
+
 # OBDS 4.0.2 — Documentation, discoverability and public-surface
 
 ## 4.0.2

@@ -1,0 +1,13 @@
+PyYAML>=6.0
+jsonschema>=4.20
+# Section 11.5, pinned in 3.0.0. `word_boundary_ci` is the one match mode whose
+# meaning is delegated to a segmentation implementation, and `\b`, IGNORECASE,
+# FULLCASE and WORD come from this package's own bundled Unicode tables rather
+# than from the host `unicodedata`. `regex>=2025.0` with no upper bound was
+# therefore an unpinned normative contract: two conforming installs could
+# disagree about what the mode means. The portable contract is
+# reference/foundation/fixtures/word-boundary-ci.json; this pin is how the
+# reference implementation reproduces it.
+regex==2026.9.3
+pytest>=8.0
+referencing>=0.35

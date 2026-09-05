@@ -5,7 +5,7 @@
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "4.0.2",
+ "currentRelease": "4.0.3",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:be4d6da42ecc44578cc53fd7ee96626dd2bb4170fa2e82d0e5fae7329fda6f5d",
- "previousRelease": "4.0.1",
+ "packageZipSha256": "sha256:8f6e1630f83377bf3a13ff3a91181c919ab1f763be94927ddce80329b4620f4d",
+ "previousRelease": "4.0.2",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -206,9 +206,17 @@
    "baseUrl": "https://openbranddefinition.org/spec/4.0.2/",
    "date": "2026-09-05",
    "note": "Documentation, discoverability and public-surface release. It adds four explainer and comparison pages, a crawlable research index, corrected canonical URLs, per-page metadata and structured data, and a complete sitemap. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.",
-   "packageZipSha256": "sha256:be4d6da42ecc44578cc53fd7ee96626dd2bb4170fa2e82d0e5fae7329fda6f5d",
+   "packageZipSha256": "sha256:b1cea126584b59c7cae4f6614e11496c510451c11653a7d55620e77153f02836",
    "status": "stable",
    "testOutputHash": "sha256:91691cd0ab6dedc82171b83fef4b51cd7a82d2eb044183790c00b03bf7fac217"
+  },
+  "4.0.3": {
+   "baseUrl": "https://openbranddefinition.org/spec/4.0.3/",
+   "date": "2026-09-05",
+   "note": "Public-surface release. It adds an hreflang x-default, lowers the sitemap priority of the raw specification and research files below the HTML pages, and adds one verified row to the comparison page. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.",
+   "packageZipSha256": "sha256:8f6e1630f83377bf3a13ff3a91181c919ab1f763be94927ddce80329b4620f4d",
+   "status": "stable",
+   "testOutputHash": "sha256:027643663f1090eb5218cc0f34e90df93934bb43af47ac28a4e64fda6d29ac41"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -217,13 +225,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/4.0.2/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/4.0.3/",
  "specificationFilesPublished": true,
  "specificationPublishedAt": "2026-09-05",
  "stableReleaseDate": "2026-09-05",
- "testOutputHash": "sha256:91691cd0ab6dedc82171b83fef4b51cd7a82d2eb044183790c00b03bf7fac217",
+ "testOutputHash": "sha256:027643663f1090eb5218cc0f34e90df93934bb43af47ac28a4e64fda6d29ac41",
  "totalPublicContracts": 35,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 8,
- "websiteIndexSha256": "sha256:01889b6ba4769bf8e4f9732e0f624b90357e16fd5fe3bd46f59be44d34dc14b4"
+ "websiteIndexSha256": "sha256:c81af783e1e8ffb1e7b9ca84bac66338f147650a6c916b3e371af83cb0e17b2b"
 }

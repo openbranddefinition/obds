@@ -23,7 +23,7 @@
  "@type": "TechArticle",
  "headline": "Machine-readable brand specifications compared",
  "name": "Machine-readable brand specifications compared",
- "description": "Machine-readable brand specifications solve different problems. BRAND.md is a single readable brand file, the Brand Context Protocol publishes and discovers brand packages, MRBS structures a brand identity system, and OBDS decides which governed truth applies to a task and whether it may run.",
+ "description": "Machine-readable brand specifications solve different problems. BRAND.md is a single readable brand file, Brando Schema is a governance vocabulary, the Brand Context Protocol publishes and discovers brand packages, MRBS structures a brand identity system, and OBDS decides which governed truth applies to a task and whether it may run.",
  "url": "https://openbranddefinition.org/compare/machine-readable-brand-specifications/",
  "dateModified": "2026-09-05",
  "inLanguage": "en",
@@ -42,6 +42,11 @@
    "@type": "CreativeWork",
    "name": "BRAND.md",
    "url": "https://thebrand.md/"
+  },
+  {
+   "@type": "CreativeWork",
+   "name": "Brando Schema",
+   "url": "https://brandoschema.com/"
   },
   {
    "@type": "CreativeWork",
@@ -392,7 +397,7 @@
 <div class="site">
   <header class="topbar">
     <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
-    <div class="status">OBDS / 4.0.2 stable</div>
+    <div class="status">OBDS / 4.0.3 stable</div>
     <div class="lang-note" lang="en">English only</div>
     <a class="back" href="/">&larr; Back</a>
   </header>
@@ -402,15 +407,15 @@
       <div class="hero-main">
         <div class="eyebrow">
           <span>Comparison</span>
-          <span>Companion to OBDS 4.0.2</span>
+          <span>Companion to OBDS 4.0.3</span>
         </div>
-        <h1 class="hero-title">Four specs,<br>four different<br><span class="outline">problems</span></h1>
+        <h1 class="hero-title">Five specs,<br>five different<br><span class="outline">problems</span></h1>
         <p class="hero-statement">Written by the OBDS publisher, so check the other rows against their own primary sources. Every one of them is linked, and the version we read is stated.</p>
       </div>
       <div class="hero-foot">
         <div><span class="label">BRAND.md</span><span class="value">One readable brand file for AI tools.</span></div>
         <div><span class="label">BCP</span><span class="value">Publishing and discovery of brand context.</span></div>
-        <div><span class="label">MRBS / OBDS</span><span class="value">A structured brand system; governed applicability and fail-closed execution.</span></div>
+        <div><span class="label">Brando / MRBS</span><span class="value">A governance vocabulary; a structured brand system.</span></div>
       </div>
     </section>
 
@@ -460,10 +465,17 @@
               <td>Apache 2.0</td>
             </tr>
             <tr>
-              <td><a href="/spec/4.0.2/OBDS-4.0.2.md">OBDS</a></td>
+              <td><a href="https://brandoschema.com/" target="_blank" rel="noopener">Brando Schema</a></td>
+              <td>"open-source vocabulary for structuring brand identity, governance policies, and content guidelines in machine-readable formats"</td>
+              <td>A schema.org-extending vocabulary with a controls layer. A document triad: Markdown body, YAML frontmatter and a JSON-LD sidecar, held in version control.</td>
+              <td>1.3</td>
+              <td>CC BY 4.0 with the W3C Royalty-Free Patent Policy</td>
+            </tr>
+            <tr>
+              <td><a href="/spec/4.0.3/OBDS-4.0.3.md">OBDS</a></td>
               <td>"An open, implementation-ready specification for governed brand truth and AI creation."</td>
               <td>Governed applicability, conflict resolution and fail-closed execution. Decides which approved truth applies to one task and whether it may run.</td>
-              <td>4.0.2</td>
+              <td>4.0.3</td>
               <td>Spec CC BY 4.0, implementation Apache 2.0</td>
             </tr>
           </table></div>
@@ -474,11 +486,12 @@
           <p>Read this as coverage, not as a score. A specification that does not define conflict resolution is not deficient; it is solving a different problem, and carrying machinery you do not need has a real cost.</p>
           <div class="scroll-x"><table class="cmp">
             <tr>
-              <th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.0.2</th>
+              <th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>Brando 1.3</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.0.3</th>
             </tr>
             <tr>
               <td>A machine-readable brand file format</td>
               <td>Yes, Markdown with YAML frontmatter</td>
+              <td>Yes, Markdown with YAML frontmatter and a JSON-LD sidecar</td>
               <td>Yes, Markdown core plus package extensions</td>
               <td>Yes, JSON manifest plus component directories</td>
               <td>Yes, Brand Manifest in YAML or JSON with JSON Schema contracts</td>
@@ -486,12 +499,14 @@
             <tr>
               <td>Web discovery mechanism</td>
               <td>File in the project root</td>
+              <td>Files in a version-controlled repository</td>
               <td>Yes, <code>/.well-known/brand.md</code>, self-hosted or registry-backed</td>
               <td>Manifest entry point; registry offered by the platform</td>
               <td>Not defined. OBDS governs what a build receives, not how it is published</td>
             </tr>
             <tr>
               <td>Explicit unknown as a first-class state</td>
+              <td>Not addressed</td>
               <td>Not addressed</td>
               <td>Producers must omit or "record an explicit gap" and must not fabricate</td>
               <td>Not addressed</td>
@@ -500,12 +515,14 @@
             <tr>
               <td>Scope-based applicability selection</td>
               <td>Language and architecture fields; inheritance between files</td>
+              <td>Not addressed</td>
               <td>Yes, by task type, rule tier, locale, product and campaign</td>
               <td>Not addressed</td>
               <td>Yes, a closed nine-dimension scope vocabulary resolved per build target</td>
             </tr>
             <tr>
               <td>Time validity</td>
+              <td>Not addressed</td>
               <td>Not addressed</td>
               <td>Partly: logo entries must not be used past <code>active_through</code>; claims with <code>proof_status</code> expired must not be used</td>
               <td>Not addressed</td>
@@ -514,6 +531,7 @@
             <tr>
               <td>Conflict resolution between competing rules</td>
               <td>Inheritance rules between parent and child files</td>
+              <td>Not addressed</td>
               <td>Precedence ordering, and consumers "SHOULD surface the conflict rather than comply silently"; no binding resolution algorithm</td>
               <td>Not addressed</td>
               <td>Yes, declared precedence plus conflict relevance for the specific target</td>
@@ -521,12 +539,14 @@
             <tr>
               <td>Fail-closed execution on missing required truth</td>
               <td>Not addressed for brand content</td>
+              <td>Not addressed</td>
               <td>Partly: hard stops for integrity failures, expired logos and forbidden claims; missing optional guidance degrades gracefully</td>
               <td>Not addressed</td>
               <td>Yes. A target declares required truth; if it is not <code>defined</code> the build fails, no context is produced and no model is called</td>
             </tr>
             <tr>
               <td>Runtime decision or evidence record</td>
+              <td>Not addressed</td>
               <td>Not addressed</td>
               <td>Not required of consumers; provider-side hashes and registry audit trails only</td>
               <td>Not addressed</td>
@@ -535,19 +555,30 @@
             <tr>
               <td>Reproducible artefact hashing</td>
               <td>Not addressed</td>
+              <td>Not addressed</td>
               <td>Provider-side <code>source_hash</code> for claims; asset integrity checks</td>
               <td>Not addressed</td>
               <td>Yes, canonical hashing; the same manifest and build plan reproduce the same artefact hash</td>
             </tr>
             <tr>
+              <td>A named controls layer over rule strength</td>
+              <td>Not addressed</td>
+              <td>Yes: required, reviewed, escalated, discouraged, prohibited</td>
+              <td>Rule tiers: core, default, contextual</td>
+              <td>Not addressed</td>
+              <td>Rule obligation and enforcement, including prohibit and require_approval</td>
+            </tr>
+            <tr>
               <td>Executable conformance suite published</td>
               <td>Not published as part of the specification</td>
+              <td>Not addressed</td>
               <td>Not published as part of the specification</td>
               <td>Conformance levels defined; no executable suite published with the specification</td>
               <td>Yes, 1158 cases and a Foundation conformance profile shipped in the release archive</td>
             </tr>
           </table></div>
           <p class="micro-note">"Not addressed" means the specification text we read does not define the behaviour. It is not a claim that an implementation cannot do it, and it is not a criticism.</p>
+          <p class="micro-note">One candidate was left out. <a href="https://agenticadvertising.org/brand" target="_blank" rel="noopener">brand.json</a>, part of the Advertising Context Protocol, describes itself as "machine-readable brand identity for the agentic advertising era" and publishes at <code>/.well-known/brand.json</code>. We read that page and the project root and could not find a version number or a licence for the format on either. A row we cannot pin to a version describes a moving target, so it is omitted rather than shipped with a hedge. If we have missed the right source, tell us and we will add it.</p>
         </div>
       </div>
     </section>
@@ -588,7 +619,7 @@
             <span class="action-name">See it work</span>
             <span class="action-note">Two runnable examples with real output, including the fail-closed case.</span>
           </a>
-          <a href="/spec/4.0.2/OBDS-4.0.2.md">
+          <a href="/spec/4.0.3/OBDS-4.0.3.md">
             <span class="action-name">Read the spec</span>
             <span class="action-note">One normative document, so the claims in the OBDS column can be checked directly.</span>
           </a>
@@ -597,9 +628,10 @@
         <div class="state-list">
           <div class="state-row"><div><span class="state-name">Primary sources</span></div><div>
             <a href="https://thebrand.md/" target="_blank" rel="noopener">thebrand.md</a> and <a href="https://github.com/caiopizzol/brand.md" target="_blank" rel="noopener">github.com/caiopizzol/brand.md</a> &middot;
+            <a href="https://brandoschema.com/" target="_blank" rel="noopener">brandoschema.com</a> and <a href="https://github.com/JonathanBowker/brandoschema" target="_blank" rel="noopener">github.com/JonathanBowker/brandoschema</a> &middot;
             <a href="https://github.com/Brand-Context-Protocol/spec" target="_blank" rel="noopener">github.com/Brand-Context-Protocol/spec</a> &middot;
             <a href="https://brandcodex.org/specification" target="_blank" rel="noopener">brandcodex.org/specification</a> &middot;
-            <a href="/spec/4.0.2/OBDS-4.0.2.md">OBDS-4.0.2.md</a>
+            <a href="/spec/4.0.3/OBDS-4.0.3.md">OBDS-4.0.3.md</a>
           </div></div>
         </div>
       </div>

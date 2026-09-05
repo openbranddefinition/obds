@@ -49,52 +49,52 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.0.3/OBDS-4.0.3.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-MIGRATION.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.0.3/OBDS-4.0.3-MIGRATION.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-CHANGELOG.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.0.3/OBDS-4.0.3-CHANGELOG.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-IMPLEMENTER-QUICKSTART.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.0.3/OBDS-4.0.3-IMPLEMENTER-QUICKSTART.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://openbranddefinition.org/research/governed-result-hash/README.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://openbranddefinition.org/research/governed-communications-benchmark/README.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://openbranddefinition.org/research/limits/README.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://openbranddefinition.org/examples/README.md</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://openbranddefinition.org/llms.txt</loc>

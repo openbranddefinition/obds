@@ -1,3 +1,29 @@
+# Migrating 4.0.2 to 4.0.3
+
+5 September 2026.
+
+Nothing to do. OBDS 4.0.3 is a public-surface release. It corrects the language annotation of the homepage, separates the search weight of the raw specification files from the pages written for readers, and adds one verified row to the comparison page. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed. Every contract, hash and conformance result is identical to 4.0.2;
+only the version stamp, the release-file names and the public-surface documents move. An
+implementation that conforms to 4.0.2 conforms to 4.0.3 without changing a line.
+
+## Open item: no dedicated German URL
+
+English and German share one URL. The homepage carries both languages in the same document
+and switches between them in the browser, so there is no `/de/` address to give a canonical
+tag or an `hreflang` target of its own. `x-default` and the existing `en` and `de`
+references are the best annotation available for a single-URL page, and they are in place.
+
+What this costs while it stays open: a search engine cannot rank the German copy on its own
+terms. There is one indexable document, its title and description are English, and the
+German text is only present in the markup, so a German-language query has nothing addressed
+to it to match. A reader arriving from a German search lands on an English page and has to
+find the toggle. The German copy also cannot be linked to, quoted or shared as a distinct
+page, and any measurement of German traffic is folded into the English figure. Closing it
+means real `/de/` addresses, redirects and a sitemap rewrite, which is a URL structure
+change rather than a documentation patch, so it gets its own pass.
+
+---
+
 # Migrating 4.0.1 to 4.0.2
 
 5 September 2026.
