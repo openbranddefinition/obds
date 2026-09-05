@@ -89,7 +89,7 @@ SUITE_ORDER = (
 # the counts come from the run.
 IMPLEMENTATION = {
     "name": "org.openbranddefinition.reference-compiler",
-    "version": "1.0.0",
+    "version": "4.0.0",
     "language": "Python",
     "repository": "https://github.com/openbranddefinition/obds",
 }
@@ -188,6 +188,19 @@ COMPILED_RUNTIME_PROFILE = {
                    "foundation/tests.test_obds_300_systemic_executors::test_mechanism_4_no_executor_accepts_a_resealed_schema_invalid_artefact[missing required property-reference/foundation/src/obds_ref/cli.py::command_validate]"]},
         {"requirement": "governed hashes reproduced rather than declared",
          "cases": ["foundation/tests.test_obds_300_class_b::test_b2_a_resolution_snapshot_must_reproduce_its_approval_hash"]},
+        {"requirement": "contained production output paths",
+         "cases": ["foundation/tests.test_obds_400_boundaries::test_f1_safe_target_mapping_without_id_restriction[../escaped]",
+                   "foundation/tests.test_obds_400_boundaries::test_f1_output_symlinks_are_refused[generations]"]},
+        {"requirement": "explicit immutable build generations without fallback",
+         "cases": ["foundation/tests.test_obds_400_boundaries::test_f2_failed_generation_never_falls_back_and_rollback_is_explicit"]},
+        {"requirement": "verified provenance of all four governed model projection slots",
+         "cases": ["foundation/tests.test_obds_400_boundaries::test_f3_resealed_slot_cannot_reach_model_or_review[replace-hardBoundaries]",
+                   "foundation/tests.test_obds_400_boundaries::test_f3_resealed_slot_cannot_reach_model_or_review[replace-factGrounding]",
+                   "foundation/tests.test_obds_400_boundaries::test_f3_resealed_slot_cannot_reach_model_or_review[replace-stateMap]",
+                   "foundation/tests.test_obds_400_boundaries::test_f3_resealed_slot_cannot_reach_model_or_review[replace-guidanceContext]"]},
+        {"requirement": "provider failure evidence with model_failed",
+         "cases": ["foundation/tests.test_obds_400_boundaries::test_f5_model_failed_is_recorded_and_never_released[timeout-False]",
+                   "foundation/tests.test_obds_400_boundaries::test_f5_model_failed_is_recorded_and_never_released[timeout-True]"]},
     ],
 }
 
@@ -242,7 +255,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "3.0.3"
+PRIOR_RELEASE = "3.0.4"
 
 
 def _release_kind(release: str) -> str:
@@ -288,7 +301,7 @@ def release_notes(release: str, counts: dict[str, int]) -> list[str]:
     surface = _english_list(published) if published else "no earlier release"
     return [
         f"OBDS {release} is a {_release_kind(release)} release: {note}.",
-        f"The public schema surface is byte-identical to OBDS {surface}.",
+        f"The frozen 1.0.0 public schema surface is byte-identical to OBDS {surface}. New 4.0.0 contracts are published beside it.",
         "The specification and the documentation are licensed under CC BY 4.0. "
         "The schemas, release metadata, reference implementation, conformance "
         "suite and examples are licensed under the Apache License 2.0.",

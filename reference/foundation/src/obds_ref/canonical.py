@@ -246,6 +246,14 @@ def model_input_package_identity_positions(package: Any):
             if isinstance(values, list):
                 for position, value in enumerate(values):
                     yield f"selection.{field_name}[{position}]", value
+    projection = package.get("projection")
+    if isinstance(projection, dict) and isinstance(projection.get("chapters"), list):
+        for index, chapter in enumerate(projection["chapters"]):
+            if isinstance(chapter, dict):
+                yield f"projection.chapters[{index}].id", chapter.get("id")
+                if isinstance(chapter.get("elementIds"), list):
+                    for position, value in enumerate(chapter["elementIds"]):
+                        yield f"projection.chapters[{index}].elementIds[{position}]", value
 
 
 def identity_admissibility_errors(positions) -> list[str]:

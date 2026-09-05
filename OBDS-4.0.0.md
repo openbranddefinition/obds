@@ -2,9 +2,9 @@
 
 ## OBDS 3.0: Stable Specification
 
-**Version:** 3.0.4  
+**Version:** 4.0.0  
 **Status:** Stable  
-**Date:** 2026-09-04  
+**Date:** 2026-09-05  
 **Project home:** https://openbranddefinition.org  
 
 ---
@@ -469,6 +469,8 @@ Rules:
 - When a new approved manifest replaces an earlier approved version, `approval.reviewedAgainst` SHOULD identify the exact previous version and content hash reviewed by the approver.
 - `reviewedAgainst` records the comparison basis. It does not prove that every change was read.
 - A change report is derived from two manifest snapshots and is not a second source of truth.
+
+A manifest validator MUST execute the published Brand Manifest schema before iterating identities, contracts or elements. Format checking is executable, not annotation-only. For an approved manifest, `approvedBy` is a non-blank string and `approvedAt` is a calendar-valid RFC 3339 timestamp with an explicit timezone. The reference timestamp profile supports seconds 00-59 and refuses unsupported leap-second spellings. Invalid roots, collection types, metadata and approval values produce structured validation diagnostics; build and CLI boundaries report ValidationFailure rather than an uncontrolled type or attribute exception.
 
 ### 7.1 Manifest approval as the default
 
@@ -1630,6 +1632,18 @@ A failed target MUST NOT produce a production artefact.
 
 ---
 
+### 13.4 Production generations and output containment (4.0)
+
+A logical `targetId` has no filesystem semantics. An implementation MUST map its canonical identity to a deterministic safe filename without restricting the logical ID vocabulary. Distinct canonical identities MUST NOT alias through case folding, truncation or lossy sanitisation. The reference mapping is `target-` followed by the lowercase SHA-256 hex digest of the UTF-8 canonical identity, followed by `.context.json` or `.context.md`. Resolved output paths MUST remain inside the selected output root; symlinks MUST NOT redirect output outside that root.
+
+A build generation identifies one exact manifest snapshot, Build Plan and compiler implementation. The reference `generationId` is the section 14.3 hash of the object with `manifestContentHash`, `planHash`, `compilerId` and `compilerVersion`. A 4.0 Build Report follows `schemas/4.0.0/build-report.schema.json`; `reportHash` covers the complete report except itself. The build timestamp belongs to the report, not to generation identity.
+
+Generation output is published as one complete directory, never as a mixture of old and new target files. Existing generation contents MUST NOT be overwritten. Repeating a generation reuses its first completed output only after verifying identical results. The reference layout is `generations/<generation digest>/<safe target filename>`, with an immutable `build-report.yaml` in that directory. `artifactRef` is relative to the output root. A root-level report may identify the latest completed build for inspection; it MUST NOT select a generation implicitly for runtime execution.
+
+A production request MUST select its generation explicitly. The loader verifies the report contract and seal, generation identity, target membership, status, artifact hash and artifact manifest/plan/compiler bindings. A failed target has no artifact in that generation. A missing generation or target has no valid artifact. Neither condition may fall back to another generation or to a legacy flat filename.
+
+An explicitly selected previous generation remains usable while its artifacts remain valid. A failed rebuild is not revocation. Rollback selects the previous generation explicitly and does not rewrite its history. The reference `run_generation_with_model` is the generation-bound production entry point; the lower-level `run_with_model` and `run_assembled_with_model` execute explicitly supplied immutable snapshots and do not discover or select a deployment generation.
+
 ## 14. Compiled Brand Context
 
 A Compiled Brand Context is the machine-readable runtime artefact for one target.
@@ -2326,10 +2340,29 @@ never checked. The chain closes only when one renderer produces the bytes both
 ends agree on.
 
 The Model Input Package is validated against its published contract,
-`schemas/1.0.0/model-input-package.schema.json`, before any of its fields is
+`schemas/4.0.0/model-input-package.schema.json`, before any of its fields is
 read (section 15.11).
 
 The rendered model input is a deterministic runtime projection, not a second source of Brand Truth. It SHOULD omit validator-only plumbing that does not help the model act correctly, MAY render equivalent structures compactly, and MAY omit repeated chapter blocks when the same full element is already present in HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP or ACTIVE_GUIDANCE. Any such projection is covered by `modelInputHash`; the complete governed element remains available in the Compiled Brand Context for audit and validation.
+
+### 15.3a Verified model projection (4.0)
+
+A 4.0 Model Input Package follows `schemas/4.0.0/model-input-package.schema.json`. It carries a structured `projection`, covered by `assemblyHash`, with a registered `renderer` and `chapters` containing only chapter IDs and element ID arrays. The reference renderer identifier is `obds:compiled-projection-v1`. A 1.0.0 package has no verifiable projection contract and MUST NOT be accepted as a 4.0 production package merely because its hashes reproduce.
+
+Every runtime and review consumer MUST reproduce **all four** governed slots from the bound Compiled Brand Context and the validated projection selection before using the package:
+
+- `hardBoundaries`: all applicable blocking, approval-requiring and prohibit RULE elements;
+- `factGrounding`: the selected full defined non-rule elements, plus all compiler-included defined FACT elements;
+- `stateMap`: the selected non-defined elements, plus every compiler-included non-defined element;
+- `guidanceContext`: eligible active guidance plus selected chapter elements and compiler-included KNOWLEDGE as non-authoritative background. Background never makes an inactive element an expression requirement.
+
+Every selected element MUST exist in the compiled universe. Canonical duplicate IDs, a mismatch between `availableElementIds` and `elementRecords`, ineligible active guidance, unsupported renderers and modes incompatible with `contextAssembly` MUST be refused. Compliance mode cannot activate expression guidance. Full delivery includes all applicable FACTS and gaps. Required content cannot be omitted by editing the selection and recomputing a package hash.
+
+The reference projection renders compact full values with canonical element identities in deterministic identity order. RULE rendering retains statement, references, condition, requirement and check parameters. Chapter content is reproduced from the full compiled records; an externally supplied chapter whose claimed element blocks differ is rejected even if every chapter hash has been recomputed. Untrusted chapter titles, IDs and narrative prose do not enter the four governed slots. A chapter is a structured selection aid, not a second source of facts. Repeated elements are rendered once across the relevant slots.
+
+The reference renderer's `stateMap` contains governed element states only. Retrieval classifications such as `not_covered` or `access_limited` remain package metadata; a self-declared retrieval classification MUST NOT inject a new factual absence or permission statement into the governed projection. The no-hit resolution rules of 15.5 still apply before factual answers.
+
+Consumers compare each received slot with the reproduced projection and verify that the recorded selection includes all mandatory additions. Any mismatch yields `assembly_failed`, no model call and no review acceptance. Hash verification remains required but is insufficient on its own: a self-resealed foreign package is still foreign. Other renderers require a specified deterministic derivation and a matching verifier; merely asserting that an assembler is trusted does not establish slot provenance.
 
 ### 15.4 Assembly invariants
 
@@ -2503,7 +2536,8 @@ Every runtime attempt MUST create a Runtime Decision Record:
 ```json
 {
   "kind": "obds-runtime-decision-record",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "4.0.0",
+  "generationId": "sha256:...",
   "recordId": "urn:uuid:...",
   "recordedAt": "2026-07-31T09:00:00Z",
   "targetId": "social-copy-de-at",
@@ -2522,7 +2556,7 @@ Every runtime attempt MUST create a Runtime Decision Record:
 }
 ```
 
-Allowed decisions are `released`, `build_failed`, `assembly_failed`, `no_valid_artifact`, `preflight_blocked`, `postflight_blocked` and `approval_required`.
+Allowed decisions are `released`, `build_failed`, `assembly_failed`, `no_valid_artifact`, `preflight_blocked`, `postflight_blocked`, `approval_required` and `model_failed`.
 
 Rules:
 
@@ -2533,6 +2567,10 @@ Rules:
 - Check results include phase, rule ID, primitive or validator ID, enforcement, result and message.
 - Records MUST be exportable as an append-only ordered sequence.
 - A Runtime Decision Record is auditable system evidence, not cryptographic proof that no other uninstrumented call occurred.
+
+Provider failure is a runtime outcome, not a RULE violation. An exception from the instrumented model adapter, or an adapter response that is not text or a `(text, requestId-or-null)` pair, MUST produce `model_failed`, withhold output and create a Runtime Decision Record under `schemas/4.0.0/runtime-decision-record.schema.json`. `modelCall.called` is true because the adapter was invoked; a timeout does not establish whether the remote provider executed or completed the request. No automatic retry is implied. Preflight and postflight governance failures retain their own decisions.
+
+`generationId` records the explicitly requested generation, including when it fails or is unavailable. It is null for explicit in-memory snapshot execution. A malformed generation identity is rejected before a model call. Records are appended after controlled adapter failure as after success. A killed process or unavailable evidence store requires operational recovery; a process cannot claim a durable record it failed to write.
 
 ### 15.10 What compilation and assembly add
 
@@ -2580,7 +2618,7 @@ The contracts are:
 | Document | Contract |
 |---|---|
 | Compiled Brand Context | `schemas/3.0.0/compiled-context.schema.json` |
-| Model Input Package | `schemas/1.0.0/model-input-package.schema.json` |
+| Model Input Package | `schemas/4.0.0/model-input-package.schema.json` |
 | Review Result | `schemas/1.0.0/review-result.schema.json` |
 
 **Order matters.** The contract decides whether the document is that kind of
@@ -3125,7 +3163,7 @@ governed reader and every entry point of each, the identity rules of section
 
 ### 26.2 OBDS Compiled Runtime
 
-Additionally requires exact Build Plans, `requiresDefined`, every required element present in the produced context, explicit context selection, no artefact for a failed target, canonical JSON artefacts, reproducible hashes, a `governedResultHash` that matches section 14.3a for the same manifest and Build Plan, Foundation Check Registry v1, exact target loading, Runtime Decision Records, zero instrumented model calls after failed build or blocking preflight, withheld output after blocking postflight, per-slot token reporting, the governed input contract at every governed reader, identity binding of the manifest triple wherever an artefact names a manifest, two-stage validation of Foundation RULE checks, exact task-input binding, contract validation of every governed runtime document before governed field use and governed hashes reproduced rather than declared.
+Additionally requires exact Build Plans, `requiresDefined`, every required element present in the produced context, explicit context selection, no artefact for a failed target, canonical JSON artefacts, reproducible hashes, a `governedResultHash` that matches section 14.3a for the same manifest and Build Plan, Foundation Check Registry v1, exact target loading, Runtime Decision Records, zero instrumented model calls after failed build or blocking preflight, withheld output after blocking postflight, per-slot token reporting, the governed input contract at every governed reader, identity binding of the manifest triple wherever an artefact names a manifest, two-stage validation of Foundation RULE checks, exact task-input binding, contract validation of every governed runtime document before governed field use, governed hashes reproduced rather than declared, contained production output paths, explicit immutable build generations without fallback, verified provenance of all four governed model projection slots and provider failure evidence with model_failed.
 
 An implementation claiming OBDS Context Delivery additionally verifies generated Search Cards and Reasoning Chapters, keeps them non-authoritative and demonstrates that final answers use full selected elements rather than Search Card summaries alone.
 
@@ -3505,7 +3543,7 @@ The licence texts, the licence mapping and the trademark policy are published at
 
 A credible OBDS release includes:
 
-1. one normative specification: `OBDS-3.0.4.md`;
+1. one normative specification: `OBDS-4.0.0.md`;
 2. machine-readable schemas for the Foundation and declared profiles;
 3. a Foundation reference compiler and conformance suite;
 4. Context Delivery reference tests;

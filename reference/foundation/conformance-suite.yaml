@@ -44,7 +44,7 @@ cases:
   type: validate
   document: fixtures/invalid-foundation-supersedes.yaml
   expectedValid: false
-  errorContains: supersedes is not part
+  errorContains: False schema
 - id: dead-build-plan-reference
   type: build
   manifest: examples/simple/manifest.yaml
@@ -127,3 +127,18 @@ cases:
   errorContains: alias expansion exceeds
 - id: governed-input-parser-isolation
   type: parser-isolation
+- id: production-boundary-invalid-owner
+  type: validate
+  document: fixtures/invalid-owner.yaml
+  expectedValid: false
+  errorContains: manifest schema
+- id: production-boundary-invalid-elements
+  type: validate
+  document: fixtures/invalid-elements.yaml
+  expectedValid: false
+  errorContains: manifest schema
+- id: production-boundary-invalid-approval-time
+  type: validate
+  document: fixtures/invalid-approval-time.yaml
+  expectedValid: false
+  errorContains: approval.approvedAt

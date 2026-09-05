@@ -263,7 +263,7 @@ def command_conformance(args):
         results.append({"id":case["id"],"type":typ,"passed":passed,**details})
     pc=sum(1 for x in results if x["passed"]); fc=len(results)-pc
     from datetime import datetime,timezone
-    payload={"kind":"obds-conformance-result","schemaVersion":"1.0.0","profile":suite.get("profile","foundation"),"implementation":{"name":"obds-reference","version":"1.0.0"},"suiteHash":sha256_id(suite),"executedAt":datetime.now(timezone.utc).isoformat(),"passed":fc==0,"passedCount":pc,"failedCount":fc,"cases":results}
+    payload={"kind":"obds-conformance-result","schemaVersion":"1.0.0","profile":suite.get("profile","foundation"),"implementation":{"name":"obds-reference","version":"4.0.0"},"suiteHash":sha256_id(suite),"executedAt":datetime.now(timezone.utc).isoformat(),"passed":fc==0,"passedCount":pc,"failedCount":fc,"cases":results}
     if args.out: Path(args.out).write_text(json.dumps(payload,ensure_ascii=False,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     _print_json(payload); return 0 if fc==0 else 5
 

@@ -186,7 +186,7 @@ def test_language_family_is_rejected():
     broken = copy.deepcopy(manifest)
     broken["elements"][0]["family"] = "language"
     errors = validate_manifest(broken, verify_hash=False)
-    assert any("invalid family language" in error for error in errors)
+    assert any("family" in error and "language" in error for error in errors)
 
 
 def test_token_overflow_fails_without_artefact(tmp_path):
@@ -229,7 +229,7 @@ def test_colour_mismatch_fails():
 
 def test_supersedes_rejected():
     errors=validate_manifest(load_data(ROOT/"fixtures"/"invalid-foundation-supersedes.yaml"),verify_hash=False)
-    assert any("supersedes is not part" in x for x in errors)
+    assert any("False schema" in x for x in errors)
 
 def test_manifest_diff_deterministic():
     old=load_data(ROOT/"fixtures"/"diff-old-manifest.yaml"); new=load_data(ROOT/"fixtures"/"diff-new-manifest.yaml"); a=manifest_change_report(old,new); b=manifest_change_report(old,new); assert a==b; assert [x["elementId"] for x in a["added"]]==["identity.purpose"]; assert [x["elementId"] for x in a["changed"]]==["identity.voice"]; assert [x["elementId"] for x in a["removed"]]==["rule.no-best"]

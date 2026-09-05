@@ -263,8 +263,7 @@
     },
     "suiteCount": {
       "type": "integer",
-      "minimum": 1,
-      "maximum": 1000
+      "minimum": 1
     }
   }
 }

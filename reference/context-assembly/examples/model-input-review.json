@@ -1,22 +1,42 @@
 {
   "applicationMode": "review",
-  "assembledAt": "2026-09-02T19:05:25.727869+00:00",
-  "assemblyHash": "sha256:05e4cf2a03d2e84c96710522f9e717383547e6d065fe441c184595351337ea05",
+  "assembledAt": "2026-09-05T16:30:36.645920+00:00",
+  "assemblyHash": "sha256:0805a531eb78602fd160d67ae0d6dec94de781e0a16f5911f351e9e47bb8f1fe",
   "deliveryMode": "reasoning",
-  "id": "urn:obds:model-input:2b842a66-9e79-43c6-858a-fb42e6c6d598",
+  "id": "urn:obds:model-input:a44c0bc0-59a4-430c-ab10-51e2ccd7d529",
   "kind": "obds-model-input-package",
   "manifest": {
     "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
-  "modelInputHash": "sha256:7703578fe3ad1a2d9eb630fde47270a2331ee097cd4fcb307c74be4391d09386",
+  "modelInputHash": "sha256:3be7ed7b8fbd17506c5cade86bdf3c50d0c15763aad5c9f4e3c4d1c40c560767",
+  "projection": {
+    "chapters": [
+      {
+        "elementIds": [
+          "identity.value.innovation",
+          "identity.value.simplicity",
+          "identity.value.reliability"
+        ],
+        "id": "chapter.brand-expression"
+      },
+      {
+        "elementIds": [
+          "design.logo.clear-zone",
+          "rule.logo.clear-zone"
+        ],
+        "id": "chapter.logo-system"
+      }
+    ],
+    "renderer": "obds:compiled-projection-v1"
+  },
   "retrieval": {
     "resolution": "direct",
     "status": "hit",
     "truthOutcome": "mixed"
   },
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "4.0.0",
   "selection": {
     "activeGuidanceElementIds": [
       "identity.value.reliability",
@@ -44,19 +64,19 @@
   },
   "slots": {
     "factGrounding": "design.logo.clear-zone [defined]: {\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\nstructure.brand [defined]: {\"name\":\"Example Assembly Brand\"}",
-    "guidanceContext": "[ACTIVE_GUIDANCE]\nidentity.value.reliability [defined]: {\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}\nidentity.value.simplicity [defined]: {\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\n\n[REASONING_CHAPTERS]\nGenerated relationship context. Exact elements already present in other slots are omitted here. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\nchapter.brand-expression: ## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}",
+    "guidanceContext": "[ACTIVE_GUIDANCE]\nidentity.value.reliability [defined]: {\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}\nidentity.value.simplicity [defined]: {\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\n\n[REASONING_CHAPTERS]\nGenerated relationship context. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\n## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}",
     "hardBoundaries": "rule.claims.require-approval [require/require_approval]: Unregistered performance claims require approval. | refs=claims.approved-register\nrule.logo.clear-zone [require/block]: Preserve the approved logo clear zone. | refs=design.logo.clear-zone",
     "stateMap": "claims.approved-register [unknown]:",
     "taskInput": "Review: New technology. Simple to use."
   },
   "sources": {
     "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
-    "compiledContextHash": "sha256:01802282658bea48aa810c3e9f11cfdb8172c4c31c8536312798afe226dcb778",
+    "compiledContextHash": "sha256:ef4003005fc90c177f5dad7beb953846385d7e6c6aba10db91460d729259decd",
     "searchIndexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab"
   },
   "targetId": "marketing-review-global-en",
   "tokenBudget": {
-    "actual": 107,
+    "actual": 96,
     "max": 1200,
     "tokenizerId": "obds:whitespace-v1",
     "tokenizerVersion": "1.0.0"

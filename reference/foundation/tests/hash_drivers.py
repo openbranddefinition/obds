@@ -403,10 +403,9 @@ def _drive_review_assembly_hash(mode):
     """The package's own seal: selection cannot move under it."""
     reviewer, compiled, package, review = _review_fixture()
     if mode != "valid":
-        package["selection"] = {
-            **package["selection"],
-            "activeGuidanceElementIds": list(package["selection"]["activeGuidanceElementIds"]) + ["smuggled.element"],
-        }
+        # F3 now independently rejects a smuggled selection. Change metadata
+        # here to isolate the assemblyHash gate rather than test two gates.
+        package["assembledAt"] = "2099-01-01T00:00:00Z"
     if mode == "reseal":
         _reseal_package(package)
     return _run_review(reviewer, compiled, package, review)
@@ -608,10 +607,9 @@ def _drive_review_assembly_hash(mode):
     """The package's own seal: selection cannot move under it."""
     reviewer, compiled, package, review = _review_fixture()
     if mode != "valid":
-        package["selection"] = {
-            **package["selection"],
-            "activeGuidanceElementIds": list(package["selection"]["activeGuidanceElementIds"]) + ["smuggled.element"],
-        }
+        # F3 now independently rejects a smuggled selection. Change metadata
+        # here to isolate the assemblyHash gate rather than test two gates.
+        package["assembledAt"] = "2099-01-01T00:00:00Z"
     if mode == "reseal":
         _reseal_package(package)
     return _run_review(reviewer, compiled, package, review)
@@ -792,6 +790,55 @@ def drive(site_id, mode):
     """Run one registered driver. The subprocess entry point uses this."""
     driver, _ = DRIVERS[site_id]
     return driver(mode)
+
+
+
+
+def _drive_generation_boundary(boundary):
+    def driver(mode):
+        import tempfile
+        from obds_ref.compiler import build_all
+        from obds_ref.generation import _read_report, _report_hash, generation_relative, load_generation_artifact
+        from obds_ref.governed_io import save_json, save_yaml, ValidationFailure
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            manifest, plan = _example('foundation-minimal')
+            report = build_all(manifest, plan, output_dir=root)
+            generation_id = report['generationId']
+            report_path = root/generation_relative(generation_id)/'build-report.yaml'
+            artifact_path = root/report['targets'][0]['artifactRef']
+            if mode != 'valid':
+                if boundary == 'report':
+                    report['builtAt'] = '2099-01-01T00:00:00Z'
+                    if mode == 'reseal': report['reportHash'] = _report_hash(report)
+                elif boundary == 'generation':
+                    report['planHash'] = 'sha256:'+'0'*64
+                    report['reportHash'] = _report_hash(report)
+                else:
+                    artifact = load_data(artifact_path)
+                    artifact['slots']['factGrounding'] = 'tampered'
+                    artifact['artifactHash'] = artefact_hash(artifact)
+                    save_json(artifact_path, artifact)
+                    if mode == 'reseal':
+                        report['targets'][0]['artifactHash'] = artifact['artifactHash']
+                        report['reportHash'] = _report_hash(report)
+                save_yaml(report_path, report)
+            try:
+                if boundary == 'artifact':
+                    load_generation_artifact(root, generation_id, plan['targets'][0]['id'])
+                else:
+                    _read_report(root, generation_id)
+                return True
+            except ValidationFailure:
+                return False
+    return driver
+
+
+DRIVERS.update({
+    'reference/foundation/src/obds_ref/generation.py::_read_report::reportHash': (_drive_generation_boundary('report'), 'reseal-accepted'),
+    'reference/foundation/src/obds_ref/generation.py::_read_report::generationId': (_drive_generation_boundary('generation'), 'reseal-rejected'),
+    'reference/foundation/src/obds_ref/generation.py::load_generation_artifact::artifactHash': (_drive_generation_boundary('artifact'), 'reseal-accepted'),
+})
 
 
 if __name__ == "__main__":  # pragma: no cover - exercised through subprocesses

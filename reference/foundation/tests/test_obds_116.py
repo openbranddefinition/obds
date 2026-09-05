@@ -339,7 +339,11 @@ def _manifest_with_value_ref(*, referenced_state="defined", validity=None, scope
             "references": [],
         },
     })
-    rule.pop("valueContractRef", None)
+    from obds_ref.canonical import sha256_id, value_shape_hash
+    schema = load_data(ROOT / "value-schemas/3.0.0/rule.schema.json")
+    rule["valueContractRef"] = "vc.rule.literal"
+    manifest["valueContracts"].append({"id":"vc.rule.literal", "family":"rules", "kind":"rule",
+        "schemaRef":schema["$id"], "schemaHash":sha256_id(schema), "shapeHash":value_shape_hash(rule["value"])})
 
     manifest["elements"] = [manifest["elements"][0], disclaimer, rule, *copy.deepcopy(list(extra_elements))]
     reseal(manifest)

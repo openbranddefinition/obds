@@ -1,3 +1,13 @@
+# Migrating 3.0.4 to 4.0.0
+
+5 September 2026.
+
+Rebuild production outputs with compiler 4.0.0. Read the returned generationId and artifactRef; do not construct filenames from targetId or load a latest/flat target file. Use run_generation_with_model(output_dir, generation_id, target_id=..., task_input=..., model=...) for production; select the old generation explicitly for rollback. Existing snapshots are not revoked. Regenerate Model Input Packages using the 4.0.0 projection contract and a registered verifier: old package hashes alone do not prove provenance. Update record consumers to schemas/4.0.0/runtime-decision-record.schema.json and handle model_failed as withheld output with a called adapter. Update build-report consumers to schemas/4.0.0/build-report.schema.json. Manifest, Build Plan and Compiled Context schema versions remain 1.0.0, 3.0.0 and 3.0.0 respectively. Correct manifests that only passed the old hand-written validator: owner/name types, approval identity and real timestamp validity now matter. Retrieval classification remains package metadata and cannot manufacture stateMap facts. No dependency, CI, performance or unrelated refactoring changes are part of this migration.
+
+---
+
+Previous release history follows unchanged.
+
 # OBDS Migration Notes
 
 Start at the section for the release you are on. Coming from 2.x, that is

@@ -14,9 +14,9 @@ claims.approved-register [unknown]:
 identity.value.simplicity [defined]: {"description":"Make the relevant idea easy to understand and use.","name":"Simplicity"}
 
 [REASONING_CHAPTERS]
-Generated relationship context. Exact elements already present in other slots are omitted here. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.
+Generated relationship context. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.
 
-chapter.brand-expression: ## identity.value.innovation [identity/core-value/defined]
+## identity.value.innovation [identity/core-value/defined]
 {"description":"Find useful new ways to solve real customer problems.","name":"Innovation"}
 
 ## identity.value.reliability [identity/core-value/defined]

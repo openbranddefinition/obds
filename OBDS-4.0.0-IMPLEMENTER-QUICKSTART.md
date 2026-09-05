@@ -1,4 +1,4 @@
-# OBDS 3.0.4 Implementer Quickstart
+# OBDS 4.0.0 Implementer Quickstart
 
 ## Start with five concepts
 
@@ -12,7 +12,7 @@
 
 Support `obds-foundation`, section 26.1:
 
-- parse the manifest;
+- parse the manifest and validate its published schema, including approval date-time formats, before semantic validation;
 - validate IDs, effective subjects, states, string-only scope and references;
 - resolve every required `valueContractRef`;
 - verify `shapeHash`, `schemaRef`, `schemaHash` and any declared value-contract validator;
@@ -31,13 +31,33 @@ Add `compiled-runtime`, section 26.2, when the build must refuse:
 - fail the target when required truth is missing, `unknown`, `not_defined`, out
   of scope, expired or conflicting;
 - write **no** Compiled Brand Context for a failed target, so nothing downstream
-  has anything to assemble a model input from; and
+  can assemble a model input for that generation; and
 - record the outcome in a Runtime Decision Record.
 
 This is where the fail-closed guarantee lives. A Foundation-only implementation
 holds governed truth with explicit unknowns; it does not run this gate.
 
 Add Context Delivery, Context Assembly, Composition, Visual Operations, Claims or Localisation only when the product needs them.
+
+## Production generations in 4.0.0
+
+Persist the `generationId` returned by `build_all` with the job. Use the report's `artifactRef` for inspection; target IDs are logical identifiers and must never be joined into filesystem paths.
+
+```python
+from obds_ref.compiler import build_all
+from obds_ref.runtime import run_generation_with_model
+
+report = build_all(manifest, plan, output_dir="out")
+record = run_generation_with_model(
+    "out", report["generationId"], target_id=plan["targets"][0]["id"],
+    task_input="Create the requested text.", model=my_provider,
+    record_path="runtime-records.ndjson",
+)
+```
+
+A failed generation has no artifact for its failed target. An explicit rollback may select an older successful generation; the loader never selects it implicitly. For assembled input, also pass `package` and `model_input_text`. Runtime reproduces `hardBoundaries`, `factGrounding`, `stateMap` and `guidanceContext` from the bound compiled context and rejects altered projections even if their hashes were recomputed.
+
+Consume the 4.0.0 Model Input Package, Build Report and Runtime Decision Record schemas. A provider exception or timeout returns `model_failed`, with `modelCall.called=true`, a persisted record when `record_path` is supplied, and no released output. Build Plan and Compiled Brand Context remain at schema version 3.0.0.
 
 ## Context Assembly
 

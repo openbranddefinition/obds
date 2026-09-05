@@ -453,7 +453,7 @@ def test_canonical_json_artefacts_are_written_canonically(tmp_path):
     out = tmp_path / "out"
     build_all(manifest, bind(manifest, plan), output_dir=out)
 
-    written = sorted(out.glob("*.context.json"))
+    written = sorted(out.rglob("*.context.json"))
     assert len(written) == 1, [item.name for item in written]
 
     on_disk = load_data(written[0])
@@ -485,11 +485,12 @@ def test_exact_target_loading_builds_only_the_named_target(tmp_path):
     out = tmp_path / "out"
     report = build_all(manifest, plan, output_dir=out)
 
-    built = sorted(path.name for path in out.glob("*.context.json"))
-    assert built == sorted(f"{target['id']}.context.json" for target in plan["targets"])
+    from obds_ref.generation import target_filename, generation_relative
+    built = sorted(path.name for path in out.rglob("*.context.json"))
+    assert built == sorted(target_filename(target["id"]) + ".context.json" for target in plan["targets"])
     for entry in report["targets"]:
         assert entry["status"] == "ready", entry["targetId"]
-        assert entry["artifactRef"] == f"{entry['targetId']}.context.json"
+        assert entry["artifactRef"] == (generation_relative(report["generationId"]) / (target_filename(entry["targetId"]) + ".context.json")).as_posix()
 
 
 # --- 3.0.2: exact target loading at the runtime end of the seam -------------

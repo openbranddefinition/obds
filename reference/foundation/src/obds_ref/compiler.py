@@ -11,6 +11,7 @@ from typing import Any
 
 import yaml
 import jsonschema
+from .formats import format_checker
 
 from .canonical import (_utf16_sort_key, artefact_hash, canonical_json_bytes,
                         compiled_context_identity_positions, identity_admissibility_error,
@@ -41,7 +42,7 @@ SUPPORTED_TOKENIZERS = {("obds:whitespace-v1", "1.0.0")}
 # declared identity straight into the artefact, so a plan naming any other
 # compiler produced an artefact claiming provenance that never happened.
 COMPILER_ID = "org.openbranddefinition.reference-compiler"
-COMPILER_VERSION = "1.0.0"
+COMPILER_VERSION = "4.0.0"
 
 # OBDS 1.1 section 9: the closed scope vocabulary, nine dimensions. `brands` was
 # accepted by the reference but appeared nowhere in the specification;
@@ -876,8 +877,35 @@ def _selection_validity_window(scope_matching: list[dict[str, Any]], as_of: date
     return valid_from, valid_to
 
 
+def _manifest_schema_errors(manifest):
+    # F4: shape must be established before any identity iterator reads it.
+    schema = load_data(Path(__file__).resolve().parents[2] / "schemas" / "brand-manifest.schema.json")
+    validator = jsonschema.Draft202012Validator(schema, format_checker=format_checker())
+    violations = sorted(validator.iter_errors(manifest), key=str)
+    if violations:
+        return ["manifest schema: " + ("/".join(map(str, e.path)) or "<root>") + ": " + e.message + " [contract " + "/".join(map(str, e.absolute_schema_path)) + "]" for e in violations]
+
+    return []
+
+
+def _approval_format_errors(manifest):
+    if manifest.get("status") != "approved":
+        return []
+    approval = manifest.get("approval") or {}
+    errors = []
+    if not isinstance(approval.get("approvedBy"), str) or not approval["approvedBy"].strip():
+        errors.append("approval.approvedBy must be a non-empty string")
+    approved_at = approval.get("approvedAt")
+    if not isinstance(approved_at, str) or not format_checker().conforms(approved_at, "date-time"):
+        errors.append("approval.approvedAt must be a valid RFC 3339 date-time")
+    return errors
+
+
 def validate_manifest(manifest: dict[str, Any], *, verify_hash: bool = True) -> list[str]:
-    errors: list[str] = []
+    structural = _manifest_schema_errors(manifest)
+    if structural:
+        return structural
+    errors: list[str] = _approval_format_errors(manifest)
 
     # Section 8.0a first: every later check compares through `identity_key`, and
     # an inadmissible identity has no comparison key. Reporting stops here so a
@@ -1156,10 +1184,12 @@ def _build_plan_schema_errors(plan: dict[str, Any]) -> list[str]:
 
 def validate_plan(plan: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    structural = _build_plan_schema_errors(plan)
+    if structural:
+        return structural
     identity_errors = _identity_admissibility_errors(_plan_identity_positions(plan))
     if identity_errors:
         return identity_errors
-    errors.extend(_build_plan_schema_errors(plan))
     for key in ("id", "kind", "schemaVersion", "asOf", "manifestRef", "compiler", "tokenizer", "targets"):
         if key not in plan:
             errors.append(f"build plan missing: {key}")
@@ -1448,6 +1478,12 @@ def build_target(
     plan: dict[str, Any],
     target: dict[str, Any],
 ) -> TargetResult:
+    structural = _manifest_schema_errors(manifest)
+    if structural:
+        raise ValidationFailure(structural)
+    approval_errors = _approval_format_errors(manifest)
+    if approval_errors:
+        raise ValidationFailure(approval_errors)
     result = TargetResult(target_id=target["id"], status="failed")
 
     if manifest.get("status") != "approved":
@@ -1774,13 +1810,16 @@ def build_all(
 ) -> dict[str, Any]:
     manifest_errors = validate_manifest(manifest)
     plan_errors = validate_plan(plan)
+    if manifest_errors or plan_errors:
+        raise ValidationFailure(manifest_errors + plan_errors)
     cross_errors = validate_plan_against_manifest(plan, manifest)
     if manifest_errors or plan_errors or cross_errors:
         raise ValidationFailure(manifest_errors + plan_errors + cross_errors)
 
     output = Path(output_dir) if output_dir else None
-    if output:
-        output.mkdir(parents=True, exist_ok=True)
+    from .generation import generation_identity, generation_relative, publish_generation, target_filename
+    generation_id = generation_identity(manifest_content_hash(manifest), sha256_id(plan), COMPILER_ID, COMPILER_VERSION)
+    artifacts = {}
 
     target_results = [build_target(manifest, plan, target) for target in plan["targets"]]
     report_targets: list[dict[str, Any]] = []
@@ -1812,12 +1851,8 @@ def build_all(
         }
 
         if target_result.artefact is not None and output:
-            filename = f"{target_result.target_id}.context.json"
-            save_json(output / filename, target_result.artefact)
-            (output / f"{target_result.target_id}.context.md").write_text(
-                render_markdown(target_result.artefact),
-                encoding="utf-8",
-            )
+            filename = (generation_relative(generation_id) / (target_filename(target_result.target_id) + ".context.json")).as_posix()
+            artifacts[target_result.target_id] = target_result.artefact
             target_report["artifactRef"] = filename
             target_report["artifactHash"] = target_result.artefact["artifactHash"]
         elif target_result.artefact is not None:
@@ -1827,7 +1862,8 @@ def build_all(
 
     report = {
         "kind": "obds-build-report",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "4.0.0",
+        "generationId": generation_id,
         "builtAt": datetime.now(timezone.utc).isoformat(),
         "planId": plan["id"],
         "planHash": sha256_id(plan),
@@ -1835,10 +1871,12 @@ def build_all(
         "manifestVersion": manifest["version"],
         "manifestContentHash": manifest_content_hash(manifest),
         "compilerVersion": COMPILER_VERSION,
+        "compilerId": COMPILER_ID,
         "targets": report_targets,
     }
     if output:
-        save_yaml(output / "build-report.yaml", report)
+        return publish_generation(output, report, artifacts, render_markdown)
+    report["reportHash"] = sha256_id(report)
     return report
 
 

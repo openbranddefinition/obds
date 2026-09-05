@@ -305,7 +305,32 @@ def _drive_validate_review(document, tmp_path):
         return False, 0
 
 
+def _drive_generation_loader(document, tmp_path):
+    from obds_ref.canonical import sha256_id
+    from obds_ref.generation import generation_identity, generation_relative, target_filename, load_generation_artifact
+    from obds_ref.governed_io import save_json, save_yaml
+    base = load_data(BASE_ARTEFACT)
+    generation_id = generation_identity(base["manifest"]["contentHash"], base["build"]["planHash"], base["build"]["compilerId"], base["build"]["compilerVersion"])
+    relative = generation_relative(generation_id)
+    (tmp_path/relative).mkdir(parents=True, exist_ok=True)
+    ref = (relative/(target_filename(base["targetId"])+".context.json")).as_posix()
+    save_json(tmp_path/ref, document)
+    report = {"kind":"obds-build-report","schemaVersion":"4.0.0","generationId":generation_id,
+        "builtAt":"2026-09-05T12:00:00Z", "planId":base["build"]["planId"],"planHash":base["build"]["planHash"],
+        "manifestId":base["manifest"]["id"],"manifestVersion":base["manifest"]["version"],"manifestContentHash":base["manifest"]["contentHash"],
+        "compilerId":base["build"]["compilerId"],"compilerVersion":base["build"]["compilerVersion"],
+        "targets":[{"targetId":base["targetId"],"status":"ready","artifactRef":ref,"artifactHash":artefact_hash(document) if isinstance(document, dict) else "sha256:"+"0"*64}]}
+    report["reportHash"] = sha256_id(report)
+    save_yaml(tmp_path/relative/"build-report.yaml", report)
+    try:
+        load_generation_artifact(tmp_path, generation_id, base["targetId"])
+        return True, 0
+    except ValidationFailure:
+        return False, 0
+
+
 EXECUTOR_DRIVERS = {
+    "reference/foundation/src/obds_ref/generation.py::load_generation_artifact": _drive_generation_loader,
     "reference/foundation/src/obds_ref/runtime.py::run_with_model": _drive_run_with_model,
     "reference/foundation/src/obds_ref/runtime.py::run_assembled_with_model": _drive_run_assembled_with_model,
     "reference/foundation/src/obds_ref/cli.py::command_validate": _drive_command_validate,

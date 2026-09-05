@@ -276,7 +276,7 @@ def test_scope_scalars_are_strings_only():
         {"id":"x","family":"identity","kind":"guidance","nature":"knowledge","state":"defined","value":"x","scope":{"markets":[False]},"sourceRefs":[]}
     ])
     errors=validate_manifest(manifest,verify_hash=False)
-    assert any("scope.markets values must be non-empty strings" in e for e in errors)
+    assert any("scope/markets" in e and "string" in e for e in errors)
 
 
 def test_rc5_context_delivery_uses_foundation_canonical_bytes():

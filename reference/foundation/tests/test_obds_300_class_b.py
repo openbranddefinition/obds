@@ -114,6 +114,9 @@ def _full_coverage_documents():
     manifest = copy.deepcopy(manifest)
     plan = copy.deepcopy(plan)
 
+    manifest["version"] = "7.8.9"
+    plan["manifestRef"]["version"] = "7.8.9"
+
     base = copy.deepcopy(manifest["elements"][0])
     base.pop("valueContractRef", None)
 
@@ -135,6 +138,7 @@ def _full_coverage_documents():
     fact.update(
         {
             "id": "context.pos-fact",
+            "valueContractRef": "vc.pos-fact",
             "family": "context",
             "kind": "pos-kind-fact",
             "subject": "pos-subject-fact",
@@ -183,7 +187,7 @@ def _full_coverage_documents():
     target["id"] = "pos-target"
     target["requiresDefined"] = ["structure.brand"]
     target["scope"] = {"locales": ["pos-scope-locale"]}
-    target["contextAssembly"] = {"eligibleGuidanceIds": ["identity.pos-guidance"]}
+    target["contextAssembly"] = {"deliveryMode":"lookup", "applicationMode":"create", "noHitPolicy":"resolve_before_answer", "eligibleGuidanceIds": ["identity.pos-guidance"]}
     target["styleTexture"] = {"mode": "selected", "elementIds": ["identity.pos-guidance"]}
     target["stateMap"] = {"mode": "kinds", "kinds": ["pos-kind-fact"]}
     plan["targets"] = [target]
@@ -780,6 +784,7 @@ def _governed(report):
     """A build report minus the one field that is packaging, not governance."""
     report = dict(report)
     report.pop("builtAt", None)
+    report.pop("reportHash", None)
     return report
 
 

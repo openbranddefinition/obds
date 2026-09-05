@@ -1,4 +1,6 @@
-# OBDS 3.0 Architecture
+# OBDS 4.0 Architecture
+
+Production builds publish immutable generations with safe target filenames. Runtime requests bind an explicit generation; a failed replacement cannot fall back to a previous release. Assembly and runtime reproduce all four governed projection slots from the bound compiled universe. Provider failures produce `model_failed` evidence and withhold output.
 
 ```text
 SOURCES

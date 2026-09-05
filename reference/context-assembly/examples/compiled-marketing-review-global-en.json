@@ -1,5 +1,5 @@
 {
-  "artifactHash": "sha256:01802282658bea48aa810c3e9f11cfdb8172c4c31c8536312798afe226dcb778",
+  "artifactHash": "sha256:ef4003005fc90c177f5dad7beb953846385d7e6c6aba10db91460d729259decd",
   "availableElementIds": [
     "claims.approved-register",
     "design.logo.clear-zone",
@@ -13,7 +13,7 @@
   "build": {
     "asOf": "2026-08-27T00:00:00Z",
     "compilerId": "org.openbranddefinition.reference-compiler",
-    "compilerVersion": "1.0.0",
+    "compilerVersion": "4.0.0",
     "planHash": "sha256:64ed73670ab5b0325a070d8a59490ad9f83cfb3859da45712f1fa74a62606076",
     "planId": "urn:obds:build-plan:example-assembly"
   },

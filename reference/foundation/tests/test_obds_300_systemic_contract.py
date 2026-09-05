@@ -242,6 +242,9 @@ def test_the_published_contracts_are_the_ones_on_disk():
         for directory in ("schemas/3.0.0", "value-schemas/3.0.0")
         for path in (PACKAGE_ROOT / directory).glob("*.json")
     }
+    # The 3.0 record is frozen; its current executor now uses the 4.0 contract.
+    on_disk.remove("schemas/3.0.0/runtime-decision-record.schema.json")
+    on_disk.add("schemas/4.0.0/runtime-decision-record.schema.json")
     assert on_disk == set(PUBLISHED_3_0_CONTRACTS), (
         f"unregistered: {sorted(on_disk - set(PUBLISHED_3_0_CONTRACTS))}; "
         f"missing: {sorted(set(PUBLISHED_3_0_CONTRACTS) - on_disk)}"
@@ -474,7 +477,7 @@ def test_mechanism_1_the_runtime_validates_the_contract_it_publishes():
 
 def test_mechanism_1_the_decision_vocabulary_is_one_vocabulary():
     """The runtime's decision values and the record contract's are one list."""
-    record_contract = contract("schemas/3.0.0/runtime-decision-record.schema.json")
+    record_contract = contract("schemas/4.0.0/runtime-decision-record.schema.json")
     assert set(record_contract["properties"]["decision"]["enum"]) == DECISIONS
 
 

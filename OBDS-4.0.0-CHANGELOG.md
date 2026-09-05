@@ -1,3 +1,15 @@
+# OBDS 4.0.0 — Production Boundary Closure
+
+## 4.0.0
+
+5 September 2026.
+
+F1: safe target filenames and symlink containment. F2: immutable generations, explicit loading and rollback. F3: verified provenance of all four model-projection slots and new Model Input Package 4.0.0. F4: schema-first manifests and actual approval format validation. F5: Runtime Decision Record 4.0.0 adds model_failed. New Build Report 4.0.0 records generations. Existing public schemas and historical snapshots remain unchanged. Reference compiler identity advances to 4.0.0. This major release implements the ratified bounded F1–F5 audit; unrelated work remains deferred.
+
+---
+
+Previous release history follows unchanged.
+
 # OBDS Changelog
 
 ## Release

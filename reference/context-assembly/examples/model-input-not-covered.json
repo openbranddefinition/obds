@@ -1,28 +1,35 @@
 {
   "applicationMode": "create",
-  "assembledAt": "2026-09-02T19:05:25.735476+00:00",
-  "assemblyHash": "sha256:0c0a4e674340c0c517656de885c52bfd7fd3830946387ec2b749ab385d139815",
+  "assembledAt": "2026-09-05T16:30:36.648721+00:00",
+  "assemblyHash": "sha256:ae0fe0dfc7bf35743fe809334b503b133fcaf75252fcaab8cc8433a08bdc796d",
   "deliveryMode": "lookup",
-  "id": "urn:obds:model-input:bf606c53-ee4b-42d4-b1d4-eedb5dfa8c12",
+  "id": "urn:obds:model-input:81fadce8-5309-464c-adc8-c17da8eb7e26",
   "kind": "obds-model-input-package",
   "manifest": {
     "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
-  "modelInputHash": "sha256:2d5bfbd15dec27e799439a7d9f48deed36d27e4f4a3fc70f512cca205aa9468c",
+  "modelInputHash": "sha256:ab9f193fcbbc28c8b5247a5ff113ef7510964850c04af00f5dc510b4124d31a8",
+  "projection": {
+    "chapters": [],
+    "renderer": "obds:compiled-projection-v1"
+  },
   "retrieval": {
     "resolution": "manifest_checked",
     "status": "no_match",
     "truthOutcome": "not_covered"
   },
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "4.0.0",
   "selection": {
     "activeGuidanceElementIds": [],
     "factElementIds": [
+      "design.logo.clear-zone",
       "structure.brand"
     ],
-    "gapElementIds": [],
+    "gapElementIds": [
+      "claims.approved-register"
+    ],
     "hardBoundaryElementIds": [
       "rule.claims.require-approval",
       "rule.logo.clear-zone"
@@ -34,20 +41,20 @@
     ]
   },
   "slots": {
-    "factGrounding": "structure.brand [defined]: {\"name\":\"Example Assembly Brand\"}",
+    "factGrounding": "design.logo.clear-zone [defined]: {\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\nstructure.brand [defined]: {\"name\":\"Example Assembly Brand\"}",
     "guidanceContext": "",
     "hardBoundaries": "rule.claims.require-approval [require/require_approval]: Unregistered performance claims require approval. | refs=claims.approved-register\nrule.logo.clear-zone [require/block]: Preserve the approved logo clear zone. | refs=design.logo.clear-zone",
-    "stateMap": "runtime.coverage [not_covered]: The current manifest contains no applicable element for the question. This does not imply permission or prohibition.",
+    "stateMap": "claims.approved-register [unknown]:",
     "taskInput": "What is the approved sonic logo duration?"
   },
   "sources": {
     "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
-    "compiledContextHash": "sha256:563f393a21b22ca3e8b5fd812a65bfc4cb081c9f6d32ae96a6ad7eeac584a7d1",
+    "compiledContextHash": "sha256:75408818ac4e8a309924058944018ef1c9b9f6eec71a0d78def2cd337e39a5cb",
     "searchIndexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab"
   },
   "targetId": "brand-query-global-en",
   "tokenBudget": {
-    "actual": 55,
+    "actual": 49,
     "max": 1200,
     "tokenizerId": "obds:whitespace-v1",
     "tokenizerVersion": "1.0.0"

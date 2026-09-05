@@ -1,5 +1,5 @@
 {
-  "$id": "https://openbranddefinition.org/schemas/1.0.0/model-input-package.schema.json",
+  "$id": "https://openbranddefinition.org/schemas/4.0.0/model-input-package.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
@@ -59,6 +59,44 @@
       "pattern": "^sha256:[0-9a-f]{64}$",
       "type": "string"
     },
+    "projection": {
+      "additionalProperties": false,
+      "properties": {
+        "chapters": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "elementIds": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "elementIds"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "renderer": {
+          "const": "obds:compiled-projection-v1"
+        }
+      },
+      "required": [
+        "renderer",
+        "chapters"
+      ],
+      "type": "object"
+    },
     "retrieval": {
       "additionalProperties": false,
       "properties": {
@@ -101,7 +139,7 @@
       "type": "object"
     },
     "schemaVersion": {
-      "const": "1.0.0"
+      "const": "4.0.0"
     },
     "selection": {
       "additionalProperties": false,
@@ -268,8 +306,9 @@
     "slots",
     "tokenBudget",
     "modelInputHash",
-    "assemblyHash"
+    "assemblyHash",
+    "projection"
   ],
-  "title": "OBDS Model Input Package 1.0.0",
+  "title": "OBDS Model Input Package 4.0.0",
   "type": "object"
 }

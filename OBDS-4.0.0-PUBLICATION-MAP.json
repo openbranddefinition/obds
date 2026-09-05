@@ -287,6 +287,33 @@
       "publicUrl": "https://openbranddefinition.org/value-schemas/3.0.0/rule.schema.json",
       "releaseFile": "value-schemas/3.0.0/rule.schema.json",
       "sha256": "sha256:b148876b0e6396060f2799ef2689329d91f8d16f47bc9d34f812e00b1654dfbb"
+    },
+    {
+      "capability": "compiled-runtime",
+      "id": "https://openbranddefinition.org/schemas/4.0.0/build-report.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/4.0.0/build-report.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/4.0.0/build-report.schema.json",
+      "releaseFile": "schemas/4.0.0/build-report.schema.json",
+      "sha256": "sha256:02156015a6549ec2730b853d6b8b180bc71b053e6bddf2ebaca097f4b159bea2"
+    },
+    {
+      "capability": "context-assembly",
+      "id": "https://openbranddefinition.org/schemas/4.0.0/model-input-package.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/4.0.0/model-input-package.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/4.0.0/model-input-package.schema.json",
+      "releaseFile": "schemas/4.0.0/model-input-package.schema.json",
+      "sha256": "sha256:322344dd18a628f0c8ceb71b50330d3164b30728d4005ee51c9f09a798b4a919"
+    },
+    {
+      "capability": "compiled-runtime",
+      "id": "https://openbranddefinition.org/schemas/4.0.0/runtime-decision-record.schema.json",
+      "kind": "schema",
+      "publicPath": "/schemas/4.0.0/runtime-decision-record.schema.json",
+      "publicUrl": "https://openbranddefinition.org/schemas/4.0.0/runtime-decision-record.schema.json",
+      "releaseFile": "schemas/4.0.0/runtime-decision-record.schema.json",
+      "sha256": "sha256:ebd87337b7f3a60692fe0382d2d7ef74c9fa818cfacb44c91cc0d87caea11b86"
     }
   ],
   "directories": [
@@ -333,11 +360,11 @@
   "origin": "https://openbranddefinition.org",
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
-  "release": "3.0.4",
+  "release": "4.0.0",
   "schemaContractVersion": "1.0.0",
   "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaVersion": "1.0.0",
   "status": "stable",
-  "totalPublicContracts": 32,
-  "versionedSchemaCount": 5
+  "totalPublicContracts": 35,
+  "versionedSchemaCount": 8
 }

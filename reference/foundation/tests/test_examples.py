@@ -15,6 +15,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from obds_ref.generation import target_filename, generation_relative
 from obds_ref.canonical import artefact_hash
 from obds_ref.compiler import build_all, load_data, validate_manifest, validate_plan
 from obds_ref.runtime import run_with_model
@@ -43,7 +44,7 @@ def test_foundation_minimal_example_is_the_smallest_thing_that_compiles(tmp_path
     target = report["targets"][0]
 
     assert target["status"] == "ready"
-    assert target["artifactRef"] == "brand-query-global-en.context.json"
+    assert target["artifactRef"] == (generation_relative(report["generationId"]) / (target_filename(target["targetId"]) + ".context.json")).as_posix()
     assert [(r["elementId"], r["actualState"], r["result"]) for r in target["requirements"]] == [
         ("structure.brand", "defined", "pass")
     ]
@@ -133,11 +134,12 @@ def test_the_readme_quickstart_reproduces_exactly_what_it_publishes(tmp_path):
         (element_id, state, outcome)
     ]
 
-    assert sorted(path.name for path in tmp_path.iterdir()) == [
-        "brand-query-global-en.context.json",
-        "brand-query-global-en.context.md",
-        "build-report.yaml",
-    ]
+    assert sorted(path.name for path in tmp_path.iterdir()) == ["build-report.yaml", "generations"]
+    generation = tmp_path / generation_relative(report["generationId"])
+    assert sorted(path.name for path in generation.iterdir()) == sorted([
+        target_filename(target["targetId"]) + ".context.json",
+        target_filename(target["targetId"]) + ".context.md", "build-report.yaml"])
+    assert published["generationId"] == report["generationId"]
 
 
 def test_the_quickstart_hashes_are_not_self_referential():

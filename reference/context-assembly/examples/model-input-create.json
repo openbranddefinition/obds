@@ -1,22 +1,42 @@
 {
   "applicationMode": "create",
-  "assembledAt": "2026-09-02T19:05:25.731680+00:00",
-  "assemblyHash": "sha256:200993ebdba3f4116873d4f7ca5d4724ecc483f4a3f9d07ab4be8854217ab8ba",
+  "assembledAt": "2026-09-05T16:30:36.643182+00:00",
+  "assemblyHash": "sha256:6e2477e8381b36595d9e7ed99823fb7957752768dd0727eab5c18098d3300335",
   "deliveryMode": "reasoning",
-  "id": "urn:obds:model-input:4cfa607a-1832-4cc5-9c73-203ed2bfd957",
+  "id": "urn:obds:model-input:39821482-7f1b-4a1d-b655-d81c9faa6b6b",
   "kind": "obds-model-input-package",
   "manifest": {
     "contentHash": "sha256:5b168570f65f17ee2f4793786090ea7d4f71b4f6abe201ce3c50ec0e383e0db6",
     "id": "urn:obds:brand:example-assembly",
     "version": "1.0.0"
   },
-  "modelInputHash": "sha256:64025f8e55ca953f1f526b0dab95a90a0e0d2a875144f3c3062fa7670d1350ef",
+  "modelInputHash": "sha256:4d284f810e0222a711dd1b78ccf6062406efb26c1f7044d9b40a4d11ef081044",
+  "projection": {
+    "chapters": [
+      {
+        "elementIds": [
+          "identity.value.innovation",
+          "identity.value.simplicity",
+          "identity.value.reliability"
+        ],
+        "id": "chapter.brand-expression"
+      },
+      {
+        "elementIds": [
+          "design.logo.clear-zone",
+          "rule.logo.clear-zone"
+        ],
+        "id": "chapter.logo-system"
+      }
+    ],
+    "renderer": "obds:compiled-projection-v1"
+  },
   "retrieval": {
     "resolution": "direct",
     "status": "hit",
     "truthOutcome": "mixed"
   },
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "4.0.0",
   "selection": {
     "activeGuidanceElementIds": [
       "identity.value.simplicity"
@@ -43,19 +63,19 @@
   },
   "slots": {
     "factGrounding": "design.logo.clear-zone [defined]: {\"description\":\"Keep one logo-height clear around the logo.\",\"name\":\"Logo Clear Zone\"}\nstructure.brand [defined]: {\"name\":\"Example Assembly Brand\"}",
-    "guidanceContext": "[ACTIVE_GUIDANCE]\nidentity.value.simplicity [defined]: {\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\n\n[REASONING_CHAPTERS]\nGenerated relationship context. Exact elements already present in other slots are omitted here. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\nchapter.brand-expression: ## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}\n\n## identity.value.reliability [identity/core-value/defined]\n{\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}",
+    "guidanceContext": "[ACTIVE_GUIDANCE]\nidentity.value.simplicity [defined]: {\"description\":\"Make the relevant idea easy to understand and use.\",\"name\":\"Simplicity\"}\n\n[REASONING_CHAPTERS]\nGenerated relationship context. Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\n## identity.value.innovation [identity/core-value/defined]\n{\"description\":\"Find useful new ways to solve real customer problems.\",\"name\":\"Innovation\"}\n\n## identity.value.reliability [identity/core-value/defined]\n{\"description\":\"Use precise information and avoid unsupported certainty.\",\"name\":\"Reliability\"}",
     "hardBoundaries": "rule.claims.require-approval [require/require_approval]: Unregistered performance claims require approval. | refs=claims.approved-register\nrule.logo.clear-zone [require/block]: Preserve the approved logo clear zone. | refs=design.logo.clear-zone",
     "stateMap": "claims.approved-register [unknown]:",
     "taskInput": "Create a concise product-launch headline."
   },
   "sources": {
     "chapterSetHash": "sha256:ff546a54cf177dcd93eac32e4d4cedd2b21bafdec46583e7d1a2acc16b670bd7",
-    "compiledContextHash": "sha256:b79d8199970569570a13e1e30558309fc6555207d4f0310a671b5f5b323508d4",
+    "compiledContextHash": "sha256:faa2b8b423fe9cc98955bd95dc2eee9dde1221054eb0b624f9ce12c1c60c81ce",
     "searchIndexHash": "sha256:4102fb523e743184bcb6fa8ea4cd869a6a3b80427b027b680f6965f69cd043ab"
   },
   "targetId": "social-copy-global-en",
   "tokenBudget": {
-    "actual": 107,
+    "actual": 96,
     "max": 1200,
     "tokenizerId": "obds:whitespace-v1",
     "tokenizerVersion": "1.0.0"

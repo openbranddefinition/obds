@@ -59,7 +59,7 @@
     },
     {
       "errors": [
-        "structure.brand: supersedes is not part of OBDS Foundation 1.0.0; use the Lineage Profile"
+        "manifest schema: elements/0: False schema does not allow ['structure.old'] [contract properties/elements/items/properties]"
       ],
       "id": "foundation-supersedes-rejected",
       "passed": true,
@@ -183,20 +183,44 @@
       "passed": true,
       "stderr": "",
       "type": "parser-isolation"
+    },
+    {
+      "errors": [
+        "manifest schema: owner: None is not of type 'string' [contract properties/owner/type]"
+      ],
+      "id": "production-boundary-invalid-owner",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "errors": [
+        "manifest schema: elements: 5 is not of type 'array' [contract properties/elements/type]"
+      ],
+      "id": "production-boundary-invalid-elements",
+      "passed": true,
+      "type": "validate"
+    },
+    {
+      "errors": [
+        "approval.approvedAt must be a valid RFC 3339 date-time"
+      ],
+      "id": "production-boundary-invalid-approval-time",
+      "passed": true,
+      "type": "validate"
     }
   ],
   "claimScope": "Result of the official OBDS Foundation Conformance Suite declared in reference/foundation/conformance-suite.yaml, profile `foundation`, executed against the reference implementation. Every declared case ran and passed; none was skipped or changed. This run is deliberately not added to the aggregate suiteCounts: 14 of its 15 cases exercise the same fixtures and examples as the pytest suites, so aggregating both would double-count the same coverage.",
-  "executedAt": "2026-09-04T11:58:58.008117+00:00",
+  "executedAt": "2026-09-05T16:59:51.295009+00:00",
   "failedCount": 0,
   "implementation": {
     "name": "obds-reference",
-    "version": "1.0.0"
+    "version": "4.0.0"
   },
   "kind": "obds-conformance-result",
-  "obdsRelease": "3.0.4",
+  "obdsRelease": "4.0.0",
   "passed": true,
-  "passedCount": 23,
+  "passedCount": 26,
   "profile": "foundation",
   "schemaVersion": "1.0.0",
-  "suiteHash": "sha256:aa40518545bc53eccd4945759130a97ed0c1e7e285db1ae2fff9c88b20245e7e"
+  "suiteHash": "sha256:d5cd60d9f6e402fab1a3ccf3a35dc42db5c3761328f4ac69dbb3570b0dd821f2"
 }

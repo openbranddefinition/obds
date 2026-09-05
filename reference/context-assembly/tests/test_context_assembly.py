@@ -111,7 +111,8 @@ def test_manifest_checked_not_covered_is_explicit():
         compiled, index, chapters, request, resolution_manifest=manifest
     )
     assert package["retrieval"]["truthOutcome"] == "not_covered"
-    assert "does not imply permission or prohibition" in package["slots"]["stateMap"]
+    # F3: retrieval classifications remain metadata, not invented brand states.
+    assert "runtime.coverage" not in package["slots"]["stateMap"]
 
 
 def test_opportunity_must_reference_active_guidance():
@@ -345,7 +346,7 @@ def test_review_references_resolve_across_normalisation_forms_1_1_6():
 
     manifest, compiled, index, chapters = setup()
     compiled = copy.deepcopy(compiled)
-    record = copy.deepcopy(compiled["elementRecords"][0])
+    record = copy.deepcopy(next(e for e in compiled["elementRecords"] if e["id"] == "identity.value.simplicity"))
     record["id"] = "context.cafe\u0301"
     record["subject"] = "context.cafe\u0301"
     compiled["elementRecords"].append(record)
@@ -354,7 +355,7 @@ def test_review_references_resolve_across_normalisation_forms_1_1_6():
     )
     # A Review Result is a review-mode document by contract, so the context it
     # is derived from has to permit that mode.
-    compiled["contextAssembly"] = {**compiled["contextAssembly"], "applicationMode": "review"}
+    compiled["contextAssembly"] = {**compiled["contextAssembly"], "applicationMode": "review", "eligibleGuidanceIds": compiled["contextAssembly"]["eligibleGuidanceIds"] + ["context.café"]}
     compiled.pop("artifactHash", None)
     compiled["artifactHash"] = canonical.artefact_hash(compiled)
 
@@ -374,6 +375,11 @@ def test_review_references_resolve_across_normalisation_forms_1_1_6():
         **package["selection"],
         "activeGuidanceElementIds": ["context.caf\u0065\u0301"],
     }
+    from projection import derive_projection
+    slots, selection = derive_projection(compiled, package["selection"], package["projection"],
+        delivery_mode=package["deliveryMode"], application_mode=package["applicationMode"])
+    slots["taskInput"] = package["slots"]["taskInput"]
+    package["slots"], package["selection"] = slots, selection
     package["modelInputHash"] = canonical.text_hash(renderer.render_model_input(package["slots"]))
     package["assemblyHash"] = canonical.sha256_id(
         {key: value for key, value in package.items() if key != "assemblyHash"}
@@ -442,6 +448,9 @@ def test_assembly_order_follows_the_canonical_identity_1_1_6():
             [item for item in compiled["availableElementIds"] if item != "structure.brand"]
             + [NFC_ID, NEIGHBOUR]
         )
+        compiled["includedElementIds"] = sorted([
+            NFC_ID if item == "structure.brand" else item for item in compiled["includedElementIds"]
+        ] + [NEIGHBOUR])
         compiled.pop("artifactHash", None)
         compiled["artifactHash"] = canonical.artefact_hash(compiled)
 

@@ -119,7 +119,7 @@ def test_golden_manifest_to_runtime_decision():
 
     search_index, chapter_set = builder.build_views(manifest, chapter_map)
     package, model_input = assembler.assemble(compiled, search_index, chapter_set, request)
-    jsonschema.validate(package, schema("model-input-package.schema.json"))
+    jsonschema.validate(package, schema_for(package, "model-input-package.schema.json"))
     assert package["sources"]["compiledContextHash"] == compiled["artifactHash"]
 
     review = {
@@ -185,7 +185,7 @@ def test_normative_state_and_runtime_decision_enums_are_synchronised():
     spec_states = set(re.findall(r"^\| `([a-z_]+)` \|", state_section, flags=re.MULTILINE))
     assert spec_states == schema_states
 
-    runtime_schema = schema("runtime-decision-record.schema.json")
+    runtime_schema = schema_for({"schemaVersion":"4.0.0"}, "runtime-decision-record.schema.json")
     schema_decisions = set(runtime_schema["properties"]["decision"]["enum"])
     assert schema_decisions == DECISIONS
 

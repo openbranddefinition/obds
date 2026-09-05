@@ -37,7 +37,7 @@ PACKAGE_ROOT = REFERENCE.parent
 PUBLISHED_3_0_CONTRACTS = {
     "schemas/3.0.0/build-plan.schema.json": "build-plan",
     "schemas/3.0.0/compiled-context.schema.json": "compiled-context",
-    "schemas/3.0.0/runtime-decision-record.schema.json": "runtime-decision-record",
+    "schemas/4.0.0/runtime-decision-record.schema.json": "runtime-decision-record",
     "value-schemas/3.0.0/rule.schema.json": "rule-value",
 }
 
@@ -94,7 +94,7 @@ GOVERNED_HASH_FIELDS = (
     "artifactHash", "modelInputHash", "assemblyHash", "reviewHash", "contentHash",
     "compiledContextHash", "planHash", "schemaHash", "shapeHash", "cardHash",
     "chapterHash", "indexHash", "chapterSetHash", "searchIndexHash",
-    "governedResultHash", "taskInputHash", "suiteHash", "testOutputHash",
+    "governedResultHash", "taskInputHash", "suiteHash", "testOutputHash", "generationId", "reportHash",
     "packageZipSha256", "websiteIndexSha256",
 )
 
@@ -680,6 +680,7 @@ SEMANTIC_PRIMITIVE_IMPLEMENTATIONS = {
 # it is two contracts. The release gate pins these; the systemic test asserts the
 # registry and the gate agree about which files those are.
 BYTE_IDENTICAL_COPIES = {
+    "projection.py": ["reference/foundation/src/obds_ref/projection.py", "reference/context-assembly/projection.py"],
     "governed_io.py": [
         "reference/foundation/src/obds_ref/governed_io.py",
         "reference/context-assembly/governed_io.py",
@@ -875,3 +876,52 @@ FROZEN_CONTRACT_PINS = (
     "EXPECTED_PUBLIC_VALUE_SCHEMAS",
     "EXPECTED_V11_SCHEMAS",
 )
+
+# 4.0 F1/F2: generation production and the two independent verified boundaries.
+HASH_CALL_SITES.update({
+    "reference/foundation/src/obds_ref/generation.py::target_filename::*": {"role": PRODUCER, "note": "safe mapping of canonical target identity"},
+    "reference/foundation/src/obds_ref/generation.py::generation_identity::planHash": {"role": PRODUCER, "note": "generation identity binds manifest, plan and compiler"},
+    "reference/foundation/src/obds_ref/generation.py::_report_hash::reportHash": {"role": PRODUCER, "note": "report seal excludes itself"},
+    "reference/foundation/src/obds_ref/compiler.py::build_all::generationId": {"role": PRODUCER, "note": "publishes exact build identity"},
+    "reference/foundation/src/obds_ref/compiler.py::build_all::reportHash": {"role": PRODUCER, "note": "seals in-memory report; output reports are sealed at publication"},
+    "reference/foundation/src/obds_ref/cli.py::command_conformance::reportHash": {"role": PRODUCER, "note": "hashes the deterministic diff report, not a generation report"},
+    "reference/foundation/src/obds_ref/generation.py::_read_report::reportHash": {
+        "role": VERIFIER, "note": "reproduces the stored generation report seal",
+        "gate": "if report['reportHash'] != _report_hash(report):",
+        "neutralised": "if False and report['reportHash'] != _report_hash(report):",
+        "reproduces": "_report_hash(report)",
+    },
+    "reference/foundation/src/obds_ref/generation.py::_read_report::generationId": {
+        "role": VERIFIER, "note": "binds the report to the explicitly requested generation",
+        "gate": "if report['generationId'] != generation_id or expected != generation_id:",
+        "neutralised": "if False and (report['generationId'] != generation_id or expected != generation_id):",
+        "reproduces": "generation_identity(report['manifestContentHash'], report['planHash'],",
+    },
+    "reference/foundation/src/obds_ref/generation.py::_read_report::planHash": {
+        "role": COMPARISON_ONLY, "note": "a component of the reproduced generation binding",
+        "after": "reference/foundation/src/obds_ref/generation.py::_read_report::generationId",
+    },
+    "reference/foundation/src/obds_ref/generation.py::load_generation_artifact::artifactHash": {
+        "role": VERIFIER, "note": "compares reproduced artifact bytes to the generation's seal",
+        "gate": "if artifact.get('artifactHash') != target['artifactHash'] or artefact_hash(artifact) != target['artifactHash']:",
+        "neutralised": "if False and (artifact.get('artifactHash') != target['artifactHash'] or artefact_hash(artifact) != target['artifactHash']):",
+        "reproduces": "artefact_hash(artifact)",
+    },
+    "reference/foundation/src/obds_ref/generation.py::load_generation_artifact::contentHash": {
+        "role": COMPARISON_ONLY, "note": "compares sealed artifact identity against verified generation report",
+        "after": "reference/foundation/src/obds_ref/generation.py::load_generation_artifact::artifactHash",
+    },
+    "reference/foundation/src/obds_ref/generation.py::load_generation_artifact::planHash": {
+        "role": COMPARISON_ONLY, "note": "compares sealed artifact plan against verified report",
+        "after": "reference/foundation/src/obds_ref/generation.py::load_generation_artifact::artifactHash",
+    },
+    "reference/foundation/src/obds_ref/generation.py::publish_generation::generationId": {"role": PRODUCER, "note": "publishes one immutable verified output generation"},
+    "reference/foundation/src/obds_ref/generation.py::publish_generation::reportHash": {"role": PRODUCER, "note": "seals report before atomic publication"},
+    "reference/foundation/src/obds_ref/runtime.py::_new_record::generationId": {"role": INTERNAL, "note": "initialises explicit in-memory execution with no generation discovery"},
+    "reference/foundation/src/obds_ref/runtime.py::run_generation_with_model::generationId": {"role": INTERNAL, "note": "calls verified generation loader and records requested generation even on refusal"},
+})
+COMPILED_CONTEXT_CONSUMERS.update({
+    "reference/foundation/src/obds_ref/generation.py::load_generation_artifact": EXECUTOR,
+    "reference/foundation/src/obds_ref/projection.py::derive_projection": "internal deterministic renderer; runtime and assembly execute contract and seal before calling it; F3 adversarial tests drive both boundaries",
+    "reference/context-assembly/projection.py::derive_projection": "byte-identical copy of the same internal projection renderer",
+})

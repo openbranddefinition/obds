@@ -105,52 +105,7 @@ def artifact_hash(artefact):
     return sha256_id(payload)
 
 
-def _compact_json(value):
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-
-
-def render_element(element):
-    value = element.get("value")
-    if isinstance(value, str):
-        rendered = value
-    elif value is None:
-        rendered = ""
-    else:
-        rendered = _compact_json(value)
-    return f"{identity_key(element['id'])} [{element['state']}]: {rendered}".rstrip()
-
-
-def render_rule_for_model(element):
-    value = element.get("value") or {}
-    prefix = f"{identity_key(element['id'])} [{value.get('obligation','?')}/{value.get('enforcement','inform')}]"
-    parts = [f"{prefix}: {value.get('statement','').strip()}"]
-    refs = value.get("references") or []
-    if refs:
-        # Section 8.0a: a reference names an identity, so the model sees the
-        # canonical form. Rendering the stored spelling made two canonically
-        # equivalent rules render differently while text_hash, which normalises,
-        # reported the same modelInputHash for both.
-        parts.append("refs=" + ",".join(identity_key(item) for item in refs))
-    condition = value.get("condition") or {}
-    if condition:
-        parts.append("condition=" + _compact_json(condition))
-    requirement = value.get("requirement") or {}
-    if requirement:
-        parts.append("requirement=" + _compact_json(requirement))
-    checks = value.get("checks") or []
-    if checks:
-        compact_checks = []
-        for check in checks:
-            primitive = check.get("primitive", "check")
-            params = dict(check.get("params") or {})
-            reference = params.get("elementValueRef")
-            if isinstance(reference, dict) and isinstance(reference.get("elementId"), str):
-                reference = dict(reference)
-                reference["elementId"] = identity_key(reference["elementId"])
-                params["elementValueRef"] = reference
-            compact_checks.append(primitive + "(" + _compact_json(params) + ")")
-        parts.append("checks=" + ";".join(compact_checks))
-    return " | ".join(parts)
+from projection import render_element, render_rule_for_model, chapter_content, derive_projection
 
 
 def _filtered_reference_chapter_content(chapter, excluded_ids, declared_universe):
@@ -448,63 +403,26 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
     active_guidance.sort(key=lambda item: identity_key(item["id"]))
     selected_chapters.sort(key=lambda item: item["id"])
 
-    state_lines = [render_element(item) for item in gap_elements]
-    if retrieval["truthOutcome"] == "not_covered":
-        state_lines.append(
-            "runtime.coverage [not_covered]: "
-            "The current manifest contains no applicable element for the question. "
-            "This does not imply permission or prohibition."
-        )
-    elif retrieval["truthOutcome"] == "access_limited":
-        state_lines.append(
-            "runtime.coverage [access_limited]: "
-            "Applicable brand truth may exist but is unavailable to this target."
-        )
-    elif retrieval["truthOutcome"] == "prohibited":
-        state_lines.append(
-            "runtime.decision [prohibited]: "
-            "An applicable explicit prohibit RULE blocks the requested action or value."
-        )
-
-    guidance_parts = []
-    if active_guidance:
-        guidance_parts.append(
-            "[ACTIVE_GUIDANCE]\n" + "\n".join(render_element(item) for item in active_guidance)
-        )
-    if selected_chapters:
-        exact_ids = set(hard_boundary_ids)
-        exact_ids.update(identity_key(item["id"]) for item in fact_elements)
-        exact_ids.update(identity_key(item["id"]) for item in gap_elements)
-        exact_ids.update(identity_key(item["id"]) for item in active_guidance)
-        chapter_parts = []
-        for item in selected_chapters:
-            content = _filtered_reference_chapter_content(item, exact_ids, declared_universe)
-            if content:
-                chapter_parts.append(f"{identity_key(item['id'])}: {content}")
-        if chapter_parts:
-            guidance_parts.append(
-                "[REASONING_CHAPTERS]\n"
-                "Generated relationship context. Exact elements already present in other slots are omitted here. "
-                "Only elements listed under ACTIVE_GUIDANCE are expression requirements for this task.\n\n"
-                + "\n\n".join(chapter_parts)
-            )
-
-    # Section 14.3a / 10.2a seam. Every element rendered into a slot above is
-    # drawn from `by_id`, and `_validate_compiled_context` has already proven
-    # `by_id` equals `availableElementIds`, so the slot side of this seam holds
-    # by construction and an assertion here could not fail. The side that could
-    # fail — and did — is Reasoning Chapter content, which is text rather than an
-    # element lookup; it is filtered against `declared_universe` where it is
-    # rendered, and a chapter that declares an undeclared element is refused
-    # outright above.
-
-    slots = {
-        "hardBoundaries": "\n".join(render_rule_for_model(item) for item in hard_boundary_elements),
-        "factGrounding": "\n".join(render_element(item) for item in fact_elements),
-        "stateMap": "\n".join(state_lines),
-        "guidanceContext": "\n\n".join(guidance_parts),
-        "taskInput": request["taskInput"],
+    # F3: chapter hashes establish integrity, not provenance. Reproduce their
+    # element blocks from the compiled universe before admitting a projection.
+    for chapter in selected_chapters:
+        if chapter["content"] != chapter_content(by_id, chapter["elementIds"]):
+            raise ValueError("Reasoning Chapter content does not derive from compiled elements")
+    projection = {
+        "renderer": "obds:compiled-projection-v1",
+        "chapters": [{"id": c["id"], "elementIds": list(c["elementIds"])} for c in selected_chapters],
     }
+    selection = {
+        "searchCardIds": list(selected["searchCardIds"]),
+        "reasoningChapterIds": [c["id"] for c in selected_chapters],
+        "hardBoundaryElementIds": hard_boundary_ids,
+        "factElementIds": [identity_key(e["id"]) for e in fact_elements],
+        "gapElementIds": [identity_key(e["id"]) for e in gap_elements],
+        "activeGuidanceElementIds": sorted(active),
+    }
+    slots, selection = derive_projection(compiled_context, selection, projection,
+        delivery_mode=request["deliveryMode"], application_mode=request["applicationMode"])
+    slots["taskInput"] = request["taskInput"]
     final_text = render_model_input(slots)
 
     actual_tokens = len(final_text.split())
@@ -514,7 +432,8 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
 
     package = {
         "kind": "obds-model-input-package",
-        "schemaVersion": "1.0.0",
+        "schemaVersion": "4.0.0",
+        "projection": projection,
         "id": f"urn:obds:model-input:{uuid.uuid4()}",
         "assembledAt": datetime.now(timezone.utc).isoformat(),
         "targetId": request["targetId"],
@@ -527,14 +446,7 @@ def assemble(compiled_context, search_index, chapter_set, request, *, resolution
             "chapterSetHash": chapter_set["chapterSetHash"],
         },
         "retrieval": retrieval,
-        "selection": {
-            "searchCardIds": selected["searchCardIds"],
-            "reasoningChapterIds": [item["id"] for item in selected_chapters],
-            "hardBoundaryElementIds": hard_boundary_ids,
-            "factElementIds": sorted(identity_key(item["id"]) for item in fact_elements),
-            "gapElementIds": sorted(identity_key(item["id"]) for item in gap_elements),
-            "activeGuidanceElementIds": sorted(active),
-        },
+        "selection": selection,
         "slots": slots,
         "tokenBudget": {
             "tokenizerId": compiled_context["tokenBudget"]["tokenizerId"],

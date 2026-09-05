@@ -12,8 +12,8 @@
     }
   ],
   "kind": "obds-review-result",
-  "modelInputHash": "sha256:7703578fe3ad1a2d9eb630fde47270a2331ee097cd4fcb307c74be4391d09386",
-  "reviewHash": "sha256:f76b2d815d03957c263ba7014cd437b2f8d67d9d740a42430a1057bfdfbf2fbd",
+  "modelInputHash": "sha256:3be7ed7b8fbd17506c5cade86bdf3c50d0c15763aad5c9f4e3c4d1c40c560767",
+  "reviewHash": "sha256:f9d137356f1940484fd1430e51b96f36b2548a9e9c207a5825bdf3bde7cf4905",
   "schemaVersion": "1.0.0",
   "targetId": "marketing-review-global-en"
 }

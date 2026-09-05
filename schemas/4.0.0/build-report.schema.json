@@ -1,0 +1,102 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/4.0.0/build-report.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "builtAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "compilerId": {
+      "type": "string"
+    },
+    "compilerVersion": {
+      "type": "string"
+    },
+    "generationId": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-build-report"
+    },
+    "manifestContentHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "manifestId": {
+      "type": "string"
+    },
+    "manifestVersion": {
+      "type": "string"
+    },
+    "planHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "planId": {
+      "type": "string"
+    },
+    "reportHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "4.0.0"
+    },
+    "targets": {
+      "items": {
+        "properties": {
+          "artifactHash": {
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "artifactRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "enum": [
+              "ready",
+              "failed"
+            ]
+          },
+          "targetId": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "targetId",
+          "status",
+          "artifactRef",
+          "artifactHash"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "generationId",
+    "reportHash",
+    "builtAt",
+    "planId",
+    "planHash",
+    "manifestId",
+    "manifestVersion",
+    "manifestContentHash",
+    "compilerId",
+    "compilerVersion",
+    "targets"
+  ],
+  "title": "OBDS Build Report 4.0.0",
+  "type": "object"
+}

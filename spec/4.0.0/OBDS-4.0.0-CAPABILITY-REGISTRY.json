@@ -1,0 +1,95 @@
+{
+  "brandProfiles": [
+    {
+      "id": "obds-governed-records",
+      "section": "16"
+    },
+    {
+      "id": "obds-release-approval",
+      "section": "16.1"
+    },
+    {
+      "id": "obds-claims-evidence",
+      "section": "17"
+    },
+    {
+      "id": "obds-assets-rights",
+      "section": "18"
+    },
+    {
+      "id": "obds-localisation",
+      "section": "19"
+    },
+    {
+      "id": "obds-assurance-lineage",
+      "section": "20"
+    },
+    {
+      "id": "obds-composition",
+      "section": "21.3"
+    },
+    {
+      "id": "obds-visual-operations",
+      "section": "21"
+    }
+  ],
+  "foundation": {
+    "id": "obds-foundation",
+    "required": true,
+    "standardValueContracts": [
+      "brand-identity",
+      "brand-group",
+      "colour",
+      "clear-zone",
+      "rule",
+      "semantic-boundary"
+    ]
+  },
+  "kind": "obds-capability-registry",
+  "releaseModel": {
+    "foundationRequired": true,
+    "normativeSpecification": "OBDS-4.0.0.md",
+    "optionalBrandProfiles": true,
+    "optionalRuntimeCapabilities": true
+  },
+  "runtimeCapabilities": [
+    {
+      "conformanceSection": "26.2",
+      "id": "compiled-runtime"
+    },
+    {
+      "conformanceSection": "26.2",
+      "id": "context-delivery"
+    },
+    {
+      "conformanceSection": "26.3",
+      "id": "context-assembly"
+    },
+    {
+      "conformanceSection": "26.4",
+      "id": "text"
+    },
+    {
+      "conformanceSection": "26.5",
+      "id": "visual-operations"
+    },
+    {
+      "conformanceSection": "26.6",
+      "id": "composition"
+    },
+    {
+      "conformanceSection": "26.7",
+      "id": "claims"
+    },
+    {
+      "conformanceSection": "26.8",
+      "id": "localisation"
+    },
+    {
+      "conformanceSection": "26.9",
+      "id": "operations"
+    }
+  ],
+  "schemaVersion": "1.0.0",
+  "status": "stable"
+}

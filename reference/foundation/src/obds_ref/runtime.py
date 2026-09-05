@@ -14,9 +14,11 @@ from .checks import (
     assert_check_input_admissible,
     execute_checks,
 )
+from .projection import verify_projection
+from .formats import format_checker
 from .model_input import ModelInputContractError, render_model_input
 
-DECISIONS={"released","build_failed","assembly_failed","no_valid_artifact","preflight_blocked","postflight_blocked","approval_required"}
+DECISIONS={"released","build_failed","assembly_failed","no_valid_artifact","preflight_blocked","postflight_blocked","approval_required","model_failed"}
 
 
 def _parse_time(raw):
@@ -176,12 +178,9 @@ def _new_record(target_id, artefact, task_input, provider, model_id, runtime_at=
     runtime_at = runtime_at or datetime.now(timezone.utc)
     return {
         "kind": "obds-runtime-decision-record",
-        # 3.0.0 publishes a corrected Runtime Decision Record contract beside
-        # the frozen 1.0.0 surface, exactly as 1.1 did for compiled contexts.
-        # `taskInputHash` becomes nullable because there is no admissible hash
-        # for an inadmissible task input, and section 15.9 requires a record
-        # for that attempt all the same.
-        "schemaVersion": "3.0.0",
+        # 4.0.0 adds generation binding and the closed-enum model_failed outcome.
+        "schemaVersion": "4.0.0",
+        "generationId": None,
         "recordId": f"urn:uuid:{uuid.uuid4()}",
         "recordedAt": runtime_at.isoformat(),
         # `isinstance`, not truthiness: a non-object artefact reached `.get`
@@ -357,7 +356,7 @@ def _record_validator():
 
         from .governed_io import load_data
 
-        _RECORD_VALIDATOR = jsonschema.Draft202012Validator(load_data(_RECORD_SCHEMA_PATH))
+        _RECORD_VALIDATOR = jsonschema.Draft202012Validator(load_data(_RECORD_SCHEMA_PATH), format_checker=format_checker())
     return _RECORD_VALIDATOR
 
 
@@ -379,6 +378,62 @@ def append_runtime_record(path, record):
             )
             + "\n"
         )
+
+
+def _call_model(model, prompt, record):
+    record["modelCall"]["called"] = True
+    response = model(prompt)
+    if isinstance(response, tuple):
+        if len(response) != 2:
+            raise ValueError("model adapter returned an invalid tuple")
+        output, request_id = response
+        if request_id is not None and not isinstance(request_id, str):
+            raise ValueError("model adapter requestId must be a string or null")
+        if request_id is not None:
+            request_id.encode("utf-8")
+        record["modelCall"]["requestId"] = request_id
+    else:
+        output = response
+    if not isinstance(output, str):
+        raise ValueError("model adapter output must be text")
+    return output
+
+
+def run_generation_with_model(output_dir, generation_id, *, target_id, task_input,
+                              model, package=None, model_input_text=None,
+                              record_path=None, provider=None, model_id=None,
+                              runtime_at=None):
+    """Production loading requires an exact generation; there is no latest fallback.
+
+    Passing package/model_input_text chooses assembled execution. Direct artifact
+    APIs below are for explicitly selected in-memory snapshots, not generation
+    discovery. A caller selecting B uses this entry point, including for rollback.
+    """
+    from .generation import load_generation_artifact
+    from .governed_io import ValidationFailure
+    try:
+        artifact = load_generation_artifact(output_dir, generation_id, target_id)
+    except ValidationFailure:
+        record = _new_record(target_id, None, task_input, provider, model_id, runtime_at)
+        record["decision"] = "no_valid_artifact"
+    else:
+        kwargs = dict(target_id=target_id, task_input=task_input, model=model,
+                      provider=provider, model_id=model_id, runtime_at=runtime_at)
+        if package is not None or model_input_text is not None:
+            record = run_assembled_with_model(artifact, package, model_input_text, **kwargs)
+        else:
+            record = run_with_model(artifact, **kwargs)
+    # Even a failed or unavailable generation remains the requested identity.
+    from .generation import generation_relative
+    try:
+        generation_relative(generation_id)
+    except ValidationFailure:
+        record["generationId"] = None
+    else:
+        record["generationId"] = generation_id
+    if record_path:
+        append_runtime_record(record_path, record)
+    return record
 
 
 def run_with_model(
@@ -458,13 +513,14 @@ def run_with_model(
         f"[STYLE_TEXTURE]\n{slots['styleTexture']}\n\n"
         f"[TASK_INPUT]\n{task_input}\n"
     )
-    record["modelCall"]["called"] = True
-    response = model(prompt)
-    if isinstance(response, tuple):
-        output, request_id = response
-        record["modelCall"]["requestId"] = request_id
-    else:
-        output = response
+    try:
+        output = _call_model(model, prompt, record)
+    except Exception:
+        # F5: an adapter exception is a model failure, not a RULE violation.
+        record["decision"] = "model_failed"
+        if record_path:
+            append_runtime_record(record_path, record)
+        return record
 
     try:
         postflight = _execute_governed_checks(
@@ -718,6 +774,13 @@ def run_assembled_with_model(
             record_path=record_path,
         )
 
+    try:
+        verify_projection(artefact, package)
+    except (ValueError, TypeError, KeyError):
+        return assembly_failed_record(target_id=target_id or artefact.get("targetId"),
+            artefact=artefact, task_input=task_input, provider=provider,
+            model_id=model_id, record_path=record_path)
+
     record["assemblyHash"] = package["assemblyHash"]
     record["modelInputHash"] = package["modelInputHash"]
 
@@ -737,13 +800,14 @@ def run_assembled_with_model(
             append_runtime_record(record_path, record)
         return record
 
-    record["modelCall"]["called"] = True
-    response = model(model_input_text)
-    if isinstance(response, tuple):
-        output, request_id = response
-        record["modelCall"]["requestId"] = request_id
-    else:
-        output = response
+    try:
+        output = _call_model(model, model_input_text, record)
+    except Exception:
+        # F5: an adapter exception is a model failure, not a RULE violation.
+        record["decision"] = "model_failed"
+        if record_path:
+            append_runtime_record(record_path, record)
+        return record
 
     try:
         post = _execute_governed_checks(artefact, phase="postflight", text=output)

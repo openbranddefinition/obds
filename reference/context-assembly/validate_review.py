@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from canonical import identity_key, sha256_id, text_hash
+from projection import verify_projection
 from model_input import ModelInputContractError, render_model_input
 
 # Section 14. The review validator is a Compiled Brand Context executor: it
@@ -78,6 +79,8 @@ def validate_review(compiled_context, package, review):
     for where, claimed in (("package", package.get("targetId")), ("review", review.get("targetId"))):
         if not isinstance(claimed, str) or identity_key(claimed) != target:
             raise ValueError(f"review {where} targetId does not match the compiled context")
+
+    verify_projection(compiled_context, package)
 
     # Section 8.0a: identities are compared on their canonical form.
     by_id = {identity_key(item["id"]): item for item in compiled_context["elementRecords"]}

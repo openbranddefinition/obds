@@ -102,6 +102,18 @@ def _conflicted(*, family="context", nature="knowledge", state="defined",
                 "value": value or {"text": f"tone {index}"},
             }
         )
+        if state != "defined":
+            element.pop("value", None)
+        elif nature == "fact":
+            # F4: this lower-level conflict probe still supplies a schema-valid
+            # FACT contract, rather than bypassing the manifest contract.
+            from obds_ref.canonical import value_shape_hash
+            element["value"].setdefault("name", f"Tone {index}")
+            contract = copy.deepcopy(manifest["valueContracts"][0])
+            contract.update(id=f"vc.conflict.{index}", family=family, kind="guidance",
+                            shapeHash=value_shape_hash(element["value"]))
+            manifest["valueContracts"].append(contract)
+            element["valueContractRef"] = contract["id"]
         elements.append(element)
     manifest["elements"] = elements
     reseal(manifest)
@@ -386,7 +398,7 @@ def test_d1_an_omitted_or_modeless_projection_is_refused(spelling, field):
     else:
         target[field] = {"elementIds": []} if field == "styleTexture" else {"kinds": []}
     errors = validate_plan(plan)
-    assert any(f"{field} is required and must declare mode" in error for error in errors), errors
+    assert any(field in error and "required" in error for error in errors), errors
 
 
 def test_d1_the_explicit_spelling_is_accepted_and_the_corpus_already_uses_it():
@@ -796,11 +808,9 @@ def test_s6_a_chapter_block_outside_the_universe_is_filtered_even_when_declared_
     chapters.pop("chapterSetHash", None)
     chapters["chapterSetHash"] = sha256_id(chapters)
 
-    package, model_input = assembler.assemble(compiled, index, chapters, request)
-    assert "SENTINEL-BLOCK-MARKER" not in model_input, (
-        "a chapter block for an undeclared element reached the model input"
-    )
-    assert "identity.value.smuggled" not in model_input
+    # 4.0 refuses an inconsistent chapter; it no longer silently repairs one.
+    with pytest.raises(ValueError, match="does not derive"):
+        assembler.assemble(compiled, index, chapters, request)
 
 
 def test_s6_a_derived_view_must_reproduce_its_own_hashes():
