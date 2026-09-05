@@ -7,34 +7,88 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/authoring/</loc>
+    <loc>https://openbranddefinition.org/what-is-obds/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/examples/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/machine-readable-brand-guidelines/</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1.md</loc>
+    <loc>https://openbranddefinition.org/brand-governance-for-ai/</loc>
     <lastmod>2026-09-05</lastmod>
-    <changefreq>yearly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/LICENSE.md</loc>
+    <loc>https://openbranddefinition.org/compare/machine-readable-brand-specifications/</loc>
     <lastmod>2026-09-05</lastmod>
-    <changefreq>yearly</changefreq>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/research/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/authoring/</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-MIGRATION.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/TRADEMARKS.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-CHANGELOG.md</loc>
     <lastmod>2026-09-05</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/GOVERNANCE.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-IMPLEMENTER-QUICKSTART.md</loc>
     <lastmod>2026-09-05</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/research/governed-result-hash/README.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/research/governed-communications-benchmark/README.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/research/limits/README.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://openbranddefinition.org/examples/README.md</loc>
@@ -49,9 +103,21 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://openbranddefinition.org/research/README.md</loc>
+    <loc>https://openbranddefinition.org/LICENSE.md</loc>
     <lastmod>2026-09-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/GOVERNANCE.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://openbranddefinition.org/TRADEMARKS.md</loc>
+    <lastmod>2026-09-05</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 </urlset>

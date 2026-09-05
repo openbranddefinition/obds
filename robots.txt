@@ -1,3 +1,12 @@
+# openbranddefinition.org
+# The specification, the examples, the research and the explainer pages are all
+# intended to be crawled. Nothing public here is behind a disallow rule.
+#
+# Private working material is not excluded here because it is never uploaded:
+# .vercelignore keeps answers/, tools/, .claude/ and environment files out of the
+# deployment entirely, and tools/deploy-smoke-test.py asserts on every deploy that
+# those paths return no content. A Disallow line would publish the inventory instead.
+
 User-agent: *
 Allow: /
 

@@ -1,6 +1,6 @@
 # OBDS Research
 
-Open Brand Definition Standard, release 3.0.2. This directory is the public
+Open Brand Definition Specification, current release 4.0.2. This directory is the public
 research surface: the evidence, and the boundary of the evidence. It is not a
 second specification. Nothing here changes a normative artefact.
 

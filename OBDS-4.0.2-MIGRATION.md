@@ -1,3 +1,17 @@
+# Migrating 4.0.1 to 4.0.2
+
+5 September 2026.
+
+Nothing to do. OBDS 4.0.2 is a documentation, discoverability and public-surface release. It improves current release consistency, examples, search discoverability and machine-readable navigation. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed. Every contract, hash and conformance result is identical to 4.0.1;
+only the version stamp, the release-file names and the public-surface documents move. An
+implementation that conforms to 4.0.1 conforms to 4.0.2 without changing a line.
+
+The release adds explainer pages, a comparison page and a research index to the website.
+None of them is normative. Where they describe OBDS behaviour they restate the
+specification; where the two ever disagree, the specification is authoritative.
+
+---
+
 # Migrating 4.0.0 to 4.0.1
 
 5 September 2026.

@@ -1,14 +1,3 @@
-<!--
-  English only, deliberately, matching /authoring/.
-
-  The main site (index.html) carries parallel EN/DE copy on a shared DOM using
-  [data-copy="en"|"de"] pairs plus a language toggle. This companion page does
-  not implement that pattern and says so in the topbar and the closing note.
-
-  Every command, path, hash and output block below was produced by running the
-  reference implementation shipped in the release package against the two
-  example directories in this repository. Nothing here is illustrative.
--->
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,40 +6,66 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Two runnable OBDS examples: approved brand truth compiles into a Compiled Brand Context, and required truth that is unknown stops the build before any model is called.">
-<title>OBDS Examples: Approved Truth Compiles, Unknown Truth Fails Closed</title>
+<title>OBDS Research: Deterministic Interoperability, Governed Communications Benchmark, Known Limits</title>
+<meta name="description" content="The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark whose wrong claims are all downstream transformations of correct source material, and a written statement of what OBDS does not prove.">
 <meta name="robots" content="index,follow">
-<link rel="canonical" href="https://openbranddefinition.org/examples/">
+<link rel="canonical" href="https://openbranddefinition.org/research/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://openbranddefinition.org/examples/">
-<meta property="og:title" content="See OBDS decide">
-<meta property="og:description" content="Two runnable examples with real output: approved brand truth compiles, and required truth that is unknown stops the build before any model is called.">
+<meta property="og:url" content="https://openbranddefinition.org/research/">
+<meta property="og:title" content="OBDS Research">
+<meta property="og:description" content="Deterministic cross-language result hashes, a 14-case governed communications benchmark including a published failure, and what OBDS does not prove.">
 <meta name="twitter:card" content="summary">
 <meta name="author" content="Kill The Dragon GmbH">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
- "@type": "TechArticle",
- "headline": "OBDS Examples",
- "name": "OBDS Examples",
- "description": "Two runnable OBDS examples with real output: a Foundation build that produces a Compiled Brand Context, and a fail-closed build that produces nothing and calls no model.",
- "url": "https://openbranddefinition.org/examples/",
- "dateModified": "2026-09-05",
- "inLanguage": "en",
- "license": "https://creativecommons.org/licenses/by/4.0/",
- "isPartOf": {
-  "@type": "WebSite",
-  "name": "Open Brand Definition",
-  "url": "https://openbranddefinition.org/"
- },
- "publisher": {
-  "@type": "Organization",
-  "name": "Kill The Dragon GmbH"
- }
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "@id": "https://openbranddefinition.org/research/#page",
+   "headline": "OBDS Research",
+   "name": "OBDS Research",
+   "description": "The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark whose wrong claims are all downstream transformations of correct source material, and a written statement of what OBDS does not prove.",
+   "url": "https://openbranddefinition.org/research/",
+   "dateModified": "2026-09-05",
+   "inLanguage": "en",
+   "license": "https://creativecommons.org/licenses/by/4.0/",
+   "isPartOf": {
+    "@type": "WebSite",
+    "name": "Open Brand Definition",
+    "url": "https://openbranddefinition.org/"
+   },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Kill The Dragon GmbH"
+   }
+  },
+  {
+   "@type": "Dataset",
+   "@id": "https://openbranddefinition.org/research/governed-communications-benchmark/#dataset",
+   "name": "OBDS Governed Communications Benchmark",
+   "description": "Fourteen reproducible cases asking whether OBDS primitives stop unsafe external communication when relevant source material exists and is retrieved correctly. Each case ships a manifest, a build plan and the expected governed decision. Case 14 is adversarial and is a published failure.",
+   "url": "https://openbranddefinition.org/research/governed-communications-benchmark/README.md",
+   "license": "https://creativecommons.org/licenses/by/4.0/",
+   "creator": {
+    "@type": "Organization",
+    "name": "Kill The Dragon GmbH"
+   },
+   "dateModified": "2026-09-05",
+   "isAccessibleForFree": true,
+   "measurementTechnique": "Deterministic governed build and runtime decision under the OBDS reference implementation",
+   "distribution": [
+    {
+     "@type": "DataDownload",
+     "encodingFormat": "application/json",
+     "contentUrl": "https://openbranddefinition.org/research/governed-communications-benchmark/raw-results.json"
+    }
+   ]
+  }
+ ]
 }
 </script>
-
 <style>
   :root {
     --paper: #fff;
@@ -363,7 +378,25 @@
     line-height: 1.6;
     opacity: .6;
   }
-</style></head>
+</style>
+
+<style>
+  .answer { margin: 0 0 clamp(40px, 6vw, 80px); padding: 22px 24px; border: 1px solid var(--line); }
+  .answer p { margin: 0; font-size: clamp(19px, 1.7vw, 27px); line-height: 1.22; letter-spacing: -.035em; max-width: 46ch; }
+  .answer .answer-label { display: block; margin-bottom: 12px; font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+  .q { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .q h3 { margin: 0; padding: 22px 0 6px; font-size: clamp(21px, 2.1vw, 34px); letter-spacing: -.045em; }
+  .q p { margin: 0 0 22px; max-width: 68ch; }
+  table.cmp { width: 100%; border-collapse: collapse; margin-top: clamp(40px, 5vw, 70px); font-size: clamp(14px, 1.15vw, 18px); }
+  table.cmp th, table.cmp td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; letter-spacing: 0; line-height: 1.4; }
+  table.cmp th { font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+  .scroll-x { overflow-x: auto; }
+  ul.plain { margin: 18px 0 0; padding: 0; list-style: none; max-width: 68ch; }
+  ul.plain li { padding: 10px 0; border-top: 1px solid var(--line); }
+  .breadcrumb { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; }
+</style>
+
+</head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="site">
@@ -378,166 +411,82 @@
     <section class="hero" id="top">
       <div class="hero-main">
         <div class="eyebrow">
-          <span>Examples</span>
+          <span>Research</span>
           <span>Companion to OBDS 4.0.2</span>
         </div>
-        <h1 class="hero-title">See OBDS<br><span class="outline">decide</span></h1>
-        <p class="hero-statement">Two runnable examples. One compiles because the truth it needs is approved. One refuses to compile because the truth it needs is unknown, and stops before any model is called.</p>
+        <h1 class="hero-title">The evidence,<br>and its<br><span class="outline">boundary</span></h1>
+        <p class="hero-statement">Can an AI system retrieve the right evidence and still make the wrong governed decision? Yes. This is the reproducible evidence for that, and the written statement of what it does not prove.</p>
       </div>
       <div class="hero-foot">
-        <div><span class="label">Example 01</span><span class="value">Defined truth compiles. Reproducible hash.</span></div>
-        <div><span class="label">Example 02</span><span class="value">Unknown truth fails closed. Zero model calls.</span></div>
-        <div><span class="label">Both</span><span class="value">Conformance cases. An example that drifts fails the suite.</span></div>
+        <div><span class="label">Proof 1</span><span class="value">Deterministic governed result. 59 of 59 cross-language vectors.</span></div>
+        <div><span class="label">Proof 2</span><span class="value">Governed communications benchmark. 14 cases, one published failure.</span></div>
+        <div><span class="label">Proof 3</span><span class="value">What OBDS does not prove.</span></div>
       </div>
     </section>
 
-    <section class="section" id="setup">
-      <div class="section-number">00 / Setup</div>
+    <section class="section" id="evidence">
+      <div class="section-number">01 / Evidence</div>
       <div class="section-content">
-        <h2>Four lines, then both examples run.</h2>
-        <p class="lead">The repository root is the package root. This works in a clone and in the extracted release archive.</p>
-
-        <div class="code-block"><pre>git clone https://github.com/openbranddefinition/obds.git &amp;&amp; cd obds
-python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt
-export PYTHONPATH=reference/foundation/src</pre></div>
-        <p class="code-caption">Or download <a href="/spec/4.0.2/OBDS-4.0.2-FINAL.zip">OBDS-4.0.2-FINAL.zip</a>, extract it, and run the same commands from the extracted directory.</p>
-
-        <div class="callout">
-          <div><span class="callout-key">build &lt;manifest&gt; &lt;plan&gt;</span></div>
-          <div>
-            <p><code>build</code> takes the manifest and the build plan as positional arguments, in that order. <code>--out</code> is the only option. Both examples are also conformance cases in <code>reference/foundation/tests/test_examples.py</code>, so an example that drifts from the reference implementation fails the suite.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="defined">
-      <div class="section-number">01 / Defined truth</div>
-      <div class="section-content">
-        <h2>Approved truth compiles.</h2>
-        <p class="lead">One manifest. One element, <code>structure.brand</code>, a fact in state <code>defined</code>. One target that requires it. The build produces a Compiled Brand Context.</p>
-
-        <div class="chain">
-          <div><span class="chain-index">01</span><span class="chain-step">Approved</span><span class="chain-note">A named role approved the manifest. The approval carries a content hash.</span></div>
-          <div><span class="chain-index">02</span><span class="chain-step">Required</span><span class="chain-note">The target declares requiresDefined: structure.brand.</span></div>
-          <div><span class="chain-index">03</span><span class="chain-step">Ready</span><span class="chain-note">The requirement passes, so the target builds.</span></div>
-          <div><span class="chain-index">04</span><span class="chain-step">Compiled</span><span class="chain-note">One Compiled Brand Context, with a hash that reproduces across runs.</span></div>
+        <div class="answer">
+          <span class="answer-label">In one sentence</span>
+          <p>The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark, and a written statement of what OBDS does not prove.</p>
         </div>
 
-        <div class="code-block"><pre>.venv/bin/python -m obds_ref.cli build \
-  examples/foundation-minimal/manifest.yaml \
-  examples/foundation-minimal/build-plan.yaml \
-  --out /tmp/obds-out</pre></div>
-        <p class="code-caption">Exits <code>0</code>.</p>
+        <h2>Can a system retrieve the right evidence and still decide wrong?</h2>
+        <p class="lead">That is the question this research exists to answer. The short version is yes, and the two are different problems. Retrieval asks what looks relevant. Governance has to ask which truth is authoritative, which scope applies, whether it is valid now, whether required truth is missing, whether a conflict is relevant, and whether execution may proceed.</p>
 
-        <div class="code-block"><pre>status             ready
-targetId           brand-query-global-en
-generationId       sha256:6e051b97cd804fee753a1e71ccc695a0a00d936d08b789f8bc193c18e81b1a06
-artifactRef        generations/6e051b97cd804fee753a1e71ccc695a0a00d936d08b789f8bc193c18e81b1a06/
-                   target-bea1c8bf6e2f0c8c990e7ec685b2f67a98bc8fe1111aaaae278176477cb8f123.context.json
-artifactHash       sha256:ee526d850ff185f4cadd44dbbd72547de78499284d893e668c7366119a690f0a
-requirements       structure.brand  defined  pass</pre></div>
-        <p class="code-caption">Since 4.0 the file name is a deterministic mapping of the target's canonical identity, not the identity itself, and the artefact lives under its build generation. Do not construct the path from <code>targetId</code>; read <code>artifactRef</code> from the build report.</p>
-
-        <div class="code-block"><pre>{
-  "kind": "obds-compiled-brand-context",
-  "schemaVersion": "3.0.0",
-  "targetId": "brand-query-global-en",
-  "slots": {
-    "hardBoundaries": "",
-    "factGrounding": "- `structure.brand` — {\"name\":\"Example Minimal Brand\"}",
-    "stateMap": "",
-    "styleTexture": ""
-  }
-}</pre></div>
-        <p class="code-caption">Excerpt of the produced artefact. Three slots are empty because this manifest declares nothing to put in them. That is the whole Foundation minimum: one element and its value contract.</p>
-
-        <div class="state-list">
-          <div class="state-row"><div><span class="state-name"><a href="https://github.com/openbranddefinition/obds/blob/main/examples/foundation-minimal/manifest.yaml">manifest.yaml</a></span></div><div>One element, <code>structure.brand</code>, state <code>defined</code>, with a value contract pinning the shape hash, the schema reference and the schema hash. Foundation, section 26.1.</div></div>
-          <div class="state-row"><div><span class="state-name"><a href="https://github.com/openbranddefinition/obds/blob/main/examples/foundation-minimal/build-plan.yaml">build-plan.yaml</a></span></div><div>One target, <code>brand-query-global-en</code>, requiring that element to be defined. Compiled Runtime, section 26.2.</div></div>
-          <div class="state-row"><div><span class="state-name"><a href="/examples/README.md">README.md</a></span></div><div>The written walkthrough for both examples, shipped in the release package.</div></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section inverse" id="fail-closed">
-      <div class="section-number">02 / Unknown truth</div>
-      <div class="section-content">
-        <h2>Required truth is unknown. Nothing is generated.</h2>
-        <p class="lead">The same shape, with one difference. A second element, <code>context.efficacy-claim</code>, is in state <code>unknown</code>. The target requires it. The build fails, and that is the correct result.</p>
-
-        <div class="proof-chain">
-          <div class="proof-row"><div class="proof-a">Required truth</div><div class="proof-arrow">&rarr;</div><div class="proof-b">context.efficacy-claim  unknown</div></div>
-          <div class="proof-row"><div class="proof-a">Build</div><div class="proof-arrow">&rarr;</div><div class="proof-b">status: failed  ·  exit 2</div></div>
-          <div class="proof-row"><div class="proof-a">Compiled context</div><div class="proof-arrow">&rarr;</div><div class="proof-b">none written  ·  artifactRef: null</div></div>
-          <div class="proof-row"><div class="proof-a">Model calls</div><div class="proof-arrow">&rarr;</div><div class="proof-b">0</div></div>
+        <div class="q">
+          <h3>OBDS Governed Result Hash — deterministic interoperability evidence</h3>
+          <p>The strongest thing OBDS can currently demonstrate: the same governed inputs, run through independent implementations, produce the same governed decision and the same result hash. And the mirror of it, which matters more in practice: the same governed inputs that do not support the request produce the same refusal. Published with 59 of 59 cross-language vectors byte-identical and a runnable <code>verify.py</code>.</p>
+          <ul class="plain">
+            <li><a href="/research/governed-result-hash/README.md">Read the proof</a> &middot; <a href="/research/governed-result-hash/verify.py">verify.py</a></li>
+          </ul>
         </div>
 
-        <div class="code-block"><pre>.venv/bin/python -m obds_ref.cli build \
-  examples/fail-closed/manifest.yaml \
-  examples/fail-closed/build-plan.yaml \
-  --out /tmp/obds-fail</pre></div>
-        <p class="code-caption">Exits <code>2</code>. It writes a build report and no Compiled Brand Context.</p>
-
-        <div class="code-block"><pre>status             failed
-targetId           claim-copy-global-en
-artifactRef        null
-artifactHash       null
-context files      none written
-requirements       structure.brand         defined  pass
-                   context.efficacy-claim  unknown  fail
-error              OBDS-BUILD-REQUIRED-NOT-DEFINED
-                   context.efficacy-claim: expected defined, got unknown</pre></div>
-
-        <div class="callout">
-          <div><span class="callout-key">state: unknown</span></div>
-          <div>
-            <p>The unknown element is never guessed, never widened to a neighbouring scope and never quietly dropped to let the build succeed. It carries no <code>value</code> key at all, because a non-defined state must not carry one. No Compiled Brand Context exists, so there is nothing to assemble a model input from, so no model is called.</p>
-          </div>
+        <div class="q">
+          <h3>OBDS Governed Communications Benchmark</h3>
+          <p>Fourteen reproducible cases, each shipping its own manifest, build plan and expected governed decision. Every wrong claim in the benchmark is a downstream transformation of a correct statement: a revenue share becomes a product share, an eligibility figure becomes an alignment figure, a process comparison becomes a whole-product claim, a fiscal-year fact becomes a present-tense one. That is the failure mode retrieval cannot see, because the retrieved passage is correct and the claim built from it is not.</p>
+          <p>Case 14 is adversarial: it was written to defeat OBDS, and it does. It is published as a failure rather than removed, because an under-declared build target builds successfully with valid hashes and no governance layer can see it.</p>
+          <ul class="plain">
+            <li><a href="/research/governed-communications-benchmark/README.md">Read the benchmark</a> &middot; <a href="/research/governed-communications-benchmark/results-table.md">results table</a> &middot; <a href="/research/governed-communications-benchmark/raw-results.json">raw results (JSON)</a> &middot; <a href="/research/governed-communications-benchmark/run_benchmark.py">run_benchmark.py</a></li>
+          </ul>
         </div>
 
-        <p class="pull">This is what fail closed means: the absence of required truth stops the process before generation, rather than producing fluent output from an assumption nobody approved.</p>
-
-        <div class="state-list">
-          <div class="state-row"><div><span class="state-name"><a href="https://github.com/openbranddefinition/obds/blob/main/examples/fail-closed/manifest.yaml">manifest.yaml</a></span></div><div>Two elements. <code>structure.brand</code> is <code>defined</code>; <code>context.efficacy-claim</code> is <code>unknown</code> and carries no value.</div></div>
-          <div class="state-row"><div><span class="state-name"><a href="https://github.com/openbranddefinition/obds/blob/main/examples/fail-closed/build-plan.yaml">build-plan.yaml</a></span></div><div>One target requiring both elements to be defined.</div></div>
+        <div class="q">
+          <h3>Known Limits of OBDS</h3>
+          <p>A governance specification that cannot state its own boundary is a marketing claim. In one line: OBDS can govern declared truth, and it cannot prove undeclared truth does not exist. It cannot detect an approved value that is false in the world, and it cannot detect a build target that under-declares what it should have required.</p>
+          <ul class="plain">
+            <li><a href="/research/limits/README.md">Read the limits</a></li>
+          </ul>
         </div>
 
-        <p class="micro-note">The guarantee belongs to Compiled Runtime. Section 26.2 is what requires no artefact for a failed target and zero instrumented model calls after a failed build. Foundation supplies the truth the gate reads. A Foundation-only implementation does not run the gate.</p>
-      </div>
-    </section>
-
-    <section class="section" id="next">
-      <div class="section-number">03 / Next</div>
-      <div class="section-content">
-        <h2>Where this goes next.</h2>
-        <p class="lead">These two examples cover the Foundation minimum and the build gate. Everything else in OBDS is optional and added only when a task requires it.</p>
+        <div class="q">
+          <h3>What this is not</h3>
+          <p>The research directory is not a second specification and nothing in it changes a normative artefact. It is not part of the release package. The benchmark cases are neutral and de-identified; they name no company and no sector. Results are stated against the reference implementation only and say nothing about how any particular model behaves in production.</p>
+        </div>
 
         <div class="actions">
-          <a href="/authoring/">
-            <span class="action-name">How to author OBDS</span>
-            <span class="action-note">Who curates brand truth, what evidence a manifest is built from, who approves it, and what OBDS cannot guarantee.</span>
+          <a href="/brand-governance-for-ai/">
+            <span class="action-name">Brand governance for AI</span>
+            <span class="action-note">The problem this research measures, explained in one page.</span>
           </a>
-          <a href="/spec/4.0.2/OBDS-4.0.2.md">
-            <span class="action-name">Read the spec</span>
-            <span class="action-note">One normative document. Section 26.1 is Foundation, section 26.2 is Compiled Runtime.</span>
+          <a href="/examples/">
+            <span class="action-name">See it work</span>
+            <span class="action-note">Two runnable examples with real output, including the fail-closed case.</span>
           </a>
-          <a href="/spec/4.0.2/OBDS-4.0.2-IMPLEMENTER-QUICKSTART.md">
-            <span class="action-name">Quickstart</span>
-            <span class="action-note">Five concepts and the smallest conforming implementation.</span>
+          <a href="https://github.com/openbranddefinition/obds/tree/main/research" target="_blank" rel="noopener">
+            <span class="action-name">Research on GitHub</span>
+            <span class="action-note">All cases, fixtures and runners, with the full history.</span>
           </a>
         </div>
-
-        <p class="lang-disclosure" lang="en">This page is published in English only. The rest of
-        openbranddefinition.org carries parallel English and German copy; this
-        companion page does not yet, matching <a href="/authoring/">/authoring/</a>.</p>
       </div>
     </section>
+
   </main>
 
   <footer>
     <span>&copy; 2026 Kill The Dragon GmbH</span>
-    <span>Open Brand Definition / Examples</span>
+    <span>Open Brand Definition / Research</span>
   </footer>
 </div>
 </body>

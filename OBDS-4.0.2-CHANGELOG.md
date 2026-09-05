@@ -1,3 +1,78 @@
+# OBDS 4.0.2 — Documentation, discoverability and public-surface
+
+## 4.0.2
+
+5 September 2026.
+
+**Documentation, discoverability and public-surface release. PATCH.**
+
+OBDS 4.0.2 is a documentation, discoverability and public-surface release. It improves current release consistency, examples, search discoverability and machine-readable navigation. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.
+
+### Why
+
+The public information architecture did not let a search engine or an LLM classify OBDS
+correctly. The site answered "what is Open Brand Definition" and nothing else: there was no
+page for the problems people search for before they know the name, no statement of how OBDS
+relates to the other machine-readable brand approaches, and the research surface existed
+only as raw Markdown. A category search for machine-readable brand guidelines did not
+surface OBDS at all.
+
+### New pages
+
+- `/what-is-obds/` — the definition in one sentence, the distinction between knowledge
+  access and governed applicability, one concrete example with real output, the vocabulary,
+  and the limits.
+- `/machine-readable-brand-guidelines/` — the category question. Machine-readable brand
+  systems solve three different problems: readability, discovery, and governed
+  applicability. OBDS is positioned in the third, explicitly, including when it is the
+  wrong choice.
+- `/brand-governance-for-ai/` — where the applicability decision sits between retrieval and
+  generation, the five questions a governance layer has to answer, fail-closed with real
+  output, and what evidence it leaves.
+- `/compare/machine-readable-brand-specifications/` — BRAND.md 0.3.0, Brand Context
+  Protocol 0.8, MRBS 1.0.0 and OBDS 4.0.2, each described from its own primary source, read
+  on 5 September 2026, with the version read and the licence stated. No ranking, no
+  adoption claim about any project including OBDS, and an explicit section on when OBDS is
+  unnecessary.
+- `/research/` — a crawlable index for the three research surfaces, which previously
+  existed only as Markdown files: the deterministic governed result hash, the governed
+  communications benchmark including its published failure, and the known limits.
+
+### Metadata and discoverability
+
+- Per-page `title`, `description`, `canonical`, and OpenGraph title, description and URL.
+  `/examples/` and `/authoring/` had none of these and inherited nothing.
+- Homepage title now leads with the problem rather than only the project name:
+  "OBDS — Governed Brand Truth for AI".
+- Structured data: a `SoftwareSourceCode` node for the reference implementation on the
+  homepage graph, `TechArticle` on each explainer, and a `Dataset` node for the governed
+  communications benchmark, which genuinely qualifies. Every value matches visible text.
+- `sitemap.xml` rewritten: 20 URLs including all five new pages, `/examples/`, the current
+  specification, migration and changelog, and the three research documents. `/examples/`
+  was missing entirely.
+- `robots.txt` documents why there are no `Disallow` lines: private material is excluded at
+  deploy time by `.vercelignore` and asserted absent by the deploy smoke test, so a
+  `Disallow` line would publish the inventory instead.
+- `llms.txt` gains a Definition block, a Classification block stating what OBDS is not, and
+  navigational sections for the explainers, the comparison and the research surfaces.
+
+### Corrections
+
+- `research/README.md` announced "Open Brand Definition Standard, release 3.0.2".
+- `llms.txt`, `index.html` and `README.md` still described OBDS as "a standard for brand
+  specifically". 3.0.4 moved the public wording from standard to specification; this
+  sentence was missed.
+
+### What did not move
+
+No schema, no reference implementation source, no test assertion about OBDS behaviour, no
+conformance case and no historical release. `spec/4.0.1/` and `spec/4.0.0/` are
+byte-identical and the `v4.0.1` and `v4.0.0` tags are unchanged.
+
+---
+
+Previous release history follows unchanged.
+
 # OBDS 4.0.1 — Documentation and public-surface consistency
 
 ## 4.0.1

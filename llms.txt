@@ -2,15 +2,36 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 4.0.1 (stable, 5 September 2026)
+Current release: 4.0.2 (stable, 5 September 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
+
+## Definition
+
+OBDS is an open, implementation-ready specification for determining which governed brand
+truth is authoritative and applicable to a specific AI task, and whether execution may
+proceed.
+
+## Classification
+
+OBDS focuses on governed applicability and execution decisions. It is not a generic RAG
+system, prompt format, AI operating system or general policy engine.
+
+Machine-readable brand guidelines make brand information accessible to software. OBDS
+additionally governs which declared truth is applicable to a specific task. It does not
+replace retrieval: it determines which retrieved or declared brand truth is authorised
+and applicable to the current task, and stops execution when required truth is missing.
+
+Category terms that describe this work accurately: machine-readable brand guidelines,
+machine-readable brand specification, brand context for AI agents, AI brand governance,
+governed brand context, brand applicability for AI, deterministic brand governance,
+fail-closed brand AI.
 
 ## Purpose
 
 An open, implementation-ready specification for governed brand truth and AI creation.
 
-OBDS is a governed brand control layer for AI systems. It is a standard for
+OBDS is a governed brand control layer for AI systems. It is a specification for
 brand specifically, not a general policy, compliance or enterprise-governance
 framework.
 
@@ -82,7 +103,7 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1.md
+https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2.md
 
 ## Authoring and curation
 
@@ -96,17 +117,39 @@ what it requires: both build successfully with valid hashes.
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
+## Explainers
+
+What is OBDS:            https://openbranddefinition.org/what-is-obds/
+Machine-readable brand guidelines:
+                         https://openbranddefinition.org/machine-readable-brand-guidelines/
+Brand governance for AI: https://openbranddefinition.org/brand-governance-for-ai/
+Comparison of approaches:
+                         https://openbranddefinition.org/compare/machine-readable-brand-specifications/
+
+The comparison page describes BRAND.md, the Brand Context Protocol, MRBS and OBDS from
+their own primary sources, with the version read and the date it was read. It contains no
+ranking and no adoption claim about any project, including OBDS.
+
+## Research
+
+Overview:                https://openbranddefinition.org/research/
+Deterministic governed result hash, 59 of 59 cross-language vectors:
+                         https://openbranddefinition.org/research/governed-result-hash/README.md
+Governed Communications Benchmark, 14 cases including one published failure:
+                         https://openbranddefinition.org/research/governed-communications-benchmark/README.md
+Known limits of OBDS:    https://openbranddefinition.org/research/limits/README.md
+
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-CHANGELOG.md
-Migration: https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1-MIGRATION.md
+Complete package: https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-CHANGELOG.md
+Migration: https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2-MIGRATION.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 
@@ -168,14 +211,14 @@ OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 4.0.1 is
+the licensing wording that was current at the time. Section 32.1 of 4.0.2 is
 the operative one, unchanged from 1.0.2.
 
 OBDS 4.0 closes five production-boundary failures found after 3.x: filesystem containment,
 build-generation binding, model-input provenance, schema-first manifest validation and explicit
 model-failure evidence. It is MAJOR because the Runtime Decision Record 3.0.0 contract has a
 closed decision enum and additionalProperties false, so the new model_failed outcome cannot be
-expressed by any existing extension mechanism. The core architecture is unchanged. 4.0.1 is a
+expressed by any existing extension mechanism. The core architecture is unchanged. 4.0.2 is a
 documentation and public-surface consistency release on top of it; no normative contract moved.
 
 Historical, for context: OBDS 1.1 was the independent-implementability release. It added
@@ -184,7 +227,7 @@ plan, and left artifactHash and its meaning untouched. Precedence, the scope voc
 tokenizer, the validator registry and the build failure codes became defined rather than
 inferred.
 
-The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 4.0.0 and 4.0.1. OBDS 1.1 added one versioned contract beside it, OBDS 3.0 added four more and OBDS 4.0 adds three, changing none of the frozen surface.
+The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 4.0.0 and 4.0.2. OBDS 1.1 added one versioned contract beside it, OBDS 3.0 added four more and OBDS 4.0 adds three, changing none of the frozen surface.
 Eight versioned contracts stand beside the frozen 21 schemas and 6 value schemas, 35 public
 contracts in total. Manifests stay at schemaVersion 1.0.0.
 

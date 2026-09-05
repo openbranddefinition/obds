@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>Machine-Readable Brand Specifications Compared: BRAND.md, BCP, MRBS, OBDS</title>
+<meta name="description" content="A neutral, primary-source comparison of BRAND.md, the Brand Context Protocol, MRBS and OBDS. What each specification actually defines, and when a simpler format is the better choice.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://openbranddefinition.org/compare/machine-readable-brand-specifications/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openbranddefinition.org/compare/machine-readable-brand-specifications/">
+<meta property="og:title" content="Machine-readable brand specifications compared">
+<meta property="og:description" content="BRAND.md, Brand Context Protocol, MRBS and OBDS: what each one defines, verified against primary sources. No ranking.">
+<meta name="twitter:card" content="summary">
+<meta name="author" content="Kill The Dragon GmbH">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "headline": "Machine-readable brand specifications compared",
+ "name": "Machine-readable brand specifications compared",
+ "description": "Machine-readable brand specifications solve different problems. BRAND.md is a single readable brand file, the Brand Context Protocol publishes and discovers brand packages, MRBS structures a brand identity system, and OBDS decides which governed truth applies to a task and whether it may run.",
+ "url": "https://openbranddefinition.org/compare/machine-readable-brand-specifications/",
+ "dateModified": "2026-09-05",
+ "inLanguage": "en",
+ "license": "https://creativecommons.org/licenses/by/4.0/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "Open Brand Definition",
+  "url": "https://openbranddefinition.org/"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "Kill The Dragon GmbH"
+ },
+ "citation": [
+  {
+   "@type": "CreativeWork",
+   "name": "BRAND.md",
+   "url": "https://thebrand.md/"
+  },
+  {
+   "@type": "CreativeWork",
+   "name": "Brand Context Protocol specification",
+   "url": "https://github.com/Brand-Context-Protocol/spec"
+  },
+  {
+   "@type": "CreativeWork",
+   "name": "MRBS specification",
+   "url": "https://brandcodex.org/specification"
+  }
+ ]
+}
+</script>
+<style>
+  :root {
+    --paper: #fff;
+    --ink: #000;
+    --line: #000;
+    --pad: clamp(18px, 2.6vw, 42px);
+    --max: 1680px;
+    --step: clamp(14px, 1.05vw, 18px);
+    --display: clamp(46px, 8.6vw, 148px);
+    --headline: clamp(34px, 5.5vw, 92px);
+    --subhead: clamp(22px, 2.7vw, 42px);
+    --body: clamp(17px, 1.35vw, 23px);
+    --small: clamp(12px, .82vw, 15px);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: var(--body);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .16em; }
+  a:hover { text-decoration-thickness: 3px; }
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-110%);
+  }
+  .skip-link:focus { transform: translateY(0); }
+
+  .site {
+    width: min(100%, var(--max));
+    margin: 0 auto;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    min-height: 64px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+  .mark, .status, .back {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--pad);
+    white-space: nowrap;
+  }
+  .mark { font-weight: 700; text-transform: uppercase; letter-spacing: -.04em; }
+  .status, .back { border-left: 1px solid var(--line); font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+  a:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+
+  .hero {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-main {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-content: space-between;
+    gap: 0;
+    padding: var(--pad);
+  }
+  .eyebrow {
+    grid-column: 1 / 13;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .11em;
+  }
+  .hero-title {
+    grid-column: 1 / 13;
+    margin: clamp(40px, 8vh, 96px) 0 0;
+    font-size: var(--display);
+    line-height: .8;
+    letter-spacing: -.075em;
+    text-transform: uppercase;
+    font-weight: 700;
+    max-width: 15ch;
+  }
+  .hero-title .outline {
+    color: var(--paper);
+    -webkit-text-stroke: max(1px, .012em) var(--ink);
+    text-stroke: max(1px, .012em) var(--ink);
+  }
+  .hero-statement {
+    grid-column: 1 / 13;
+    align-self: end;
+    margin: clamp(40px, 8vh, 100px) 0 0;
+    font-size: var(--subhead);
+    line-height: 1.06;
+    letter-spacing: -.045em;
+    max-width: 44ch;
+  }
+  .hero-foot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+  }
+  .hero-foot > div {
+    min-height: 112px;
+    padding: 18px var(--pad);
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-foot > div:first-child { border-left: 0; }
+  .label { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+  .value { font-size: clamp(18px, 1.9vw, 28px); letter-spacing: -.04em; }
+
+  .section {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+  .section-number {
+    grid-column: 1 / 3;
+    padding: var(--pad);
+    border-right: 1px solid var(--line);
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+  .section-content { grid-column: 3 / 13; padding: var(--pad); }
+  .section h2 {
+    margin: 0 0 clamp(40px, 7vw, 110px);
+    font-size: var(--headline);
+    line-height: .93;
+    letter-spacing: -.07em;
+    font-weight: 700;
+    max-width: 14ch;
+  }
+  .lead { margin: 0; font-size: var(--subhead); line-height: 1.08; letter-spacing: -.045em; max-width: 30ch; }
+  .inverse { background: var(--ink); color: var(--paper); --line: var(--paper); }
+
+  .pull {
+    margin: clamp(46px, 6vw, 90px) 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: clamp(22px, 2.5vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -.05em;
+    max-width: 30ch;
+  }
+  .micro-note { margin-top: 28px; max-width: 74ch; font-size: var(--small); line-height: 1.45; }
+
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .9em;
+    overflow-wrap: anywhere;
+  }
+
+  /* callout */
+  .callout { margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); display: grid; grid-template-columns: minmax(180px, .5fr) 1.5fr; }
+  .callout > div { padding: 20px; }
+  .callout > div + div { border-left: 1px solid var(--line); }
+  .callout .callout-key { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(15px, 1.3vw, 21px); font-weight: 700; }
+  .callout p { margin: 0; max-width: 58ch; }
+
+  /* chain */
+  .chain { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .chain > div { position: relative; padding: 18px 14px 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
+  .chain-step { font-size: clamp(16px, 1.5vw, 24px); letter-spacing: -.03em; text-transform: uppercase; font-weight: 700; }
+  .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 22ch; opacity: .72; }
+  .chain-index { font-size: var(--small); letter-spacing: .1em; }
+  .inverse .chain { border-color: var(--line); }
+
+  /* code block */
+  .code-block { margin-top: clamp(30px, 4vw, 50px); border: 1px solid var(--line); padding: 20px; overflow-x: auto; }
+  .code-block pre { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(12.5px, 1.05vw, 15.5px); line-height: 1.55; white-space: pre; }
+  .code-caption { margin-top: 10px; font-size: var(--small); opacity: .72; max-width: 60ch; }
+
+  /* state list */
+  .state-list { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .state-row { display: grid; grid-template-columns: minmax(170px, .55fr) 1.45fr; border-bottom: 1px solid var(--line); }
+  .state-row > div { padding: 18px 0; }
+  .state-row > div:not(:first-child) { border-left: 1px solid var(--line); padding-left: 28px; }
+  .state-name { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(16px, 1.4vw, 22px); font-weight: 700; }
+
+  /* boundary (is / is not) */
+  .boundary { margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .boundary-head { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+  .boundary-head > div { padding: 18px 20px; }
+  .boundary-head > div + div { border-left: 1px solid var(--line); }
+  .boundary-term { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(20px, 2.2vw, 36px); font-weight: 700; letter-spacing: -.03em; margin-top: 8px; }
+  .boundary-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .boundary-body > div { padding: 20px; min-height: 180px; }
+  .boundary-body > div + div { border-left: 1px solid var(--line); }
+  .boundary-body ul { margin: 18px 0 0; padding: 0; list-style: none; }
+  .boundary-body li { padding: 7px 0; border-top: 1px solid var(--line); font-size: clamp(17px, 1.6vw, 26px); letter-spacing: -.04em; }
+  .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; max-width: 84ch; }
+
+  /* proof chain */
+  .proof-chain { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .proof-row { display: grid; grid-template-columns: 1fr 58px 1fr; align-items: center; border-bottom: 1px solid var(--line); }
+  .proof-row > * { padding: 16px 0; }
+  .proof-a { font-size: clamp(20px, 2.2vw, 36px); letter-spacing: -.05em; text-transform: uppercase; }
+  .proof-arrow { text-align: center; }
+  .proof-b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(13px, 1.1vw, 17px); letter-spacing: .02em; border-left: 1px solid var(--line); padding-left: 22px; }
+
+  /* integrity list (numbered) */
+  .integrity-list { margin-top: clamp(46px, 6vw, 90px); counter-reset: integrity; border-top: 1px solid var(--line); }
+  .integrity-item { counter-increment: integrity; display: grid; grid-template-columns: 74px 1fr; border-bottom: 1px solid var(--line); }
+  .integrity-item::before { content: counter(integrity, decimal-leading-zero); padding: 22px 18px; font-size: var(--small); letter-spacing: .1em; border-right: 1px solid var(--line); }
+  .integrity-item > div { padding: 22px 28px; }
+  .integrity-item h3 { margin: 0 0 8px; font-size: clamp(21px, 2.1vw, 34px); letter-spacing: -.045em; }
+  .integrity-item p { margin: 0; max-width: 64ch; }
+
+  /* actions */
+  .actions { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .actions > a { padding: 22px 20px 26px; min-height: 170px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+  .actions > a + a { border-left: 1px solid var(--line); }
+  .actions > a:hover { background: var(--ink); color: var(--paper); }
+  .action-name { font-size: clamp(23px, 2.3vw, 38px); line-height: .96; letter-spacing: -.05em; text-transform: uppercase; font-weight: 700; }
+  .action-note { font-size: var(--small); line-height: 1.4; max-width: 26ch; }
+
+  .contact-line { margin-top: clamp(56px, 8vw, 130px); padding-top: 22px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+  .contact-line a { font-size: clamp(26px, 4vw, 62px); line-height: .9; letter-spacing: -.06em; overflow-wrap: anywhere; }
+
+  footer { display: grid; grid-template-columns: 1fr auto; gap: 30px; padding: 20px var(--pad); font-size: var(--small); text-transform: uppercase; letter-spacing: .07em; }
+
+  @media (max-width: 900px) {
+    .site { border-left: 0; border-right: 0; }
+    .topbar { grid-template-columns: 1fr auto; min-height: 58px; }
+    .status { display: none; }
+    .mark { padding: 0 16px; }
+    .hero-main { padding: 20px 16px 34px; }
+    .hero-title { font-size: clamp(46px, 15vw, 90px); }
+    .hero-statement { margin-top: 60px; font-size: clamp(24px, 6.5vw, 34px); }
+    .hero-foot { grid-template-columns: 1fr; }
+    .hero-foot > div { min-height: 90px; padding: 14px 16px; border-left: 0; border-top: 1px solid var(--line); }
+    .hero-foot > div:first-child { border-top: 0; }
+    .section { grid-template-columns: 1fr; }
+    .section-number { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+    .section-content { grid-column: 1; padding: 44px 16px 60px; }
+    .section h2 { margin-bottom: 56px; font-size: clamp(38px, 11vw, 64px); }
+    .callout { grid-template-columns: 1fr; }
+    .callout > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .chain { grid-template-columns: repeat(2, 1fr); }
+    .chain > div { min-height: 130px; }
+    .state-row { grid-template-columns: 1fr; }
+    .state-row > div:not(:first-child) { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+    .boundary-head, .boundary-body { grid-template-columns: 1fr; }
+    .boundary-head > div + div, .boundary-body > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .boundary-body > div { min-height: 0; }
+    .proof-row { grid-template-columns: 1fr 40px 1fr; }
+    .proof-b { padding-left: 14px; }
+    .actions { grid-template-columns: 1fr; }
+    .actions > a + a { border-left: 0; border-top: 1px solid var(--line); }
+    .actions > a { min-height: 140px; }
+    .contact-line { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #000; --ink: #fff; --line: #fff; }
+    .topbar { background: color-mix(in srgb, var(--paper) 94%, transparent); }
+  }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  @media print {
+    .topbar { display: none; }
+    .site { border: 0; }
+    .section { break-inside: avoid; }
+  }
+
+  .lang-note {
+    font-size: var(--small);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-left: auto;
+    margin-right: 1.5rem;
+    white-space: nowrap;
+  }
+
+  .lang-disclosure {
+    margin-top: 40px;
+    max-width: 60ch;
+    font-size: var(--small);
+    line-height: 1.6;
+    opacity: .6;
+  }
+</style>
+
+<style>
+  .answer { margin: 0 0 clamp(40px, 6vw, 80px); padding: 22px 24px; border: 1px solid var(--line); }
+  .answer p { margin: 0; font-size: clamp(19px, 1.7vw, 27px); line-height: 1.22; letter-spacing: -.035em; max-width: 46ch; }
+  .answer .answer-label { display: block; margin-bottom: 12px; font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+  .q { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .q h3 { margin: 0; padding: 22px 0 6px; font-size: clamp(21px, 2.1vw, 34px); letter-spacing: -.045em; }
+  .q p { margin: 0 0 22px; max-width: 68ch; }
+  table.cmp { width: 100%; border-collapse: collapse; margin-top: clamp(40px, 5vw, 70px); font-size: clamp(14px, 1.15vw, 18px); }
+  table.cmp th, table.cmp td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; letter-spacing: 0; line-height: 1.4; }
+  table.cmp th { font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+  .scroll-x { overflow-x: auto; }
+  ul.plain { margin: 18px 0 0; padding: 0; list-style: none; max-width: 68ch; }
+  ul.plain li { padding: 10px 0; border-top: 1px solid var(--line); }
+  .breadcrumb { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; }
+</style>
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="site">
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
+    <div class="status">OBDS / 4.0.2 stable</div>
+    <div class="lang-note" lang="en">English only</div>
+    <a class="back" href="/">&larr; Back</a>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-main">
+        <div class="eyebrow">
+          <span>Comparison</span>
+          <span>Companion to OBDS 4.0.2</span>
+        </div>
+        <h1 class="hero-title">Four specs,<br>four different<br><span class="outline">problems</span></h1>
+        <p class="hero-statement">Written by the OBDS publisher, so check the other rows against their own primary sources. Every one of them is linked, and the version we read is stated.</p>
+      </div>
+      <div class="hero-foot">
+        <div><span class="label">BRAND.md</span><span class="value">One readable brand file for AI tools.</span></div>
+        <div><span class="label">BCP</span><span class="value">Publishing and discovery of brand context.</span></div>
+        <div><span class="label">MRBS / OBDS</span><span class="value">A structured brand system; governed applicability and fail-closed execution.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="overview">
+      <div class="section-number">01 / The field</div>
+      <div class="section-content">
+        <div class="answer">
+          <span class="answer-label">In one sentence</span>
+          <p>Machine-readable brand specifications solve different problems. BRAND.md is a single readable brand file, the Brand Context Protocol publishes and discovers brand packages, MRBS structures a brand identity system, and OBDS decides which governed truth applies to a task and whether it may run.</p>
+        </div>
+
+        <h2>Different problems, not better and worse.</h2>
+        <p class="lead">This page exists so the category can be classified correctly. It is written by the OBDS publisher, so treat the OBDS row as self-description and check the others against their own primary sources, which are linked on every claim.</p>
+
+        <div class="callout">
+          <div><span class="callout-key">verified 2026-09-05</span></div>
+          <div>
+            <p>Every statement below was read from each project's own specification or official site on 5 September 2026, not from memory or from secondary write-ups. These projects move quickly and versions change; the version we read is stated in each row. If a description here is out of date or wrong, tell us at <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a> and we will correct it.</p>
+          </div>
+        </div>
+
+        <div class="q">
+          <h3>What each one is, in its own words</h3>
+          <div class="scroll-x"><table class="cmp">
+            <tr>
+              <th>Project</th><th>Self-description, verbatim</th><th>Read as</th><th>Version read</th><th>Licence</th>
+            </tr>
+            <tr>
+              <td><a href="https://thebrand.md/" target="_blank" rel="noopener">BRAND.md</a></td>
+              <td>"An open standard for brand identity files. A single markdown file with YAML frontmatter that replaces 50-page brand guides."</td>
+              <td>Lightweight brand context for AI tools. One file in the project root, four layers: Strategy, Voice, Visual and optional Governance.</td>
+              <td>0.3.0</td>
+              <td>MIT</td>
+            </tr>
+            <tr>
+              <td><a href="https://github.com/Brand-Context-Protocol/spec" target="_blank" rel="noopener">Brand Context Protocol</a></td>
+              <td>"The open standard for encoding brand identity as a portable, machine-readable package."</td>
+              <td>Publishing and discovery of brand context. A root document at <code>/.well-known/brand.md</code> with daughter files, self-hosted or registry-backed.</td>
+              <td>0.8</td>
+              <td>Spec CC BY 4.0, schema and code MIT</td>
+            </tr>
+            <tr>
+              <td><a href="https://brandcodex.org/specification" target="_blank" rel="noopener">MRBS</a></td>
+              <td>"An open specification for AI-ready brand identity systems."</td>
+              <td>A structured machine-readable brand system. A <code>brand.manifest.json</code> entry point with component directories and three conformance levels.</td>
+              <td>1.0.0</td>
+              <td>Apache 2.0</td>
+            </tr>
+            <tr>
+              <td><a href="/spec/4.0.2/OBDS-4.0.2.md">OBDS</a></td>
+              <td>"An open, implementation-ready specification for governed brand truth and AI creation."</td>
+              <td>Governed applicability, conflict resolution and fail-closed execution. Decides which approved truth applies to one task and whether it may run.</td>
+              <td>4.0.2</td>
+              <td>Spec CC BY 4.0, implementation Apache 2.0</td>
+            </tr>
+          </table></div>
+        </div>
+
+        <div class="q">
+          <h3>What each specification defines</h3>
+          <p>Read this as coverage, not as a score. A specification that does not define conflict resolution is not deficient; it is solving a different problem, and carrying machinery you do not need has a real cost.</p>
+          <div class="scroll-x"><table class="cmp">
+            <tr>
+              <th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.0.2</th>
+            </tr>
+            <tr>
+              <td>A machine-readable brand file format</td>
+              <td>Yes, Markdown with YAML frontmatter</td>
+              <td>Yes, Markdown core plus package extensions</td>
+              <td>Yes, JSON manifest plus component directories</td>
+              <td>Yes, Brand Manifest in YAML or JSON with JSON Schema contracts</td>
+            </tr>
+            <tr>
+              <td>Web discovery mechanism</td>
+              <td>File in the project root</td>
+              <td>Yes, <code>/.well-known/brand.md</code>, self-hosted or registry-backed</td>
+              <td>Manifest entry point; registry offered by the platform</td>
+              <td>Not defined. OBDS governs what a build receives, not how it is published</td>
+            </tr>
+            <tr>
+              <td>Explicit unknown as a first-class state</td>
+              <td>Not addressed</td>
+              <td>Producers must omit or "record an explicit gap" and must not fabricate</td>
+              <td>Not addressed</td>
+              <td>Yes. Four Brand States: <code>defined</code>, <code>unknown</code>, <code>not_defined</code>, <code>not_applicable</code></td>
+            </tr>
+            <tr>
+              <td>Scope-based applicability selection</td>
+              <td>Language and architecture fields; inheritance between files</td>
+              <td>Yes, by task type, rule tier, locale, product and campaign</td>
+              <td>Not addressed</td>
+              <td>Yes, a closed nine-dimension scope vocabulary resolved per build target</td>
+            </tr>
+            <tr>
+              <td>Time validity</td>
+              <td>Not addressed</td>
+              <td>Partly: logo entries must not be used past <code>active_through</code>; claims with <code>proof_status</code> expired must not be used</td>
+              <td>Not addressed</td>
+              <td>Yes, <code>validity.from</code> and <code>validity.to</code> resolved against a declared <code>asOf</code></td>
+            </tr>
+            <tr>
+              <td>Conflict resolution between competing rules</td>
+              <td>Inheritance rules between parent and child files</td>
+              <td>Precedence ordering, and consumers "SHOULD surface the conflict rather than comply silently"; no binding resolution algorithm</td>
+              <td>Not addressed</td>
+              <td>Yes, declared precedence plus conflict relevance for the specific target</td>
+            </tr>
+            <tr>
+              <td>Fail-closed execution on missing required truth</td>
+              <td>Not addressed for brand content</td>
+              <td>Partly: hard stops for integrity failures, expired logos and forbidden claims; missing optional guidance degrades gracefully</td>
+              <td>Not addressed</td>
+              <td>Yes. A target declares required truth; if it is not <code>defined</code> the build fails, no context is produced and no model is called</td>
+            </tr>
+            <tr>
+              <td>Runtime decision or evidence record</td>
+              <td>Not addressed</td>
+              <td>Not required of consumers; provider-side hashes and registry audit trails only</td>
+              <td>Not addressed</td>
+              <td>Yes, a Runtime Decision Record against a published schema, append-only</td>
+            </tr>
+            <tr>
+              <td>Reproducible artefact hashing</td>
+              <td>Not addressed</td>
+              <td>Provider-side <code>source_hash</code> for claims; asset integrity checks</td>
+              <td>Not addressed</td>
+              <td>Yes, canonical hashing; the same manifest and build plan reproduce the same artefact hash</td>
+            </tr>
+            <tr>
+              <td>Executable conformance suite published</td>
+              <td>Not published as part of the specification</td>
+              <td>Not published as part of the specification</td>
+              <td>Conformance levels defined; no executable suite published with the specification</td>
+              <td>Yes, 1158 cases and a Foundation conformance profile shipped in the release archive</td>
+            </tr>
+          </table></div>
+          <p class="micro-note">"Not addressed" means the specification text we read does not define the behaviour. It is not a claim that an implementation cannot do it, and it is not a criticism.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section inverse" id="choose">
+      <div class="section-number">02 / Choosing</div>
+      <div class="section-content">
+        <h2>Which one is right depends on what breaks.</h2>
+
+        <div class="q">
+          <h3>Choose OBDS when</h3>
+          <ul class="plain">
+            <li>Brand truth varies by scope or time, and the same question has different correct answers per market, channel or date.</li>
+            <li>Approved declarations can conflict, and which one wins has to be decided rather than argued.</li>
+            <li>Required truth may be missing, and you need that to be a state rather than a blank.</li>
+            <li>Execution must stop rather than guess, and a plausible sentence is worse than no sentence.</li>
+            <li>You need reproducible decision evidence: why this output was released, against which approved artefact, provable later.</li>
+          </ul>
+        </div>
+
+        <div class="q">
+          <h3>OBDS may be unnecessary when</h3>
+          <p>If you only need a lightweight AI-readable brand context, a simpler format may be more appropriate. If one file of tone, colours and do-and-do-not gets your agents on brand, use one file. If your problem is that tools cannot find your brand context at all, a discovery protocol solves that directly and OBDS does not solve it. Adopting a governance layer for a problem you do not have costs authoring effort, review effort and time, and returns nothing.</p>
+          <p class="pull">These approaches are not mutually exclusive. A readable brand file and a governed applicability layer answer different questions and can sit in the same stack.</p>
+        </div>
+
+        <div class="q">
+          <h3>What we are not claiming</h3>
+          <p>OBDS is technically mature and publicly young. It is not an industry standard, not a de facto standard, not widely adopted and not certified, and there is no certification programme. Nothing on this page should be read as a ranking. We have not measured adoption of any project here, including our own, and we do not make adoption claims about others.</p>
+        </div>
+
+        <div class="actions">
+          <a href="/what-is-obds/">
+            <span class="action-name">What is OBDS</span>
+            <span class="action-note">The definition, the distinction from retrieval, and one concrete example.</span>
+          </a>
+          <a href="/examples/">
+            <span class="action-name">See it work</span>
+            <span class="action-note">Two runnable examples with real output, including the fail-closed case.</span>
+          </a>
+          <a href="/spec/4.0.2/OBDS-4.0.2.md">
+            <span class="action-name">Read the spec</span>
+            <span class="action-note">One normative document, so the claims in the OBDS column can be checked directly.</span>
+          </a>
+        </div>
+
+        <div class="state-list">
+          <div class="state-row"><div><span class="state-name">Primary sources</span></div><div>
+            <a href="https://thebrand.md/" target="_blank" rel="noopener">thebrand.md</a> and <a href="https://github.com/caiopizzol/brand.md" target="_blank" rel="noopener">github.com/caiopizzol/brand.md</a> &middot;
+            <a href="https://github.com/Brand-Context-Protocol/spec" target="_blank" rel="noopener">github.com/Brand-Context-Protocol/spec</a> &middot;
+            <a href="https://brandcodex.org/specification" target="_blank" rel="noopener">brandcodex.org/specification</a> &middot;
+            <a href="/spec/4.0.2/OBDS-4.0.2.md">OBDS-4.0.2.md</a>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Kill The Dragon GmbH</span>
+    <span>Open Brand Definition / Comparison</span>
+  </footer>
+</div>
+</body>
+</html>
