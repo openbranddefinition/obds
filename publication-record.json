@@ -5,7 +5,7 @@
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "4.0.3",
+ "currentRelease": "4.0.4",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,7 +42,7 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:8f6e1630f83377bf3a13ff3a91181c919ab1f763be94927ddce80329b4620f4d",
+ "packageZipSha256": "sha256:147524478939ebd801cf668ecdd3ac2fa8e981c67d42084f6b0ec7b3090c2717",
  "previousRelease": "4.0.2",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
@@ -217,6 +217,14 @@
    "packageZipSha256": "sha256:8f6e1630f83377bf3a13ff3a91181c919ab1f763be94927ddce80329b4620f4d",
    "status": "stable",
    "testOutputHash": "sha256:027643663f1090eb5218cc0f34e90df93934bb43af47ac28a4e64fda6d29ac41"
+  },
+  "4.0.4": {
+   "baseUrl": "https://openbranddefinition.org/spec/4.0.4/",
+   "date": "2026-09-06",
+   "note": "Public-surface release. It adds a per-page Open Graph preview image to every public page and switches the Twitter card to summary_large_image, and it fixes a grid overflow that let a long German display word push the page wider than the viewport. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or interoperability contract changed.",
+   "packageZipSha256": "sha256:147524478939ebd801cf668ecdd3ac2fa8e981c67d42084f6b0ec7b3090c2717",
+   "status": "stable",
+   "testOutputHash": "sha256:385698491023dcf7b14d448843cdd7ad1e59cd27bed985518fe191eb99ca2bbc"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -225,13 +233,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/4.0.3/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/4.0.4/",
  "specificationFilesPublished": true,
- "specificationPublishedAt": "2026-09-05",
- "stableReleaseDate": "2026-09-05",
- "testOutputHash": "sha256:027643663f1090eb5218cc0f34e90df93934bb43af47ac28a4e64fda6d29ac41",
+ "specificationPublishedAt": "2026-09-06",
+ "stableReleaseDate": "2026-09-06",
+ "testOutputHash": "sha256:385698491023dcf7b14d448843cdd7ad1e59cd27bed985518fe191eb99ca2bbc",
  "totalPublicContracts": 35,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 8,
- "websiteIndexSha256": "sha256:c81af783e1e8ffb1e7b9ca84bac66338f147650a6c916b3e371af83cb0e17b2b"
+ "websiteIndexSha256": "sha256:6698b7efd8e879df968336e332f68d8a3430b37f83556b6ee31a7b65c8d18cf0"
 }

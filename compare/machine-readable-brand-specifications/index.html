@@ -14,8 +14,14 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://openbranddefinition.org/compare/machine-readable-brand-specifications/">
 <meta property="og:title" content="Machine-readable brand specifications compared">
+  <meta property="og:image" content="https://openbranddefinition.org/og/compare-machine-readable-brand-specifications.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Machine-readable brand specifications compared — Open Brand Definition Specification 4.0.4">
 <meta property="og:description" content="BRAND.md, Brand Context Protocol, MRBS and OBDS: what each one defines, verified against primary sources. No ranking.">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://openbranddefinition.org/og/compare-machine-readable-brand-specifications.png">
 <meta name="author" content="Kill The Dragon GmbH">
 <script type="application/ld+json">
 {
@@ -25,7 +31,7 @@
  "name": "Machine-readable brand specifications compared",
  "description": "Machine-readable brand specifications solve different problems. BRAND.md is a single readable brand file, Brando Schema is a governance vocabulary, the Brand Context Protocol publishes and discovers brand packages, MRBS structures a brand identity system, and OBDS decides which governed truth applies to a task and whether it may run.",
  "url": "https://openbranddefinition.org/compare/machine-readable-brand-specifications/",
- "dateModified": "2026-09-05",
+ "dateModified": "2026-09-06",
  "inLanguage": "en",
  "license": "https://creativecommons.org/licenses/by/4.0/",
  "isPartOf": {
@@ -80,6 +86,9 @@
   html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
   body {
     margin: 0;
+    /* German sets longer words than English; a display word must break rather
+       than force the page wider than the viewport. */
+    overflow-wrap: break-word;
     background: var(--paper);
     color: var(--ink);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -143,7 +152,7 @@
   }
   .hero-main {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     align-content: space-between;
     gap: 0;
     padding: var(--pad);
@@ -184,7 +193,7 @@
   }
   .hero-foot {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     border-top: 1px solid var(--line);
   }
   .hero-foot > div {
@@ -201,7 +210,7 @@
 
   .section {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     border-bottom: 1px solid var(--line);
   }
   .section-number {
@@ -249,7 +258,7 @@
   .callout p { margin: 0; max-width: 58ch; }
 
   /* chain */
-  .chain { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .chain { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
   .chain > div { position: relative; padding: 18px 14px 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
   .chain-step { font-size: clamp(16px, 1.5vw, 24px); letter-spacing: -.03em; text-transform: uppercase; font-weight: 700; }
   .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 22ch; opacity: .72; }
@@ -298,7 +307,7 @@
   .integrity-item p { margin: 0; max-width: 64ch; }
 
   /* actions */
-  .actions { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
   .actions > a { padding: 22px 20px 26px; min-height: 170px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
   .actions > a + a { border-left: 1px solid var(--line); }
   .actions > a:hover { background: var(--ink); color: var(--paper); }
@@ -327,7 +336,7 @@
     .section h2 { margin-bottom: 56px; font-size: clamp(38px, 11vw, 64px); }
     .callout { grid-template-columns: 1fr; }
     .callout > div + div { border-left: 0; border-top: 1px solid var(--line); }
-    .chain { grid-template-columns: repeat(2, 1fr); }
+    .chain { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .chain > div { min-height: 130px; }
     .state-row { grid-template-columns: 1fr; }
     .state-row > div:not(:first-child) { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
@@ -397,7 +406,7 @@
 <div class="site">
   <header class="topbar">
     <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
-    <div class="status">OBDS / 4.0.3 stable</div>
+    <div class="status">OBDS / 4.0.4 stable</div>
     <div class="lang-note" lang="en">English only</div>
     <a class="back" href="/">&larr; Back</a>
   </header>
@@ -407,7 +416,7 @@
       <div class="hero-main">
         <div class="eyebrow">
           <span>Comparison</span>
-          <span>Companion to OBDS 4.0.3</span>
+          <span>Companion to OBDS 4.0.4</span>
         </div>
         <h1 class="hero-title">Five specs,<br>five different<br><span class="outline">problems</span></h1>
         <p class="hero-statement">Written by the OBDS publisher, so check the other rows against their own primary sources. Every one of them is linked, and the version we read is stated.</p>
@@ -472,10 +481,10 @@
               <td>CC BY 4.0 with the W3C Royalty-Free Patent Policy</td>
             </tr>
             <tr>
-              <td><a href="/spec/4.0.3/OBDS-4.0.3.md">OBDS</a></td>
+              <td><a href="/spec/4.0.4/OBDS-4.0.4.md">OBDS</a></td>
               <td>"An open, implementation-ready specification for governed brand truth and AI creation."</td>
               <td>Governed applicability, conflict resolution and fail-closed execution. Decides which approved truth applies to one task and whether it may run.</td>
-              <td>4.0.3</td>
+              <td>4.0.4</td>
               <td>Spec CC BY 4.0, implementation Apache 2.0</td>
             </tr>
           </table></div>
@@ -486,7 +495,7 @@
           <p>Read this as coverage, not as a score. A specification that does not define conflict resolution is not deficient; it is solving a different problem, and carrying machinery you do not need has a real cost.</p>
           <div class="scroll-x"><table class="cmp">
             <tr>
-              <th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>Brando 1.3</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.0.3</th>
+              <th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>Brando 1.3</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.0.4</th>
             </tr>
             <tr>
               <td>A machine-readable brand file format</td>
@@ -619,7 +628,7 @@
             <span class="action-name">See it work</span>
             <span class="action-note">Two runnable examples with real output, including the fail-closed case.</span>
           </a>
-          <a href="/spec/4.0.3/OBDS-4.0.3.md">
+          <a href="/spec/4.0.4/OBDS-4.0.4.md">
             <span class="action-name">Read the spec</span>
             <span class="action-note">One normative document, so the claims in the OBDS column can be checked directly.</span>
           </a>
@@ -631,7 +640,7 @@
             <a href="https://brandoschema.com/" target="_blank" rel="noopener">brandoschema.com</a> and <a href="https://github.com/JonathanBowker/brandoschema" target="_blank" rel="noopener">github.com/JonathanBowker/brandoschema</a> &middot;
             <a href="https://github.com/Brand-Context-Protocol/spec" target="_blank" rel="noopener">github.com/Brand-Context-Protocol/spec</a> &middot;
             <a href="https://brandcodex.org/specification" target="_blank" rel="noopener">brandcodex.org/specification</a> &middot;
-            <a href="/spec/4.0.3/OBDS-4.0.3.md">OBDS-4.0.3.md</a>
+            <a href="/spec/4.0.4/OBDS-4.0.4.md">OBDS-4.0.4.md</a>
           </div></div>
         </div>
       </div>

@@ -1,3 +1,20 @@
+# Migrating 4.0.3 to 4.0.4
+
+6 September 2026.
+
+Nothing to do. OBDS 4.0.4 is a public-surface release. It gives every public page its own
+Open Graph preview image, and it fixes a layout defect that broke the German rendering of
+those pages. No normative OBDS contract, schema, runtime behaviour, conformance behaviour or
+interoperability contract changed. Every contract, hash and conformance result is identical
+to 4.0.3; only the version stamp, the release-file names and the public-surface documents
+move. An implementation that conforms to 4.0.3 conforms to 4.0.4 without changing a line.
+
+If you link to the release files: the paths move from `/spec/4.0.3/` to `/spec/4.0.4/` as
+they do on every release. `/spec/4.0.3/` stays published, byte-identical, and its tag is
+unchanged.
+
+---
+
 # Migrating 4.0.2 to 4.0.3
 
 5 September 2026.

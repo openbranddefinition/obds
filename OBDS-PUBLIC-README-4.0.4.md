@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 4.0.3** is the stable Open Brand Definition Specification.
+**OBDS 4.0.4** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,9 +21,9 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 4.0.3. Stable. 2026-09-05.**
+**OBDS 4.0.4. Stable. 2026-09-06.**
 
-OBDS 4.0.3 closes five production boundaries: contained output paths, immutable explicitly selected generations, provenance of all four model-projection slots, schema-first manifest validation, and provider failure evidence. Runtime Decision Record, Model Input Package and Build Report now have 4.0.0 contracts. The new closed-enum decision `model_failed` makes this a major release.
+OBDS 4.0.4 closes five production boundaries: contained output paths, immutable explicitly selected generations, provenance of all four model-projection slots, schema-first manifest validation, and provider failure evidence. Runtime Decision Record, Model Input Package and Build Report now have 4.0.0 contracts. The new closed-enum decision `model_failed` makes this a major release.
 
 OBDS 3.0 was the Semantic Closure release.
 

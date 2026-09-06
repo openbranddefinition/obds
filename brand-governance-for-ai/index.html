@@ -14,8 +14,14 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://openbranddefinition.org/brand-governance-for-ai/">
 <meta property="og:title" content="Brand governance for AI">
+  <meta property="og:image" content="https://openbranddefinition.org/og/brand-governance-for-ai.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Brand governance for AI — Open Brand Definition Specification 4.0.4">
 <meta property="og:description" content="The decision layer between retrieval and generation: authority, applicability, and stopping when required brand truth is missing.">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://openbranddefinition.org/og/brand-governance-for-ai.png">
 <meta name="author" content="Kill The Dragon GmbH">
 <script type="application/ld+json">
 {
@@ -25,7 +31,7 @@
  "name": "Brand governance for AI",
  "description": "Brand governance for AI is the decision layer between retrieval and generation: it determines which governed brand truth is authoritative and applicable to the task, compiles exactly that truth into an immutable context, and stops execution when required truth is missing.",
  "url": "https://openbranddefinition.org/brand-governance-for-ai/",
- "dateModified": "2026-09-05",
+ "dateModified": "2026-09-06",
  "inLanguage": "en",
  "license": "https://creativecommons.org/licenses/by/4.0/",
  "isPartOf": {
@@ -58,6 +64,9 @@
   html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
   body {
     margin: 0;
+    /* German sets longer words than English; a display word must break rather
+       than force the page wider than the viewport. */
+    overflow-wrap: break-word;
     background: var(--paper);
     color: var(--ink);
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -121,7 +130,7 @@
   }
   .hero-main {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     align-content: space-between;
     gap: 0;
     padding: var(--pad);
@@ -162,7 +171,7 @@
   }
   .hero-foot {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     border-top: 1px solid var(--line);
   }
   .hero-foot > div {
@@ -179,7 +188,7 @@
 
   .section {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     border-bottom: 1px solid var(--line);
   }
   .section-number {
@@ -227,7 +236,7 @@
   .callout p { margin: 0; max-width: 58ch; }
 
   /* chain */
-  .chain { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .chain { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
   .chain > div { position: relative; padding: 18px 14px 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
   .chain-step { font-size: clamp(16px, 1.5vw, 24px); letter-spacing: -.03em; text-transform: uppercase; font-weight: 700; }
   .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 22ch; opacity: .72; }
@@ -276,7 +285,7 @@
   .integrity-item p { margin: 0; max-width: 64ch; }
 
   /* actions */
-  .actions { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
   .actions > a { padding: 22px 20px 26px; min-height: 170px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
   .actions > a + a { border-left: 1px solid var(--line); }
   .actions > a:hover { background: var(--ink); color: var(--paper); }
@@ -305,7 +314,7 @@
     .section h2 { margin-bottom: 56px; font-size: clamp(38px, 11vw, 64px); }
     .callout { grid-template-columns: 1fr; }
     .callout > div + div { border-left: 0; border-top: 1px solid var(--line); }
-    .chain { grid-template-columns: repeat(2, 1fr); }
+    .chain { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .chain > div { min-height: 130px; }
     .state-row { grid-template-columns: 1fr; }
     .state-row > div:not(:first-child) { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
@@ -375,7 +384,7 @@
 <div class="site">
   <header class="topbar">
     <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
-    <div class="status">OBDS / 4.0.3 stable</div>
+    <div class="status">OBDS / 4.0.4 stable</div>
     <div class="lang-note" lang="en">English only</div>
     <a class="back" href="/">&larr; Back</a>
   </header>
@@ -385,7 +394,7 @@
       <div class="hero-main">
         <div class="eyebrow">
           <span>Brand governance for AI</span>
-          <span>Companion to OBDS 4.0.3</span>
+          <span>Companion to OBDS 4.0.4</span>
         </div>
         <h1 class="hero-title">The right<br>source, the<br><span class="outline">wrong truth</span></h1>
         <p class="hero-statement">Retrieval scores relevance. It does not decide whether a declaration is authoritative, whether it applies to this market today, or whether something required is simply missing.</p>
