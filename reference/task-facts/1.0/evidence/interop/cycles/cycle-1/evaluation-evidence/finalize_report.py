@@ -1,0 +1,35 @@
+import json,hashlib,pathlib,collections
+P=pathlib.Path(__file__).resolve().parents[1];E=P/'evaluation-evidence';C=P/'frozen-contract'
+def read(p):return json.loads(p.read_text())
+freeze=read(E/'RESULTS-FROZEN.json');assert all(hashlib.sha256((E/f).read_bytes()).hexdigest()==h for f,h in freeze.items())
+expected=[{k:v for k,v in r.items() if k!='basis'} for r in read(C/'expected-results.json')['results']]
+reg=[r for v in sorted(read(C/'regressions/expected-results.json')['vectors'],key=lambda v:v['input']) for r in v['expected']]
+info={}
+for suite,exp in [('fixtures',expected),('regressions',reg)]:
+ for impl in ['python','node']:
+  actual=read(E/(suite+'-'+impl+'.json'))['results']; info[suite+'-'+impl]={'records':len(actual),'matchesExpected':actual==exp}
+(E/'informational-expected-comparison.json').write_text(json.dumps(info,indent=2))
+integ={}
+for tree in ['frozen-contract','implementation-python','implementation-node']:
+ inv=read(P/(tree+'-integrity.json'));integ[tree]=all(hashlib.sha256((P/tree/f).read_bytes()).hexdigest()==h for f,h in inv.items())
+(E/'integrity-after.json').write_text(json.dumps(integ,indent=2));assert all(integ.values())
+probes=read(E/'probe-results-by-name.json'); comp=read(E/'comparison.json')
+assert all(comp[s]['equal'] for s in ['fixtures','regressions','probes']);assert all(x['pass'] for x in comp['identityChecks'])
+hashchecks=[]
+for name,outputs in probes.items():
+ try:d=read(E/'probe-inputs'/(name+'.json'))
+ except (ValueError,UnicodeError):continue
+ if not isinstance(d,dict) or 'cases' not in d:continue
+ cases={c['id']:c for c in d['cases']}
+ for impl,rows in outputs.items():
+  for r in rows:
+   if r['snapshotHash'] is None:continue
+   s=cases[r['caseId']]['snapshot'];h='sha256:'+hashlib.sha256(json.dumps(s,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+   hashchecks.append({'probe':name,'implementation':impl,'matchesIndependentCanonicalHash':r['snapshotHash']==h})
+assert all(x['matchesIndependentCanonicalHash'] for x in hashchecks)
+(E/'independent-hash-checks.json').write_text(json.dumps(hashchecks,indent=2))
+lines=['# Independent interoperability evaluation — cycle 1','','`INTEROPERABLE`','','Independence is reasonably established. The two implementers were separate fresh Codex subagents with no inherited context, worked in separate temporary directories, and received the identical implementer ZIP SHA-256 `35fd3c427d6aa1cf6d8c3cc253fa2d1b227891294ea1c1891f158b1b358b7b16`. Both provenance statements attest no sibling implementation or excluded expected/reference access. Orchestration evidence records both implementations frozen before copying. The supplied input and output inventories match before and after evaluation. This is procedural independence supported by attestations; the shared filesystem did not enforce OS isolation. No private clarification was required.','','The evaluator read only its role, the frozen contract/schema and fixture inputs, implementation documentation/provenance, and the permitted orchestration/integrity records before executing probes. It did not use either implementation source to design probes. A standalone standard-library generator authored 73 counter-probe files and synthetic verification contexts. Implementations ran unchanged from an external `/private/tmp` directory with `PYTHONDONTWRITEBYTECODE=1`.','','| Suite | Files | Decisions per implementation | Full six-field agreement |','| --- | ---: | ---: | --- |','| Frozen fixtures | 6 | 66 | 66 / 66 |','| Frozen regressions | 24 | 36 | 36 / 36 |','| Independent counter-probes | 73 | 76 | 76 / 76 |','','Agreement compares ordered records including family, caseId, conditionId, snapshotHash, outcome and reason. Both CLIs emitted the required JSON envelope and exit code 2 on each combined suite because each includes intentional INVALID inputs. No crashes or stderr output occurred.','','All 16 relational identity checks passed across both implementations: object-key reordering preserves identity; set-member reordering preserves applicability but changes identity; missing/empty/unknown snapshots differ; changing task ID, action, artifact hash or input-package hash changes snapshot identity. Stale verification contexts become EVIDENCE_UNVERIFIED; independently renewed synthetic contexts restore APPLIES. Every bound counter-probe hash also matches the independently computed TFJ bytes ('+str(len(hashchecks))+' individual implementation checks). Canonicalisable malformed snapshots retain real hashes and routing; parse/TFJ/routing failures remain unbound.','','All required counter-probe categories are covered below. Null is exercised both as a canonicalisable malformed snapshot and as a prohibited known string value; booleans, safe integer limits, numeric-looking strings, non-ASCII scalar text, controls, and Unicode scalar key ordering are included. Date/instant comparisons preserve TIME_BASIS_UNRESOLVED in both directions. Duplicate case/condition identities suppress the whole family, while a malformed condition leaves its valid sibling intact.','','## Counter-probe detail','','Each row records both implementations’ identical outcome/reason sequence. Full hashes and routing fields are in `evaluation-evidence/probe-results-by-name.json`.','','| Probe | Agreed outcomes / reasons |','| --- | --- |']
+for n,v in probes.items():lines.append('| '+n+' | '+'; '.join(r['outcome']+' / '+r['reason'] for r in v['python'])+' |')
+lines+=['','## Freeze and informational expectation check','','The six aggregate result files were written and SHA-256 inventoried in `evaluation-evidence/RESULTS-FROZEN.json` before any expected-results file was opened. The freeze was verified again during finalization. Only afterwards were expected results inspected: Python and Node each match all 66 literal fixture expectations and all 36 regression expectations (ignoring fixture `basis`, which is explanatory metadata). This comparison is informational and did not determine cross-implementation agreement. No reference evaluator was used.','','## Blocking divergences','','None. No divergence classification applies. Neither implementation nor the frozen contract was repaired or modified. This verdict concerns the supplied contract, frozen inputs and listed probes; it does not establish production readiness, source truth or OBDS conformance.','','## Reproduction','','Run `PYTHONDONTWRITEBYTECODE=1 python3 _autonomous_interop_run/cycles/cycle-1/evaluation-evidence/run_evaluation.py` from the repository root. This regenerates independent probes in a new external temporary directory and writes both outputs and comparisons. `execution.json` records original commands, file order, working directory, exit codes and counts. `probe-inputs/` preserves exact raw probe documents. Run `finalize_report.py` only after the execution freeze to reproduce the informational expected comparison and this report.','','`INTEROPERABLE`','']
+(P/'interoperability-evaluation.md').write_text('\n'.join(lines))
+print(json.dumps(info));print('Independent bound hash checks:',len(hashchecks));print('Report written.')

@@ -1,0 +1,580 @@
+{
+  "family": "06-ambiguous-time",
+  "cases": [
+    {
+      "id": "time-expiry-boundary",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-expiry-boundary",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+          "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          },
+          "publicationTime": {
+            "type": "date-time"
+          },
+          "sourceValidThrough": {
+            "type": "date"
+          },
+          "sourceTimezone": {
+            "type": "string"
+          },
+          "publicationWithinWindow": {
+            "type": "boolean"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06"
+            ]
+          },
+          "publicationTime": {
+            "state": "known",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ],
+            "value": "2026-09-30T22:30:00Z"
+          },
+          "sourceValidThrough": {
+            "state": "known",
+            "evidenceRefs": [
+              "sourceValidThrough:0"
+            ],
+            "value": "2026-09-30"
+          },
+          "sourceTimezone": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "sourceTimezone:0"
+            ]
+          },
+          "publicationWithinWindow": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "publicationWithinWindow:0"
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-expiry-boundary:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:a7ec39fcdc9df32a4b62d08abbbd0056a6471b92f1dbfd180e2796fe88e07611",
+            "taskId": "task:time-expiry-boundary",
+            "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+            "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-expiry-boundary:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:55f1da44d599a2afce4b8db1655de85d826c9c4366cc1681a7ccdc571e08e3bc",
+            "taskId": "task:time-expiry-boundary",
+            "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+            "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "sourceValidThrough:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-expiry-boundary:sourceValidThrough:0",
+            "method": "fixture-attestation",
+            "fact": "sourceValidThrough",
+            "assertionHash": "sha256:8e41d94a3d4086076c1ffe3b80cd099840cc3bf4b24e1d67cd9f23a447423732",
+            "taskId": "task:time-expiry-boundary",
+            "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+            "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "sourceTimezone:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-expiry-boundary:sourceTimezone:0",
+            "method": "fixture-attestation",
+            "fact": "sourceTimezone",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:time-expiry-boundary",
+            "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+            "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "publicationWithinWindow:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-expiry-boundary:publicationWithinWindow:0",
+            "method": "fixture-attestation",
+            "fact": "publicationWithinWindow",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:time-expiry-boundary",
+            "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+            "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-expiry-boundary",
+        "artifactHash": "sha256:94e4bf7c6b6f3016cada84001ed3b83c67dc4f8b952d0d4dbb6a058259bebfa6",
+        "inputPackageHash": "sha256:bb5daec618b4a2d67026d9cfc29b1c63e8ea754f1dbcd863205f0a6e8e87d8e1",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:ae1763257c4339d84e7d034c16c75c23c6af6c53a030c2f87de78af5edabb33f",
+          "publicationTime:0": "sha256:d1e9dc12e7910231c513a7e3606948102bf4ab74246c96eed9b3061ef3641e58",
+          "sourceValidThrough:0": "sha256:5163356bba94a452b2e94012dfe19e7cc52bbeb84370bc0207f1124675af5a3e",
+          "sourceTimezone:0": "sha256:9a010040fe81c2f1bea4bdc124718ff627bf5ffe076ef194d2c4e726e7551da1",
+          "publicationWithinWindow:0": "sha256:687f87cb38f0bede43710c57f7f69c62d0ba8c6623042f073dced396ffc3dc99"
+        },
+        "snapshotHash": "sha256:2e08094b2d3a98a8e670529d55be3b8aa4d6063f2699631f8a6d3f64635cad0b"
+      },
+      "conditions": [
+        {
+          "id": "claim-window",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            },
+            {
+              "fact": "publicationWithinWindow",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "time-date-vs-instant",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-date-vs-instant",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:696d6e86d37bd3509cb152afdc6a52e0287910d866ea93d2d5e1b34d99897034",
+          "inputPackageHash": "sha256:48f050bca8f361dc84d01c75882dd7f33967fb8fd12d578906d435892e65b68e"
+        },
+        "declarations": {
+          "publicationTime": {
+            "type": "date"
+          }
+        },
+        "facts": {
+          "publicationTime": {
+            "state": "known",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ],
+            "value": "2026-09-30"
+          }
+        },
+        "evidence": {
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-date-vs-instant:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:8e41d94a3d4086076c1ffe3b80cd099840cc3bf4b24e1d67cd9f23a447423732",
+            "taskId": "task:time-date-vs-instant",
+            "artifactHash": "sha256:696d6e86d37bd3509cb152afdc6a52e0287910d866ea93d2d5e1b34d99897034",
+            "inputPackageHash": "sha256:48f050bca8f361dc84d01c75882dd7f33967fb8fd12d578906d435892e65b68e",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-date-vs-instant",
+        "artifactHash": "sha256:696d6e86d37bd3509cb152afdc6a52e0287910d866ea93d2d5e1b34d99897034",
+        "inputPackageHash": "sha256:48f050bca8f361dc84d01c75882dd7f33967fb8fd12d578906d435892e65b68e",
+        "acceptedEvidence": {
+          "publicationTime:0": "sha256:5686f081b9bb4915fd260553be95f939f24d886d4f9ee35a4169985407b5fe17"
+        },
+        "snapshotHash": "sha256:311cf2c1464b148dff28a2ba5b421cae869977c5781e81e8c3e7a2ebdaeadd38"
+      },
+      "conditions": [
+        {
+          "id": "same-publication-time",
+          "all": [
+            {
+              "fact": "publicationTime",
+              "op": "equals",
+              "value": "2026-09-30T22:00:00Z"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "time-local-unresolved",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-local-unresolved",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:c4e663ef80120a0c50fcd944f7577b2517dc00d16e01c03f18a0c6e754454dca",
+          "inputPackageHash": "sha256:47d4e5c1fd4623acf6dceb3219130206b29dd7a84b905b5c37a7a38c026f2d59"
+        },
+        "declarations": {
+          "publicationTime": {
+            "type": "date-time"
+          },
+          "sourceDate": {
+            "type": "date"
+          },
+          "sourceTimezone": {
+            "type": "string"
+          }
+        },
+        "facts": {
+          "publicationTime": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ]
+          },
+          "sourceDate": {
+            "state": "known",
+            "evidenceRefs": [
+              "sourceDate:0"
+            ],
+            "value": "2026-09-30"
+          },
+          "sourceTimezone": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "sourceTimezone:0"
+            ]
+          }
+        },
+        "evidence": {
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-local-unresolved:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:time-local-unresolved",
+            "artifactHash": "sha256:c4e663ef80120a0c50fcd944f7577b2517dc00d16e01c03f18a0c6e754454dca",
+            "inputPackageHash": "sha256:47d4e5c1fd4623acf6dceb3219130206b29dd7a84b905b5c37a7a38c026f2d59",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "sourceDate:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-local-unresolved:sourceDate:0",
+            "method": "fixture-attestation",
+            "fact": "sourceDate",
+            "assertionHash": "sha256:8e41d94a3d4086076c1ffe3b80cd099840cc3bf4b24e1d67cd9f23a447423732",
+            "taskId": "task:time-local-unresolved",
+            "artifactHash": "sha256:c4e663ef80120a0c50fcd944f7577b2517dc00d16e01c03f18a0c6e754454dca",
+            "inputPackageHash": "sha256:47d4e5c1fd4623acf6dceb3219130206b29dd7a84b905b5c37a7a38c026f2d59",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "sourceTimezone:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-local-unresolved:sourceTimezone:0",
+            "method": "fixture-attestation",
+            "fact": "sourceTimezone",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:time-local-unresolved",
+            "artifactHash": "sha256:c4e663ef80120a0c50fcd944f7577b2517dc00d16e01c03f18a0c6e754454dca",
+            "inputPackageHash": "sha256:47d4e5c1fd4623acf6dceb3219130206b29dd7a84b905b5c37a7a38c026f2d59",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-local-unresolved",
+        "artifactHash": "sha256:c4e663ef80120a0c50fcd944f7577b2517dc00d16e01c03f18a0c6e754454dca",
+        "inputPackageHash": "sha256:47d4e5c1fd4623acf6dceb3219130206b29dd7a84b905b5c37a7a38c026f2d59",
+        "acceptedEvidence": {
+          "publicationTime:0": "sha256:155de3185f83b3a13d8902635b60bdcac6a6822fc8d2a1220c7da7b9ecd18634",
+          "sourceDate:0": "sha256:6e24e16b1f9e137defbed83042ab278f3245991cb944f34b55170262355be1fe",
+          "sourceTimezone:0": "sha256:d81c8fd541cee0af282ce8692ff831c8cf18955567ce4f8c8bbc628453da6b48"
+        },
+        "snapshotHash": "sha256:c04c63bae237319e73e7d7e12d3a966320159480f8b5cabc543efb9067c1ee6f"
+      },
+      "conditions": [
+        {
+          "id": "same-publication-time",
+          "all": [
+            {
+              "fact": "publicationTime",
+              "op": "equals",
+              "value": "2026-09-30T22:00:00Z"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "time-explicit-instant",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-explicit-instant",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:55eed8fa43ddc574fc381717332cd58223dddebf2ab7da36faab6b574cb21ddd",
+          "inputPackageHash": "sha256:aa5eaae855df74819bea2306bd52db19d6e84daa2fe6ff401397cb9deaa34fbf"
+        },
+        "declarations": {
+          "publicationTime": {
+            "type": "date-time"
+          }
+        },
+        "facts": {
+          "publicationTime": {
+            "state": "known",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ],
+            "value": "2026-10-01T00:00:00+02:00"
+          }
+        },
+        "evidence": {
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-explicit-instant:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:2a829e5725224b72dc816b0c6298ae6823255ff8f3263705de5ebe5c0cad513d",
+            "taskId": "task:time-explicit-instant",
+            "artifactHash": "sha256:55eed8fa43ddc574fc381717332cd58223dddebf2ab7da36faab6b574cb21ddd",
+            "inputPackageHash": "sha256:aa5eaae855df74819bea2306bd52db19d6e84daa2fe6ff401397cb9deaa34fbf",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-explicit-instant",
+        "artifactHash": "sha256:55eed8fa43ddc574fc381717332cd58223dddebf2ab7da36faab6b574cb21ddd",
+        "inputPackageHash": "sha256:aa5eaae855df74819bea2306bd52db19d6e84daa2fe6ff401397cb9deaa34fbf",
+        "acceptedEvidence": {
+          "publicationTime:0": "sha256:70c6316e3f859e0d9d852635d10989b1df44febfb3305bde3cb6f6d8504c601a"
+        },
+        "snapshotHash": "sha256:bdb30bf33d224bb99c1ac12924c3a70105ef78f781d23f7e4408b6f4fee3f9af"
+      },
+      "conditions": [
+        {
+          "id": "same-publication-time",
+          "all": [
+            {
+              "fact": "publicationTime",
+              "op": "equals",
+              "value": "2026-09-30T22:00:00Z"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "time-different-instant",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-different-instant",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:69358bde0d38b028c7b1fe0dd1cb9c01088ceac16663bd78078b57d5b30862f4",
+          "inputPackageHash": "sha256:5ea6f9859abe93e6267e1dc2c0c6b3d9eb619bb2f839335dd560242299a77138"
+        },
+        "declarations": {
+          "publicationTime": {
+            "type": "date-time"
+          }
+        },
+        "facts": {
+          "publicationTime": {
+            "state": "known",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ],
+            "value": "2026-09-30T21:59:59Z"
+          }
+        },
+        "evidence": {
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-different-instant:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:01a1609d912683a60ca1bc16e9dc4eb3b2b10ac3ec04351601c9a9ad3c735afd",
+            "taskId": "task:time-different-instant",
+            "artifactHash": "sha256:69358bde0d38b028c7b1fe0dd1cb9c01088ceac16663bd78078b57d5b30862f4",
+            "inputPackageHash": "sha256:5ea6f9859abe93e6267e1dc2c0c6b3d9eb619bb2f839335dd560242299a77138",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-different-instant",
+        "artifactHash": "sha256:69358bde0d38b028c7b1fe0dd1cb9c01088ceac16663bd78078b57d5b30862f4",
+        "inputPackageHash": "sha256:5ea6f9859abe93e6267e1dc2c0c6b3d9eb619bb2f839335dd560242299a77138",
+        "acceptedEvidence": {
+          "publicationTime:0": "sha256:3f8b6f97bbc8ffc4473f241283170da6c011b3754cdbf056a690f5380aa610b0"
+        },
+        "snapshotHash": "sha256:2e56b3db7f0bb4a9ad32193bb426c593b6babd8df30dd1d7f58c84d3a7594440"
+      },
+      "conditions": [
+        {
+          "id": "same-publication-time",
+          "all": [
+            {
+              "fact": "publicationTime",
+              "op": "equals",
+              "value": "2026-09-30T22:00:00Z"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "time-same-civil-date",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-same-civil-date",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:b66e33584b248dd37948520f7487a377cb48c1edcae2852536e55a488c83ba67",
+          "inputPackageHash": "sha256:875ee9b0f9b699b2882a43dcfcc1987b4698f24a15b4ac826586e802b0d59f9d"
+        },
+        "declarations": {
+          "publicationTime": {
+            "type": "date"
+          }
+        },
+        "facts": {
+          "publicationTime": {
+            "state": "known",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ],
+            "value": "2026-09-30"
+          }
+        },
+        "evidence": {
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-same-civil-date:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:8e41d94a3d4086076c1ffe3b80cd099840cc3bf4b24e1d67cd9f23a447423732",
+            "taskId": "task:time-same-civil-date",
+            "artifactHash": "sha256:b66e33584b248dd37948520f7487a377cb48c1edcae2852536e55a488c83ba67",
+            "inputPackageHash": "sha256:875ee9b0f9b699b2882a43dcfcc1987b4698f24a15b4ac826586e802b0d59f9d",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-same-civil-date",
+        "artifactHash": "sha256:b66e33584b248dd37948520f7487a377cb48c1edcae2852536e55a488c83ba67",
+        "inputPackageHash": "sha256:875ee9b0f9b699b2882a43dcfcc1987b4698f24a15b4ac826586e802b0d59f9d",
+        "acceptedEvidence": {
+          "publicationTime:0": "sha256:d6ed16a0dac81f4ebe67cc3ba4c5431ca3aacee3384fe1413fee4d0eb90b8e69"
+        },
+        "snapshotHash": "sha256:d60731a125e2d6af92598c93a358a0a0d082aeb6ecb80e258f55160fa63d472e"
+      },
+      "conditions": [
+        {
+          "id": "civil-date",
+          "all": [
+            {
+              "fact": "publicationTime",
+              "op": "equals",
+              "value": "2026-09-30"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "time-zone-missing-invalid",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:time-zone-missing-invalid",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:ab127dfb3cce0b342f4a58ab29db6a6ca94f7ef2c64c872a40d9592ef9356fc3",
+          "inputPackageHash": "sha256:cf2b50325e3c30b6e80ce23277217e72b84fe72fd59d4d88633c996c51d2c3e9"
+        },
+        "declarations": {
+          "publicationTime": {
+            "type": "date-time"
+          }
+        },
+        "facts": {
+          "publicationTime": {
+            "state": "known",
+            "evidenceRefs": [
+              "publicationTime:0"
+            ],
+            "value": "2026-09-30T22:00:00"
+          }
+        },
+        "evidence": {
+          "publicationTime:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:time-zone-missing-invalid:publicationTime:0",
+            "method": "fixture-attestation",
+            "fact": "publicationTime",
+            "assertionHash": "sha256:b58fb57c539c987c827a18358b47f3c0a8dbb5af32c225e4170c61d7349a4ba6",
+            "taskId": "task:time-zone-missing-invalid",
+            "artifactHash": "sha256:ab127dfb3cce0b342f4a58ab29db6a6ca94f7ef2c64c872a40d9592ef9356fc3",
+            "inputPackageHash": "sha256:cf2b50325e3c30b6e80ce23277217e72b84fe72fd59d4d88633c996c51d2c3e9",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:time-zone-missing-invalid",
+        "artifactHash": "sha256:ab127dfb3cce0b342f4a58ab29db6a6ca94f7ef2c64c872a40d9592ef9356fc3",
+        "inputPackageHash": "sha256:cf2b50325e3c30b6e80ce23277217e72b84fe72fd59d4d88633c996c51d2c3e9",
+        "acceptedEvidence": {
+          "publicationTime:0": "sha256:2989ad4e0cf8f119b2420d63c6cecff0f17bd20798eff18ac61a9c39e3f17aef"
+        },
+        "snapshotHash": "sha256:f527597337c3c40c1123f98e15fd330ad40ea28780289f4b8848f4424ed9e57a"
+      },
+      "conditions": [
+        {
+          "id": "same-publication-time",
+          "all": [
+            {
+              "fact": "publicationTime",
+              "op": "equals",
+              "value": "2026-09-30T22:00:00Z"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    }
+  ]
+}

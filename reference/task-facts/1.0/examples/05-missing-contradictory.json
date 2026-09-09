@@ -1,0 +1,632 @@
+{
+  "family": "05-missing-contradictory",
+  "cases": [
+    {
+      "id": "fact-missing",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-missing",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:aa94ad876b6e576417f303261561cff4d679a96eead7dc1c5b977964c000c499",
+          "inputPackageHash": "sha256:63040c24811d9c56f718559d417870a7663ac8021f27e2892f6b1ae2605241c7"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {},
+        "evidence": {}
+      },
+      "verificationContext": {
+        "taskId": "task:fact-missing",
+        "artifactHash": "sha256:aa94ad876b6e576417f303261561cff4d679a96eead7dc1c5b977964c000c499",
+        "inputPackageHash": "sha256:63040c24811d9c56f718559d417870a7663ac8021f27e2892f6b1ae2605241c7",
+        "acceptedEvidence": {},
+        "snapshotHash": "sha256:f9ba3130b60f8c3633abbf73dee8b79ad8065061550fc4352b926ecf531b6271"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-empty",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-empty",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:bbd56f26f28013127437fdc3abaa16c4187b6d52a0008e3d9d566358f99f56c5",
+          "inputPackageHash": "sha256:ed23999c27edea8a452c5eb802207807b948e6f507d148f583e389477de42ef3"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "empty",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-empty:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:56ef94ec99d69a08e969e38d2900adbf141817fcb5e5a5c3069577687f4c1942",
+            "taskId": "task:fact-empty",
+            "artifactHash": "sha256:bbd56f26f28013127437fdc3abaa16c4187b6d52a0008e3d9d566358f99f56c5",
+            "inputPackageHash": "sha256:ed23999c27edea8a452c5eb802207807b948e6f507d148f583e389477de42ef3",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-empty",
+        "artifactHash": "sha256:bbd56f26f28013127437fdc3abaa16c4187b6d52a0008e3d9d566358f99f56c5",
+        "inputPackageHash": "sha256:ed23999c27edea8a452c5eb802207807b948e6f507d148f583e389477de42ef3",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:ae426daaa3e73c498534d14b53193b732d3991f8e9bb14eb6683b353df479cb1"
+        },
+        "snapshotHash": "sha256:9605113a7dc1f937407466f510cd2e5e81deaf2f2849c8dc7554f35369f5f45e"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-unknown",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-unknown",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:b3b7fa5cc44d0dff4983fa4fab35c99699fca8cc1f552a6157cc07d119726d53",
+          "inputPackageHash": "sha256:5ade0d8ce5a898833ae784f49c1132eb69a36c8c4f29fdc4c30f68c5ab707f02"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-unknown:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:fact-unknown",
+            "artifactHash": "sha256:b3b7fa5cc44d0dff4983fa4fab35c99699fca8cc1f552a6157cc07d119726d53",
+            "inputPackageHash": "sha256:5ade0d8ce5a898833ae784f49c1132eb69a36c8c4f29fdc4c30f68c5ab707f02",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-unknown",
+        "artifactHash": "sha256:b3b7fa5cc44d0dff4983fa4fab35c99699fca8cc1f552a6157cc07d119726d53",
+        "inputPackageHash": "sha256:5ade0d8ce5a898833ae784f49c1132eb69a36c8c4f29fdc4c30f68c5ab707f02",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:94570598923f4108f6d69dbfd842590ffe7c9552a582d63fa7be0b4e13abf32e"
+        },
+        "snapshotHash": "sha256:870af8780173c24ba64f550c7ac82441ee8e3c394525d0f8f3732be5308a0cfb"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-contradictory",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-contradictory",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:e6ed0f4c7c18efb653e8e32bf85f7d75b0a70505301a43fcfcd896130756a4af",
+          "inputPackageHash": "sha256:c35a9d8f3e6ae465b2c673dca7c7e22d0cbd26e7fc931fa809e27a5e2ace3c34"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "contradictory",
+            "evidenceRefs": [
+              "claimsUsed:0",
+              "claimsUsed:1"
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-contradictory:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:c59fca5829c2e0c2781ad802bf2264a58d849e0a24ef15bb05c733b279ec7bcd",
+            "taskId": "task:fact-contradictory",
+            "artifactHash": "sha256:e6ed0f4c7c18efb653e8e32bf85f7d75b0a70505301a43fcfcd896130756a4af",
+            "inputPackageHash": "sha256:c35a9d8f3e6ae465b2c673dca7c7e22d0cbd26e7fc931fa809e27a5e2ace3c34",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "claimsUsed:1": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-contradictory:claimsUsed:1",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:c59fca5829c2e0c2781ad802bf2264a58d849e0a24ef15bb05c733b279ec7bcd",
+            "taskId": "task:fact-contradictory",
+            "artifactHash": "sha256:e6ed0f4c7c18efb653e8e32bf85f7d75b0a70505301a43fcfcd896130756a4af",
+            "inputPackageHash": "sha256:c35a9d8f3e6ae465b2c673dca7c7e22d0cbd26e7fc931fa809e27a5e2ace3c34",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-contradictory",
+        "artifactHash": "sha256:e6ed0f4c7c18efb653e8e32bf85f7d75b0a70505301a43fcfcd896130756a4af",
+        "inputPackageHash": "sha256:c35a9d8f3e6ae465b2c673dca7c7e22d0cbd26e7fc931fa809e27a5e2ace3c34",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:8f76b861c9b93bb741afd39414000137bee8a9a1304237b3e9ecd8d82d21ffe9",
+          "claimsUsed:1": "sha256:97dbcf643e6656d71d28333c5d46f8e469f31db9c39da0059141138ac2bda08f"
+        },
+        "snapshotHash": "sha256:3a35478233ca88718ef52bde869b1e332bc42fa90c728452c4a3e34116e88e9b"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-unverified",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-unverified",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:3a2328fe937e85a71e313941700f2767ee60743eda0df33d0aaf8f93a20afde8",
+          "inputPackageHash": "sha256:d35d21319576f469628dc04e77169235cda5deee6a3031e51dd9c66a4ea2a949"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06"
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-unverified:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:a7ec39fcdc9df32a4b62d08abbbd0056a6471b92f1dbfd180e2796fe88e07611",
+            "taskId": "task:fact-unverified",
+            "artifactHash": "sha256:3a2328fe937e85a71e313941700f2767ee60743eda0df33d0aaf8f93a20afde8",
+            "inputPackageHash": "sha256:d35d21319576f469628dc04e77169235cda5deee6a3031e51dd9c66a4ea2a949",
+            "status": "asserted",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-unverified",
+        "artifactHash": "sha256:3a2328fe937e85a71e313941700f2767ee60743eda0df33d0aaf8f93a20afde8",
+        "inputPackageHash": "sha256:d35d21319576f469628dc04e77169235cda5deee6a3031e51dd9c66a4ea2a949",
+        "acceptedEvidence": {},
+        "snapshotHash": "sha256:c69ac3defcf7dda290a066fd8c34ea65039227c3124c95665ab32d17c4e1b43f"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-malformed-set",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-malformed-set",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:addf29eb24a552fe3e1a3635f7ceba796b8376f3118a7fbf19c1ea1e4fbca4da",
+          "inputPackageHash": "sha256:3aae3d0f7d59fcf4b67a927cb0fed48bd686d5a8b7f8cf8025abc99a621ebc30"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": "C06"
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-malformed-set:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:ea474960af4a79954d6d2ce080ef07286d39d73e45d25c603c5e190a2e02fdfe",
+            "taskId": "task:fact-malformed-set",
+            "artifactHash": "sha256:addf29eb24a552fe3e1a3635f7ceba796b8376f3118a7fbf19c1ea1e4fbca4da",
+            "inputPackageHash": "sha256:3aae3d0f7d59fcf4b67a927cb0fed48bd686d5a8b7f8cf8025abc99a621ebc30",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-malformed-set",
+        "artifactHash": "sha256:addf29eb24a552fe3e1a3635f7ceba796b8376f3118a7fbf19c1ea1e4fbca4da",
+        "inputPackageHash": "sha256:3aae3d0f7d59fcf4b67a927cb0fed48bd686d5a8b7f8cf8025abc99a621ebc30",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:480f683ab3b51114ed26b51d7ce6aa48b1d8d7f164d4a717ba74acc3a9d92a5e"
+        },
+        "snapshotHash": "sha256:e8a8698e421c68fa91ca27d2cebc1e487361fa1e35e3a0303751469fda1fe35f"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-malformed-member",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-malformed-member",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:d755d40cef2b50c39336f7d05ef81b59fa2a9be4d4e58ecd35b58fd1442dea53",
+          "inputPackageHash": "sha256:441ea9b1e297567677ae0960830133fd341153596b18200fca9404083b21d162"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06",
+              7
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-malformed-member:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:ccae5198898639a274351acc0f1bb5e491e5e569adc6c1e89665de5a50169a57",
+            "taskId": "task:fact-malformed-member",
+            "artifactHash": "sha256:d755d40cef2b50c39336f7d05ef81b59fa2a9be4d4e58ecd35b58fd1442dea53",
+            "inputPackageHash": "sha256:441ea9b1e297567677ae0960830133fd341153596b18200fca9404083b21d162",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-malformed-member",
+        "artifactHash": "sha256:d755d40cef2b50c39336f7d05ef81b59fa2a9be4d4e58ecd35b58fd1442dea53",
+        "inputPackageHash": "sha256:441ea9b1e297567677ae0960830133fd341153596b18200fca9404083b21d162",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:7499a6358a50b4cd0223d65f428dfebd438862ac89dfb5b7f3b1a5d55aeefb8c"
+        },
+        "snapshotHash": "sha256:90f6dc20485ce28bc740075cdaeffd605fde6da637fd44926a028789020c5fec"
+      },
+      "conditions": [
+        {
+          "id": "claim-presence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "present"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-absence",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "absent"
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "claim-membership",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "fact-tampered",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:fact-tampered",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:67475ca00463c286405c258e8914d606ea8890c515889f2ac03e293e49f080bc",
+          "inputPackageHash": "sha256:010ac16d87f896ad922fac57426e99f5e643accc808f1a48e8ad204c17e95f9c"
+        },
+        "declarations": {
+          "campaignId": {
+            "type": "string"
+          }
+        },
+        "facts": {
+          "campaignId": {
+            "state": "known",
+            "evidenceRefs": [
+              "campaignId:0"
+            ],
+            "value": "caller-replacement"
+          }
+        },
+        "evidence": {
+          "campaignId:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:fact-tampered:campaignId:0",
+            "method": "fixture-attestation",
+            "fact": "campaignId",
+            "assertionHash": "sha256:1dde00aa4a4e524d6e8943894c3c702d2ba53c422b5837aaefee6ab6da20288b",
+            "taskId": "task:fact-tampered",
+            "artifactHash": "sha256:67475ca00463c286405c258e8914d606ea8890c515889f2ac03e293e49f080bc",
+            "inputPackageHash": "sha256:010ac16d87f896ad922fac57426e99f5e643accc808f1a48e8ad204c17e95f9c",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:fact-tampered",
+        "artifactHash": "sha256:67475ca00463c286405c258e8914d606ea8890c515889f2ac03e293e49f080bc",
+        "inputPackageHash": "sha256:010ac16d87f896ad922fac57426e99f5e643accc808f1a48e8ad204c17e95f9c",
+        "acceptedEvidence": {
+          "campaignId:0": "sha256:ba9353c9017eb1b54e9d5aef8d4ae8e1da9d4867fb4c3039eea453cbebe3c5c8"
+        },
+        "snapshotHash": "sha256:f13fa89a167afa8c1cb80147d9cfa9279c2a1aefae31ad51da6be0aa0236cf85"
+      },
+      "conditions": [
+        {
+          "id": "campaign-equality",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    }
+  ]
+}

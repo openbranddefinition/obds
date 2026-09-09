@@ -1,0 +1,5 @@
+{
+  "frozen-contract": true,
+  "implementation-python": true,
+  "implementation-node": true
+}

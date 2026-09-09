@@ -1,0 +1,602 @@
+[
+  {
+    "probe": "absent-operand",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "absent-operand",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "association-conflict",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "association-conflict",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "bad-op",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "bad-op",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "base",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "base",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "campaign-claim",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "campaign-claim",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "campaign-claim",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "campaign-claim",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-action-stale",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-action-stale",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-action-verified",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-action-verified",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-artifactHash-stale",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-artifactHash-stale",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-artifactHash-verified",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-artifactHash-verified",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-id-stale",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-id-stale",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-id-verified",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-id-verified",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-inputPackageHash-stale",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-inputPackageHash-stale",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-inputPackageHash-verified",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "changed-inputPackageHash-verified",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "contradictory",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "contradictory",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "duplicate-association",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "duplicate-association",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "duplicate-atoms",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "duplicate-atoms",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "duplicate-set",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "duplicate-set",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "empty",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "empty",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "extra-case",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "extra-case",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-condition-valid-sibling",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-condition-valid-sibling",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-condition-valid-sibling",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-condition-valid-sibling",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-array",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-array",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-boolean",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-boolean",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-integer",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-integer",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-null",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-null",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-object",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-object",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-string",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "malformed-snapshot-string",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "missing-context",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "missing-context",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "missing-requires",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "missing-requires",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "missing",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "missing",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "multiple-assets",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "multiple-assets",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "multiple-claims",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "multiple-claims",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "object-reordered",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "object-reordered",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "partner-portrait",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "partner-portrait",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "partner-portrait",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "partner-portrait",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "set-reordered",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "set-reordered",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "special-fact-constructor",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "special-fact-constructor",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "special-fact-hasOwnProperty",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "special-fact-hasOwnProperty",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "special-fact-toString",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "special-fact-toString",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-date-instant",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-date-instant",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-instant-date",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-instant-date",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-leap-invalid",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-leap-invalid",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-leap-valid",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-leap-valid",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-offset-equal",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-offset-equal",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-unknown-offset",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-unknown-offset",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-year-one",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "time-year-one",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "unknown",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "unknown",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-bool-as-int",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-bool-as-int",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-false",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-false",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-int-as-bool",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-int-as-bool",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-integer-as-string",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-integer-as-string",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-maxint",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-maxint",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-minint",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-minint",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-null",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-null",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-numeric-string",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-numeric-string",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-true",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-true",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-unicode",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-unicode",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-zero",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "value-zero",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "wrong-scalar-set",
+    "implementation": "python",
+    "matchesIndependentCanonicalHash": true
+  },
+  {
+    "probe": "wrong-scalar-set",
+    "implementation": "node",
+    "matchesIndependentCanonicalHash": true
+  }
+]

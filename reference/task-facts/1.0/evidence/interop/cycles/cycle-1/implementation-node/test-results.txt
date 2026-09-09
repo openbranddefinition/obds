@@ -1,0 +1,24 @@
+✔ strict syntax wins over TFJ and rejects duplicate decoded keys (1.19475ms)
+✔ TFJ rejects number categories and scalars (0.226833ms)
+✔ canonical scalar sorting and controls (0.291083ms)
+✔ verified known false and zero are present (0.956042ms)
+✔ bound malformed snapshots have their actual hashes (0.254209ms)
+✔ routing failures and duplicates suppress every sibling (0.330333ms)
+✔ condition errors remain isolated and wrapper errors bind (0.806917ms)
+✔ attestation changes cannot retain verification (0.20925ms)
+✔ missing, unknown, empty differ (0.995125ms)
+✔ relation conflict versus duplicate pairs (0.490333ms)
+✔ temporal equality preserves dates and resolves offsets (0.449375ms)
+✔ bad Gregorian and unresolved offset types fail (0.699875ms)
+✔ conservative unknown dominates false regardless of order (0.554958ms)
+✔ unused malformed fact invalidates snapshot before bad condition (0.134875ms)
+✔ I/O returns a single fully unbound result (0.413208ms)
+✔ CLI preserves file order, unbound errors, and exit status (67.537125ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 120.121333

@@ -1,0 +1,599 @@
+{
+  "status": "Frozen before reference evaluator implementation; outcomes derived from supplied reports, hashes computed independently of evaluator.",
+  "results": [
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-both",
+      "conditionId": "claim-C06-C2",
+      "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-both",
+      "conditionId": "claim-C01",
+      "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-empty",
+      "conditionId": "claim-C06-C2",
+      "snapshotHash": "sha256:450c309ce11a5b3ff828bf6b9f1b16312b120a8d4063a63081e4f51a59ada42e",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-empty",
+      "conditionId": "claim-C01",
+      "snapshotHash": "sha256:450c309ce11a5b3ff828bf6b9f1b16312b120a8d4063a63081e4f51a59ada42e",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-wrong-product",
+      "conditionId": "claim-C06-C2",
+      "snapshotHash": "sha256:b11f4e89f0517299ae5e566f34e3429b9917f3040fe0599637d10822319281d3",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-wrong-product",
+      "conditionId": "claim-C01",
+      "snapshotHash": "sha256:b11f4e89f0517299ae5e566f34e3429b9917f3040fe0599637d10822319281d3",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-conflicting-product",
+      "conditionId": "claim-C06-C2",
+      "snapshotHash": "sha256:f19377925dabd48ac7e7ff91b285f0b76838e3b0427d8a705431e5dc3df85fe2",
+      "outcome": "CONTRADICTORY",
+      "reason": "ASSOCIATION_CONFLICT",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "01-two-claims",
+      "caseId": "claims-conflicting-product",
+      "conditionId": "claim-C01",
+      "snapshotHash": "sha256:f19377925dabd48ac7e7ff91b285f0b76838e3b0427d8a705431e5dc3df85fe2",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: C06+C11 or other multiple claims; review.md section 4: C06+C01, separate obligations. IDs and attestations are synthetic abstractions."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-two-rights-unknown",
+      "conditionId": "portrait-rights-dependency",
+      "snapshotHash": "sha256:86b6a7a650d8fbc85b434b19ea6952c3c66b5d494ccb6eeaf8b1a8b23cdc9ec7",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-two-rights-unknown",
+      "conditionId": "font-rights-dependency",
+      "snapshotHash": "sha256:86b6a7a650d8fbc85b434b19ea6952c3c66b5d494ccb6eeaf8b1a8b23cdc9ec7",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-two-rights-unknown",
+      "conditionId": "portrait-rights-associated",
+      "snapshotHash": "sha256:86b6a7a650d8fbc85b434b19ea6952c3c66b5d494ccb6eeaf8b1a8b23cdc9ec7",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-two-rights-unknown",
+      "conditionId": "portrait-rights-record",
+      "snapshotHash": "sha256:86b6a7a650d8fbc85b434b19ea6952c3c66b5d494ccb6eeaf8b1a8b23cdc9ec7",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_UNKNOWN",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-font-only",
+      "conditionId": "portrait-rights-dependency",
+      "snapshotHash": "sha256:a632ad2f8e6ef06fe74007f6e29e65fbba048fe62d24e08ec4c36b5bde623981",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-font-only",
+      "conditionId": "font-rights-dependency",
+      "snapshotHash": "sha256:a632ad2f8e6ef06fe74007f6e29e65fbba048fe62d24e08ec4c36b5bde623981",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-font-only",
+      "conditionId": "portrait-rights-associated",
+      "snapshotHash": "sha256:a632ad2f8e6ef06fe74007f6e29e65fbba048fe62d24e08ec4c36b5bde623981",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-wrong-rights",
+      "conditionId": "portrait-rights-dependency",
+      "snapshotHash": "sha256:c30cfae918d06be25e7308c962278037ea249cf2794e77c27a7389bf6cdece52",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-wrong-rights",
+      "conditionId": "font-rights-dependency",
+      "snapshotHash": "sha256:c30cfae918d06be25e7308c962278037ea249cf2794e77c27a7389bf6cdece52",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-wrong-rights",
+      "conditionId": "portrait-rights-associated",
+      "snapshotHash": "sha256:c30cfae918d06be25e7308c962278037ea249cf2794e77c27a7389bf6cdece52",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "02-two-assets",
+      "caseId": "assets-wrong-rights",
+      "conditionId": "portrait-rights-record",
+      "snapshotHash": "sha256:c30cfae918d06be25e7308c962278037ea249cf2794e77c27a7389bf6cdece52",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Multiple assets / Trial font and OM portrait; review.md section 4: each explicitly required unknown remains separate. Applicability is not rights clearance."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "partner-portrait",
+      "conditionId": "partner-mark",
+      "snapshotHash": "sha256:f4f6d08de05ed3370ab3e472ec0678ddedb1cc3404cbfd1e1b8281f4b2b16f03",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "partner-portrait",
+      "conditionId": "portrait-independent",
+      "snapshotHash": "sha256:f4f6d08de05ed3370ab3e472ec0678ddedb1cc3404cbfd1e1b8281f4b2b16f03",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "partner-portrait",
+      "conditionId": "partner-and-portrait",
+      "snapshotHash": "sha256:f4f6d08de05ed3370ab3e472ec0678ddedb1cc3404cbfd1e1b8281f4b2b16f03",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "partner-mark-only",
+      "conditionId": "partner-mark",
+      "snapshotHash": "sha256:db7ea07af492de36e0d05cdd308f20a40c941adb0fd6267d07bdc37ce3ec197e",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "partner-mark-only",
+      "conditionId": "portrait-independent",
+      "snapshotHash": "sha256:db7ea07af492de36e0d05cdd308f20a40c941adb0fd6267d07bdc37ce3ec197e",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "partner-mark-only",
+      "conditionId": "partner-and-portrait",
+      "snapshotHash": "sha256:db7ea07af492de36e0d05cdd308f20a40c941adb0fd6267d07bdc37ce3ec197e",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "portrait-no-partner",
+      "conditionId": "partner-mark",
+      "snapshotHash": "sha256:9d374d54f6dd8cf51510a851ae235690443e6f641dbeb343dec17d8f4c5b4375",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "portrait-no-partner",
+      "conditionId": "portrait-independent",
+      "snapshotHash": "sha256:9d374d54f6dd8cf51510a851ae235690443e6f641dbeb343dec17d8f4c5b4375",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "03-partner-plus-portrait",
+      "caseId": "portrait-no-partner",
+      "conditionId": "partner-and-portrait",
+      "snapshotHash": "sha256:9d374d54f6dd8cf51510a851ae235690443e6f641dbeb343dec17d8f4c5b4375",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: OM grant and OM portrait; review.md section 4: mark-only vs portrait dependency. Conjunction is an experimental probe, not a new brand obligation."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-claim",
+      "conditionId": "campaign-placement",
+      "snapshotHash": "sha256:f45b14387efd4c493f448d1643ecde25e6f95f3bd7e0f2dd67f88396da073f9b",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-claim",
+      "conditionId": "claim-independent",
+      "snapshotHash": "sha256:f45b14387efd4c493f448d1643ecde25e6f95f3bd7e0f2dd67f88396da073f9b",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-claim",
+      "conditionId": "campaign-and-claim",
+      "snapshotHash": "sha256:f45b14387efd4c493f448d1643ecde25e6f95f3bd7e0f2dd67f88396da073f9b",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-wrong-placement",
+      "conditionId": "campaign-placement",
+      "snapshotHash": "sha256:caaa24e4bed6b568a9686acae8990929ecf0fe075c3d7296e05c8e4fbeca0d16",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-wrong-placement",
+      "conditionId": "claim-independent",
+      "snapshotHash": "sha256:caaa24e4bed6b568a9686acae8990929ecf0fe075c3d7296e05c8e4fbeca0d16",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-wrong-placement",
+      "conditionId": "campaign-and-claim",
+      "snapshotHash": "sha256:caaa24e4bed6b568a9686acae8990929ecf0fe075c3d7296e05c8e4fbeca0d16",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-conflict",
+      "conditionId": "campaign-placement",
+      "snapshotHash": "sha256:ef7493ab922e0a6abc8c3bd39c597da563e38e118faa07ed6ea5ea7fc676f499",
+      "outcome": "CONTRADICTORY",
+      "reason": "FACT_CONTRADICTORY",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-conflict",
+      "conditionId": "claim-independent",
+      "snapshotHash": "sha256:ef7493ab922e0a6abc8c3bd39c597da563e38e118faa07ed6ea5ea7fc676f499",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "04-campaign-plus-claim",
+      "caseId": "campaign-conflict",
+      "conditionId": "campaign-and-claim",
+      "snapshotHash": "sha256:ef7493ab922e0a6abc8c3bd39c597da563e38e118faa07ed6ea5ea7fc676f499",
+      "outcome": "CONTRADICTORY",
+      "reason": "FACT_CONTRADICTORY",
+      "basis": "task-facts-audit.md: AC26 and Campaign + claim; review.md sections 4 and 6: simultaneous triggers and verified placement attribution. No single-campaign-per-artifact brand rule is inferred."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-missing",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:f9ba3130b60f8c3633abbf73dee8b79ad8065061550fc4352b926ecf531b6271",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_MISSING",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-missing",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:f9ba3130b60f8c3633abbf73dee8b79ad8065061550fc4352b926ecf531b6271",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_MISSING",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-missing",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:f9ba3130b60f8c3633abbf73dee8b79ad8065061550fc4352b926ecf531b6271",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_MISSING",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-empty",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:9605113a7dc1f937407466f510cd2e5e81deaf2f2849c8dc7554f35369f5f45e",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-empty",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:9605113a7dc1f937407466f510cd2e5e81deaf2f2849c8dc7554f35369f5f45e",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-empty",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:9605113a7dc1f937407466f510cd2e5e81deaf2f2849c8dc7554f35369f5f45e",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-unknown",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:870af8780173c24ba64f550c7ac82441ee8e3c394525d0f8f3732be5308a0cfb",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_UNKNOWN",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-unknown",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:870af8780173c24ba64f550c7ac82441ee8e3c394525d0f8f3732be5308a0cfb",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_UNKNOWN",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-unknown",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:870af8780173c24ba64f550c7ac82441ee8e3c394525d0f8f3732be5308a0cfb",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_UNKNOWN",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-contradictory",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:3a35478233ca88718ef52bde869b1e332bc42fa90c728452c4a3e34116e88e9b",
+      "outcome": "CONTRADICTORY",
+      "reason": "FACT_CONTRADICTORY",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-contradictory",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:3a35478233ca88718ef52bde869b1e332bc42fa90c728452c4a3e34116e88e9b",
+      "outcome": "CONTRADICTORY",
+      "reason": "FACT_CONTRADICTORY",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-contradictory",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:3a35478233ca88718ef52bde869b1e332bc42fa90c728452c4a3e34116e88e9b",
+      "outcome": "CONTRADICTORY",
+      "reason": "FACT_CONTRADICTORY",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-unverified",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:c69ac3defcf7dda290a066fd8c34ea65039227c3124c95665ab32d17c4e1b43f",
+      "outcome": "UNKNOWN",
+      "reason": "EVIDENCE_UNVERIFIED",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-unverified",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:c69ac3defcf7dda290a066fd8c34ea65039227c3124c95665ab32d17c4e1b43f",
+      "outcome": "UNKNOWN",
+      "reason": "EVIDENCE_UNVERIFIED",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-unverified",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:c69ac3defcf7dda290a066fd8c34ea65039227c3124c95665ab32d17c4e1b43f",
+      "outcome": "UNKNOWN",
+      "reason": "EVIDENCE_UNVERIFIED",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-malformed-set",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:e8a8698e421c68fa91ca27d2cebc1e487361fa1e35e3a0303751469fda1fe35f",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-malformed-set",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:e8a8698e421c68fa91ca27d2cebc1e487361fa1e35e3a0303751469fda1fe35f",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-malformed-set",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:e8a8698e421c68fa91ca27d2cebc1e487361fa1e35e3a0303751469fda1fe35f",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-malformed-member",
+      "conditionId": "claim-presence",
+      "snapshotHash": "sha256:90f6dc20485ce28bc740075cdaeffd605fde6da637fd44926a028789020c5fec",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-malformed-member",
+      "conditionId": "claim-absence",
+      "snapshotHash": "sha256:90f6dc20485ce28bc740075cdaeffd605fde6da637fd44926a028789020c5fec",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-malformed-member",
+      "conditionId": "claim-membership",
+      "snapshotHash": "sha256:90f6dc20485ce28bc740075cdaeffd605fde6da637fd44926a028789020c5fec",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "05-missing-contradictory",
+      "caseId": "fact-tampered",
+      "conditionId": "campaign-equality",
+      "snapshotHash": "sha256:f13fa89a167afa8c1cb80147d9cfa9279c2a1aefae31ad51da6be0aa0236cf85",
+      "outcome": "UNKNOWN",
+      "reason": "EVIDENCE_UNVERIFIED",
+      "basis": "task-facts-audit.md: Input types and Known semantics versus authority; review.md sections 4 and 6: missing != empty != unknown; contradictions cannot select a convenient value. Outcome precedence is an explicit experimental design choice."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-expiry-boundary",
+      "conditionId": "claim-window",
+      "snapshotHash": "sha256:2e08094b2d3a98a8e670529d55be3b8aa4d6063f2699631f8a6d3f64635cad0b",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_UNKNOWN",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-date-vs-instant",
+      "conditionId": "same-publication-time",
+      "snapshotHash": "sha256:311cf2c1464b148dff28a2ba5b421cae869977c5781e81e8c3e7a2ebdaeadd38",
+      "outcome": "UNKNOWN",
+      "reason": "TIME_BASIS_UNRESOLVED",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-local-unresolved",
+      "conditionId": "same-publication-time",
+      "snapshotHash": "sha256:c04c63bae237319e73e7d7e12d3a966320159480f8b5cabc543efb9067c1ee6f",
+      "outcome": "UNKNOWN",
+      "reason": "FACT_UNKNOWN",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-explicit-instant",
+      "conditionId": "same-publication-time",
+      "snapshotHash": "sha256:bdb30bf33d224bb99c1ac12924c3a70105ef78f781d23f7e4408b6f4fee3f9af",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-different-instant",
+      "conditionId": "same-publication-time",
+      "snapshotHash": "sha256:2e56b3db7f0bb4a9ad32193bb426c593b6babd8df30dd1d7f58c84d3a7594440",
+      "outcome": "DOES_NOT_APPLY",
+      "reason": "PREDICATE_FALSE",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-same-civil-date",
+      "conditionId": "civil-date",
+      "snapshotHash": "sha256:d60731a125e2d6af92598c93a358a0a0d082aeb6ecb80e258f55160fa63d472e",
+      "outcome": "APPLIES",
+      "reason": "ALL_TRUE",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    },
+    {
+      "family": "06-ambiguous-time",
+      "caseId": "time-zone-missing-invalid",
+      "conditionId": "same-publication-time",
+      "snapshotHash": "sha256:f527597337c3c40c1123f98e15fd330ad40ea28780289f4b8848f4424ed9e57a",
+      "outcome": "INVALID",
+      "reason": "TYPE_MISMATCH",
+      "basis": "task-facts-audit.md: Claims/partner expiry; review.md P36 and section 6: date-only source cannot establish an instant without an authoritative zone. Date, timestamp and pre-reviewed window-status facts suffice; no interval policy engine is introduced. Dates here are synthetic, not source release dates."
+    }
+  ]
+}

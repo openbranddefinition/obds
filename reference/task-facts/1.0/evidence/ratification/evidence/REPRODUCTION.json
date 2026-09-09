@@ -1,0 +1,33 @@
+{
+  "fixtures-python": {
+    "identicalFrozenOutput": true,
+    "records": 66,
+    "exitCode": 2
+  },
+  "fixtures-node": {
+    "identicalFrozenOutput": true,
+    "records": 66,
+    "exitCode": 2
+  },
+  "regressions-python": {
+    "identicalFrozenOutput": true,
+    "records": 36,
+    "exitCode": 2
+  },
+  "regressions-node": {
+    "identicalFrozenOutput": true,
+    "records": 36,
+    "exitCode": 2
+  },
+  "probes-python": {
+    "identicalFrozenOutput": true,
+    "records": 76,
+    "exitCode": 2
+  },
+  "probes-node": {
+    "identicalFrozenOutput": true,
+    "records": 76,
+    "exitCode": 2
+  },
+  "sourceTests": "57 passed"
+}

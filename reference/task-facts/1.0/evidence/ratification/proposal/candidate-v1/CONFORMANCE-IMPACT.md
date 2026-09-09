@@ -1,0 +1,9 @@
+# Conformance impact
+
+Proposed normative requirements: a claimant MUST identify implementation/version and exact contract revision, implement the normative prose and schema together, and report suite identity, full six-field results, passed/failed counts and limitations. It MUST preserve all routing, outcomes, reasons and hashes in the 66 fixture decisions and 36 regression records. Schema-only validation MUST NOT be called evaluator conformance. Existing official OBDS profile claims remain subject to their official suites; these vectors MUST NOT be called Foundation, Compiled Runtime or integrated production conformance.
+
+Informative evidence: two fresh independent implementations agreed on 66/66 fixture and 36/36 regression decisions; 73 independent counter-probe files yielded 76/76 agreed decisions. All 16 relational identity checks and 120 independent bound-hash checks passed. After results were frozen, each implementation matched 102/102 literal expectations. Source tests reported 57 passed. This is tested-set interoperability, not exhaustive proof or production readiness. Shared-filesystem isolation was procedural. Both implementers were Codex agents; this is not a cross-model benchmark.
+
+examples/ holds the six unchanged families and expected-results.json. conformance/regressions/ holds unchanged raw invalid inputs and expectations. Do not repair malformed JSON by reserializing it. Explanatory basis fields are excluded from the six-field comparison. Canonical example families intentionally include unresolved and invalid cases.
+
+Official adoption would register/freeze the optional suite and claim wording through ordinary governance. This proposal does not alter the current official suite or grant certification. Implementers should additionally reproduce the independent probes referenced in EVIDENCE-MAP.md.

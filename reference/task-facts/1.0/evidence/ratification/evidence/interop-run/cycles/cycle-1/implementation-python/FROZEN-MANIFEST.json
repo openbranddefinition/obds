@@ -1,0 +1,12 @@
+{
+  "status": "FROZEN",
+  "files": {
+    "README.md": "156535136c42442f227aed21873607bfeaa6aab54e834037d5e78064e61f31b6",
+    "evaluate.py": "cf9d36783265395318fee2d58cfd263753cbe8360e2f1bf22d73ebfd2e12e59c",
+    "provenance.json": "ce8ffe12f4e8fb0e6ca2ac55d407237d532456b441430ceb3f2e9e7d64d6ef37",
+    "results.json": "3e2544cccc36f69c9e6c723ef21db85b0045d7400a92e2a8818a36dd9748ef18",
+    "task-facts.schema.json": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646",
+    "test-output.txt": "d3bf29102c2b62964fc197bad8d358961801a8e96ee4ad872202c5b36ddd9d95",
+    "test_evaluate.py": "ace5a23d11590e99059984654913723c225fda6569baa66032790644c1c43214"
+  }
+}

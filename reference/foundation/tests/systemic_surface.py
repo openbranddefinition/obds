@@ -925,3 +925,123 @@ COMPILED_CONTEXT_CONSUMERS.update({
     "reference/foundation/src/obds_ref/projection.py::derive_projection": "internal deterministic renderer; runtime and assembly execute contract and seal before calling it; F3 adversarial tests drive both boundaries",
     "reference/context-assembly/projection.py::derive_projection": "byte-identical copy of the same internal projection renderer",
 })
+
+# 4.1.0 Task Facts/release integration: exact adjudicated architectural sites.
+# NON_GOVERNED here means outside Core Classes A-E, not outside the normative
+# Task Facts contract. Frozen evaluator bytes and TFJ identities stay unchanged.
+HASH_CALL_SITES.update({
+    'reference/release-gate.py::verify_publication::*': {"role": RELEASE_BOOKKEEPING, "note": 'Reproduces raw publication response-file SHA-256 against frozen RC inventory; gates publication byte identity, not Classes A-E execution'},
+    'reference/release-gate.py::verify_task_facts::suiteHash': {"role": RELEASE_BOOKKEEPING, "note": 'Reproduces each distributed evidence raw-file digest and derives suite identity through protocol.load_suite before comparing stored/fresh conformance subjects; release bookkeeping, not TFJ snapshot canonicalization'},
+    'reference/release-gate.py::verify_task_facts_schema::*': {"role": RELEASE_BOOKKEEPING, "note": 'Reproduces preserved schema raw-byte digest and byte-identical local copies against the companion index; separate URN retrieval bookkeeping'},
+    'reference/task-facts/1.0/compare.py::digest::*': {"role": PRODUCER, "note": 'Raw-file SHA-256 primitive for suite/subject inventory; never substitutes TFJ snapshot hash or Core governed seal'},
+    'reference/task-facts/1.0/compare.py::load_suite::*': {"role": PRODUCER, "note": 'Checks exact raw contract/schema/vector digests then produces suite hash over sorted path NUL raw-digest LF inventory, as RUNNER-CONTRACT specifies'},
+    'reference/task-facts/1.0/compare.py::main::suiteHash': {"role": PRODUCER, "note": 'Produces retained-output comparison metadata carrying suite identity obtained from load_suite; does not create a governed runtime decision'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py::att::artifactHash': {"role": PRODUCER, "note": 'Synthetic probe builder writes Task Facts evidence/verification context with computed snapshot/assertion/evidence hashes and copied task artifact binding; no claim to reproduce a Core compiled artifact'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py::case::artifactHash': {"role": NON_GOVERNED, "note": 'Synthetic probe input builder inserts fixed placeholder task artifact/package hash strings, then att seals Task Facts data; does not verify or execute any Core artifact'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py::digest::*': {"role": PRODUCER, "note": 'Independent research probe builder produces synthetic TFJ-profile snapshot/assertion/evidence hashes from canonical probe values; not a Core artifact seal'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py::snapshot_hash::*': {"role": PRODUCER, "note": 'Frozen Task Facts TFJ-0.1 hash primitive for complete snapshots/assertions/evidence; deliberately distinct from OBDS Core canonicalization and raw-file inventory hashes'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py::verified::artifactHash': {"role": NON_GOVERNED, "note": 'Frozen Task Facts normative applicability binding compares context/task artifact identity and TFJ snapshot/evidence/assertion hashes; gates the separate Task Facts contract, not a governed Core Classes A-E decision or compiled-artifact seal. Fresh 66/36 and binding mutations exercise this contract'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py::atom_result::artifactHash': {"role": NON_GOVERNED, "note": 'Frozen Task Facts normative applicability binding compares context/task artifact identity and TFJ snapshot/evidence/assertion hashes; gates the separate Task Facts contract, not a governed Core Classes A-E decision or compiled-artifact seal. Fresh 66/36 and binding mutations exercise this contract'},
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py::digest::*': {"role": PRODUCER, "note": 'Frozen Task Facts TFJ-0.1 hash primitive for complete snapshots/assertions/evidence; deliberately distinct from OBDS Core canonicalization and raw-file inventory hashes'},
+    'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py::snapshot_hash::*': {"role": PRODUCER, "note": 'Frozen Task Facts TFJ-0.1 hash primitive for complete snapshots/assertions/evidence; deliberately distinct from OBDS Core canonicalization and raw-file inventory hashes'},
+    'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py::verified::artifactHash': {"role": NON_GOVERNED, "note": 'Frozen Task Facts normative applicability binding compares context/task artifact identity and TFJ snapshot/evidence/assertion hashes; gates the separate Task Facts contract, not a governed Core Classes A-E decision or compiled-artifact seal. Fresh 66/36 and binding mutations exercise this contract'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py::att::artifactHash': {"role": PRODUCER, "note": 'Synthetic probe builder writes Task Facts evidence/verification context with computed snapshot/assertion/evidence hashes and copied task artifact binding; no claim to reproduce a Core compiled artifact'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py::case::artifactHash': {"role": NON_GOVERNED, "note": 'Synthetic probe input builder inserts fixed placeholder task artifact/package hash strings, then att seals Task Facts data; does not verify or execute any Core artifact'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py::digest::*': {"role": PRODUCER, "note": 'Independent research probe builder produces synthetic TFJ-profile snapshot/assertion/evidence hashes from canonical probe values; not a Core artifact seal'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py::snapshot_hash::*': {"role": PRODUCER, "note": 'Frozen Task Facts TFJ-0.1 hash primitive for complete snapshots/assertions/evidence; deliberately distinct from OBDS Core canonicalization and raw-file inventory hashes'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py::verified::artifactHash': {"role": NON_GOVERNED, "note": 'Frozen Task Facts normative applicability binding compares context/task artifact identity and TFJ snapshot/evidence/assertion hashes; gates the separate Task Facts contract, not a governed Core Classes A-E decision or compiled-artifact seal. Fresh 66/36 and binding mutations exercise this contract'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py::atom_result::artifactHash': {"role": NON_GOVERNED, "note": 'Frozen Task Facts normative applicability binding compares context/task artifact identity and TFJ snapshot/evidence/assertion hashes; gates the separate Task Facts contract, not a governed Core Classes A-E decision or compiled-artifact seal. Fresh 66/36 and binding mutations exercise this contract'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py::digest::*': {"role": PRODUCER, "note": 'Frozen Task Facts TFJ-0.1 hash primitive for complete snapshots/assertions/evidence; deliberately distinct from OBDS Core canonicalization and raw-file inventory hashes'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py::snapshot_hash::*': {"role": PRODUCER, "note": 'Frozen Task Facts TFJ-0.1 hash primitive for complete snapshots/assertions/evidence; deliberately distinct from OBDS Core canonicalization and raw-file inventory hashes'},
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py::verified::artifactHash': {"role": NON_GOVERNED, "note": 'Frozen Task Facts normative applicability binding compares context/task artifact identity and TFJ snapshot/evidence/assertion hashes; gates the separate Task Facts contract, not a governed Core Classes A-E decision or compiled-artifact seal. Fresh 66/36 and binding mutations exercise this contract'},
+    'reference/task-facts/1.0/evidence/ratification/reports/verify_integrity.py::inventory::*': {"role": PRODUCER, "note": 'Produces raw-file inventory for the preserved ratification audit verifier; historical provenance bookkeeping, not Core or TFJ canonicalization'},
+    'reference/task-facts/1.0/run-suite.py::main::suiteHash': {"role": INTERNAL, "note": 'Formats summary of the result returned by run, whose registered producer checks suite identity; no independent hash acceptance boundary'},
+    'reference/task-facts/1.0/run-suite.py::run::suiteHash': {"role": PRODUCER, "note": 'Produces separate evaluator conformance report, checks suite and subject raw-byte identities before/after execution and retains exact six-field comparisons'},
+    'tools/build-release.py::run_optional_suite::suiteHash': {"role": PRODUCER, "note": 'Writes separate measured optional conformance aggregate with the independently derived Task Facts suite identity; claims no compiler Task Facts support'},
+    'tools/deploy-smoke-test.py::verify_exact_publication::*': {"role": RELEASE_BOOKKEEPING, "note": 'Reproduces fetched HTTP entity raw-byte SHA-256 against approved publication inventory, including missing-route body; no Core canonicalization'},
+})
+COMPILED_CONTEXT_CONSUMERS.update({
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py::att':
+        'Synthetic research probe builder attaches Task Facts evidence and trusted-context test bindings; creates inputs and never consumes a Compiled Brand Context',
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py::case':
+        'Synthetic research probe builder creates Task Facts family snapshots and placeholder artifact/package identities; no compiled-context execution',
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py::verified':
+        'Executes frozen Task Facts evidence/context binding checks against the snapshot task identity and TFJ hashes; consumes Task Facts snapshots, not Compiled Brand Contexts',
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py::atom_result':
+        'Executes independent Python Task Facts atom applicability and accepted-evidence binding against a snapshot; never reads or executes the Core compiled-context contract',
+    'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py::verified':
+        'Executes frozen Task Facts evidence/context binding checks against the snapshot task identity and TFJ hashes; consumes Task Facts snapshots, not Compiled Brand Contexts',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py::att':
+        'Synthetic research probe builder attaches Task Facts evidence and trusted-context test bindings; creates inputs and never consumes a Compiled Brand Context',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py::case':
+        'Synthetic research probe builder creates Task Facts family snapshots and placeholder artifact/package identities; no compiled-context execution',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py::verified':
+        'Executes frozen Task Facts evidence/context binding checks against the snapshot task identity and TFJ hashes; consumes Task Facts snapshots, not Compiled Brand Contexts',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py::atom_result':
+        'Executes independent Python Task Facts atom applicability and accepted-evidence binding against a snapshot; never reads or executes the Core compiled-context contract',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py::verified':
+        'Executes frozen Task Facts evidence/context binding checks against the snapshot task identity and TFJ hashes; consumes Task Facts snapshots, not Compiled Brand Contexts',
+})
+
+# Publication mutation tests deliberately regenerate temporary site inventories;
+# discovery also attributes the nested trial hash call to its enclosing function.
+HASH_CALL_SITES.update({
+    "reference/release-gate.py::retired_licensing_failures::*": {"role": RELEASE_BOOKKEEPING, "note": "Exact historical 4.0.4 changelog raw-file preservation digest; exemption requires immutable historical bytes, no governed identity"},
+    "reference/release-gate.py::current_changelog_claims::*": {"role": RELEASE_BOOKKEEPING, "note": "Binds the complete retained changelog suffix to verified historical 4.0.4 raw bytes before historical treatment; current claims remain scanned; no governed or Task Facts identity"},
+    "tools/test-task-facts-release.py::verify_publication_occurrences::*": {"role": RELEASE_BOOKKEEPING, "note": "Temporary publication mutation inventory only: recomputes raw response-file hashes through release gate sha256_file, proving semantic staleness still fails; no governed or Task Facts identity"},
+    "tools/test-task-facts-release.py::trial::*": {"role": RELEASE_BOOKKEEPING, "note": "Exact nested publication trial helper recomputes temporary publication raw-file hashes for each mutation; not a governed hash producer or consumer"},
+})
+
+HASH_CALL_SITES.update({
+    "reference/release-gate.py::non_claim_executable_source::*": {
+        "role": RELEASE_BOOKKEEPING,
+        "note": "Authenticates all reviewed executable regression source bytes before granting its explicit non-claim licensing role; drift and publication-role conflict fail closed, no Core or Task Facts identity",
+    },
+})
+
+# Final-closure public archive omits immutable historical audit records. This
+# exact reviewed source list is not inferred from absence: reintroduced sources
+# remain discoverable and fail the archive registry/public membership checks.
+HISTORICAL_AUDIT_ONLY_SOURCES = frozenset(['reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/finalize_report.py', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/run-fixtures.mjs', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/test.mjs', 'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/test_evaluate.py', 'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py', 'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', 'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/finalize_report.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/evaluate.mjs', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/run-fixtures.mjs', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/test.mjs', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/test_evaluate.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', 'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py', 'reference/task-facts/1.0/evidence/ratification/reports/verify_integrity.py'])
+
+# 4.1.0 approved boundary: naming a file and shipping a file are two claims.
+#
+# The registries above classify a call site. That classification is what the
+# discovery mechanisms need, and it stays true in every layout where the file
+# exists. It is not by itself a distribution decision. Until 4.1.0 the parity
+# invariant read it as one, so eight immutable historical audit sources were
+# required to ship and excluded from the package at the same time.
+#
+# These eight are exactly the set that conflict. They are named here, not
+# inferred from absence, so a reintroduced source is still discovered and still
+# fails. This is the only Public Surface membership change. The broader
+# HISTORICAL_AUDIT_ONLY_SOURCES inventory above defines and verifies the
+# Historical Audit Evidence Registry and is deliberately NOT used to widen it.
+PUBLIC_SURFACE_HISTORICAL_EXCLUSIONS = frozenset([
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py',
+    'reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py',
+    'reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py',
+    'reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py',
+    'reference/task-facts/1.0/evidence/ratification/reports/verify_integrity.py',
+])
+assert PUBLIC_SURFACE_HISTORICAL_EXCLUSIONS <= HISTORICAL_AUDIT_ONLY_SOURCES
+
+# Where an excluded path has to arrive instead. A path that leaves the public
+# surface without an identity-bound entry here has left both registries.
+HISTORICAL_AUDIT_REGISTRY = PACKAGE_ROOT / "reference/task-facts/1.0/HISTORICAL-AUDIT-REGISTRY.json"
+HISTORICAL_AUDIT_INVENTORY = PACKAGE_ROOT / "reference/task-facts/1.0/EVIDENCE-MANIFEST.json"
+
+PUBLIC_ARCHIVE_LAYOUT = ((PACKAGE_ROOT / "schemas/brand-manifest.schema.json").is_file()
+                         and not (PACKAGE_ROOT / "schemas/1.0.0/brand-manifest.schema.json").is_file())
+if PUBLIC_ARCHIVE_LAYOUT:
+    HASH_CALL_SITES = {key: value for key, value in HASH_CALL_SITES.items()
+                       if key.split("::", 1)[0] not in HISTORICAL_AUDIT_ONLY_SOURCES}
+    COMPILED_CONTEXT_CONSUMERS = {key: value for key, value in COMPILED_CONTEXT_CONSUMERS.items()
+                                  if key.split("::", 1)[0] not in HISTORICAL_AUDIT_ONLY_SOURCES}
+
+HASH_CALL_SITES["reference/release-gate.py::verify_public_evidence::*"] = {"role": RELEASE_BOOKKEEPING, "note": "Authenticates the reviewed public evidence inventory and four immutable runnable source dependencies by raw-file digest; fresh report bytes are bound by the root package manifest, no Core or TFJ identity"}
+HASH_CALL_SITES["tools/test-final-closure.py::main::*"] = {"role": RELEASE_BOOKKEEPING, "note": "Focused boundary regression verifies all immutable historical raw-file inventory entries when present; synthetic provenance fixtures carry no measured conformance or governed identity"}
+HASH_CALL_SITES["reference/release-gate.py::verify_historical_audit::*"] = {"role": RELEASE_BOOKKEEPING, "note": "Authenticates the Historical Audit Evidence Registry and its inventory by raw-file digest and reverifies each declared non-public audit member by size and SHA-256; audit-store integrity bookkeeping, never a public conformance result, Core seal or TFJ identity"}

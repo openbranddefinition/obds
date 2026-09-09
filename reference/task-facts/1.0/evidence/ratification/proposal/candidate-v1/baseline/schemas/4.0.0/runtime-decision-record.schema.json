@@ -1,0 +1,157 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/4.0.0/runtime-decision-record.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "model_failed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "modelCall": {
+            "properties": {
+              "called": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "artifactHash": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      ]
+    },
+    "assemblyHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "checkResults": {
+      "type": "array"
+    },
+    "decision": {
+      "enum": [
+        "released",
+        "build_failed",
+        "assembly_failed",
+        "no_valid_artifact",
+        "preflight_blocked",
+        "postflight_blocked",
+        "approval_required",
+        "model_failed"
+      ]
+    },
+    "generationId": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kind": {
+      "const": "obds-runtime-decision-record"
+    },
+    "modelCall": {
+      "additionalProperties": false,
+      "properties": {
+        "called": {
+          "type": "boolean"
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "provider": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requestId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "called",
+        "provider",
+        "model",
+        "requestId"
+      ],
+      "type": "object"
+    },
+    "modelInputHash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "recordId": {
+      "type": "string"
+    },
+    "recordedAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "4.0.0"
+    },
+    "targetId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "taskInputHash": {
+      "description": "sha256 of the canonicalised task input; null exactly when the task input is inadmissible under section 14.3c, in which case nothing was mechanically evaluated and the decision is fail-closed.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "required": [
+    "kind",
+    "schemaVersion",
+    "recordId",
+    "recordedAt",
+    "targetId",
+    "artifactHash",
+    "taskInputHash",
+    "decision",
+    "modelCall",
+    "checkResults",
+    "assemblyHash",
+    "modelInputHash",
+    "generationId"
+  ],
+  "title": "OBDS Runtime Decision Record 4.0.0",
+  "type": "object"
+}

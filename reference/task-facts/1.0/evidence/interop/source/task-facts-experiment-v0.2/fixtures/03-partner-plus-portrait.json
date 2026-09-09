@@ -1,0 +1,356 @@
+{
+  "family": "03-partner-plus-portrait",
+  "cases": [
+    {
+      "id": "partner-portrait",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:partner-portrait",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:860f0777f965164c795a4e6967116f2f0f4e5feef159b63c5f8f2d848ad0916b",
+          "inputPackageHash": "sha256:c7bc2835f24f6d85017a4425f5ffa547e42a4a4debd47b498c80c81ddd1d61e1"
+        },
+        "declarations": {
+          "partnersUsed": {
+            "type": "string-set"
+          },
+          "portraitPresent": {
+            "type": "boolean"
+          }
+        },
+        "facts": {
+          "partnersUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "partnersUsed:0"
+            ],
+            "value": [
+              "OM"
+            ]
+          },
+          "portraitPresent": {
+            "state": "known",
+            "evidenceRefs": [
+              "portraitPresent:0"
+            ],
+            "value": true
+          }
+        },
+        "evidence": {
+          "partnersUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:partner-portrait:partnersUsed:0",
+            "method": "fixture-attestation",
+            "fact": "partnersUsed",
+            "assertionHash": "sha256:03e830397ed2b48f909280c3fe708280f6436b05fb269c187a4ec716c8aa9196",
+            "taskId": "task:partner-portrait",
+            "artifactHash": "sha256:860f0777f965164c795a4e6967116f2f0f4e5feef159b63c5f8f2d848ad0916b",
+            "inputPackageHash": "sha256:c7bc2835f24f6d85017a4425f5ffa547e42a4a4debd47b498c80c81ddd1d61e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "portraitPresent:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:partner-portrait:portraitPresent:0",
+            "method": "fixture-attestation",
+            "fact": "portraitPresent",
+            "assertionHash": "sha256:df40818fdfa6ea6ecbfd89e6369ee728326d6cb72dedc6fd8e704ca78549a2d4",
+            "taskId": "task:partner-portrait",
+            "artifactHash": "sha256:860f0777f965164c795a4e6967116f2f0f4e5feef159b63c5f8f2d848ad0916b",
+            "inputPackageHash": "sha256:c7bc2835f24f6d85017a4425f5ffa547e42a4a4debd47b498c80c81ddd1d61e1",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:partner-portrait",
+        "artifactHash": "sha256:860f0777f965164c795a4e6967116f2f0f4e5feef159b63c5f8f2d848ad0916b",
+        "inputPackageHash": "sha256:c7bc2835f24f6d85017a4425f5ffa547e42a4a4debd47b498c80c81ddd1d61e1",
+        "acceptedEvidence": {
+          "partnersUsed:0": "sha256:377698e2de7e0783715c3280f749da6d07b7c296b0b603e33f383417effad342",
+          "portraitPresent:0": "sha256:b6037848b4dd745de777f5e9e25dbdd66b0c7aa01c4842ad94dcd36441ccf361"
+        },
+        "snapshotHash": "sha256:f4f6d08de05ed3370ab3e472ec0678ddedb1cc3404cbfd1e1b8281f4b2b16f03"
+      },
+      "conditions": [
+        {
+          "id": "partner-mark",
+          "all": [
+            {
+              "fact": "partnersUsed",
+              "op": "contains",
+              "value": "OM"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.grant.OM"
+          ]
+        },
+        {
+          "id": "portrait-independent",
+          "all": [
+            {
+              "fact": "portraitPresent",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.portrait"
+          ]
+        },
+        {
+          "id": "partner-and-portrait",
+          "all": [
+            {
+              "fact": "partnersUsed",
+              "op": "contains",
+              "value": "OM"
+            },
+            {
+              "fact": "portraitPresent",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "partner-mark-only",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:partner-mark-only",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:3aca5b83d08b1eec1f59043c5af3b91164713d6a776096202414c3ee721518e0",
+          "inputPackageHash": "sha256:00b906c8c607bdd8cfd3ba5b19c33695edc501884e51af81e001861e08b5eefa"
+        },
+        "declarations": {
+          "partnersUsed": {
+            "type": "string-set"
+          },
+          "portraitPresent": {
+            "type": "boolean"
+          }
+        },
+        "facts": {
+          "partnersUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "partnersUsed:0"
+            ],
+            "value": [
+              "OM"
+            ]
+          },
+          "portraitPresent": {
+            "state": "known",
+            "evidenceRefs": [
+              "portraitPresent:0"
+            ],
+            "value": false
+          }
+        },
+        "evidence": {
+          "partnersUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:partner-mark-only:partnersUsed:0",
+            "method": "fixture-attestation",
+            "fact": "partnersUsed",
+            "assertionHash": "sha256:03e830397ed2b48f909280c3fe708280f6436b05fb269c187a4ec716c8aa9196",
+            "taskId": "task:partner-mark-only",
+            "artifactHash": "sha256:3aca5b83d08b1eec1f59043c5af3b91164713d6a776096202414c3ee721518e0",
+            "inputPackageHash": "sha256:00b906c8c607bdd8cfd3ba5b19c33695edc501884e51af81e001861e08b5eefa",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "portraitPresent:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:partner-mark-only:portraitPresent:0",
+            "method": "fixture-attestation",
+            "fact": "portraitPresent",
+            "assertionHash": "sha256:a5f268a30118501ab81b2e7645845bd6e2751f34c8751b7915ec435cdbfc7e5f",
+            "taskId": "task:partner-mark-only",
+            "artifactHash": "sha256:3aca5b83d08b1eec1f59043c5af3b91164713d6a776096202414c3ee721518e0",
+            "inputPackageHash": "sha256:00b906c8c607bdd8cfd3ba5b19c33695edc501884e51af81e001861e08b5eefa",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:partner-mark-only",
+        "artifactHash": "sha256:3aca5b83d08b1eec1f59043c5af3b91164713d6a776096202414c3ee721518e0",
+        "inputPackageHash": "sha256:00b906c8c607bdd8cfd3ba5b19c33695edc501884e51af81e001861e08b5eefa",
+        "acceptedEvidence": {
+          "partnersUsed:0": "sha256:b239aacd89b3e4fd4add6e895688ea6d866b1924df8d1e84ad1edeef076e1346",
+          "portraitPresent:0": "sha256:a9e66070e3326e4e268314cd614ab2bbdfbd36f64ec26b2be60b1e357f8ea573"
+        },
+        "snapshotHash": "sha256:db7ea07af492de36e0d05cdd308f20a40c941adb0fd6267d07bdc37ce3ec197e"
+      },
+      "conditions": [
+        {
+          "id": "partner-mark",
+          "all": [
+            {
+              "fact": "partnersUsed",
+              "op": "contains",
+              "value": "OM"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.grant.OM"
+          ]
+        },
+        {
+          "id": "portrait-independent",
+          "all": [
+            {
+              "fact": "portraitPresent",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.portrait"
+          ]
+        },
+        {
+          "id": "partner-and-portrait",
+          "all": [
+            {
+              "fact": "partnersUsed",
+              "op": "contains",
+              "value": "OM"
+            },
+            {
+              "fact": "portraitPresent",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "portrait-no-partner",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:portrait-no-partner",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:1cbfe76aea1a96c6acdb01fc856e01522081eca02be41a9d34ba28a86a7bce3d",
+          "inputPackageHash": "sha256:214449bc9fa09670877932de3b8afe6e2f6bf9c602f98672c49209880c3384f6"
+        },
+        "declarations": {
+          "partnersUsed": {
+            "type": "string-set"
+          },
+          "portraitPresent": {
+            "type": "boolean"
+          }
+        },
+        "facts": {
+          "partnersUsed": {
+            "state": "empty",
+            "evidenceRefs": [
+              "partnersUsed:0"
+            ]
+          },
+          "portraitPresent": {
+            "state": "known",
+            "evidenceRefs": [
+              "portraitPresent:0"
+            ],
+            "value": true
+          }
+        },
+        "evidence": {
+          "partnersUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:portrait-no-partner:partnersUsed:0",
+            "method": "fixture-attestation",
+            "fact": "partnersUsed",
+            "assertionHash": "sha256:56ef94ec99d69a08e969e38d2900adbf141817fcb5e5a5c3069577687f4c1942",
+            "taskId": "task:portrait-no-partner",
+            "artifactHash": "sha256:1cbfe76aea1a96c6acdb01fc856e01522081eca02be41a9d34ba28a86a7bce3d",
+            "inputPackageHash": "sha256:214449bc9fa09670877932de3b8afe6e2f6bf9c602f98672c49209880c3384f6",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "portraitPresent:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:portrait-no-partner:portraitPresent:0",
+            "method": "fixture-attestation",
+            "fact": "portraitPresent",
+            "assertionHash": "sha256:df40818fdfa6ea6ecbfd89e6369ee728326d6cb72dedc6fd8e704ca78549a2d4",
+            "taskId": "task:portrait-no-partner",
+            "artifactHash": "sha256:1cbfe76aea1a96c6acdb01fc856e01522081eca02be41a9d34ba28a86a7bce3d",
+            "inputPackageHash": "sha256:214449bc9fa09670877932de3b8afe6e2f6bf9c602f98672c49209880c3384f6",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:portrait-no-partner",
+        "artifactHash": "sha256:1cbfe76aea1a96c6acdb01fc856e01522081eca02be41a9d34ba28a86a7bce3d",
+        "inputPackageHash": "sha256:214449bc9fa09670877932de3b8afe6e2f6bf9c602f98672c49209880c3384f6",
+        "acceptedEvidence": {
+          "partnersUsed:0": "sha256:8375a5c8c86a76e80558157aba4398e71020684ebb28a248ffa089475a1b1be2",
+          "portraitPresent:0": "sha256:cf4df946d1f10fd5aa1f16bbd2094efb806c41926adab75459ec4f84a1d3756f"
+        },
+        "snapshotHash": "sha256:9d374d54f6dd8cf51510a851ae235690443e6f641dbeb343dec17d8f4c5b4375"
+      },
+      "conditions": [
+        {
+          "id": "partner-mark",
+          "all": [
+            {
+              "fact": "partnersUsed",
+              "op": "contains",
+              "value": "OM"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.grant.OM"
+          ]
+        },
+        {
+          "id": "portrait-independent",
+          "all": [
+            {
+              "fact": "portraitPresent",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.portrait"
+          ]
+        },
+        {
+          "id": "partner-and-portrait",
+          "all": [
+            {
+              "fact": "partnersUsed",
+              "op": "contains",
+              "value": "OM"
+            },
+            {
+              "fact": "portraitPresent",
+              "op": "equals",
+              "value": true
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    }
+  ]
+}

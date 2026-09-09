@@ -1,0 +1,15 @@
+{
+  "source": "task-facts-experiment-v0.2",
+  "source_tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v",
+    "passed": 57,
+    "exit_code": 0
+  },
+  "reviewer": "fresh gpt-6-astra subagent, fork_turns=none",
+  "isolation": "Fresh agents receive only role-specific paths; implementers use separate temporary workspaces. Shared filesystem is not an OS access boundary; access restrictions are explicit and attested.",
+  "constraints": {
+    "max_interoperability_cycles": 3,
+    "modify_OBDS": false,
+    "publish": false
+  }
+}

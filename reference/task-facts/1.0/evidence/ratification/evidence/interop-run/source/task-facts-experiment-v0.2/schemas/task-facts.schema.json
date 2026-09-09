@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:task-facts-experiment:0.2:schema",
+  "title": "Non-normative task-facts experiment 0.2 (snapshot payload 0.1)",
+  "$comment": "Validate routingFamily and ID uniqueness first. family and case check only wrapper structure per decision. Validate snapshot, verificationContext and condition separately; never recursively gate routing on typed payloads.",
+  "$ref": "#/$defs/snapshot",
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "action": {
+          "$ref": "#/$defs/text"
+        },
+        "artifactHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "inputPackageHash": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "id",
+        "action",
+        "artifactHash",
+        "inputPackageHash"
+      ],
+      "additionalProperties": false
+    },
+    "declaration": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "string",
+            "boolean",
+            "integer",
+            "string-set",
+            "association-set",
+            "date",
+            "date-time"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "fact": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "known"
+            },
+            "value": {},
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/identifier"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "evidenceRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "enum": [
+                "empty",
+                "unknown"
+              ]
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/identifier"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "state",
+            "evidenceRefs"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "contradictory"
+            },
+            "evidenceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/identifier"
+              },
+              "minItems": 2,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "state",
+            "evidenceRefs"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "supplier": {
+          "$ref": "#/$defs/text"
+        },
+        "sourceRef": {
+          "$ref": "#/$defs/text"
+        },
+        "method": {
+          "$ref": "#/$defs/text"
+        },
+        "fact": {
+          "$ref": "#/$defs/identifier"
+        },
+        "assertionHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "taskId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "artifactHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "inputPackageHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "status": {
+          "enum": [
+            "asserted",
+            "verified"
+          ]
+        },
+        "verifier": {
+          "$ref": "#/$defs/text"
+        }
+      },
+      "required": [
+        "supplier",
+        "sourceRef",
+        "method",
+        "fact",
+        "assertionHash",
+        "taskId",
+        "artifactHash",
+        "inputPackageHash",
+        "status",
+        "verifier"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "0.1"
+        },
+        "task": {
+          "$ref": "#/$defs/task"
+        },
+        "declarations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/declaration"
+          }
+        },
+        "facts": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/fact"
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/evidence"
+          }
+        }
+      },
+      "required": [
+        "contractVersion",
+        "task",
+        "declarations",
+        "facts",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "predicate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "fact": {
+              "$ref": "#/$defs/identifier"
+            },
+            "op": {
+              "enum": [
+                "present",
+                "absent"
+              ]
+            }
+          },
+          "required": [
+            "fact",
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "fact": {
+              "$ref": "#/$defs/identifier"
+            },
+            "op": {
+              "enum": [
+                "equals",
+                "contains"
+              ]
+            },
+            "value": {}
+          },
+          "required": [
+            "fact",
+            "op",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/predicate"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "requiresDefined": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "all",
+        "requiresDefined"
+      ],
+      "additionalProperties": false
+    },
+    "verificationContext": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "$ref": "#/$defs/identifier"
+        },
+        "artifactHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "inputPackageHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "acceptedEvidence": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/hash"
+          }
+        },
+        "snapshotHash": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "taskId",
+        "artifactHash",
+        "inputPackageHash",
+        "acceptedEvidence",
+        "snapshotHash"
+      ],
+      "additionalProperties": false
+    },
+    "case": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "snapshot": {},
+        "verificationContext": {},
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/routingCondition"
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "id",
+        "snapshot",
+        "verificationContext",
+        "conditions"
+      ],
+      "additionalProperties": false
+    },
+    "family": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/identifier"
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/routingCase"
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "family",
+        "cases"
+      ],
+      "additionalProperties": false
+    },
+    "routingCondition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "routingCase": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "snapshot": {},
+        "verificationContext": {},
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/routingCondition"
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "id",
+        "snapshot",
+        "conditions"
+      ],
+      "additionalProperties": true
+    },
+    "routingFamily": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/identifier"
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/routingCase"
+          },
+          "minItems": 1,
+          "uniqueItems": false
+        }
+      },
+      "required": [
+        "family",
+        "cases"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

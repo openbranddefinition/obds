@@ -1,0 +1,5 @@
+VERIFIED /Users/max/development/obds-autonomous/_autonomous_interop_run 207 files
+VERIFIED /Users/max/development/obds-autonomous/proposal-ratification/evidence 210 files
+VERIFIED /Users/max/development/obds-autonomous/proposal-ratification/proposal/candidate-v1 54 files
+VERIFIED both independent review digests
+OBDS modifications: NO; merge/tag/publish/release: NO

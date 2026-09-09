@@ -1,0 +1,125 @@
+{
+  "family": "regression-wrong-contract-version",
+  "cases": [
+    {
+      "id": "claims-both",
+      "snapshot": {
+        "contractVersion": "0.2",
+        "task": {
+          "id": "task:claims-both",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:3b0991936e4aed2114f9c8395edbf96e46ff11235bf1c2d96d9c83582a4df278",
+          "inputPackageHash": "sha256:5e5ae1ec4aa11d2aa4c316718189fbf57d2ccc7bff915ad6107d6627acb625da"
+        },
+        "declarations": {
+          "claimsUsed": {
+            "type": "string-set"
+          },
+          "claimProducts": {
+            "type": "association-set"
+          }
+        },
+        "facts": {
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06",
+              "C01"
+            ]
+          },
+          "claimProducts": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimProducts:0"
+            ],
+            "value": [
+              [
+                "C06",
+                "C2"
+              ],
+              [
+                "C01",
+                "P1"
+              ]
+            ]
+          }
+        },
+        "evidence": {
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:claims-both:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:c7580d6d1ef2286d898f92711171a7c95d3f2fda133d32902d63e8593cc5d84c",
+            "taskId": "task:claims-both",
+            "artifactHash": "sha256:3b0991936e4aed2114f9c8395edbf96e46ff11235bf1c2d96d9c83582a4df278",
+            "inputPackageHash": "sha256:5e5ae1ec4aa11d2aa4c316718189fbf57d2ccc7bff915ad6107d6627acb625da",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "claimProducts:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:claims-both:claimProducts:0",
+            "method": "fixture-attestation",
+            "fact": "claimProducts",
+            "assertionHash": "sha256:733a0c7af5a4acb96140c94899b85f4bbf53ad1e06d455be9fde1f4f09e4da71",
+            "taskId": "task:claims-both",
+            "artifactHash": "sha256:3b0991936e4aed2114f9c8395edbf96e46ff11235bf1c2d96d9c83582a4df278",
+            "inputPackageHash": "sha256:5e5ae1ec4aa11d2aa4c316718189fbf57d2ccc7bff915ad6107d6627acb625da",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:claims-both",
+        "artifactHash": "sha256:3b0991936e4aed2114f9c8395edbf96e46ff11235bf1c2d96d9c83582a4df278",
+        "inputPackageHash": "sha256:5e5ae1ec4aa11d2aa4c316718189fbf57d2ccc7bff915ad6107d6627acb625da",
+        "acceptedEvidence": {
+          "claimsUsed:0": "sha256:2763fab44b7f00e9933fb8bd82620aca1284e85c2274dd0ce929e6453f6ed7e1",
+          "claimProducts:0": "sha256:32b00ec28332d538b7ea56a5c77b0f23dfe66b5b33cba0571f1e999df3731b2a"
+        },
+        "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5"
+      },
+      "conditions": [
+        {
+          "id": "claim-C06-C2",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            },
+            {
+              "fact": "claimProducts",
+              "op": "contains",
+              "value": [
+                "C06",
+                "C2"
+              ]
+            }
+          ],
+          "requiresDefined": [
+            "experimental.qualifier.C06"
+          ]
+        },
+        {
+          "id": "claim-C01",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C01"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.evidence.C01"
+          ]
+        }
+      ]
+    }
+  ]
+}

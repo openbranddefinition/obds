@@ -1,0 +1,22 @@
+{
+  "inputZipSha256": "35fd3c427d6aa1cf6d8c3cc253fa2d1b227891294ea1c1891f158b1b358b7b16",
+  "pythonVersion": "3.14.7",
+  "dependencies": {
+    "Python standard library": "3.14.7",
+    "thirdParty": []
+  },
+  "testCommand": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s implementation-python -v",
+  "testResult": "PASS: 16 tests",
+  "runnerCommand": "PYTHONDONTWRITEBYTECODE=1 python3 implementation-python/evaluate.py input/fixtures/*.json input/regressions/inputs/*.json > implementation-python/results.json",
+  "runnerExitCode": 2,
+  "resultCount": 102,
+  "outcomeCounts": {
+    "APPLIES": 31,
+    "DOES_NOT_APPLY": 14,
+    "CONTRADICTORY": 6,
+    "UNKNOWN": 14,
+    "INVALID": 37
+  },
+  "independenceStatement": "Implemented independently from the supplied implementer-input.zip and ROLE.md only. No sibling implementation, expected results, reference evaluator, reference tests, previous implementation, previous evaluator report, or private SUPABRAND ground truth was accessed. No files outside the assigned temporary workspace were inspected. The frozen contract and supplied inputs were not modified.",
+  "status": "FROZEN"
+}

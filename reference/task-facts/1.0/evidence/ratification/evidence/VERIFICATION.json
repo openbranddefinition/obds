@@ -1,0 +1,46 @@
+{
+  "status": "VERIFIED",
+  "checks": [
+    {
+      "inventory": "reports/source-integrity.json",
+      "sha256": "a6f150889a0f2b7291aef9522bad2a85e3c0280586cdd0859adbfd555c1d1f27",
+      "verified": true
+    },
+    {
+      "inventory": "cycles/cycle-1/frozen-contract-integrity.json",
+      "sha256": "a6f150889a0f2b7291aef9522bad2a85e3c0280586cdd0859adbfd555c1d1f27",
+      "verified": true
+    },
+    {
+      "inventory": "cycles/cycle-1/implementation-python-integrity.json",
+      "sha256": "5d7fcb3f7f5b05e954d9138836aeba916dc4b133958b04afb9ff9de06d2bd6eb",
+      "verified": true
+    },
+    {
+      "inventory": "cycles/cycle-1/implementation-node-integrity.json",
+      "sha256": "5550990edafbbb3c13d8c967ba87ae81ed0f8b680692821f485ae1c2a3547e47",
+      "verified": true
+    },
+    {
+      "manifest": "source/task-facts-experiment-v0.2/PACKAGE-MANIFEST.json",
+      "verified": true
+    },
+    {
+      "manifest": "cycles/cycle-1/frozen-contract/PACKAGE-MANIFEST.json",
+      "verified": true
+    },
+    {
+      "manifest": "cycles/cycle-1/implementation-python/FROZEN-MANIFEST.json",
+      "verified": true
+    },
+    {
+      "manifest": "cycles/cycle-1/implementation-node/FROZEN-MANIFEST.json",
+      "verified": true
+    },
+    {
+      "manifest": "cycles/cycle-1/evaluation-evidence/RESULTS-FROZEN.json",
+      "verified": true
+    }
+  ],
+  "historicalManifestFields": "Pre-interop NOT_PROVEN_FOR_V0.2 is superseded by final evaluator; inherited v0.1 hashes are historical provenance, not required new proof."
+}

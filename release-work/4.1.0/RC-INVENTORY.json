@@ -1,0 +1,78 @@
+{
+  "notPublished": true,
+  "purpose": "Diagnostic assembly for mandatory packaging tests; not an approved RC",
+  "publication": [
+    {
+      "path": "index.html",
+      "url": "/",
+      "status": 200,
+      "sha256": "1b10c5588f8511bc98190ff3956d39adec5af37610a681d649450a752b1211c9"
+    },
+    {
+      "path": "authoring/index.html",
+      "url": "/authoring/",
+      "status": 200,
+      "sha256": "426b2c3ff33739656eb12f62641e036d235de560a09178b8bb71fa2d1ec31370"
+    },
+    {
+      "path": "examples/index.html",
+      "url": "/examples/",
+      "status": 200,
+      "sha256": "201d05299ecbd0f957746863659b1c39a0b38a793bcd0a6eedeeda214e6eae92"
+    },
+    {
+      "path": "what-is-obds/index.html",
+      "url": "/what-is-obds/",
+      "status": 200,
+      "sha256": "7a8f472d6ae1e277742280ad33159e0f03ad482e888f3e7b353afd2ee1c05d45"
+    },
+    {
+      "path": "research/index.html",
+      "url": "/research/",
+      "status": 200,
+      "sha256": "dae0d339381486cad9f638ebc27493e8efec79f4dcaffcd6b17f5e15cbb25993"
+    },
+    {
+      "path": "machine-readable-brand-guidelines/index.html",
+      "url": "/machine-readable-brand-guidelines/",
+      "status": 200,
+      "sha256": "b2987c7477cbed53021f9d31d12db2a1667c7ef9075a19336b0b0f57184dddbc"
+    },
+    {
+      "path": "brand-governance-for-ai/index.html",
+      "url": "/brand-governance-for-ai/",
+      "status": 200,
+      "sha256": "6af2d3080084b1c21ab7fbb48a211142cf87480134184c6df8ba49df26188d11"
+    },
+    {
+      "path": "compare/machine-readable-brand-specifications/index.html",
+      "url": "/compare/machine-readable-brand-specifications/",
+      "status": 200,
+      "sha256": "be679a42e6989b2e946a1d3b5a74663a6e885cf6197ea1bcc78dffab0e2235ea"
+    },
+    {
+      "path": "404.html",
+      "url": "/404.html",
+      "status": 200,
+      "sha256": "a7936c453494fce6b6adc51bb01a783262520dfe77077f042c604132b2e5425a"
+    },
+    {
+      "path": "llms.txt",
+      "url": "/llms.txt",
+      "status": 200,
+      "sha256": "bda9cb7ef381ab6687dd77f9d590958899bbe48235c9ac2faaf6136879467868"
+    },
+    {
+      "path": "publication-record.json",
+      "url": "/publication-record.json",
+      "status": 200,
+      "sha256": "65989748d960874513440e9677a0ca991e98a0c880f1c11cb8a8226fe92f13a3"
+    },
+    {
+      "path": "sitemap.xml",
+      "url": "/sitemap.xml",
+      "status": 200,
+      "sha256": "64318b9775ac73fa6d0d360951310d535ce93252e680332354d20dba0cc3e23d"
+    }
+  ]
+}

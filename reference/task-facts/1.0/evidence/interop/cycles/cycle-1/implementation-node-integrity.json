@@ -1,0 +1,13 @@
+{
+  "FROZEN-MANIFEST.json": "b3db24453cf0deb6084f4561eaabbc20011ddfe914c686324b6866cb659cf3f6",
+  "PROVENANCE.json": "962905c8bea50ad2f3388f52bfc78f788d36e2b0cb0c4b509ff9d869aa84599d",
+  "README.md": "9561e0f0382a3f3f0deff33ed77946dec734431dc57cef1979c70210b62128f8",
+  "evaluate.mjs": "a4e16653680b0e4127ff7da30bc3716a9f98c82b48ae77383439ce5cb4ef6c6f",
+  "package.json": "9796ea91a179de0388f562061022fc82c4450d561f31faa4d77bbd3764c3fcd5",
+  "regression-results.json": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526",
+  "results.json": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9",
+  "run-fixtures.mjs": "951f75b44c766aeb65a05e0b27fe83c6a6ebc3618153c6ae8afc2d9338f6a205",
+  "schemas/task-facts.schema.json": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646",
+  "test-results.txt": "c73fe4339300a3075eec4bae2d2df49f857c9f46038da7e3343ac6bc1880fc47",
+  "test.mjs": "bd2b43a88806e2c5394d8bd77fe64f9d4bbecceebbb1c37e2cc6a68c8d5a12c6"
+}

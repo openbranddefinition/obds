@@ -1,0 +1,1656 @@
+{
+  "absent-operand": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "association-conflict": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:5c3e3a28f4253c9e6a9e00daf262be3eeecbcc0fe2e6a27ad980c767eea48667",
+        "outcome": "CONTRADICTORY",
+        "reason": "ASSOCIATION_CONFLICT"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:5c3e3a28f4253c9e6a9e00daf262be3eeecbcc0fe2e6a27ad980c767eea48667",
+        "outcome": "CONTRADICTORY",
+        "reason": "ASSOCIATION_CONFLICT"
+      }
+    ]
+  },
+  "bad-op": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "base": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "campaign-claim": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:3377f0bdf0dc107122664beb4f2c5a671b487ed0fb9e2bb079ac6e785fa425c6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      },
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-1",
+        "snapshotHash": "sha256:3377f0bdf0dc107122664beb4f2c5a671b487ed0fb9e2bb079ac6e785fa425c6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:3377f0bdf0dc107122664beb4f2c5a671b487ed0fb9e2bb079ac6e785fa425c6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      },
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-1",
+        "snapshotHash": "sha256:3377f0bdf0dc107122664beb4f2c5a671b487ed0fb9e2bb079ac6e785fa425c6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "changed-action-stale": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a3c06e63650caa884765799830a1d2fbf1a7e13e1dce76f2184715bcde12b73a",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a3c06e63650caa884765799830a1d2fbf1a7e13e1dce76f2184715bcde12b73a",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ]
+  },
+  "changed-action-verified": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a3c06e63650caa884765799830a1d2fbf1a7e13e1dce76f2184715bcde12b73a",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a3c06e63650caa884765799830a1d2fbf1a7e13e1dce76f2184715bcde12b73a",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "changed-artifactHash-stale": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:c987df1d11d0911febc68b29129dce54947082517886c8ea9138732070680be1",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:c987df1d11d0911febc68b29129dce54947082517886c8ea9138732070680be1",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ]
+  },
+  "changed-artifactHash-verified": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:f5a57fd2c4112f77757edc14ebeb53e18f37938a29bc69e9831be59734680e87",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:f5a57fd2c4112f77757edc14ebeb53e18f37938a29bc69e9831be59734680e87",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "changed-id-stale": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:9c5cdeab49b4ef6c78d2c3e4095898514e95441b182ff1a2fe6b06048c9e4b79",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:9c5cdeab49b4ef6c78d2c3e4095898514e95441b182ff1a2fe6b06048c9e4b79",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ]
+  },
+  "changed-id-verified": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:8e9b9a3432f5fab4ec141e76743efab8d551ea128ecdd48ebae8dccc6c2e79d7",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:8e9b9a3432f5fab4ec141e76743efab8d551ea128ecdd48ebae8dccc6c2e79d7",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "changed-inputPackageHash-stale": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:7c6a3d636f06b4c16cbada835f0af1fb1b652d47803cca4747fab105019bc4d0",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:7c6a3d636f06b4c16cbada835f0af1fb1b652d47803cca4747fab105019bc4d0",
+        "outcome": "UNKNOWN",
+        "reason": "EVIDENCE_UNVERIFIED"
+      }
+    ]
+  },
+  "changed-inputPackageHash-verified": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:53e36fde6e1ca17ca3c97e6bc958aecbd2fc2dd7db1a199bb9183bd6bf787880",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:53e36fde6e1ca17ca3c97e6bc958aecbd2fc2dd7db1a199bb9183bd6bf787880",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "contradictory": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:0df4ca11a2a465b4169edc5a98a8a084feed290e465369ab038a9bc9d772c27b",
+        "outcome": "CONTRADICTORY",
+        "reason": "FACT_CONTRADICTORY"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:0df4ca11a2a465b4169edc5a98a8a084feed290e465369ab038a9bc9d772c27b",
+        "outcome": "CONTRADICTORY",
+        "reason": "FACT_CONTRADICTORY"
+      }
+    ]
+  },
+  "duplicate-association": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:55d15052e447d717b0de78505bbdf397b8c67b1cb23f44402ebf64ce8bf444ad",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:55d15052e447d717b0de78505bbdf397b8c67b1cb23f44402ebf64ce8bf444ad",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "duplicate-atoms": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "duplicate-case-id": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "DUPLICATE_ID"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "DUPLICATE_ID"
+      }
+    ]
+  },
+  "duplicate-condition-id": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "DUPLICATE_ID"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "DUPLICATE_ID"
+      }
+    ]
+  },
+  "duplicate-set": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:d8c6260d42634276e3ee1b4bf871ca0bea4b1c69c1d400463965187753a0f24a",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:d8c6260d42634276e3ee1b4bf871ca0bea4b1c69c1d400463965187753a0f24a",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "empty": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:434fb294db97dd599e1b3e2d7d6082a3d5ae353d930809f4aa86e4682f37f03e",
+        "outcome": "DOES_NOT_APPLY",
+        "reason": "PREDICATE_FALSE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:434fb294db97dd599e1b3e2d7d6082a3d5ae353d930809f4aa86e4682f37f03e",
+        "outcome": "DOES_NOT_APPLY",
+        "reason": "PREDICATE_FALSE"
+      }
+    ]
+  },
+  "extra-case": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-condition-valid-sibling": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      },
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "bad",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      },
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "bad",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-snapshot-array": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-snapshot-boolean": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-snapshot-integer": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-snapshot-null": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-snapshot-object": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:c9b219573dee6e10e31e1ef9f65eaceee5ec2dbc1828d13c4f5d1c0f2374dc54",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:c9b219573dee6e10e31e1ef9f65eaceee5ec2dbc1828d13c4f5d1c0f2374dc54",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "malformed-snapshot-string": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:5aa762ae383fbb727af3c7a36d4940a5b8c40a989452d2304fc958ff3f354e7a",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:5aa762ae383fbb727af3c7a36d4940a5b8c40a989452d2304fc958ff3f354e7a",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "missing-context": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "missing-requires": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "missing": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:10593b1c67f2a5ecc8b29e3851513df1dc79266c20abea6d2479e1f6dad525d5",
+        "outcome": "UNKNOWN",
+        "reason": "FACT_MISSING"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:10593b1c67f2a5ecc8b29e3851513df1dc79266c20abea6d2479e1f6dad525d5",
+        "outcome": "UNKNOWN",
+        "reason": "FACT_MISSING"
+      }
+    ]
+  },
+  "multiple-assets": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:c6092a6487860e67dd9983b4f1f22713956cbc73c03e95121d8a2882dbdef690",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:c6092a6487860e67dd9983b4f1f22713956cbc73c03e95121d8a2882dbdef690",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "multiple-claims": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:63c191566b90dac2dfa4773cd6920fdba3afea96b02815dc2efcca18effd2dd3",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:63c191566b90dac2dfa4773cd6920fdba3afea96b02815dc2efcca18effd2dd3",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "object-reordered": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:503ea78ecabd3537794b769154c86977144d265b6bfca151170dcfafe963a7a6",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "partner-portrait": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:31724588b79602b30eab880a191d29c4740e927e6b4fd731ab476161d7ef67c1",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      },
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-1",
+        "snapshotHash": "sha256:31724588b79602b30eab880a191d29c4740e927e6b4fd731ab476161d7ef67c1",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:31724588b79602b30eab880a191d29c4740e927e6b4fd731ab476161d7ef67c1",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      },
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-1",
+        "snapshotHash": "sha256:31724588b79602b30eab880a191d29c4740e927e6b4fd731ab476161d7ef67c1",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "raw-bom": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-duplicate-key": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-escaped-duplicate-key": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-exponent": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ]
+  },
+  "raw-float": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ]
+  },
+  "raw-infinity": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-malformed-json": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-minus-zero": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "raw-nan-after-float": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-nan": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-surrogate": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ]
+  },
+  "raw-top-array": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "SCHEMA_INVALID"
+      }
+    ]
+  },
+  "raw-trailing": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "JSON_PARSE_ERROR"
+      }
+    ]
+  },
+  "raw-unsafe-integer": {
+    "python": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ],
+    "node": [
+      {
+        "family": null,
+        "caseId": null,
+        "conditionId": null,
+        "snapshotHash": null,
+        "outcome": "INVALID",
+        "reason": "NON_CANONICAL_INPUT"
+      }
+    ]
+  },
+  "set-reordered": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a367f296945287938a5aabdc57f131d18c961399a7db42630577a657af370dd7",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a367f296945287938a5aabdc57f131d18c961399a7db42630577a657af370dd7",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "special-fact-constructor": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:81d6072a3d118508d530af877812cb4f8ef1affb563a23d41725eae32e6a25c7",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:81d6072a3d118508d530af877812cb4f8ef1affb563a23d41725eae32e6a25c7",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "special-fact-hasOwnProperty": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:caaf4e4145067546b73f9e00340a78b7ee4d92558e3dbad5f1794fc0f3d04c32",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:caaf4e4145067546b73f9e00340a78b7ee4d92558e3dbad5f1794fc0f3d04c32",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "special-fact-toString": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:3cc956b5cbe48e018e5f7681beb6144339c45c2b063af47b318fced83c31ce84",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:3cc956b5cbe48e018e5f7681beb6144339c45c2b063af47b318fced83c31ce84",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "time-date-instant": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:2b9ee62d31b96a896955253907a47c47137c4158c9ae44328586237f8c6075b6",
+        "outcome": "UNKNOWN",
+        "reason": "TIME_BASIS_UNRESOLVED"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:2b9ee62d31b96a896955253907a47c47137c4158c9ae44328586237f8c6075b6",
+        "outcome": "UNKNOWN",
+        "reason": "TIME_BASIS_UNRESOLVED"
+      }
+    ]
+  },
+  "time-instant-date": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b5c953ca69344ff9da5ffa8fa9b2a4981256e0152551c02916556e31baf5e360",
+        "outcome": "UNKNOWN",
+        "reason": "TIME_BASIS_UNRESOLVED"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b5c953ca69344ff9da5ffa8fa9b2a4981256e0152551c02916556e31baf5e360",
+        "outcome": "UNKNOWN",
+        "reason": "TIME_BASIS_UNRESOLVED"
+      }
+    ]
+  },
+  "time-leap-invalid": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:118e4d36692c3d11d2c02bd5b89588be35a2fd547681309e1fb85522a0194d88",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:118e4d36692c3d11d2c02bd5b89588be35a2fd547681309e1fb85522a0194d88",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "time-leap-valid": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:64da99a053a731a77ba4c40fd56edd8ba5be51ef2a575d999682ff3afced6539",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:64da99a053a731a77ba4c40fd56edd8ba5be51ef2a575d999682ff3afced6539",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "time-offset-equal": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:663bc53bd31b039ed70305956b71edb723fe3452d59ef5fc7f4f7bc3f2f3babb",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:663bc53bd31b039ed70305956b71edb723fe3452d59ef5fc7f4f7bc3f2f3babb",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "time-unknown-offset": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b370c9aad565841e819184ffd7ddff9a5f8b540c4344c74c68ea406893d9bf9f",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b370c9aad565841e819184ffd7ddff9a5f8b540c4344c74c68ea406893d9bf9f",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "time-year-one": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:0d012704bb74b8736ae4b7c812a03e4236c1ca1a73f21ce32b566f8a92fa9516",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:0d012704bb74b8736ae4b7c812a03e4236c1ca1a73f21ce32b566f8a92fa9516",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "unknown": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:4a420a19879c2ff9c704ec40d538ae92334f96bf27c7a064e7dfdf94327738f7",
+        "outcome": "UNKNOWN",
+        "reason": "FACT_UNKNOWN"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:4a420a19879c2ff9c704ec40d538ae92334f96bf27c7a064e7dfdf94327738f7",
+        "outcome": "UNKNOWN",
+        "reason": "FACT_UNKNOWN"
+      }
+    ]
+  },
+  "value-bool-as-int": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:bec3ba190d58b1a1e8289c9dd51bdf91070e443df8ba27aca969decacd82b004",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:bec3ba190d58b1a1e8289c9dd51bdf91070e443df8ba27aca969decacd82b004",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "value-false": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:1acfbb0019279b880415a4f547fba03cffafab453cf112e9b384e557453e451c",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:1acfbb0019279b880415a4f547fba03cffafab453cf112e9b384e557453e451c",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "value-int-as-bool": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:1eefe978c35661cdf8f053a6b8fabaf46281725142e4d3767362af0103019a0a",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:1eefe978c35661cdf8f053a6b8fabaf46281725142e4d3767362af0103019a0a",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "value-integer-as-string": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a6b93f04469b1ed13badc4d5265455261345f60d3be358ac96b2d313af7df413",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a6b93f04469b1ed13badc4d5265455261345f60d3be358ac96b2d313af7df413",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "value-maxint": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:12eaa7711b84aee6fb7f009e4da0e5cef5fc4812342036b412af43027e6f73d2",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:12eaa7711b84aee6fb7f009e4da0e5cef5fc4812342036b412af43027e6f73d2",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "value-minint": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:43491367b0cb1cdb2092841f4fbb685b3849df7a80b23dee9011686ecd59ee43",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:43491367b0cb1cdb2092841f4fbb685b3849df7a80b23dee9011686ecd59ee43",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "value-null": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a3f5f971364fc77b62f33183a5b7bae978091067388d5a52f7c536e8564882b6",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:a3f5f971364fc77b62f33183a5b7bae978091067388d5a52f7c536e8564882b6",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  },
+  "value-numeric-string": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:3b3dcb5f05ddccfd0419ff6f454563a673c90a59925535474828ab7526f5ac21",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:3b3dcb5f05ddccfd0419ff6f454563a673c90a59925535474828ab7526f5ac21",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "value-true": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:db621cac2f6fd0a2d2247053c97fecb6d189914a81ec0f422f7e7ebfa13e6add",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:db621cac2f6fd0a2d2247053c97fecb6d189914a81ec0f422f7e7ebfa13e6add",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "value-unicode": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:e36c3dfea3a442905ba77de05991e4722bf17c0167ccd20f90fb9c694d32502c",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:e36c3dfea3a442905ba77de05991e4722bf17c0167ccd20f90fb9c694d32502c",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "value-zero": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b9d1d5904e8303f2d9542a5db6d91cc0c597abc30d1aa2e71a2ebd8095a6c500",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:b9d1d5904e8303f2d9542a5db6d91cc0c597abc30d1aa2e71a2ebd8095a6c500",
+        "outcome": "APPLIES",
+        "reason": "ALL_TRUE"
+      }
+    ]
+  },
+  "wrong-scalar-set": {
+    "python": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:e10f88f84ac59f3e4f38996dcd83ab104cb506d31f29b87c8b890e7d5a5c6877",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ],
+    "node": [
+      {
+        "family": "independent-probe",
+        "caseId": "probe-case",
+        "conditionId": "rule-0",
+        "snapshotHash": "sha256:e10f88f84ac59f3e4f38996dcd83ab104cb506d31f29b87c8b890e7d5a5c6877",
+        "outcome": "INVALID",
+        "reason": "TYPE_MISMATCH"
+      }
+    ]
+  }
+}

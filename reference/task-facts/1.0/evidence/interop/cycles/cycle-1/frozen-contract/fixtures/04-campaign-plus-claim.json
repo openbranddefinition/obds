@@ -1,0 +1,480 @@
+{
+  "family": "04-campaign-plus-claim",
+  "cases": [
+    {
+      "id": "campaign-claim",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:campaign-claim",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:8e78a2ac01312de2cba230da16a8c17a5bae3832c9fa2161b95071b27af6c9b7",
+          "inputPackageHash": "sha256:81ea39f9e59513b35b6bb28dc42b8f967f215ddb81b7e24bf800b5e3c3298ffd"
+        },
+        "declarations": {
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignPlacements": {
+            "type": "association-set"
+          },
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "campaignId": {
+            "state": "known",
+            "evidenceRefs": [
+              "campaignId:0"
+            ],
+            "value": "AC26"
+          },
+          "campaignPlacements": {
+            "state": "known",
+            "evidenceRefs": [
+              "campaignPlacements:0"
+            ],
+            "value": [
+              [
+                "AC26",
+                "hero"
+              ]
+            ]
+          },
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06"
+            ]
+          }
+        },
+        "evidence": {
+          "campaignId:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-claim:campaignId:0",
+            "method": "fixture-attestation",
+            "fact": "campaignId",
+            "assertionHash": "sha256:1dde00aa4a4e524d6e8943894c3c702d2ba53c422b5837aaefee6ab6da20288b",
+            "taskId": "task:campaign-claim",
+            "artifactHash": "sha256:8e78a2ac01312de2cba230da16a8c17a5bae3832c9fa2161b95071b27af6c9b7",
+            "inputPackageHash": "sha256:81ea39f9e59513b35b6bb28dc42b8f967f215ddb81b7e24bf800b5e3c3298ffd",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "campaignPlacements:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-claim:campaignPlacements:0",
+            "method": "fixture-attestation",
+            "fact": "campaignPlacements",
+            "assertionHash": "sha256:8549f4c26690e23a5c1a48a2ee8ddd8a7dd5da82c559d223f5ff49a755c1ce6e",
+            "taskId": "task:campaign-claim",
+            "artifactHash": "sha256:8e78a2ac01312de2cba230da16a8c17a5bae3832c9fa2161b95071b27af6c9b7",
+            "inputPackageHash": "sha256:81ea39f9e59513b35b6bb28dc42b8f967f215ddb81b7e24bf800b5e3c3298ffd",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-claim:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:a7ec39fcdc9df32a4b62d08abbbd0056a6471b92f1dbfd180e2796fe88e07611",
+            "taskId": "task:campaign-claim",
+            "artifactHash": "sha256:8e78a2ac01312de2cba230da16a8c17a5bae3832c9fa2161b95071b27af6c9b7",
+            "inputPackageHash": "sha256:81ea39f9e59513b35b6bb28dc42b8f967f215ddb81b7e24bf800b5e3c3298ffd",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:campaign-claim",
+        "artifactHash": "sha256:8e78a2ac01312de2cba230da16a8c17a5bae3832c9fa2161b95071b27af6c9b7",
+        "inputPackageHash": "sha256:81ea39f9e59513b35b6bb28dc42b8f967f215ddb81b7e24bf800b5e3c3298ffd",
+        "acceptedEvidence": {
+          "campaignId:0": "sha256:4a61c9ab097bb0642f54c7c12c8d7448417e18ec73816e143e47ed95a12ca70b",
+          "campaignPlacements:0": "sha256:8df4ec275310141f382d9cb3464c04d2d91046d6a2777f5548dd768383095175",
+          "claimsUsed:0": "sha256:283a840d9f7f3b72c241e497581235dae04c91f753a4245755aded55df8d1f71"
+        },
+        "snapshotHash": "sha256:f45b14387efd4c493f448d1643ecde25e6f95f3bd7e0f2dd67f88396da073f9b"
+      },
+      "conditions": [
+        {
+          "id": "campaign-placement",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            },
+            {
+              "fact": "campaignPlacements",
+              "op": "contains",
+              "value": [
+                "AC26",
+                "hero"
+              ]
+            }
+          ],
+          "requiresDefined": [
+            "experimental.signature.AC26"
+          ]
+        },
+        {
+          "id": "claim-independent",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.qualifier.C06"
+          ]
+        },
+        {
+          "id": "campaign-and-claim",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            },
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "campaign-wrong-placement",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:campaign-wrong-placement",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:db2e830aeae5cc1ee9ded1abed3dc1866eed26a2af9858afc018a903122e740e",
+          "inputPackageHash": "sha256:2961fa293be9e1c6a7d124f10e9a8f0840b3566d4eb3778aef2c39d6dcfcf918"
+        },
+        "declarations": {
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignPlacements": {
+            "type": "association-set"
+          },
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "campaignId": {
+            "state": "known",
+            "evidenceRefs": [
+              "campaignId:0"
+            ],
+            "value": "AC26"
+          },
+          "campaignPlacements": {
+            "state": "known",
+            "evidenceRefs": [
+              "campaignPlacements:0"
+            ],
+            "value": [
+              [
+                "AC26",
+                "footer"
+              ]
+            ]
+          },
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06"
+            ]
+          }
+        },
+        "evidence": {
+          "campaignId:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-wrong-placement:campaignId:0",
+            "method": "fixture-attestation",
+            "fact": "campaignId",
+            "assertionHash": "sha256:1dde00aa4a4e524d6e8943894c3c702d2ba53c422b5837aaefee6ab6da20288b",
+            "taskId": "task:campaign-wrong-placement",
+            "artifactHash": "sha256:db2e830aeae5cc1ee9ded1abed3dc1866eed26a2af9858afc018a903122e740e",
+            "inputPackageHash": "sha256:2961fa293be9e1c6a7d124f10e9a8f0840b3566d4eb3778aef2c39d6dcfcf918",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "campaignPlacements:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-wrong-placement:campaignPlacements:0",
+            "method": "fixture-attestation",
+            "fact": "campaignPlacements",
+            "assertionHash": "sha256:395c830a0a2c95ea2e20b41dc8fc1df912504d121c9311c2b629ffd4b4308545",
+            "taskId": "task:campaign-wrong-placement",
+            "artifactHash": "sha256:db2e830aeae5cc1ee9ded1abed3dc1866eed26a2af9858afc018a903122e740e",
+            "inputPackageHash": "sha256:2961fa293be9e1c6a7d124f10e9a8f0840b3566d4eb3778aef2c39d6dcfcf918",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-wrong-placement:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:a7ec39fcdc9df32a4b62d08abbbd0056a6471b92f1dbfd180e2796fe88e07611",
+            "taskId": "task:campaign-wrong-placement",
+            "artifactHash": "sha256:db2e830aeae5cc1ee9ded1abed3dc1866eed26a2af9858afc018a903122e740e",
+            "inputPackageHash": "sha256:2961fa293be9e1c6a7d124f10e9a8f0840b3566d4eb3778aef2c39d6dcfcf918",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:campaign-wrong-placement",
+        "artifactHash": "sha256:db2e830aeae5cc1ee9ded1abed3dc1866eed26a2af9858afc018a903122e740e",
+        "inputPackageHash": "sha256:2961fa293be9e1c6a7d124f10e9a8f0840b3566d4eb3778aef2c39d6dcfcf918",
+        "acceptedEvidence": {
+          "campaignId:0": "sha256:aa437d4c91c0cba223f5616c5b89f143bbc6a9edbc8ad0e7863a99dd3e4be879",
+          "campaignPlacements:0": "sha256:325aab0c95da12d9870055dd283a99f381007bbb52d0858d0fc47785ef5d24a4",
+          "claimsUsed:0": "sha256:8f90da058944e0e834708280beb7da56c8af7445a0724b9f9f9f68d1366749af"
+        },
+        "snapshotHash": "sha256:caaa24e4bed6b568a9686acae8990929ecf0fe075c3d7296e05c8e4fbeca0d16"
+      },
+      "conditions": [
+        {
+          "id": "campaign-placement",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            },
+            {
+              "fact": "campaignPlacements",
+              "op": "contains",
+              "value": [
+                "AC26",
+                "hero"
+              ]
+            }
+          ],
+          "requiresDefined": [
+            "experimental.signature.AC26"
+          ]
+        },
+        {
+          "id": "claim-independent",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.qualifier.C06"
+          ]
+        },
+        {
+          "id": "campaign-and-claim",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            },
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "campaign-conflict",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:campaign-conflict",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:037363cd7e3831ee3753cf433b6b39082b6a335b99e2c5258d98cda80376b2ef",
+          "inputPackageHash": "sha256:bd6abc6633b41c0c718a7fea1f59f0bf789f87b1adf61e0c58e080a6a96eab85"
+        },
+        "declarations": {
+          "campaignId": {
+            "type": "string"
+          },
+          "campaignPlacements": {
+            "type": "association-set"
+          },
+          "claimsUsed": {
+            "type": "string-set"
+          }
+        },
+        "facts": {
+          "campaignId": {
+            "state": "contradictory",
+            "evidenceRefs": [
+              "campaignId:0",
+              "campaignId:1"
+            ]
+          },
+          "campaignPlacements": {
+            "state": "known",
+            "evidenceRefs": [
+              "campaignPlacements:0"
+            ],
+            "value": [
+              [
+                "AC26",
+                "hero"
+              ]
+            ]
+          },
+          "claimsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "claimsUsed:0"
+            ],
+            "value": [
+              "C06"
+            ]
+          }
+        },
+        "evidence": {
+          "campaignId:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-conflict:campaignId:0",
+            "method": "fixture-attestation",
+            "fact": "campaignId",
+            "assertionHash": "sha256:c59fca5829c2e0c2781ad802bf2264a58d849e0a24ef15bb05c733b279ec7bcd",
+            "taskId": "task:campaign-conflict",
+            "artifactHash": "sha256:037363cd7e3831ee3753cf433b6b39082b6a335b99e2c5258d98cda80376b2ef",
+            "inputPackageHash": "sha256:bd6abc6633b41c0c718a7fea1f59f0bf789f87b1adf61e0c58e080a6a96eab85",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "campaignId:1": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-conflict:campaignId:1",
+            "method": "fixture-attestation",
+            "fact": "campaignId",
+            "assertionHash": "sha256:c59fca5829c2e0c2781ad802bf2264a58d849e0a24ef15bb05c733b279ec7bcd",
+            "taskId": "task:campaign-conflict",
+            "artifactHash": "sha256:037363cd7e3831ee3753cf433b6b39082b6a335b99e2c5258d98cda80376b2ef",
+            "inputPackageHash": "sha256:bd6abc6633b41c0c718a7fea1f59f0bf789f87b1adf61e0c58e080a6a96eab85",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "campaignPlacements:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-conflict:campaignPlacements:0",
+            "method": "fixture-attestation",
+            "fact": "campaignPlacements",
+            "assertionHash": "sha256:8549f4c26690e23a5c1a48a2ee8ddd8a7dd5da82c559d223f5ff49a755c1ce6e",
+            "taskId": "task:campaign-conflict",
+            "artifactHash": "sha256:037363cd7e3831ee3753cf433b6b39082b6a335b99e2c5258d98cda80376b2ef",
+            "inputPackageHash": "sha256:bd6abc6633b41c0c718a7fea1f59f0bf789f87b1adf61e0c58e080a6a96eab85",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "claimsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:campaign-conflict:claimsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "claimsUsed",
+            "assertionHash": "sha256:a7ec39fcdc9df32a4b62d08abbbd0056a6471b92f1dbfd180e2796fe88e07611",
+            "taskId": "task:campaign-conflict",
+            "artifactHash": "sha256:037363cd7e3831ee3753cf433b6b39082b6a335b99e2c5258d98cda80376b2ef",
+            "inputPackageHash": "sha256:bd6abc6633b41c0c718a7fea1f59f0bf789f87b1adf61e0c58e080a6a96eab85",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:campaign-conflict",
+        "artifactHash": "sha256:037363cd7e3831ee3753cf433b6b39082b6a335b99e2c5258d98cda80376b2ef",
+        "inputPackageHash": "sha256:bd6abc6633b41c0c718a7fea1f59f0bf789f87b1adf61e0c58e080a6a96eab85",
+        "acceptedEvidence": {
+          "campaignId:0": "sha256:8bd5bb4dcbbbd3d49883f15fe9cf94167cd095b7ec7c7ffe7bda085d661e8b96",
+          "campaignId:1": "sha256:45acbf6cdd069e85c871d6e783147c5e54e184d67d3333449e60a1c4146ab02c",
+          "campaignPlacements:0": "sha256:7cd2e031805d8ebc0e195b4ca250528c1514927452a7d3db566d3500ea02dadc",
+          "claimsUsed:0": "sha256:b30b449889b1f8c9c8d4ae648ef500523bf3df7f91952da8f848314bc1a42245"
+        },
+        "snapshotHash": "sha256:ef7493ab922e0a6abc8c3bd39c597da563e38e118faa07ed6ea5ea7fc676f499"
+      },
+      "conditions": [
+        {
+          "id": "campaign-placement",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            },
+            {
+              "fact": "campaignPlacements",
+              "op": "contains",
+              "value": [
+                "AC26",
+                "hero"
+              ]
+            }
+          ],
+          "requiresDefined": [
+            "experimental.signature.AC26"
+          ]
+        },
+        {
+          "id": "claim-independent",
+          "all": [
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.qualifier.C06"
+          ]
+        },
+        {
+          "id": "campaign-and-claim",
+          "all": [
+            {
+              "fact": "campaignId",
+              "op": "equals",
+              "value": "AC26"
+            },
+            {
+              "fact": "claimsUsed",
+              "op": "contains",
+              "value": "C06"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    }
+  ]
+}

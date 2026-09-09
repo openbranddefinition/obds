@@ -1,0 +1,134 @@
+{
+  "fixtures": {
+    "pythonRecords": 66,
+    "nodeRecords": 66,
+    "equal": true,
+    "divergences": []
+  },
+  "regressions": {
+    "pythonRecords": 36,
+    "nodeRecords": 36,
+    "equal": true,
+    "divergences": []
+  },
+  "probes": {
+    "pythonRecords": 76,
+    "nodeRecords": 76,
+    "equal": true,
+    "divergences": []
+  },
+  "identityChecks": [
+    {
+      "a": "base",
+      "b": "set-reordered",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "set-reordered",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "object-reordered",
+      "implementation": "python",
+      "requirement": "equal",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "object-reordered",
+      "implementation": "node",
+      "requirement": "equal",
+      "pass": true
+    },
+    {
+      "a": "missing",
+      "b": "empty",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "missing",
+      "b": "empty",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "missing",
+      "b": "unknown",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "missing",
+      "b": "unknown",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-id-stale",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-id-stale",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-action-stale",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-action-stale",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-artifactHash-stale",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-artifactHash-stale",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-inputPackageHash-stale",
+      "implementation": "python",
+      "requirement": "different",
+      "pass": true
+    },
+    {
+      "a": "base",
+      "b": "changed-inputPackageHash-stale",
+      "implementation": "node",
+      "requirement": "different",
+      "pass": true
+    }
+  ]
+}

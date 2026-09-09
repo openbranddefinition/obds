@@ -1,0 +1,164 @@
+{
+  "suiteId": "task-facts-1.0",
+  "revision": 1,
+  "contract": {
+    "path": "contract/TASK-FACTS-CONTRACT.md",
+    "sha256": "a92b5a1de66365c81543d939d104975c5ee139d6b7396f532bbd0a1163014046"
+  },
+  "schema": {
+    "path": "schemas/task-facts.schema.json",
+    "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+  },
+  "groups": [
+    {
+      "name": "fixtures",
+      "inputs": [
+        {
+          "path": "examples/01-two-claims.json",
+          "sha256": "6d97c0132205308842681f727569c034931fc633aaad5dde3062e4926fb7ad68"
+        },
+        {
+          "path": "examples/02-two-assets.json",
+          "sha256": "2157e7e24a8f1946a2107265fd34eaea7d2188b588e6e7b96e32fee8d175415d"
+        },
+        {
+          "path": "examples/03-partner-plus-portrait.json",
+          "sha256": "a9ce93a3b9e897efee37c9e5e1fd503f7a95979f2ab1120b7e46bc8db0a0812c"
+        },
+        {
+          "path": "examples/04-campaign-plus-claim.json",
+          "sha256": "6f77644f914a3be7da9345cd2dd879e2b2397eb36d19a943af7147202fe6af24"
+        },
+        {
+          "path": "examples/05-missing-contradictory.json",
+          "sha256": "83e130bfc909a1f6c8b2ace9d86565666027fa100ff8dea104757d633f8d2628"
+        },
+        {
+          "path": "examples/06-ambiguous-time.json",
+          "sha256": "424a6bceb3dfda0649e5fccae54e6e403d782f298811da486314a9d735405403"
+        }
+      ],
+      "expectations": {
+        "path": "examples/expected-results.json",
+        "sha256": "fc8376778a595f95a4f451e975e2bec8b9fe51f72b77f78a2fd63069ecc2c9ce"
+      },
+      "expectedCount": 66
+    },
+    {
+      "name": "regressions",
+      "inputs": [
+        {
+          "path": "conformance/regressions/inputs/absent-operand.json",
+          "sha256": "ebd8863df3bf3f6adc4165b0c71fad82a6fff6f4dbe4bd69b6189afe4fdd681a"
+        },
+        {
+          "path": "conformance/regressions/inputs/duplicate-atoms.json",
+          "sha256": "d7df144910d04991c9ca60e44162c2e5878c3b2ebe83e5cc84d80983c00992f6"
+        },
+        {
+          "path": "conformance/regressions/inputs/duplicate-before-typed.json",
+          "sha256": "605a1db1e331a50fe55c19cb242d44d4641d3d296484b33ace4af70e833c0258"
+        },
+        {
+          "path": "conformance/regressions/inputs/duplicate-case-id.json",
+          "sha256": "1a920473169f1e0f2d9a481c250d497abfee59aa7ecdfe8add3f5dfecad8ae98"
+        },
+        {
+          "path": "conformance/regressions/inputs/duplicate-condition-id.json",
+          "sha256": "f9ac6b918476375c1aa2a193e293e72378b88ca087fdf6e1c1f883bb4489b9c4"
+        },
+        {
+          "path": "conformance/regressions/inputs/empty-all.json",
+          "sha256": "9b608a937b71b3e6e14d34979dab15a1cf4a14d737b8f6f6803fe0623e8c289c"
+        },
+        {
+          "path": "conformance/regressions/inputs/extra-condition-key.json",
+          "sha256": "45851c2963f3b7d7d3087594f82d692b0bfc5b620dc0b0c8cbdb5799e3305c65"
+        },
+        {
+          "path": "conformance/regressions/inputs/extra-snapshot-key.json",
+          "sha256": "81abd8a6467830e38f35c787f700f1a6e6ce05b72da037cf98169afc953a9439"
+        },
+        {
+          "path": "conformance/regressions/inputs/float.json",
+          "sha256": "52b2d00e71ef8917173630cf34cef8490cf1fa9bf5c9317eb47767d6d96681ec"
+        },
+        {
+          "path": "conformance/regressions/inputs/infinity.json",
+          "sha256": "fb4b5297955e9b1e7b9c80735afdc8e3597f2fa6636dd952d53049d3b16e7b84"
+        },
+        {
+          "path": "conformance/regressions/inputs/minus-zero.json",
+          "sha256": "2d67ff3a76df43735c14de8148eac4e958061b05858948d3b432763fe69e1fc9"
+        },
+        {
+          "path": "conformance/regressions/inputs/missing-condition-id.json",
+          "sha256": "4019f5ae79052a0c785910eb7e7fabf56820bd1d4fa5e031c4651d0cb5ad60c2"
+        },
+        {
+          "path": "conformance/regressions/inputs/missing-context.json",
+          "sha256": "b654dd0cb8d5c4917c450e34aa87afa3fe9381f4aa71b72a8c26f0e89efc90fb"
+        },
+        {
+          "path": "conformance/regressions/inputs/missing-evidence-field.json",
+          "sha256": "ee7a2018f7e50899d0a465a4b9171a078e75643d60e274e122cf24c8bac92b98"
+        },
+        {
+          "path": "conformance/regressions/inputs/missing-requires-defined.json",
+          "sha256": "6f9db6e3891785f9eecf53713429c201217ac93db6dbc6806455983eb9dc4c14"
+        },
+        {
+          "path": "conformance/regressions/inputs/missing-snapshot.json",
+          "sha256": "12e7ed2ff2313f1e9f659e487a1e6245eeaefbe9074a9e7e1bd31f0deb4ae251"
+        },
+        {
+          "path": "conformance/regressions/inputs/nan.json",
+          "sha256": "9cd39b55b3e5263a6ba79c5e914f317a99bb0e7bbd64b9354b2f294bc143addf"
+        },
+        {
+          "path": "conformance/regressions/inputs/null-snapshot.json",
+          "sha256": "11782730eb57cda5d5c3074a63f85df31ad8848b8525dc5bfec19fa7da3cba9a"
+        },
+        {
+          "path": "conformance/regressions/inputs/parse-before-tfj.json",
+          "sha256": "3b8951a7d5ed1422c3560a422e30f544fa2fe80c8c0c7dcde31a4099a3fd2810"
+        },
+        {
+          "path": "conformance/regressions/inputs/surrogate.json",
+          "sha256": "86b177b89117e71783f4c50313294cb49f47b6a0324329bc2f544137360398e3"
+        },
+        {
+          "path": "conformance/regressions/inputs/tfj-before-routing.json",
+          "sha256": "3160ba80f77c9aad9d4bbe44c87989ac98665f7b8e1d8d6342313e24525eaa4a"
+        },
+        {
+          "path": "conformance/regressions/inputs/unknown-operator.json",
+          "sha256": "ac343f66deea5f42a8c3dafb0f8c2210bf7a5a7305b928f21a1573d163b59937"
+        },
+        {
+          "path": "conformance/regressions/inputs/unsafe-integer.json",
+          "sha256": "50ed3357318a63715c310e7e1dff043de3daff550e23a3bb26eca7f61c2c36ca"
+        },
+        {
+          "path": "conformance/regressions/inputs/wrong-contract-version.json",
+          "sha256": "ddcacda69211c6171ae718dd97ab8ad9fc218a713ab348c64d2228e40e4ee28a"
+        }
+      ],
+      "expectations": {
+        "path": "conformance/regressions/expected-results.json",
+        "sha256": "73aef22f49db080c4fe654ee1019d94be9123de79af15f4e1d6496643dc2b639"
+      },
+      "expectedCount": 36
+    }
+  ],
+  "identityFiles": [
+    "SUITE.json",
+    "RUNNER-CONTRACT.md",
+    "run-suite.py",
+    "compare.py",
+    "RESULT.schema.json",
+    "contract/NORMATIVE-DELTA.md",
+    "contract/CONFORMANCE-IMPACT.md",
+    "contract/schemas/task-facts.schema.json"
+  ]
+}

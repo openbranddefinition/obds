@@ -1,0 +1,1919 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Open, implementation-ready specification for determining which brand truth applies to an AI task, resolving conflicts and failing closed when required truth is missing. Machine-readable brand guidelines with governed applicability. OBDS 4.0.4, CC BY 4.0 and Apache 2.0.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://openbranddefinition.org/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://openbranddefinition.org/">
+  <meta property="og:title" content="OBDS — Governed Brand Truth for AI">
+  <meta property="og:image" content="https://openbranddefinition.org/og/home.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="OBDS — Governed Brand Truth for AI — Open Brand Definition Specification 4.0.4">
+  <meta property="og:description" content="Which brand truth applies to this AI task, and may it run? An open specification for governed applicability, conflict resolution and fail-closed execution. OBDS 4.0.4.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://openbranddefinition.org/og/home.png">
+
+  <meta name="author" content="Kill The Dragon GmbH">
+  <meta name="dcterms.title" content="Open Brand Definition Specification">
+  <meta name="dcterms.creator" content="Kill The Dragon GmbH">
+  <meta name="dcterms.date" content="2026-07-22">
+  <meta name="dcterms.type" content="Technical specification">
+  <meta name="dcterms.identifier" content="https://openbranddefinition.org/">
+  <meta name="obds-version" content="4.0.4">
+  <meta property="article:published_time" content="2026-07-22">
+  <meta property="article:modified_time" content="2026-09-06">
+  <link rel="alternate" hreflang="en" href="https://openbranddefinition.org/?lang=en">
+  <link rel="alternate" hreflang="de" href="https://openbranddefinition.org/?lang=de">
+  <link rel="alternate" hreflang="x-default" href="https://openbranddefinition.org/">
+  <title>OBDS — Governed Brand Truth for AI | Open Brand Definition</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://openbranddefinition.org/#website",
+        "name": "Open Brand Definition",
+        "alternateName": "OBDS",
+        "url": "https://openbranddefinition.org/",
+        "inLanguage": ["en", "de"],
+        "publisher": {
+          "@id": "https://openbranddefinition.org/#publisher"
+        }
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://openbranddefinition.org/#implementation",
+        "name": "OBDS reference implementation and conformance suite",
+        "description": "Reference compiler, runtime and the OBDS conformance suite for the Open Brand Definition Specification.",
+        "codeRepository": "https://github.com/openbranddefinition/obds",
+        "programmingLanguage": "Python",
+        "runtimePlatform": "Python 3.13+",
+        "license": "https://www.apache.org/licenses/LICENSE-2.0",
+        "version": "4.0.4",
+        "dateModified": "2026-09-06",
+        "url": "https://openbranddefinition.org/spec/4.0.4/OBDS-4.0.4-FINAL.zip",
+        "isPartOf": { "@id": "https://openbranddefinition.org/#obds" }
+      },
+      {
+        "@type": "TechArticle",
+        "@id": "https://openbranddefinition.org/#obds",
+        "headline": "Open Brand Definition Specification",
+        "alternativeHeadline": "OBDS",
+        "description": "An open specification for governed brand truth and AI creation, published under CC BY 4.0 and the Apache License 2.0. It has one required Foundation and optional capabilities that are added only when the task requires them. It defines which brand truth applies to a declared target, what is explicitly unknown, the permissible visual design space, and the evidence a runtime decision leaves behind.",
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "usageInfo": "https://openbranddefinition.org/#licensing",
+        "url": "https://openbranddefinition.org/",
+        "version": "4.0.4",
+        "datePublished": "2026-09-06",
+        "dateModified": "2026-09-06",
+        "isAccessibleForFree": true,
+        "copyrightYear": 2026,
+        "copyrightHolder": {
+          "@id": "https://openbranddefinition.org/#publisher"
+        },
+        "publisher": {
+          "@id": "https://openbranddefinition.org/#publisher"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://openbranddefinition.org/#publisher",
+        "name": "Kill The Dragon GmbH",
+        "email": "lets@killthedragon.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Dürergasse 3 / TOP 4 / HOF",
+          "postalCode": "1060",
+          "addressLocality": "Wien",
+          "addressCountry": "AT"
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --paper: #fff;
+      --ink: #000;
+      --line: #000;
+      --pad: clamp(18px, 2.6vw, 42px);
+      --max: 1680px;
+      --step: clamp(14px, 1.05vw, 18px);
+      --display: clamp(54px, 10.2vw, 176px);
+      --headline: clamp(34px, 5.5vw, 92px);
+      --subhead: clamp(23px, 3vw, 48px);
+      --body: clamp(17px, 1.35vw, 23px);
+      --small: clamp(12px, .82vw, 15px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
+    body {
+      margin: 0;
+      /* German sets longer words than English; a display word must break rather
+         than force the page wider than the viewport. */
+      overflow-wrap: break-word;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: var(--body);
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .16em; }
+    a:hover { text-decoration-thickness: 3px; }
+    button { font: inherit; }
+    ::selection { background: var(--ink); color: var(--paper); }
+
+    .skip-link {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      transform: translateY(-110%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .site {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      align-items: center;
+      min-height: 64px;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 94%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .mark, .status, .language, .site-nav {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--pad);
+      white-space: nowrap;
+    }
+    .mark { font-weight: 700; text-transform: uppercase; letter-spacing: -.04em; }
+    .status, .language, .site-nav { border-left: 1px solid var(--line); font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+    .language { padding: 0; }
+    .language button {
+      border: 0;
+      border-left: 1px solid var(--line);
+      background: transparent;
+      color: inherit;
+      height: 100%;
+      min-width: 58px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: var(--small);
+    }
+    .language button:first-child { border-left: 0; }
+    .language button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    .language button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--ink);
+      outline-offset: -3px;
+    }
+
+    .hero {
+      min-height: calc(100svh - 64px);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-content: space-between;
+      gap: 0;
+      padding: var(--pad);
+    }
+
+    .eyebrow {
+      grid-column: 1 / 13;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .11em;
+    }
+
+    .hero-title {
+      grid-column: 1 / 13;
+      margin: clamp(52px, 11vh, 130px) 0 0;
+      font-size: var(--display);
+      line-height: .76;
+      letter-spacing: -.082em;
+      text-transform: uppercase;
+      font-weight: 700;
+      max-width: 11ch;
+    }
+    .hero-title .outline {
+      color: var(--paper);
+      -webkit-text-stroke: max(1px, .012em) var(--ink);
+      text-stroke: max(1px, .012em) var(--ink);
+    }
+
+    .hero-statement {
+      grid-column: 5 / 13;
+      align-self: end;
+      margin: clamp(54px, 10vh, 140px) 0 0;
+      font-size: var(--subhead);
+      line-height: 1.03;
+      letter-spacing: -.05em;
+      max-width: 20ch;
+    }
+
+    .hero-foot {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+    }
+    .hero-foot > div {
+      min-height: 112px;
+      padding: 18px var(--pad);
+      border-left: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .hero-foot > div:first-child { border-left: 0; }
+    .label { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+    .value { font-size: clamp(20px, 2.2vw, 34px); letter-spacing: -.045em; }
+
+    .section {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-number {
+      grid-column: 1 / 3;
+      padding: var(--pad);
+      border-right: 1px solid var(--line);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .section-content {
+      grid-column: 3 / 13;
+      padding: var(--pad);
+    }
+
+    .section h2 {
+      margin: 0 0 clamp(50px, 9vw, 150px);
+      font-size: var(--headline);
+      line-height: .91;
+      letter-spacing: -.07em;
+      font-weight: 700;
+      max-width: 12ch;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: var(--subhead);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+      max-width: 25ch;
+    }
+
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: clamp(60px, 10vw, 150px);
+      border: 1px solid var(--line);
+    }
+    .flow-step {
+      position: relative;
+      min-height: 250px;
+      padding: 18px;
+      border-left: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .flow-step:first-child { border-left: 0; }
+    .flow-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -17px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      font-size: 20px;
+    }
+    .flow-index { font-size: var(--small); letter-spacing: .1em; }
+    .flow-name { font-size: clamp(21px, 2.1vw, 36px); letter-spacing: -.045em; line-height: .95; }
+
+    .inverse { background: var(--ink); color: var(--paper); --line: var(--paper); }
+    .inverse .flow-step:not(:last-child)::after { background: var(--ink); }
+
+    .contrast-list {
+      margin-top: clamp(60px, 9vw, 130px);
+      border-top: 1px solid var(--line);
+    }
+    .contrast-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .contrast-row > div { padding: 22px 0; }
+    .contrast-row > div:first-child { padding-right: 30px; }
+    .contrast-row > div:last-child { border-left: 1px solid var(--line); padding-left: 30px; }
+    .contrast-row strong { display: block; font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 9px; }
+
+
+    .contact-line {
+      margin-top: clamp(70px, 12vw, 180px);
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+    }
+    .contact-line a {
+      font-size: clamp(31px, 5vw, 82px);
+      line-height: .9;
+      letter-spacing: -.06em;
+      overflow-wrap: anywhere;
+    }
+
+    .legal {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+    .legal-title {
+      grid-column: 1 / 5;
+      padding: var(--pad);
+      border-right: 1px solid var(--line);
+    }
+    .legal-title h2 {
+      position: sticky;
+      top: 92px;
+      margin: 0;
+      font-size: var(--headline);
+      line-height: .88;
+      letter-spacing: -.07em;
+      text-transform: uppercase;
+    }
+    .legal-copy {
+      grid-column: 5 / 13;
+      padding: var(--pad);
+      font-size: clamp(14px, 1.05vw, 17px);
+      line-height: 1.45;
+    }
+    .legal-copy h3 {
+      margin: 0 0 16px;
+      font-size: var(--body);
+      letter-spacing: -.03em;
+    }
+    .legal-copy p { margin: 0 0 26px; max-width: 75ch; }
+    .legal-block { padding: 28px 0; border-top: 1px solid var(--line); }
+    .legal-block:first-child { border-top: 0; padding-top: 0; }
+    .legal-data {
+      display: grid;
+      grid-template-columns: minmax(150px, .7fr) 1.3fr;
+      gap: 10px 24px;
+      margin: 0;
+    }
+    .legal-data dt { color: color-mix(in srgb, currentColor 58%, transparent); }
+    .legal-data dd { margin: 0; }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 30px;
+      padding: 20px var(--pad);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    /* Hide only the inactive language. The active one keeps the display value
+       its own component rule sets (flex, block, list-item), so layout is never
+       reverted to the user-agent default. */
+    html[data-lang="en"] [data-copy="de"],
+    html[data-lang="de"] [data-copy="en"] { display: none !important; }
+
+
+    .definition-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: clamp(60px, 9vw, 130px);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .definition-card {
+      min-height: 250px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .definition-code {
+      font-size: var(--small);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .definition-card h3 {
+      margin: 34px 0 10px;
+      font-size: clamp(25px, 2.4vw, 42px);
+      line-height: .95;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+    }
+    .definition-card p { margin: 0; max-width: 25ch; }
+
+    .state-list {
+      margin-top: clamp(60px, 9vw, 130px);
+      border-top: 1px solid var(--line);
+    }
+    .state-row {
+      display: grid;
+      grid-template-columns: minmax(170px, .55fr) 1.45fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .state-row > div { padding: 20px 0; }
+    .state-row > div:not(:first-child) { border-left: 1px solid var(--line); padding-left: 28px; }
+    .state-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(17px, 1.5vw, 24px);
+      font-weight: 700;
+    }
+
+    .runtime-slots {
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .runtime-slot {
+      display: grid;
+      grid-template-columns: 70px minmax(200px, .85fr) 1.15fr;
+      border-top: 1px solid var(--line);
+      min-height: 118px;
+      align-items: stretch;
+    }
+    .runtime-slot:first-child { border-top: 0; }
+    .runtime-slot > div {
+      padding: 18px;
+      display: flex;
+      align-items: center;
+    }
+    .runtime-slot > div + div { border-left: 1px solid var(--line); }
+    .runtime-slot .slot-index { font-size: var(--small); letter-spacing: .1em; }
+    .runtime-slot .slot-name {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+      font-size: clamp(16px, 1.45vw, 23px);
+    }
+
+    .integrity-list {
+      margin-top: clamp(60px, 9vw, 130px);
+      counter-reset: integrity;
+      border-top: 1px solid var(--line);
+    }
+    .integrity-item {
+      counter-increment: integrity;
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .integrity-item::before {
+      content: counter(integrity, decimal-leading-zero);
+      padding: 22px 18px;
+      font-size: var(--small);
+      letter-spacing: .1em;
+      border-right: 1px solid var(--line);
+    }
+    .integrity-item > div { padding: 22px 28px; }
+    .integrity-item h3 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2vw, 34px);
+      letter-spacing: -.045em;
+    }
+    .integrity-item p { margin: 0; max-width: 60ch; }
+
+    .publication-record {
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .publication-row {
+      display: grid;
+      grid-template-columns: minmax(190px, .6fr) 1.4fr;
+      border-top: 1px solid var(--line);
+    }
+    .publication-row:first-child { border-top: 0; }
+    .publication-row > div { padding: 18px 20px; }
+    .publication-row > .publication-value { border-left: 1px solid var(--line); }
+    .publication-key {
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .publication-value {
+      font-size: clamp(18px, 1.7vw, 28px);
+      letter-spacing: -.03em;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9em;
+      overflow-wrap: anywhere;
+    }
+
+    .state-name a { text-decoration-thickness: 1px; }
+
+    .micro-note {
+      margin-top: 28px;
+      max-width: 74ch;
+      font-size: var(--small);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .definition-grid { grid-template-columns: 1fr; }
+      .runtime-slot { grid-template-columns: 54px 1fr; }
+      .runtime-slot > div:last-child { grid-column: 1 / 3; border-left: 0; border-top: 1px solid var(--line); }
+      .state-row, .publication-row { grid-template-columns: 1fr; }
+      .state-row > div:not(:first-child), .publication-row > .publication-value {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #000; --ink: #fff; --line: #fff; }
+      .topbar { background: color-mix(in srgb, var(--paper) 94%, transparent); }
+    }
+
+    @media (max-width: 900px) {
+      .site { border-left: 0; border-right: 0; }
+      .topbar { grid-template-columns: 1fr auto auto; min-height: 58px; }
+      .status { display: none; }
+      .mark { padding: 0 10px; font-size: 14px; }
+      .site-nav { padding: 0 10px; }
+      .nav-lang { display: none; }
+      .language button { min-width: 44px; }
+      .hero { min-height: auto; }
+      .hero-main { padding: 20px 16px 34px; min-height: 78svh; }
+      .hero-title { margin-top: 18vh; font-size: clamp(54px, 19vw, 110px); }
+      .hero-statement { grid-column: 1 / 13; margin-top: 90px; font-size: clamp(28px, 8vw, 48px); }
+      .hero-foot { grid-template-columns: 1fr; }
+      .hero-foot > div { min-height: 90px; padding: 14px 16px; border-left: 0; border-top: 1px solid var(--line); }
+      .hero-foot > div:first-child { border-top: 0; }
+      .section { grid-template-columns: 1fr; }
+      .section-number { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+      .section-content { grid-column: 1; padding: 50px 16px 70px; }
+      .section h2 { margin-bottom: 70px; font-size: clamp(42px, 13vw, 74px); }
+      .flow { grid-template-columns: 1fr; }
+      .flow-step { min-height: 190px; border-left: 0; border-top: 1px solid var(--line); }
+      .flow-step:first-child { border-top: 0; }
+      .flow-step:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -17px; transform: translateX(50%); }
+      .contrast-row { grid-template-columns: 1fr; }
+      .contrast-row > div:last-child { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+      .contact-line { grid-template-columns: 1fr; }
+      .legal { grid-template-columns: 1fr; }
+      .legal-title { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); }
+      .legal-title h2 { position: static; }
+      .legal-copy { grid-column: 1; }
+      .legal-data { grid-template-columns: 1fr; gap: 3px; }
+      .legal-data dd { margin-bottom: 13px; }
+      footer { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    @media print {
+      .topbar, .language { display: none; }
+      .site { border: 0; }
+      .hero { min-height: auto; }
+      .section, .legal { break-inside: avoid; }
+    }
+
+    /* --- editorial statement --- */
+    .statement { margin-top: clamp(56px, 8vw, 120px); border-top: 1px solid var(--line); }
+    .statement > p {
+      margin: 0;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(26px, 3.4vw, 58px);
+      line-height: .98;
+      letter-spacing: -.055em;
+      max-width: 22ch;
+    }
+
+    .pull {
+      margin: clamp(56px, 8vw, 120px) 0 0;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      font-size: clamp(24px, 2.9vw, 48px);
+      line-height: 1.02;
+      letter-spacing: -.05em;
+      max-width: 26ch;
+    }
+
+    .callout {
+      margin-top: clamp(46px, 6vw, 90px);
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(180px, .5fr) 1.5fr;
+    }
+    .callout > div { padding: 20px; }
+    .callout > div + div { border-left: 1px solid var(--line); }
+    .callout .callout-key {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(15px, 1.3vw, 21px);
+      font-weight: 700;
+    }
+    .callout p { margin: 0; max-width: 58ch; }
+
+    /* --- flow variants --- */
+    .flow.flow-five { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .flow-note {
+      font-size: var(--small);
+      line-height: 1.4;
+      letter-spacing: 0;
+      max-width: 26ch;
+      opacity: .72;
+    }
+
+    /* --- design space canvases --- */
+    .canvases {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--pad);
+      margin-top: clamp(56px, 8vw, 120px);
+      align-items: end;
+    }
+    .canvases figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .canvas {
+      height: clamp(300px, 30vw, 400px);
+      border: 1px solid var(--line);
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .canvas.ratio-a { aspect-ratio: 300 / 250; }
+    .canvas.ratio-b { aspect-ratio: 160 / 600; }
+    .canvas.ratio-c { aspect-ratio: 1080 / 1350; }
+    .role-row { display: flex; gap: 4px; flex: .8; }
+    .role {
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2px;
+      overflow: hidden;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 9px;
+      line-height: 1.1;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    .role-row .role { flex: 1; }
+    .canvases figcaption {
+      font-size: var(--small);
+      line-height: 1.4;
+      text-align: center;
+      max-width: 30ch;
+    }
+    .canvas-size {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+
+    /* --- semantic boundary --- */
+    .boundary { margin-top: clamp(56px, 8vw, 120px); border: 1px solid var(--line); }
+    .boundary-head { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+    .boundary-head > div { padding: 18px 20px; }
+    .boundary-head > div + div { border-left: 1px solid var(--line); }
+    .boundary-term {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(22px, 2.4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      margin-top: 8px;
+    }
+    .boundary-body { display: grid; grid-template-columns: 1fr 1fr; }
+    .boundary-body > div { padding: 20px; min-height: 210px; }
+    .boundary-body > div + div { border-left: 1px solid var(--line); }
+    .boundary-body ul { margin: 18px 0 0; padding: 0; list-style: none; }
+    .boundary-body li {
+      padding: 7px 0;
+      border-top: 1px solid var(--line);
+      font-size: clamp(19px, 1.8vw, 30px);
+      letter-spacing: -.04em;
+    }
+    .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; max-width: 84ch; }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: clamp(60px, 9vw, 130px);
+      border: 1px solid var(--line);
+    }
+    .actions > a {
+      padding: 22px 20px 26px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+    }
+    .actions > a + a { border-left: 1px solid var(--line); }
+    .actions > a:hover { background: var(--ink); color: var(--paper); }
+    .action-name {
+      font-size: clamp(26px, 2.7vw, 46px);
+      line-height: .94;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .action-note { font-size: var(--small); line-height: 1.4; max-width: 24ch; }
+
+    /* --- the chain --- */
+    .chain {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      margin-top: clamp(56px, 8vw, 120px);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .chain > div {
+      position: relative;
+      padding: 18px 14px 22px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .chain-step {
+      font-size: clamp(16px, 1.5vw, 24px);
+      letter-spacing: -.03em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 20ch; opacity: .72; }
+    .chain-index { font-size: var(--small); letter-spacing: .1em; }
+
+    /* --- proof chain --- */
+    .proof-chain { margin-top: clamp(56px, 8vw, 120px); border-top: 1px solid var(--line); }
+    .proof-row {
+      display: grid;
+      grid-template-columns: 1fr 58px 1fr;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .proof-row > * { padding: 16px 0; }
+    .proof-a { font-size: clamp(24px, 2.6vw, 44px); letter-spacing: -.05em; text-transform: uppercase; }
+    .proof-arrow { text-align: center; }
+    .proof-b {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(13px, 1.1vw, 17px);
+      letter-spacing: .02em;
+      border-left: 1px solid var(--line);
+      padding-left: 22px;
+    }
+
+    @media (max-width: 900px) {
+      .callout { grid-template-columns: 1fr; }
+      .callout > div + div { border-left: 0; border-top: 1px solid var(--line); }
+      .flow.flow-five { grid-template-columns: 1fr; }
+      .canvases { grid-template-columns: 1fr; gap: 46px; }
+      .canvas { height: 260px; }
+      .boundary-head, .boundary-body { grid-template-columns: 1fr; }
+      .boundary-head > div + div, .boundary-body > div + div { border-left: 0; border-top: 1px solid var(--line); }
+      .boundary-body > div { min-height: 0; }
+      .actions { grid-template-columns: 1fr; }
+      .actions > a + a { border-left: 0; border-top: 1px solid var(--line); }
+      .actions > a { min-height: 150px; }
+      .chain { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chain > div { min-height: 120px; }
+      .proof-row { grid-template-columns: 1fr 40px 1fr; }
+      .proof-b { padding-left: 14px; }
+    }
+
+    /* --- progressive complexity --- */
+    .scale-stack {
+      margin-top: clamp(56px, 8vw, 120px);
+      border: 1px solid var(--line);
+    }
+    .scale-tier {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+    }
+    .scale-tier:first-child { border-top: 0; }
+    .scale-cell {
+      display: flex;
+      align-items: center;
+      min-height: 66px;
+      padding: 12px 16px;
+      border-left: 1px solid var(--line);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .scale-cell:first-child { border-left: 0; }
+    .scale-cell.on { background: var(--line); color: var(--paper); }
+    .inverse .scale-cell.on { color: var(--ink); }
+
+    .levels {
+      margin-top: clamp(46px, 6vw, 90px);
+      border-top: 1px solid var(--line);
+    }
+    .level {
+      display: grid;
+      grid-template-columns: 74px minmax(210px, .9fr) 1.15fr 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+    .level > div { padding: 22px 24px; }
+    .level > div:first-child { padding: 22px 14px 22px 0; }
+    .level > div + div { border-left: 1px solid var(--line); }
+    .level-index { font-size: var(--small); letter-spacing: .1em; }
+    .level-name {
+      display: block;
+      font-size: clamp(23px, 2.2vw, 38px);
+      line-height: .95;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .level-purpose { display: block; margin-top: 12px; max-width: 24ch; }
+    .level p { margin: 10px 0 0; max-width: 42ch; }
+
+    .statement-head {
+      margin: clamp(56px, 8vw, 120px) 0 0;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .statement-head + .proof-chain { margin-top: 0; border-top: 0; }
+
+    .questions {
+      margin-top: clamp(56px, 8vw, 120px);
+      border-top: 1px solid var(--line);
+    }
+    .questions p {
+      margin: 0;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(23px, 2.9vw, 48px);
+      line-height: 1;
+      letter-spacing: -.05em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .ai-card {
+      margin-top: clamp(56px, 8vw, 120px);
+      border: 1px solid var(--line);
+    }
+    .ai-card-head {
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--line);
+      font-size: var(--small);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .ai-card ul { margin: 0; padding: 0; list-style: none; }
+    .ai-card li {
+      display: block;
+      padding: 13px 20px;
+      border-top: 1px solid var(--line);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: clamp(13px, 1.12vw, 17px);
+      line-height: 1.4;
+      letter-spacing: 0;
+    }
+    .ai-card li:first-of-type { border-top: 0; }
+
+    @media (max-width: 900px) {
+      .scale-stack { border: 0; }
+      .scale-tier {
+        grid-template-columns: 1fr;
+        margin-top: 10px;
+        border: 1px solid var(--line);
+      }
+      .scale-tier:first-child { margin-top: 0; }
+      .scale-cell { border-left: 0; border-top: 1px solid var(--line); min-height: 52px; }
+      .scale-cell:first-child { border-top: 0; }
+      .scale-tier .scale-cell:not(.on) { display: none; }
+      .level { grid-template-columns: 1fr; }
+      .level > div, .level > div:first-child { padding: 18px 0; }
+      .level > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    }
+
+    .site-nav { gap: 18px; }
+    .site-nav a {
+      font-size: var(--small);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      text-decoration: none;
+      opacity: .65;
+      white-space: nowrap;
+    }
+    .site-nav a:hover, .site-nav a:focus { opacity: 1; }
+    .nav-lang { opacity: .55; font-size: .85em; }
+
+    /* Below this the topbar cannot carry mark, both nav links and the language
+       switcher without overflowing. The repository stays reachable from the
+       Source action and from the legal notice. */
+    @media (max-width: 460px) {
+      .site-nav { gap: 12px; }
+      .nav-repo { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="site">
+    <header class="topbar">
+      <a class="mark" href="#top" aria-label="Open Brand Definition home">Open Brand Definition</a>
+      <div class="status">OBDS / 4.0.4 stable</div>
+      <nav class="site-nav" aria-label="Site">
+        <a href="/authoring/">Authoring <span class="nav-lang">EN</span></a>
+        <a class="nav-repo" href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+      <div class="language" role="group" aria-label="Language selection">
+        <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="hero-main">
+          <div class="eyebrow">
+            <span>Open Brand Definition Specification 4.0.4</span>
+            <span>Vienna / 2026</span>
+          </div>
+          <h1 class="hero-title">Open<br><span class="outline">Brand</span><br>Definition</h1>
+          <p class="hero-statement" data-copy="en">Brand truth a system can decide from. And create inside.</p>
+          <p class="hero-statement" data-copy="de">Markenwahrheit, aus der ein System entscheiden kann. Und in der es gestaltet.</p>
+        </div>
+        <div class="hero-foot">
+          <div><span class="label" data-copy="en">Form</span><span class="label" data-copy="de">Form</span><span class="value" data-copy="en">Open specification</span><span class="value" data-copy="de">Offene Spezifikation</span></div>
+          <div><span class="label" data-copy="en">Layer</span><span class="label" data-copy="de">Ebene</span><span class="value" data-copy="en">Governed brand truth and AI creation</span><span class="value" data-copy="de">Freigegebene Markenwahrheit und AI-Gestaltung</span></div>
+          <div><span class="label">Status</span><span class="value" data-copy="en">4.0.4 stable. 6 September 2026.</span><span class="value" data-copy="de">4.0.4 stabil. 6. September 2026.</span></div>
+        </div>
+      </section>
+
+      <section class="section" id="why">
+        <div class="section-number"><span data-copy="en">01 / Why</span><span data-copy="de">01 / Warum</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">A model always produces something.</h2>
+          <h2 data-copy="de">Ein Modell liefert immer etwas.</h2>
+          <p class="lead" data-copy="en">That is the problem. Asked about a brand it holds no approved truth about, a language model answers from the average of everything it has read. The result is fluent, plausible and quietly wrong.</p>
+          <p class="lead" data-copy="de">Genau das ist das Problem. Fragt man ein Sprachmodell zu einer Marke, über die es keine freigegebene Wahrheit hat, antwortet es aus dem Durchschnitt von allem, was es gelesen hat. Das Ergebnis ist flüssig, plausibel und still falsch.</p>
+
+          <div class="statement">
+            <p data-copy="en">A brandbook explains.</p>
+            <p data-copy="de">Ein Brandbook erklärt.</p>
+            <p data-copy="en">A prompt asks.</p>
+            <p data-copy="de">Ein Prompt bittet.</p>
+            <p data-copy="en">OBDS defines what applies.</p>
+            <p data-copy="de">OBDS legt fest, was gilt.</p>
+          </div>
+
+
+          <div class="chain" role="group" aria-label="What OBDS does, in order">
+            <div><span class="chain-index">01</span><span class="chain-step">Know</span><span class="chain-note" data-copy="en">Approved brand truth, with its scope, sources and knowledge state.</span><span class="chain-note" data-copy="de">Freigegebene Markenwahrheit, mit Scope, Quellen und Knowledge State.</span></div>
+            <div><span class="chain-index">02</span><span class="chain-step">Decide</span><span class="chain-note" data-copy="en">Which truth applies here, and whether enough of it exists.</span><span class="chain-note" data-copy="de">Welche Wahrheit hier gilt, und ob genug davon vorhanden ist.</span></div>
+            <div><span class="chain-index">03</span><span class="chain-step">Compile</span><span class="chain-note" data-copy="en">The exact context for one task, not the whole archive.</span><span class="chain-note" data-copy="de">Der exakte Kontext für eine Aufgabe, nicht das ganze Archiv.</span></div>
+            <div><span class="chain-index">04</span><span class="chain-step">Create</span><span class="chain-note" data-copy="en">A renderer produces one solution inside the permitted design space.</span><span class="chain-note" data-copy="de">Ein Renderer erzeugt eine Lösung im zulässigen Design Space.</span></div>
+            <div><span class="chain-index">05</span><span class="chain-step">Validate</span><span class="chain-note" data-copy="en">The result is checked against the same governed truth.</span><span class="chain-note" data-copy="de">Das Ergebnis wird gegen dieselbe freigegebene Wahrheit geprüft.</span></div>
+            <div><span class="chain-index">06</span><span class="chain-step">Prove</span><span class="chain-note" data-copy="en">Why it was released, blocked or sent to approval stays on record.</span><span class="chain-note" data-copy="de">Warum es freigegeben, blockiert oder zur Freigabe geleitet wurde, bleibt dokumentiert.</span></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Brandbooks are written for people and stay useful. A prompt can carry guidance but cannot guarantee that it was followed. OBDS is the layer underneath: governed brand truth a system can resolve, check and record.</p>
+          <p class="micro-note" data-copy="de">Brandbooks sind für Menschen geschrieben und bleiben wertvoll. Ein Prompt kann Orientierung transportieren, aber nicht garantieren, dass sie befolgt wurde. OBDS liegt darunter: freigegebene Markenwahrheit, die ein System auflösen, prüfen und protokollieren kann.</p>
+        </div>
+      </section>
+
+      <section class="section inverse" id="scale">
+        <div class="section-number"><span data-copy="en">02 / Scale</span><span data-copy="de">02 / Skalierung</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Start with brand truth. Add control when the work needs it.</h2>
+          <h2 data-copy="de">Mit Markenwahrheit anfangen. Steuerung dazunehmen, wenn die Arbeit sie braucht.</h2>
+          <p class="lead" data-copy="en">OBDS scales into complexity. It does not start with it. One specification, one required Foundation, and optional capabilities that are declared, versioned and separately testable. A small implementation stays small.</p>
+          <p class="lead" data-copy="de">OBDS wächst in Komplexität hinein. Es beginnt nicht damit. Eine Spezifikation, eine verpflichtende Foundation und optionale Capabilities, die deklariert, versioniert und separat testbar sind. Eine kleine Implementierung bleibt klein.</p>
+
+          <div class="scale-stack" aria-hidden="true">
+            <div class="scale-tier">
+              <div class="scale-cell on">Foundation</div>
+              <div class="scale-cell"></div>
+              <div class="scale-cell"></div>
+            </div>
+            <div class="scale-tier">
+              <div class="scale-cell on">Foundation</div>
+              <div class="scale-cell on">Governed Context</div>
+              <div class="scale-cell"></div>
+            </div>
+            <div class="scale-tier">
+              <div class="scale-cell on">Foundation</div>
+              <div class="scale-cell on">Governed Context</div>
+              <div class="scale-cell on">Automated Production</div>
+            </div>
+          </div>
+
+          <div class="levels">
+            <div class="level">
+              <div><span class="level-index">01</span></div>
+              <div>
+                <span class="level-name">Foundation</span>
+                <span class="level-purpose" data-copy="en">Define what is true.</span>
+                <span class="level-purpose" data-copy="de">Festlegen, was wahr ist.</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">The required base</span>
+                <span class="label" data-copy="de">Die verpflichtende Basis</span>
+                <p data-copy="en">Brand Elements, the four Brand States, Rules, Scope, Semantic Boundaries, provenance and Value Contracts. Every conforming implementation has this, and nothing beyond it is mandatory.</p>
+                <p data-copy="de">Brand Elements, die vier Brand States, Rules, Scope, Semantic Boundaries, Provenance und Value Contracts. Jede konforme Implementierung hat das, und darüber hinaus ist nichts verpflichtend.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Enough for</span>
+                <span class="label" data-copy="de">Reicht für</span>
+                <p data-copy="en">Brand chat, copy assistance, AI guidance, a single market, and any workflow where a person still signs the work off.</p>
+                <p data-copy="de">Brand-Chat, Textunterstützung, AI-Guidance, einen einzelnen Markt und jeden Workflow, in dem ein Mensch die Arbeit freigibt.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">02</span></div>
+              <div>
+                <span class="level-name">Governed Context</span>
+                <span class="level-purpose" data-copy="en">Determine what applies to one task.</span>
+                <span class="level-purpose" data-copy="de">Bestimmen, was für eine Aufgabe gilt.</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Adds existing capabilities</span>
+                <span class="label" data-copy="de">Nimmt bestehende Capabilities dazu</span>
+                <p data-copy="en">Compiled Runtime, Context Delivery and Context Assembly. With them come explicit asOf, precedence, declared conflicts, a runtime decision record, and the build gate itself: requiresDefined, a failed target that produces no Compiled Brand Context, and therefore no model call. Foundation governs Brand Truth; this layer decides whether anything may be generated from it.</p>
+                <p data-copy="de">Compiled Runtime, Context Delivery und Context Assembly. Damit kommen explizites asOf, Präzedenz, deklarierte Konflikte, ein Runtime Decision Record und das Build-Gate selbst: requiresDefined, ein gescheitertes Target ohne Compiled Brand Context und damit ohne Model Call. Foundation regelt Markenwahrheit; diese Ebene entscheidet, ob daraus überhaupt etwas erzeugt werden darf.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Reach for it when</span>
+                <span class="label" data-copy="de">Dann relevant, wenn</span>
+                <p data-copy="en">There are several markets, products or campaigns, temporary rules, claims or legal constraints, or agents that generate content without a person in the loop.</p>
+                <p data-copy="de">Es mehrere Märkte, Produkte oder Kampagnen gibt, temporäre Rules, Claims oder rechtliche Vorgaben, oder Agents, die ohne Mensch im Loop Inhalte erzeugen.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">03</span></div>
+              <div>
+                <span class="level-name">Automated Production</span>
+                <span class="level-purpose" data-copy="en">Let systems create inside declared boundaries.</span>
+                <span class="level-purpose" data-copy="de">Systeme innerhalb deklarierter Grenzen gestalten lassen.</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Adds existing capabilities</span>
+                <span class="label" data-copy="de">Nimmt bestehende Capabilities dazu</span>
+                <p data-copy="en">Composition and Visual Operations. With them come the design space, omission priority, geometry evidence and the deterministic visual checks.</p>
+                <p data-copy="de">Composition und Visual Operations. Damit kommen der Design Space, Omission Priority, Geometry Evidence und die deterministischen Visual Checks.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Reach for it when</span>
+                <span class="label" data-copy="de">Dann relevant, wenn</span>
+                <p data-copy="en">Something is actually rendered: dynamic HTML, HTML5 banners, generated PDFs, batch assets and generative layouts.</p>
+                <p data-copy="de">Tatsächlich gerendert wird: dynamisches HTML, HTML5-Banner, generierte PDFs, Batch-Assets und generative Layouts.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Three points on one path, not three standards and not three products. Section 4.2 of the specification calls it the minimal implementation path: read manifests first, compile exact context once targets multiply, and add composition only when something is rendered. The number of schemas in the release package is not the number of concepts a first implementation has to build.</p>
+          <p class="micro-note" data-copy="de">Drei Punkte auf einem Weg, keine drei Standards und keine drei Produkte. Abschnitt 4.2 der Spezifikation nennt es den Minimal Implementation Path: zuerst Manifests lesen, exakten Kontext kompilieren, sobald die Targets mehr werden, und Composition erst dazunehmen, wenn etwas gerendert wird. Die Zahl der Schemas im Release-Paket ist nicht die Zahl der Konzepte, die eine erste Implementierung bauen muss.</p>
+
+          <p class="pull" data-copy="en">The model receives the truth it needs for this task, not the whole brand archive.</p>
+          <p class="pull" data-copy="de">Das Modell bekommt die Wahrheit, die diese Aufgabe braucht, nicht das ganze Markenarchiv.</p>
+
+          <h3 class="statement-head label" data-copy="en">When does it start to matter?</h3>
+          <h3 class="statement-head label" data-copy="de">Ab wann wird es relevant?</h3>
+
+          <div class="proof-chain" role="group" aria-label="Which situation makes which part of OBDS relevant">
+            <div class="proof-row"><span class="proof-a" data-copy="en">One market</span><span class="proof-a" data-copy="de">Ein Markt</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Foundation may be all you need.</span><span class="proof-b" data-copy="de">Foundation kann bereits reichen.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Seventeen markets</span><span class="proof-a" data-copy="de">Siebzehn Märkte</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Scope decides what applies where.</span><span class="proof-b" data-copy="de">Scope entscheidet, was wo gilt.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">A rule that expires</span><span class="proof-a" data-copy="de">Eine Rule mit Ablauf</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">asOf decides what was valid then.</span><span class="proof-b" data-copy="de">asOf entscheidet, was damals galt.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">A regulated claim</span><span class="proof-a" data-copy="de">Ein regulierter Claim</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Evidence has to travel with it.</span><span class="proof-b" data-copy="de">Die Evidenz muss mitlaufen.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">An autonomous agent</span><span class="proof-a" data-copy="de">Ein autonomer Agent</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">Fail closed, or do not act at all.</span><span class="proof-b" data-copy="de">Fail closed, oder gar nicht handeln.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Eleven banner formats</span><span class="proof-a" data-copy="de">Elf Bannerformate</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">A design space, not eleven templates.</span><span class="proof-b" data-copy="de">Ein Design Space statt elf Templates.</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">A release six months ago</span><span class="proof-a" data-copy="de">Ein Release vor sechs Monaten</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">The decision record still answers why.</span><span class="proof-b" data-copy="de">Der Decision Record beantwortet das Warum.</span></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Nothing on the left forces the whole stack. Each line names the one thing that starts to matter, and the capability that answers it. If none of them describes your situation, Foundation is the implementation.</p>
+          <p class="micro-note" data-copy="de">Nichts auf der linken Seite erzwingt den ganzen Stack. Jede Zeile benennt genau das, was relevant wird, und die Capability, die es beantwortet. Trifft keine davon zu, ist Foundation die Implementierung.</p>
+
+          <p class="pull" data-copy="en">Start with Foundation. Add control as the problem grows.</p>
+          <p class="pull" data-copy="de">Mit Foundation anfangen. Steuerung dazunehmen, wenn das Problem wächst.</p>
+
+          <div class="ai-card">
+            <div class="ai-card-head" data-copy="en">For AI systems</div>
+            <div class="ai-card-head" data-copy="de">Für AI-Systeme</div>
+            <ul>
+              <li data-copy="en">OBDS is a governed brand control layer for AI systems.</li>
+              <li data-copy="de">OBDS ist eine freigegebene Steuerungsschicht für Marken in AI-Systemen.</li>
+              <li data-copy="en">It is not a prompt library, a template system or a brandbook format.</li>
+              <li data-copy="de">Es ist keine Prompt-Bibliothek, kein Template-System und kein Brandbook-Format.</li>
+              <li data-copy="en">Foundation is the minimum. Nothing above it is required.</li>
+              <li data-copy="de">Foundation ist das Minimum. Nichts darüber ist verpflichtend.</li>
+              <li data-copy="en">Optional capabilities are added only when the task requires them.</li>
+              <li data-copy="de">Optionale Capabilities kommen erst dazu, wenn die Aufgabe sie verlangt.</li>
+              <li data-copy="en">Facts establish truth. Rules establish obligations.</li>
+              <li data-copy="de">Facts begründen Wahrheit. Rules begründen Pflichten.</li>
+              <li data-copy="en">Semantic Boundaries establish qualitative direction, not compliance.</li>
+              <li data-copy="de">Semantic Boundaries geben qualitative Richtung, keine Compliance.</li>
+              <li data-copy="en">The Brand States are defined, unknown, not_defined and not_applicable.</li>
+              <li data-copy="de">Die Brand States sind defined, unknown, not_defined und not_applicable.</li>
+              <li data-copy="en">Prohibition is a Rule with obligation: prohibit. It is not a state.</li>
+              <li data-copy="de">Ein Verbot ist eine Rule mit obligation: prohibit. Es ist kein State.</li>
+              <li data-copy="en">Unknown remains unknown. It is never filled in by inference.</li>
+              <li data-copy="de">Unknown bleibt unknown. Es wird nie durch Ableitung gefüllt.</li>
+              <li data-copy="en">Scope determines what applies. asOf determines when.</li>
+              <li data-copy="de">Scope bestimmt, was gilt. asOf bestimmt, wann.</li>
+              <li data-copy="en">OBDS declares the permissible design space. Renderers create inside it.</li>
+              <li data-copy="de">OBDS deklariert den zulässigen Design Space. Renderer gestalten darin.</li>
+              <li data-copy="en">Licensing: CC BY 4.0 for the specification, Apache 2.0 for the implementation layer.</li>
+              <li data-copy="de">Lizenzen: CC BY 4.0 für die Spezifikation, Apache 2.0 für die Implementierungsschicht.</li>
+              <li data-copy="en">Commercial implementation is permitted and requires no separate permission.</li>
+              <li data-copy="de">Kommerzielle Implementierung ist erlaubt und braucht keine gesonderte Erlaubnis.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="decide">
+        <div class="section-number"><span data-copy="en">03 / Decide</span><span data-copy="de">03 / Entscheiden</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Decide, or say honestly that you cannot.</h2>
+          <h2 data-copy="de">Entscheiden. Oder ehrlich sagen, dass es nicht geht.</h2>
+          <p class="lead" data-copy="en">Brand truth is stored as scoped elements: facts, rules, context and qualitative boundaries. Each one carries a knowledge state, a scope, its sources and a machine-readable value contract. For a given task the compiler resolves which element applies, or it fails.</p>
+          <p class="lead" data-copy="de">Markenwahrheit liegt als gescopte Elemente vor: Fakten, Rules, Kontext und qualitative Grenzen. Jedes Element trägt einen Knowledge State, einen Scope, seine Quellen und einen maschinenlesbaren Value Contract. Für eine Aufgabe löst der Compiler auf, welches Element gilt. Oder er bricht ab.</p>
+
+          <div class="questions">
+            <p data-copy="en">What is true?</p>
+            <p data-copy="de">Was ist wahr?</p>
+            <p data-copy="en">What applies here?</p>
+            <p data-copy="de">Was gilt hier?</p>
+            <p data-copy="en">What conflicts?</p>
+            <p data-copy="de">Was widerspricht sich?</p>
+            <p data-copy="en">What is unknown?</p>
+            <p data-copy="de">Was ist unbekannt?</p>
+            <p data-copy="en">May the system proceed?</p>
+            <p data-copy="de">Darf das System weitermachen?</p>
+            <p data-copy="en">Can it prove why?</p>
+            <p data-copy="de">Kann es belegen, warum?</p>
+          </div>
+
+          <p class="micro-note" data-copy="en">Retrieval answers the first question. OBDS answers all six, and keeps the answer. That is the difference between looking something up and making a governed decision.</p>
+          <p class="micro-note" data-copy="de">Retrieval beantwortet die erste Frage. OBDS beantwortet alle sechs und behält die Antwort. Das ist der Unterschied zwischen Nachschlagen und einer freigegebenen Entscheidung.</p>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">defined</span></div><div data-copy="en">An applicable value exists and may be used when the scope matches.</div><div data-copy="de">Ein anwendbarer Wert existiert und darf bei passendem Scope verwendet werden.</div></div>
+            <div class="state-row"><div><span class="state-name">unknown</span></div><div data-copy="en">A value is expected but not known. Dependent use is blocked or escalated. Never guessed.</div><div data-copy="de">Ein Wert wird erwartet, ist aber nicht bekannt. Abhängige Nutzung wird blockiert oder eskaliert. Nie geraten.</div></div>
+            <div class="state-row"><div><span class="state-name">not_defined</span></div><div data-copy="en">The brand deliberately defines no value. The system returns that, it does not infer one.</div><div data-copy="de">Die Marke legt bewusst keinen Wert fest. Das System gibt genau das zurück und leitet nichts ab.</div></div>
+            <div class="state-row"><div><span class="state-name">not_applicable</span></div><div data-copy="en">The element does not apply here. It is omitted with an explanation.</div><div data-copy="de">Das Element trifft hier nicht zu. Es entfällt mit Begründung.</div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Four states, and only these four. Brand States describe knowledge status, nothing else. Workflow states such as draft or pending review are not brand states.</p>
+          <p class="micro-note" data-copy="de">Vier Zustände, und nur diese vier. Brand States beschreiben ausschließlich den Wissensstand. Workflow-Zustände wie Draft oder Pending Review sind keine Brand States.</p>
+
+          <div class="callout">
+            <div><span class="callout-key">obligation: prohibit</span></div>
+            <div>
+              <p data-copy="en">A prohibition is not a knowledge state. It is an explicit RULE with its own scope, its declared enforcement and its declared validation method. That is the only path a brand has to forbid something, and it is the reason a block can be traced back to a decision instead of to a missing value.</p>
+              <p data-copy="de">Ein Verbot ist kein Wissenszustand. Es ist eine explizite RULE mit eigenem Scope, deklariertem Enforcement und deklarierter Prüfmethode. Das ist der einzige Weg, auf dem eine Marke etwas verbieten kann, und der Grund, warum sich eine Blockade auf eine Entscheidung zurückführen lässt und nicht auf einen fehlenden Wert.</p>
+            </div>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">subject</span></div><div data-copy="en">The semantic key. Elements that compete for the same meaning declare the same subject. Similar names or values never imply it.</div><div data-copy="de">Der semantische Schlüssel. Elemente, die um dieselbe Bedeutung konkurrieren, deklarieren dasselbe Subject. Ähnliche Namen oder Werte reichen nie aus.</div></div>
+            <div class="state-row"><div><span class="state-name">scope</span></div><div data-copy="en">Market, channel, product, campaign, audience. A stricter scope wins inside its own scope, and nowhere else.</div><div data-copy="de">Markt, Kanal, Produkt, Kampagne, Zielgruppe. Der engere Scope gewinnt innerhalb seines Scopes, sonst nirgends.</div></div>
+            <div class="state-row"><div><span class="state-name">conflict</span></div><div data-copy="en">Two equally specific candidates for one subject are a hard failure. File order, array order and timestamps are never precedence.</div><div data-copy="de">Zwei gleich spezifische Kandidaten für ein Subject sind ein harter Fehler. Dateireihenfolge, Array-Reihenfolge und Zeitstempel sind nie Präzedenz.</div></div>
+            <div class="state-row"><div><span class="state-name">asOf</span></div><div data-copy="en">Every build declares the moment it is built for. Validity is evaluated against that timestamp, never against the compiler clock.</div><div data-copy="de">Jeder Build deklariert den Zeitpunkt, für den er gilt. Gültigkeit wird gegen diesen Zeitstempel geprüft, nie gegen die Systemuhr.</div></div>
+          </div>
+
+          <p class="pull" data-copy="en">The point is not that a model understands the brand. The point is that a supported decision exists, or provably does not.</p>
+          <p class="pull" data-copy="de">Es geht nicht darum, dass ein Modell die Marke versteht. Es geht darum, dass eine belegte Entscheidung existiert. Oder nachweisbar nicht.</p>
+        </div>
+      </section>
+
+      <section class="section inverse" id="distinctive">
+        <div class="section-number"><span data-copy="en">04 / Distinctive</span><span data-copy="de">04 / Unterscheidbar</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">A brand is easier to hold by its edges.</h2>
+          <h2 data-copy="de">Eine Marke lässt sich an ihren Kanten besser fassen.</h2>
+          <p class="lead" data-copy="en">Qualitative direction usually dies as a list of adjectives that every brand could claim. A Semantic Boundary keeps it structured and machine-readable: one subject, one quality, what it is, what it is not, and the trade-off the brand has already settled.</p>
+          <p class="lead" data-copy="de">Qualitative Richtung stirbt meist als Adjektivliste, die jede Marke für sich beanspruchen könnte. Eine Semantic Boundary hält sie strukturiert und maschinenlesbar: ein Subject, eine Quality, was sie ist, was sie nicht ist, und der Trade-off, den die Marke bereits entschieden hat.</p>
+
+          <div class="boundary">
+            <div class="boundary-head">
+              <div><span class="label">subject</span><span class="boundary-term">voice</span></div>
+              <div><span class="label">quality</span><span class="boundary-term">confident</span></div>
+            </div>
+            <div class="boundary-body">
+              <div>
+                <span class="label">is</span>
+                <ul>
+                  <li data-copy="en">clear</li><li data-copy="de">klar</li>
+                  <li data-copy="en">specific</li><li data-copy="de">konkret</li>
+                  <li data-copy="en">decisive</li><li data-copy="de">entschieden</li>
+                  <li data-copy="en">grounded</li><li data-copy="de">belegt</li>
+                </ul>
+              </div>
+              <div>
+                <span class="label">is not</span>
+                <ul>
+                  <li data-copy="en">aggressive</li><li data-copy="de">aggressiv</li>
+                  <li data-copy="en">boastful</li><li data-copy="de">prahlerisch</li>
+                  <li data-copy="en">absolute without evidence</li><li data-copy="de">absolut ohne Beleg</li>
+                </ul>
+              </div>
+            </div>
+            <div class="boundary-foot">
+              <span data-copy="en">tieBreaker: prefer precise over forceful.</span>
+              <span data-copy="de">tieBreaker: precise vor forceful.</span>
+            </div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key">guidance != compliance</span></div>
+            <div>
+              <p data-copy="en">A missing positive trait is not a violation. Strong evidence of an is-not trait may support a material conflict and send the result to review. Only a separate applicable RULE turns that conflict into a compliance violation. Keeping the two apart is what stops qualitative direction from silently becoming a blocking checklist.</p>
+              <p data-copy="de">Ein fehlendes positives Merkmal ist keine Verletzung. Starke Evidenz für ein Is-not-Merkmal kann einen Material Conflict stützen und das Ergebnis in die Prüfung geben. Erst eine separate anwendbare RULE macht daraus eine Compliance-Verletzung. Diese Trennung verhindert, dass qualitative Richtung still zur blockierenden Checkliste wird.</p>
+            </div>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">photography</span></div><div data-copy="en">is: available light, working environments. is not: staged perfection, stock gestures.</div><div data-copy="de">is: vorhandenes Licht, echte Arbeitsumgebungen. is not: gestellte Perfektion, Stock-Gesten.</div></div>
+            <div class="state-row"><div><span class="state-name">art direction</span></div><div data-copy="en">is: structural, high contrast. is not: decorative, softened, ornamental.</div><div data-copy="de">is: strukturell, kontrastreich. is not: dekorativ, weichgezeichnet, ornamental.</div></div>
+            <div class="state-row"><div><span class="state-name">composition</span></div><div data-copy="en">is: one clear subject, generous space. is not: crowded, competing focal points.</div><div data-copy="de">is: ein klares Motiv, großzügiger Raum. is not: überfüllt, konkurrierende Blickpunkte.</div></div>
+          </div>
+
+          <p class="pull" data-copy="en">Not just what the brand is. What it is not.</p>
+          <p class="pull" data-copy="de">Nicht nur, was die Marke ist. Auch, was sie nicht ist.</p>
+
+          <p class="micro-note" data-copy="en">The same contract holds for voice, photography, art direction, composition and product depiction. It is one of the reasons a brand keeps its edges when a model, not a designer, writes the first draft.</p>
+          <p class="micro-note" data-copy="de">Derselbe Contract gilt für Voice, Fotografie, Art Direction, Komposition und Produktdarstellung. Er ist einer der Gründe, warum eine Marke ihre Kanten behält, wenn ein Modell und kein Designer den ersten Entwurf schreibt.</p>
+        </div>
+      </section>
+
+      <section class="section" id="compile">
+        <div class="section-number"><span data-copy="en">05 / Compile</span><span data-copy="de">05 / Kompilieren</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Not the archive. The exact truth for this task.</h2>
+          <h2 data-copy="de">Nicht das Archiv. Genau die Wahrheit für diese Aufgabe.</h2>
+          <p class="lead" data-copy="en">Sources are consolidated once into an approved Brand Manifest. A Build Plan names the target and the moment in time. The compiler resolves scope, verifies that required truth exists and emits one Compiled Brand Context. Runtime builds the model input from that artefact and from nothing else.</p>
+          <p class="lead" data-copy="de">Quellen werden einmal zu einem freigegebenen Brand Manifest zusammengeführt. Ein Build Plan benennt das Target und den Zeitpunkt. Der Compiler löst den Scope auf, prüft, ob die geforderte Wahrheit vorhanden ist, und erzeugt einen Compiled Brand Context. Die Runtime baut den Model Input aus genau diesem Artefakt und aus nichts anderem.</p>
+
+          <div class="flow" role="group" aria-label="From sources to exact context">
+            <div class="flow-step">
+              <span class="flow-index">01</span>
+              <span class="flow-name" data-copy="en">Sources</span>
+              <span class="flow-name" data-copy="de">Quellen</span>
+              <span class="flow-note" data-copy="en">Brandbook, PIM, DAM, legal, claims, markets, decisions.</span>
+              <span class="flow-note" data-copy="de">Brandbook, PIM, DAM, Legal, Claims, Märkte, Entscheidungen.</span>
+            </div>
+            <div class="flow-step">
+              <span class="flow-index">02</span>
+              <span class="flow-name" data-copy="en">Governed brand truth</span>
+              <span class="flow-name" data-copy="de">Freigegebene Markenwahrheit</span>
+              <span class="flow-note" data-copy="en">One approved manifest. Scoped elements, states, rules, sources.</span>
+              <span class="flow-note" data-copy="de">Ein freigegebenes Manifest. Gescopte Elemente, States, Rules, Quellen.</span>
+            </div>
+            <div class="flow-step">
+              <span class="flow-index">03</span>
+              <span class="flow-name" data-copy="en">Declared target</span>
+              <span class="flow-name" data-copy="de">Deklariertes Target</span>
+              <span class="flow-note" data-copy="en">Market, channel, task, required truth, asOf, token budget.</span>
+              <span class="flow-note" data-copy="de">Markt, Kanal, Aufgabe, geforderte Wahrheit, asOf, Token-Budget.</span>
+            </div>
+            <div class="flow-step">
+              <span class="flow-index">04</span>
+              <span class="flow-name" data-copy="en">Exact context</span>
+              <span class="flow-name" data-copy="de">Exakter Kontext</span>
+              <span class="flow-note" data-copy="en">One compiled artefact, hashed, with its checks and its validity window.</span>
+              <span class="flow-note" data-copy="de">Ein kompiliertes Artefakt, gehasht, mit Checks und Gültigkeitsfenster.</span>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">If required truth is missing, ambiguous or in conflict, the build stops and no runtime context is produced. Stopping early is the feature.</p>
+          <p class="micro-note" data-copy="de">Fehlt geforderte Wahrheit, ist sie mehrdeutig oder im Konflikt, stoppt der Build und es entsteht kein Runtime-Kontext. Das frühe Anhalten ist der Zweck.</p>
+
+          <div class="runtime-slots">
+            <div class="runtime-slot"><div class="slot-index">01</div><div class="slot-name">HARD_BOUNDARIES</div><div data-copy="en">Every applicable rule that blocks or requires approval. Never dropped to fit a token budget.</div><div data-copy="de">Jede anwendbare Rule, die blockiert oder Freigabe verlangt. Wird nie für ein Token-Budget entfernt.</div></div>
+            <div class="runtime-slot"><div class="slot-index">02</div><div class="slot-name">FACT_GROUNDING</div><div data-copy="en">Full governed elements for the target. Summaries cannot replace them.</div><div data-copy="de">Vollständige freigegebene Elemente für das Target. Zusammenfassungen ersetzen sie nicht.</div></div>
+            <div class="runtime-slot"><div class="slot-index">03</div><div class="slot-name">STATE_MAP</div><div data-copy="en">The known gaps that change the answer or prevent an unsafe assumption.</div><div data-copy="de">Die bekannten Lücken, die die Antwort verändern oder eine unsichere Annahme verhindern.</div></div>
+            <div class="runtime-slot"><div class="slot-index">04</div><div class="slot-name">GUIDANCE_CONTEXT</div><div data-copy="en">Active guidance and reasoning. Non-authoritative: it cannot add a rule, a permission, an exception or a fact.</div><div data-copy="de">Aktive Guidance und Reasoning. Nicht autoritativ: kann keine Rule, keine Erlaubnis, keine Ausnahme und keinen Fakt hinzufügen.</div></div>
+            <div class="runtime-slot"><div class="slot-index">05</div><div class="slot-name">TASK_INPUT</div><div data-copy="en">The briefing and the user request. It cannot rewrite brand truth.</div><div data-copy="de">Das Briefing und die Nutzeranfrage. Sie können Markenwahrheit nicht umschreiben.</div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">This is the assembled model input, rendered in this fixed order and hashed before the call. Inside the compiled artefact the corresponding delivery slot is named STYLE_TEXTURE; the assembled input the model receives uses GUIDANCE_CONTEXT.</p>
+          <p class="micro-note" data-copy="de">Das ist der assemblierte Model Input, in dieser festen Reihenfolge gerendert und vor dem Aufruf gehasht. Im kompilierten Artefakt heißt der zugehörige Delivery-Slot STYLE_TEXTURE; der assemblierte Input, den das Modell erhält, verwendet GUIDANCE_CONTEXT.</p>
+        </div>
+      </section>
+
+      <section class="section inverse" id="create">
+        <div class="section-number"><span data-copy="en">06 / Create</span><span data-copy="de">06 / Gestalten</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Define the design space. Not the layout.</h2>
+          <h2 data-copy="de">Den Design Space definieren. Nicht das Layout.</h2>
+          <p class="lead" data-copy="en">OBDS holds no pixel coordinates. It holds what a composition is made of, what must never be dropped, what has to keep its distance, and how values combine. A renderer produces one solution inside that space. A validator proves the solution stayed inside.</p>
+          <p class="lead" data-copy="de">OBDS speichert keine Pixelkoordinaten. Es speichert, woraus eine Komposition besteht, was nie entfallen darf, was Abstand halten muss und wie Werte zusammenwirken. Ein Renderer erzeugt eine Lösung in diesem Raum. Ein Validator weist nach, dass sie darin geblieben ist.</p>
+
+          <div class="flow flow-five" role="group" aria-label="From brief to validated render">
+            <div class="flow-step"><span class="flow-index">01</span><span class="flow-name" data-copy="en">Brief</span><span class="flow-name" data-copy="de">Briefing</span><span class="flow-note" data-copy="en">One product, a headline, a call to action, legal, three formats.</span><span class="flow-note" data-copy="de">Ein Produkt, eine Headline, ein Call to Action, Legal, drei Formate.</span></div>
+            <div class="flow-step"><span class="flow-index">02</span><span class="flow-name" data-copy="en">Design space</span><span class="flow-name" data-copy="de">Design Space</span><span class="flow-note" data-copy="en">Roles, hierarchy, clear zones, minimum sizes, what may never be dropped.</span><span class="flow-note" data-copy="de">Roles, Hierarchie, Clear Zones, Mindestgrößen, was nie entfallen darf.</span></div>
+            <div class="flow-step"><span class="flow-index">03</span><span class="flow-name" data-copy="en">Composition</span><span class="flow-name" data-copy="de">Komposition</span><span class="flow-note" data-copy="en">One valid arrangement per format, chosen by the renderer.</span><span class="flow-note" data-copy="de">Eine gültige Anordnung je Format, gewählt vom Renderer.</span></div>
+            <div class="flow-step"><span class="flow-index">04</span><span class="flow-name" data-copy="en">Render</span><span class="flow-name" data-copy="de">Render</span><span class="flow-note" data-copy="en">HTML, PDF, banner, image, video. The renderer is not part of OBDS.</span><span class="flow-note" data-copy="de">HTML, PDF, Banner, Bild, Video. Der Renderer ist nicht Teil von OBDS.</span></div>
+            <div class="flow-step"><span class="flow-index">05</span><span class="flow-name" data-copy="en">Validate</span><span class="flow-name" data-copy="de">Validierung</span><span class="flow-note" data-copy="en">Geometry evidence goes back through the same governed truth.</span><span class="flow-note" data-copy="de">Geometry Evidence läuft zurück durch dieselbe freigegebene Wahrheit.</span></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">One product, two logos, a headline, a call to action and a legal line. Three formats, three different solutions, one governed truth. The diagrams below name the composition roles the renderer placed in each canvas.</p>
+          <p class="micro-note" data-copy="de">Ein Produkt, zwei Logos, eine Headline, ein Call to Action und eine Rechtszeile. Drei Formate, drei verschiedene Lösungen, eine freigegebene Wahrheit. Die Diagramme benennen die Composition Roles, die der Renderer im jeweiligen Canvas platziert hat.</p>
+
+          <div class="canvases">
+            <figure>
+              <div class="canvas ratio-a">
+                <div class="role-row"><span class="role">brand-logo</span><span class="role">partner-logo</span></div>
+                <span class="role" style="flex: 1.4;">hero-product</span>
+                <span class="role" style="flex: 1;">headline</span>
+                <div class="role-row" style="flex: .8;"><span class="role">cta</span><span class="role">legal</span></div>
+              </div>
+              <figcaption>
+                <span class="canvas-size">300 x 250</span>
+                <span data-copy="en">Both identity tiers fit. Supporting copy is not placed.</span>
+                <span data-copy="de">Beide Identity-Tiers passen. Supporting Copy wird nicht platziert.</span>
+              </figcaption>
+            </figure>
+            <figure>
+              <div class="canvas ratio-b">
+                <div class="role-row"><span class="role">brand-logo</span></div>
+                <span class="role" style="flex: 2.2;">hero-product</span>
+                <span class="role" style="flex: 1.1;">headline</span>
+                <span class="role" style="flex: .8;">cta</span>
+                <span class="role" style="flex: .5;">legal</span>
+              </div>
+              <figcaption>
+                <span class="canvas-size">160 x 600</span>
+                <span data-copy="en">Space runs out. The partner logo is dropped by declared omission priority. brand-logo and legal are never omitted.</span>
+                <span data-copy="de">Der Platz reicht nicht. Das Partner-Logo entfällt nach deklarierter Omission Priority. brand-logo und legal entfallen nie.</span>
+              </figcaption>
+            </figure>
+            <figure>
+              <div class="canvas ratio-c">
+                <span class="role" style="flex: 2.4;">hero-product</span>
+                <span class="role" style="flex: 1.1;">headline</span>
+                <span class="role" style="flex: .8;">supporting-copy</span>
+                <span class="role" style="flex: .8;">cta</span>
+                <div class="role-row" style="flex: .7;"><span class="role">brand-logo</span><span class="role">partner-logo</span></div>
+                <span class="role" style="flex: .5;">legal</span>
+              </div>
+              <figcaption>
+                <span class="canvas-size">1080 x 1350</span>
+                <span data-copy="en">More room, so supporting copy returns. Identity hierarchy is unchanged.</span>
+                <span data-copy="de">Mehr Raum, also kommt Supporting Copy zurück. Die Identity Hierarchy bleibt unverändert.</span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <p class="pull" data-copy="en">Different layouts. Same governed brand.</p>
+          <p class="pull" data-copy="de">Andere Layouts. Dieselbe freigegebene Marke.</p>
+
+          <div class="contrast-list">
+            <div class="contrast-row">
+              <div><strong data-copy="en">OBDS may define</strong><strong data-copy="de">OBDS darf festlegen</strong><span data-copy="en">Composition roles, identity hierarchy, clear zones, minimum sizes, measurements, omission priority, never-omit roles, and how two values interact when both apply.</span><span data-copy="de">Composition Roles, Identity Hierarchy, Clear Zones, Mindestgrößen, Maße, Omission Priority, Never-Omit-Roles und wie zwei Werte zusammenwirken, wenn beide gelten.</span></div>
+              <div><strong data-copy="en">The renderer decides</strong><strong data-copy="de">Der Renderer entscheidet</strong><span data-copy="en">Coordinates, grid, breakpoints, the typographic scale inside the declared bounds, and which of the valid solutions it produces.</span><span data-copy="de">Koordinaten, Raster, Breakpoints, die typografische Skala innerhalb der deklarierten Grenzen und welche der gültigen Lösungen entsteht.</span></div>
+            </div>
+            <div class="contrast-row">
+              <div><strong data-copy="en">Never brand truth</strong><strong data-copy="de">Nie Markenwahrheit</strong><span data-copy="en">Pixel positions, per-format layout templates, capacity tables, HTML, CSS, SVG, renderer code and motion timelines.</span><span data-copy="de">Pixelpositionen, Layout-Templates je Format, Kapazitätstabellen, HTML, CSS, SVG, Renderer-Code und Motion-Timelines.</span></div>
+              <div><strong data-copy="en">Evidence, not opinion</strong><strong data-copy="de">Evidenz statt Meinung</strong><span data-copy="en">The renderer emits a geometry record for the artefact it produced: canvas, objects, roles, element references and bounding boxes.</span><span data-copy="de">Der Renderer gibt einen Geometry Record für das erzeugte Artefakt aus: Canvas, Objekte, Roles, Element-Referenzen und Bounding Boxes.</span></div>
+            </div>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">visual.min_size</span></div><div data-copy="en">Fails when a selected object drops below the declared minimum. Logo, call to action, legibility.</div><div data-copy="de">Schlägt fehl, wenn ein Objekt unter die deklarierte Mindestgröße fällt. Logo, Call to Action, Lesbarkeit.</div></div>
+            <div class="state-row"><div><span class="state-name">visual.clear_zone</span></div><div data-copy="en">Fails when another object enters a protected keep-out region.</div><div data-copy="de">Schlägt fehl, wenn ein anderes Objekt in eine geschützte Schutzzone eindringt.</div></div>
+            <div class="state-row"><div><span class="state-name">visual.contains</span></div><div data-copy="en">Fails when an object leaves its declared container or inset. Safe zones.</div><div data-copy="de">Schlägt fehl, wenn ein Objekt seinen deklarierten Container oder Inset verlässt. Safe Zones.</div></div>
+            <div class="state-row"><div><span class="state-name">visual.no_overlap</span></div><div data-copy="en">Fails when selected object sets intersect. Legal, product, call to action, logos.</div><div data-copy="de">Schlägt fehl, wenn ausgewählte Objektmengen sich überschneiden. Legal, Produkt, Call to Action, Logos.</div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Four deterministic checks, deliberately no more. Anything richer runs behind a declared, versioned validator. Unsupported geometry fails or routes to that validator. It is never guessed.</p>
+          <p class="micro-note" data-copy="de">Vier deterministische Checks, bewusst nicht mehr. Alles Weitergehende läuft hinter einem deklarierten, versionierten Validator. Nicht unterstützte Geometrie schlägt fehl oder wird an diesen Validator geleitet. Sie wird nie geraten.</p>
+
+          <p class="pull" data-copy="en">OBDS defines the permissible design space. The render layer produces one solution inside it. The validator proves that the solution stayed inside.</p>
+          <p class="pull" data-copy="de">OBDS definiert den zulässigen Design Space. Die Render-Schicht erzeugt eine Lösung darin. Der Validator weist nach, dass die Lösung darin geblieben ist.</p>
+        </div>
+      </section>
+
+      <section class="section" id="prove">
+        <div class="section-number"><span data-copy="en">07 / Prove</span><span data-copy="de">07 / Nachweisen</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Months later, you can still show why.</h2>
+          <h2 data-copy="de">Monate später lässt sich noch zeigen, warum.</h2>
+          <p class="lead" data-copy="en">Which approved truth was used. Which rules applied. Which context was assembled. Whether a model was called at all. Why the result was released, blocked or sent to approval. The record is a by-product of the run, not a report written afterwards.</p>
+          <p class="lead" data-copy="de">Welche freigegebene Wahrheit verwendet wurde. Welche Rules galten. Welcher Kontext assembliert wurde. Ob überhaupt ein Modell aufgerufen wurde. Warum das Ergebnis freigegeben, blockiert oder zur Freigabe geleitet wurde. Der Nachweis fällt im Lauf an und wird nicht nachträglich geschrieben.</p>
+
+          <div class="proof-chain" role="group" aria-label="What is recorded at each stage">
+            <div class="proof-row"><span class="proof-a" data-copy="en">Truth</span><span class="proof-a" data-copy="de">Wahrheit</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">versioned and canonically hashed</span><span class="proof-b" data-copy="de">versioniert und kanonisch gehasht</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Context</span><span class="proof-a" data-copy="de">Kontext</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">compiled for one declared target</span><span class="proof-b" data-copy="de">kompiliert für ein deklariertes Target</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Input</span><span class="proof-a" data-copy="de">Input</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">hashed before the model is called</span><span class="proof-b" data-copy="de">gehasht, bevor das Modell aufgerufen wird</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Output</span><span class="proof-a" data-copy="de">Output</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">checked before and after generation</span><span class="proof-b" data-copy="de">geprüft vor und nach der Generierung</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Decision</span><span class="proof-a" data-copy="de">Entscheidung</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">recorded with its reason</span><span class="proof-b" data-copy="de">mit Begründung protokolliert</span></div>
+            <div class="proof-row"><span class="proof-a" data-copy="en">Render</span><span class="proof-a" data-copy="de">Render</span><span class="proof-arrow" aria-hidden="true">&#8594;</span><span class="proof-b" data-copy="en">measured against the design space</span><span class="proof-b" data-copy="de">gegen den Design Space gemessen</span></div>
+          </div>
+
+          <div class="integrity-list">
+            <div class="integrity-item"><div><h3 data-copy="en">Canonical hashes prove the approved bytes</h3><h3 data-copy="de">Canonical Hashes beweisen die freigegebenen Bytes</h3><p data-copy="en">One serialisation contract across languages. Duplicate keys are rejected, integers that cannot round-trip are rejected, and 1 and 1.0 hash identically.</p><p data-copy="de">Ein Serialisierungs-Contract über Sprachgrenzen hinweg. Doppelte Keys werden abgelehnt, Integer ohne Roundtrip werden abgelehnt, und 1 und 1.0 hashen identisch.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Value contracts pin the machine meaning</h3><h3 data-copy="de">Value Contracts fixieren die maschinelle Bedeutung</h3><p data-copy="en">A structured value binds a shape hash, a schema reference, a schema hash and an optional deterministic validator. Structure and semantics are pinned separately.</p><p data-copy="de">Ein strukturierter Wert bindet Shape-Hash, Schema-Referenz, Schema-Hash und optional einen deterministischen Validator. Struktur und Semantik werden getrennt fixiert.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Changes are shown before approval</h3><h3 data-copy="de">Änderungen werden vor der Freigabe gezeigt</h3><p data-copy="en">A deterministic change report separates added, changed and removed elements and keeps value, scope, state, validity and contract changes apart.</p><p data-copy="de">Ein deterministischer Change Report trennt hinzugefügte, geänderte und entfernte Elemente und hält Wert-, Scope-, State-, Gültigkeits- und Contract-Änderungen auseinander.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Every runtime attempt is recorded</h3><h3 data-copy="de">Jeder Runtime-Versuch wird protokolliert</h3><p data-copy="en">Target, artefact hash, assembly hash, model input hash, check results, whether a model was called, and one decision: released, blocked, approval required or failed.</p><p data-copy="de">Target, Artefakt-Hash, Assembly-Hash, Model-Input-Hash, Check-Ergebnisse, ob ein Modell aufgerufen wurde, und eine Entscheidung: freigegeben, blockiert, Freigabe erforderlich oder fehlgeschlagen.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Rendered output is measured, not judged</h3><h3 data-copy="de">Gerendertes wird gemessen, nicht bewertet</h3><p data-copy="en">Geometry evidence carries the boxes that were actually produced. A composition claim fails if a never-omit role is missing, rather than passing vacuously.</p><p data-copy="de">Geometry Evidence trägt die tatsächlich erzeugten Boxen. Ein Composition-Claim schlägt fehl, wenn eine Never-Omit-Role fehlt, statt leer durchzugehen.</p></div></div>
+            <div class="integrity-item"><div><h3 data-copy="en">Conformance is tested, not declared</h3><h3 data-copy="de">Conformance wird getestet, nicht behauptet</h3><p data-copy="en">A tool may say it uses OBDS concepts. It may only say OBDS conformant once the official suite for that exact version and profile is green and the result is retained.</p><p data-copy="de">Ein Tool darf sagen, dass es OBDS-Konzepte nutzt. OBDS-konform darf es sich erst nennen, wenn die offizielle Suite für genau diese Version und dieses Profil grün ist und das Ergebnis aufbewahrt wird.</p></div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">A decision record is auditable system evidence. It is not cryptographic proof that no other, uninstrumented call happened somewhere else.</p>
+          <p class="micro-note" data-copy="de">Ein Decision Record ist auditierbare Systemevidenz. Er ist kein kryptografischer Beweis, dass anderswo kein weiterer, nicht instrumentierter Aufruf stattgefunden hat.</p>
+        </div>
+      </section>
+
+      <section class="section inverse" id="difference">
+        <div class="section-number"><span data-copy="en">08 / Difference</span><span data-copy="de">08 / Unterschied</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Next to what you already have.</h2>
+          <h2 data-copy="de">Neben dem, was schon da ist.</h2>
+          <p class="lead" data-copy="en">None of these are replaced. They answer different questions, and OBDS answers the one that was missing once machines started producing the work.</p>
+          <p class="lead" data-copy="de">Nichts davon wird ersetzt. Sie beantworten unterschiedliche Fragen, und OBDS beantwortet die, die gefehlt hat, seit Maschinen die Arbeit produzieren.</p>
+
+          <div class="contrast-list">
+            <div class="contrast-row">
+              <div><strong data-copy="en">Brandbook</strong><strong data-copy="de">Brandbook</strong><span data-copy="en">Explains what the brand is, to people.</span><span data-copy="de">Erklärt Menschen, was die Marke ist.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Determines which truth applies to this market, channel and task, at this point in time.</span><span data-copy="de">Bestimmt, welche Wahrheit für diesen Markt, diesen Kanal und diese Aufgabe gilt, zu diesem Zeitpunkt.</span></div>
+            </div>
+            <div class="contrast-row">
+              <div><strong data-copy="en">Prompt</strong><strong data-copy="de">Prompt</strong><span data-copy="en">Asks a model to behave.</span><span data-copy="de">Bittet ein Modell, sich zu verhalten.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Can stop the task before a model is called, and records that it did.</span><span data-copy="de">Kann die Aufgabe stoppen, bevor ein Modell aufgerufen wird, und hält das fest.</span></div>
+            </div>
+            <div class="contrast-row">
+              <div><strong data-copy="en">Design system</strong><strong data-copy="de">Design System</strong><span data-copy="en">Holds reusable design decisions and components.</span><span data-copy="de">Hält wiederverwendbare Design-Entscheidungen und Komponenten.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Declares the permissible space those decisions may move in, and proves an output stayed inside.</span><span data-copy="de">Deklariert den zulässigen Raum, in dem sich diese Entscheidungen bewegen dürfen, und weist nach, dass ein Output darin geblieben ist.</span></div>
+            </div>
+            <div class="contrast-row">
+              <div><strong data-copy="en">A structured brand file</strong><strong data-copy="de">Eine strukturierte Markendatei</strong><span data-copy="en">Makes the brand readable for a model.</span><span data-copy="de">Macht die Marke für ein Modell lesbar.</span></div>
+              <div><strong>OBDS</strong><span data-copy="en">Separates fact from rule from guidance, carries explicit unknowns, resolves conflicts and leaves evidence behind.</span><span data-copy="de">Trennt Fakt, Rule und Guidance, führt explizite Unbekannte, löst Konflikte auf und hinterlässt Evidenz.</span></div>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">A small supervised brand chat can read a good brandbook directly and be fine. Compiled runtime and context assembly earn their cost when a system must stop on missing truth, tell retrieval failure apart from absent truth, reproduce an exact model input, or prove that an unsafe task never reached a model.</p>
+          <p class="micro-note" data-copy="de">Ein kleiner, betreuter Brand-Chat kann ein gutes Brandbook direkt lesen und damit gut fahren. Compiled Runtime und Context Assembly lohnen sich, wenn ein System bei fehlender Wahrheit stoppen, Retrieval-Fehler von fehlender Wahrheit unterscheiden, einen exakten Model Input reproduzieren oder nachweisen muss, dass eine unsichere Aufgabe nie ein Modell erreicht hat.</p>
+        </div>
+      </section>
+
+      <section class="section" id="challenged">
+        <div class="section-number"><span data-copy="en">09 / Challenged</span><span data-copy="de">09 / Angegriffen</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Built to be challenged.</h2>
+          <h2 data-copy="de">Gebaut, um angegriffen zu werden.</h2>
+          <p class="lead" data-copy="en">OBDS 1.0 was handed to unfamiliar language models with little project background and asked to use the contract, explain it, critique it and break it. Every reproducible failure became a regression test.</p>
+          <p class="lead" data-copy="de">OBDS 1.0 wurde wiederholt fremden Sprachmodellen ohne Projektwissen übergeben, mit der Aufgabe, den Contract zu benutzen, zu erklären, zu kritisieren und zu brechen. Jeder reproduzierbare Fehler wurde zu einem Regressionstest.</p>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name">foundation</span></div><div class="publication-value">1052</div></div>
+            <div class="state-row"><div><span class="state-name">context-delivery</span></div><div class="publication-value">3</div></div>
+            <div class="state-row"><div><span class="state-name">context-assembly</span></div><div class="publication-value">24</div></div>
+            <div class="state-row"><div><span class="state-name">design-space</span></div><div class="publication-value">20</div></div>
+            <div class="state-row"><div><span class="state-name">integration</span></div><div class="publication-value">15</div></div>
+            <div class="state-row"><div><span class="state-name">golden</span></div><div class="publication-value">6</div></div>
+            <div class="state-row"><div><span class="state-name">adversarial</span></div><div class="publication-value">38</div></div>
+            <div class="state-row"><div><span class="state-name">total</span></div><div class="publication-value" data-copy="en">1158 passed, 0 failed</div><div class="publication-value" data-copy="de">1158 bestanden, 0 fehlgeschlagen</div></div>
+          </div>
+
+          <p class="micro-note" data-copy="en">That is a signal, not a proof. What it suggests is narrow and useful: an unfamiliar implementer can infer what the contract is for and work inside it. Late review cycles increasingly surfaced canonicalisation and interoperability defects rather than confusion about the architecture. Those were the ones worth fixing. The result proves the declared conformance suite passes. It proves nothing about how any particular model behaves in production.</p>
+          <p class="micro-note" data-copy="de">Das ist ein Signal, kein Beweis. Die Aussage ist eng und trotzdem nützlich: Ein fremder Implementierer kann ableiten, wofür der Contract da ist, und darin arbeiten. Späte Review-Zyklen fanden zunehmend Canonicalisation- und Interoperabilitätsfehler statt Verwirrung über die Architektur. Genau die waren es wert, behoben zu werden. Das Ergebnis belegt, dass die deklarierte Conformance Suite besteht. Es belegt nichts darüber, wie sich ein bestimmtes Modell in der Produktion verhält.</p>
+        </div>
+      </section>
+
+      <section class="section inverse" id="open">
+        <div class="section-number"><span data-copy="en">10 / Extend</span><span data-copy="de">10 / Erweitern</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">One specification. One Foundation. Optional capabilities.</h2>
+          <h2 data-copy="de">Eine Spezifikation. Eine Foundation. Optionale Capabilities.</h2>
+          <p class="lead" data-copy="en">Open Brand Definition is an open specification for governed brand truth and AI creation. The Foundation is always required. It defines Brand Elements, knowledge states, rules, value contracts, scope, provenance and integrity. Everything beyond it is declared, optional and separately testable.</p>
+          <p class="lead" data-copy="de">Open Brand Definition ist eine offene Spezifikation für freigegebene Markenwahrheit und AI-Gestaltung. Die Foundation ist immer verpflichtend. Sie definiert Brand Elements, Knowledge States, Rules, Value Contracts, Scope, Provenance und Integrität. Alles darüber hinaus ist deklariert, optional und separat testbar.</p>
+
+          <div class="definition-grid">
+            <article class="definition-card"><span class="definition-code">Runtime</span><h3>Compiled Runtime</h3><p data-copy="en">Build plans, compiled context, validity windows.</p><p data-copy="de">Build Plans, kompilierter Kontext, Gültigkeitsfenster.</p></article>
+            <article class="definition-card"><span class="definition-code">Runtime</span><h3>Context Delivery</h3><p data-copy="en">Slot content, token budgets, human-readable views.</p><p data-copy="de">Slot-Inhalte, Token-Budgets, menschenlesbare Ansichten.</p></article>
+            <article class="definition-card"><span class="definition-code">Runtime</span><h3>Context Assembly</h3><p data-copy="en">Retrieval, no-hit resolution, the exact model input package.</p><p data-copy="de">Retrieval, No-Hit-Auflösung, das exakte Model Input Package.</p></article>
+            <article class="definition-card"><span class="definition-code">Output</span><h3>Text</h3><p data-copy="en">Checks before and after generation for written output.</p><p data-copy="de">Checks vor und nach der Generierung für Text-Output.</p></article>
+            <article class="definition-card"><span class="definition-code">Output</span><h3>Visual Operations</h3><p data-copy="en">Geometry evidence and the four deterministic visual checks.</p><p data-copy="de">Geometry Evidence und die vier deterministischen Visual Checks.</p></article>
+            <article class="definition-card"><span class="definition-code">Output</span><h3>Composition</h3><p data-copy="en">Roles, identity hierarchy, omission priority, relations.</p><p data-copy="de">Roles, Identity Hierarchy, Omission Priority, Relationen.</p></article>
+            <article class="definition-card"><span class="definition-code">Content</span><h3>Claims</h3><p data-copy="en">Claims, evidence and disclaimers as governed records.</p><p data-copy="de">Claims, Evidenz und Disclaimer als freigegebene Records.</p></article>
+            <article class="definition-card"><span class="definition-code">Content</span><h3>Localisation</h3><p data-copy="en">Locale-scoped truth, transcreation and market variance.</p><p data-copy="de">Locale-gescopte Wahrheit, Transkreation und Marktvarianz.</p></article>
+            <article class="definition-card"><span class="definition-code">Process</span><h3>Operations</h3><p data-copy="en">Governed records, release approval, assurance and lineage.</p><p data-copy="de">Governed Records, Release-Freigabe, Assurance und Lineage.</p></article>
+          </div>
+
+          <p class="micro-note" data-copy="en">Foundation conformance does not depend on one vendor, one model or one database. Vendor extensions stay optional and namespaced. Breaking semantics require a new major version. The specification is CC BY 4.0 and the implementation layer is Apache 2.0, so an independent implementation needs no permission and cannot be cut off. Section 11 has the detail.</p>
+          <p class="micro-note" data-copy="de">Foundation-Conformance hängt nicht an einem Anbieter, einem Modell oder einer Datenbank. Vendor-Erweiterungen bleiben optional und namespaced. Brechende Semantik erfordert eine neue Major-Version. Die Spezifikation steht unter CC BY 4.0, die Implementierungsschicht unter Apache 2.0. Eine unabhängige Implementierung braucht damit keine Erlaubnis und kann nicht abgeschnitten werden. Details in Abschnitt 11.</p>
+        </div>
+      </section>
+
+      <section class="section" id="licensing">
+        <div class="section-number"><span data-copy="en">11 / Licensing</span><span data-copy="de">11 / Lizenz</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">Two standard licences. Nothing to ask for.</h2>
+          <h2 data-copy="de">Zwei Standardlizenzen. Nichts zu beantragen.</h2>
+          <p class="lead" data-copy="en">OBDS is released under CC BY 4.0 and the Apache License 2.0. Neither licence text is modified, both are published here, and commercial implementation needs no permission from anyone.</p>
+          <p class="lead" data-copy="de">OBDS steht unter CC BY 4.0 und der Apache License 2.0. Kein Lizenztext ist verändert, beide sind hier veröffentlicht, und kommerzielle Implementierung braucht von niemandem eine Erlaubnis.</p>
+
+          <div class="levels">
+            <div class="level">
+              <div><span class="level-index">01</span></div>
+              <div>
+                <span class="level-name" data-copy="en">Specification and documentation</span>
+                <span class="level-name" data-copy="de">Spezifikation und Doku</span>
+                <span class="level-purpose"><a href="/LICENSES/CC-BY-4.0.txt">CC BY 4.0</a></span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Covers</span>
+                <span class="label" data-copy="de">Umfasst</span>
+                <p data-copy="en">The normative specification, the architecture, changelog, migration and quickstart documents, the governance and contribution documents, and this website.</p>
+                <p data-copy="de">Die normative Spezifikation, Architektur, Changelog, Migration und Quickstart, die Governance- und Contribution-Dokumente sowie diese Website.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">You may</span>
+                <span class="label" data-copy="de">Erlaubt ist</span>
+                <p data-copy="en">Share and adapt it for any purpose, commercial included, with credit, a link to the licence and a note on what you changed.</p>
+                <p data-copy="de">Teilen und bearbeiten für jeden Zweck, kommerziell eingeschlossen, mit Nennung, Link zur Lizenz und Hinweis auf Änderungen.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">02</span></div>
+              <div>
+                <span class="level-name" data-copy="en">Implementation layer</span>
+                <span class="level-name" data-copy="de">Implementierungsschicht</span>
+                <span class="level-purpose"><a href="/LICENSES/Apache-2.0.txt">Apache License 2.0</a></span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Covers</span>
+                <span class="label" data-copy="de">Umfasst</span>
+                <p data-copy="en">The 35 public contracts, the release metadata, the reference implementation, the conformance suite and the machine-readable examples.</p>
+                <p data-copy="de">Die 35 öffentlichen Contracts, die Release-Metadaten, die Referenzimplementierung, die Conformance Suite und die maschinenlesbaren Beispiele.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">You may</span>
+                <span class="label" data-copy="de">Erlaubt ist</span>
+                <p data-copy="en">Use, modify, distribute and sublicense it, including inside closed-source and commercial products, with a patent grant included.</p>
+                <p data-copy="de">Nutzen, ändern, weitergeben und unterlizenzieren, auch in Closed-Source- und kommerziellen Produkten, inklusive Patentlizenz.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">03</span></div>
+              <div>
+                <span class="level-name" data-copy="en">Commercial implementation</span>
+                <span class="level-name" data-copy="de">Kommerzielle Nutzung</span>
+                <span class="level-purpose" data-copy="en">Permitted</span>
+                <span class="level-purpose" data-copy="de">Erlaubt</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Covers</span>
+                <span class="label" data-copy="de">Umfasst</span>
+                <p data-copy="en">Paid client delivery, agency and consulting work, production use, SaaS and managed services, commercial products and integrations.</p>
+                <p data-copy="de">Bezahlte Kundenlieferung, Agentur- und Beratungsarbeit, Produktiveinsatz, SaaS und Managed Services, kommerzielle Produkte und Integrationen.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">You may</span>
+                <span class="label" data-copy="de">Erlaubt ist</span>
+                <p data-copy="en">All of it, with no separate agreement, no evaluation period and no distinction between commercial and non-commercial users.</p>
+                <p data-copy="de">Alles davon, ohne gesonderte Vereinbarung, ohne Testphase und ohne Unterschied zwischen kommerziellen und nicht kommerziellen Nutzern.</p>
+              </div>
+            </div>
+            <div class="level">
+              <div><span class="level-index">04</span></div>
+              <div>
+                <span class="level-name" data-copy="en">Official marks</span>
+                <span class="level-name" data-copy="de">Offizielle Marken</span>
+                <span class="level-purpose" data-copy="en">Separately governed</span>
+                <span class="level-purpose" data-copy="de">Gesondert geregelt</span>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Covers</span>
+                <span class="label" data-copy="de">Umfasst</span>
+                <p data-copy="en">The project name as your product name, the logo, claims of official status, and any future certification claim. No registration is claimed and no certification programme is live.</p>
+                <p data-copy="de">Der Projektname als Produktname, das Logo, Behauptungen offiziellen Status und künftige Zertifizierungsaussagen. Es wird keine Registrierung beansprucht, und kein Zertifizierungsprogramm ist aktiv.</p>
+              </div>
+              <div>
+                <span class="label" data-copy="en">Always allowed</span>
+                <span class="label" data-copy="de">Immer erlaubt</span>
+                <p data-copy="en">Truthful compatibility statements. "Implements OBDS 1.0" and a package called obds-parser need no permission. See <a href="/TRADEMARKS.md">TRADEMARKS.md</a>.</p>
+                <p data-copy="de">Wahrheitsgemäße Kompatibilitätsaussagen. "Implements OBDS 1.0" und ein Paket namens obds-parser brauchen keine Erlaubnis. Siehe <a href="/TRADEMARKS.md">TRADEMARKS.md</a>.</p>
+              </div>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Neither licence grants trademark rights, and that is deliberate rather than a loophole. CC BY 4.0 section 2(b)(2) and Apache 2.0 section 6 both exclude them. The line is drawn around who publishes the standard, not around who implements it.</p>
+          <p class="micro-note" data-copy="de">Keine der beiden Lizenzen räumt Markenrechte ein, und das ist Absicht, keine Lücke. CC BY 4.0 Abschnitt 2(b)(2) und Apache 2.0 Abschnitt 6 schließen sie aus. Die Grenze verläuft darum, wer den Standard herausgibt, nicht darum, wer ihn implementiert.</p>
+
+          <p class="pull" data-copy="en">Build it, ship it, sell it. No one has to say yes first.</p>
+          <p class="pull" data-copy="de">Bauen, ausliefern, verkaufen. Niemand muss vorher zustimmen.</p>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name"><a href="/LICENSE.md">LICENSE.md</a></span></div><div data-copy="en">Which licence applies to which material, file by file.</div><div data-copy="de">Welche Lizenz für welches Material gilt, Datei für Datei.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/LICENSES/CC-BY-4.0.txt">CC-BY-4.0.txt</a></span></div><div data-copy="en">The unmodified licence text as published by Creative Commons.</div><div data-copy="de">Der unveränderte Lizenztext, wie von Creative Commons veröffentlicht.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/LICENSES/Apache-2.0.txt">Apache-2.0.txt</a></span></div><div data-copy="en">The unmodified licence text as published by the Apache Software Foundation.</div><div data-copy="de">Der unveränderte Lizenztext, wie von der Apache Software Foundation veröffentlicht.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/TRADEMARKS.md">TRADEMARKS.md</a></span></div><div data-copy="en">What you may say without asking, and the short list that is governed separately.</div><div data-copy="de">Was ohne Nachfrage gesagt werden darf, und die kurze Liste, die gesondert geregelt ist.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/GOVERNANCE.md">GOVERNANCE.md</a></span></div><div data-copy="en">How the specification changes, how versions work, and what happens if the publisher stops.</div><div data-copy="de">Wie sich die Spezifikation ändert, wie Versionen funktionieren, und was passiert, wenn der Herausgeber aufhört.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/CONTRIBUTING.md">CONTRIBUTING.md</a></span></div><div data-copy="en">How to propose a change. Inbound licensing equals outbound. No contributor agreement to sign.</div><div data-copy="de">Wie man eine Änderung vorschlägt. Inbound gleich Outbound. Keine Contributor-Vereinbarung zu unterschreiben.</div></div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key" data-copy="en">ideas</span><span class="callout-key" data-copy="de">Ideen</span></div>
+            <div>
+              <p data-copy="en">No claim is made to the underlying ideas, principles or methods. Building a different system from similar ideas has never required permission and does not require it now. Independent implementation is not restricted, and describing it accurately is not restricted either.</p>
+              <p data-copy="de">Auf die zugrunde liegenden Ideen, Prinzipien oder Methoden wird kein Anspruch erhoben. Ein anderes System aus ähnlichen Ideen zu bauen hat nie eine Erlaubnis gebraucht und braucht sie auch jetzt nicht. Unabhängige Implementierung ist nicht eingeschränkt, und sie zutreffend zu beschreiben ebenso wenig.</p>
+            </div>
+          </div>
+
+          <div class="contact-line">
+            <div>
+              <span class="label" data-copy="en">Questions about use</span>
+              <span class="label" data-copy="de">Fragen zur Nutzung</span>
+            </div>
+            <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="release">
+        <div class="section-number"><span data-copy="en">12 / Release</span><span data-copy="de">12 / Release</span></div>
+        <div class="section-content">
+          <h2 data-copy="en">4.0.4 is the current release.</h2>
+          <h2 data-copy="de">4.0.4 ist der aktuelle Release.</h2>
+          <p class="lead" data-copy="en">OBDS 4.0 closes five production-boundary failures found after 3.x: filesystem containment, build-generation binding, model-input provenance, schema-first manifest validation and explicit model-failure evidence. The core architecture is unchanged. The OBDS 1.0.0 contract surface remains frozen and byte-identical across every release from 1.0.0 to 4.0.0; 4.0 places three versioned contracts beside it and changes none of them.</p>
+          <p class="lead" data-copy="de">OBDS 4.0 schließt fünf Produktionsgrenzen, die nach 3.x gefunden wurden: Filesystem-Containment, Bindung an die Build-Generation, Provenance der Model-Input-Slots, Schema-zuerst-Validierung von Manifesten und explizite Evidenz bei Model-Fehlern. Die Kernarchitektur bleibt unverändert. Die OBDS-1.0.0-Contract-Fläche bleibt eingefroren und byteidentisch über alle Releases von 1.0.0 bis 4.0.0; 4.0 stellt drei versionierte Contracts daneben und ändert keinen davon.</p>
+
+          <div class="publication-record">
+            <div class="publication-row"><div class="publication-key" data-copy="en">Specification</div><div class="publication-key" data-copy="de">Spezifikation</div><div class="publication-value">OBDS 4.0.4</div></div>
+            <div class="publication-row"><div class="publication-key">Status</div><div class="publication-value" data-copy="en">Stable</div><div class="publication-value" data-copy="de">Stabil</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Release date</div><div class="publication-key" data-copy="de">Releasedatum</div><div class="publication-value">05.09.2026</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Conformance suite</div><div class="publication-key" data-copy="de">Conformance Suite</div><div class="publication-value" data-copy="en">1158 passed, 0 failed</div><div class="publication-value" data-copy="de">1158 bestanden, 0 fehlgeschlagen</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Public schemas</div><div class="publication-key" data-copy="de">Öffentliche Schemas</div><div class="publication-value" data-copy="en">21 schemas, 6 value schemas, 8 versioned</div><div class="publication-value" data-copy="de">21 Schemas, 6 Value Schemas, 8 versionierte</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Test output hash</div><div class="publication-key" data-copy="de">Test-Output-Hash</div><div class="publication-value" style="font-size: var(--small); letter-spacing: .02em; word-break: break-all;">sha256:385698491023dcf7b14d448843cdd7ad1e59cd27bed985518fe191eb99ca2bbc</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Schema contract</div><div class="publication-key" data-copy="de">Schema-Contract</div><div class="publication-value" data-copy="en">1.0.0, unchanged</div><div class="publication-value" data-copy="de">1.0.0, unverändert</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Previous release</div><div class="publication-key" data-copy="de">Vorheriger Release</div><div class="publication-value"><a href="/spec/4.0.3/OBDS-4.0.3.md">OBDS 4.0.3</a></div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">First public record</div><div class="publication-key" data-copy="de">Erster öffentlicher Nachweis</div><div class="publication-value">22.07.2026</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Publisher</div><div class="publication-key" data-copy="de">Herausgeber</div><div class="publication-value">Kill The Dragon GmbH, Vienna</div></div>
+            <div class="publication-row"><div class="publication-key" data-copy="en">Canonical address</div><div class="publication-key" data-copy="de">Kanonische Adresse</div><div class="publication-value">openbranddefinition.org</div></div>
+          </div>
+
+          <div class="state-list">
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4.md">OBDS-4.0.4.md</a></span></div><div data-copy="en">The normative specification. One document.</div><div data-copy="de">Die normative Spezifikation. Ein Dokument.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-FINAL.zip">OBDS-4.0.4-FINAL.zip</a></span></div><div data-copy="en">The complete package: specification, 35 public contracts, reference implementation and the full conformance suite.</div><div data-copy="de">Das vollständige Paket: Spezifikation, 35 öffentliche Contracts, Referenzimplementierung und die komplette Conformance Suite.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-IMPLEMENTER-QUICKSTART.md">QUICKSTART.md</a></span></div><div data-copy="en">Five concepts and the smallest conforming implementation.</div><div data-copy="de">Fünf Konzepte und die kleinste konforme Implementierung.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-SCHEMA-INDEX.json">SCHEMA-INDEX.json</a></span></div><div data-copy="en">All 21 schemas, 6 value schemas and the versioned 1.1.0 and 3.0.0 contracts beside them, with their identifiers.</div><div data-copy="de">Alle 21 Schemas, 6 Value Schemas und die versionierten 1.1.0- und 3.0.0-Contracts daneben, mit Identifiern.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-PUBLICATION-MAP.json">PUBLICATION-MAP.json</a></span></div><div data-copy="en">Every schema identifier mapped to the exact address that serves it.</div><div data-copy="de">Jeder Schema-Identifier auf die Adresse gemappt, die ihn ausliefert.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-TEST-REQUIREMENTS.md">TEST-REQUIREMENTS.md</a></span></div><div data-copy="en">Everything needed to reproduce 1158 of 1158 yourself.</div><div data-copy="de">Alles, was nötig ist, um 1158 von 1158 selbst zu reproduzieren.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/examples/">examples/</a></span></div><div data-copy="en">The smallest manifest, built through Compiled Runtime, and a fail-closed example that deliberately does not build. Both carry a Foundation manifest; the build gate itself is Compiled Runtime, section 26.2.</div><div data-copy="de">Das kleinste Manifest, gebaut über Compiled Runtime, und ein Fail-closed-Beispiel, das bewusst nicht baut. Beide tragen ein Foundation-Manifest; das Build-Gate selbst ist Compiled Runtime, Abschnitt 26.2.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-CHANGELOG.md">CHANGELOG.md</a></span></div><div data-copy="en">What 4.0 changed, and the complete list of what it did not.</div><div data-copy="de">Was 4.0 geändert hat, und die vollständige Liste dessen, was unverändert blieb.</div></div>
+            <div class="state-row"><div><span class="state-name"><a href="/spec/4.0.4/OBDS-4.0.4-MIGRATION.md">MIGRATION.md</a></span></div><div data-copy="en">What implementers must actually change for 4.0: generation binding, projection provenance, manifest validation and the new model_failed decision.</div><div data-copy="de">Was Implementierer für 4.0 tatsächlich ändern müssen: Generation-Bindung, Projection-Provenance, Manifest-Validierung und die neue model_failed-Entscheidung.</div></div>
+          </div>
+
+          <div class="callout">
+            <div><span class="callout-key">$id</span></div>
+            <div>
+              <p data-copy="en">Every schema resolves at the address printed inside it. <code>brand-manifest.schema.json</code> declares <code>/schemas/1.0.0/brand-manifest.schema.json</code> and is served from exactly there. The publication map proves the mapping is one to one for all 35 public contracts. 1.0.1 did not move them: the schema contract is still 1.0.0.</p>
+              <p data-copy="de">Jedes Schema löst unter der Adresse auf, die in ihm steht. <code>brand-manifest.schema.json</code> deklariert <code>/schemas/1.0.0/brand-manifest.schema.json</code> und wird genau dort ausgeliefert. Die Publication Map belegt die Eins-zu-eins-Zuordnung für alle 35 Contracts. 1.0.1 hat daran nichts verschoben: der Schema-Contract ist weiterhin 1.0.0.</p>
+            </div>
+          </div>
+
+          <p class="micro-note" data-copy="en">Section 32 of the 1.0.0 document recommended CC BY 4.0 and Apache 2.0. Section 32.1 of the 1.0.1 document replaced that with a bespoke model. Both stay published exactly as released and are historical. From 1.0.2 onwards, and unchanged in 1.0.3 and 1.0.4, CC BY 4.0 and the Apache License 2.0 are the operative licences, and the texts linked in section 11 are the terms.</p>
+          <p class="micro-note" data-copy="de">Abschnitt 32 des Dokuments 1.0.0 empfahl CC BY 4.0 und Apache 2.0. Abschnitt 32.1 des Dokuments 1.0.1 ersetzte das durch ein eigenes Modell. Beide bleiben exakt wie veröffentlicht bestehen und sind historisch. Ab 1.0.2, unverändert in 1.0.3 und 1.0.4, sind CC BY 4.0 und die Apache License 2.0 die geltenden Lizenzen, und die in Abschnitt 11 verlinkten Texte sind die Bedingungen.</p>
+
+          <div class="actions">
+            <a href="/spec/4.0.4/OBDS-4.0.4.md">
+              <span class="action-name" data-copy="en">Read the spec</span>
+              <span class="action-name" data-copy="de">Spec lesen</span>
+              <span class="action-note" data-copy="en">One normative document. Start at section 3 if you want the shape of it in five minutes.</span>
+              <span class="action-note" data-copy="de">Ein normatives Dokument. Für die Form in fünf Minuten bei Abschnitt 3 anfangen.</span>
+            </a>
+            <a href="/what-is-obds/">
+              <span class="action-name" data-copy="en">What is OBDS</span>
+              <span class="action-name" data-copy="de">Was ist OBDS</span>
+              <span class="action-note" data-copy="en">The definition in one sentence, how it differs from retrieval, and one concrete example.</span>
+              <span class="action-note" data-copy="de">Die Definition in einem Satz, der Unterschied zu Retrieval, und ein konkretes Beispiel.</span>
+            </a>
+            <a href="/examples/">
+              <span class="action-name" data-copy="en">See it work → Examples</span>
+              <span class="action-name" data-copy="de">Funktion ansehen → Beispiele</span>
+              <span class="action-note" data-copy="en">Two runnable examples: approved truth compiles, and required truth that is unknown stops the build before any model is called.</span>
+              <span class="action-note" data-copy="de">Zwei lauffähige Beispiele: freigegebene Wahrheit kompiliert, und fehlende erforderliche Wahrheit stoppt den Build, bevor ein Modell aufgerufen wird.</span>
+            </a>
+            <a href="/spec/4.0.4/OBDS-4.0.4-FINAL.zip">
+              <span class="action-name" data-copy="en">Download OBDS</span>
+              <span class="action-name" data-copy="de">OBDS laden</span>
+              <span class="action-note" data-copy="en">Specification, 35 public contracts, reference implementation, conformance suite and examples.</span>
+              <span class="action-note" data-copy="de">Spezifikation, 35 öffentliche Contracts, Referenzimplementierung, Conformance Suite und Beispiele.</span>
+            </a>
+            <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">
+              <span class="action-name" data-copy="en">GitHub</span>
+              <span class="action-name" data-copy="de">GitHub</span>
+              <span class="action-note" data-copy="en">The repository behind this site. Specification, schemas, reference implementation, conformance suite and release history.</span>
+              <span class="action-note" data-copy="de">Das Repository hinter dieser Website. Spezifikation, Schemas, Referenzimplementierung, Conformance Suite und Release-Historie.</span>
+            </a>
+            <a href="/machine-readable-brand-guidelines/">
+              <span class="action-name" data-copy="en">Machine-readable brand guidelines</span>
+              <span class="action-name" data-copy="de">Maschinenlesbare Brand Guidelines</span>
+              <span class="action-note" data-copy="en">The category solves three different problems. Where governed applicability sits among them.</span>
+              <span class="action-note" data-copy="de">Die Kategorie löst drei verschiedene Probleme. Wo Governed Applicability darin steht.</span>
+            </a>
+            <a href="/brand-governance-for-ai/">
+              <span class="action-name" data-copy="en">Brand governance for AI</span>
+              <span class="action-name" data-copy="de">Brand Governance für AI</span>
+              <span class="action-note" data-copy="en">Retrieval can find the right source and still use the wrong truth. Where the decision belongs in the pipeline.</span>
+              <span class="action-note" data-copy="de">Retrieval findet die richtige Quelle und nutzt trotzdem die falsche Wahrheit. Wo die Entscheidung hingehört.</span>
+            </a>
+            <a href="/compare/machine-readable-brand-specifications/">
+              <span class="action-name" data-copy="en">Compare approaches</span>
+              <span class="action-name" data-copy="de">Ansätze vergleichen</span>
+              <span class="action-note" data-copy="en">BRAND.md, Brand Context Protocol, MRBS and OBDS, checked against primary sources. No ranking.</span>
+              <span class="action-note" data-copy="de">BRAND.md, Brand Context Protocol, MRBS und OBDS, gegen Primärquellen geprüft. Kein Ranking.</span>
+            </a>
+            <a href="/research/">
+              <span class="action-name" data-copy="en">Research</span>
+              <span class="action-name" data-copy="de">Research</span>
+              <span class="action-note" data-copy="en">Deterministic result hashes, a governed communications benchmark, and the published limits.</span>
+              <span class="action-note" data-copy="de">Deterministische Result-Hashes, ein Governed-Communications-Benchmark und die publizierten Grenzen.</span>
+            </a>
+            <a href="#licensing">
+              <span class="action-name" data-copy="en">Licensing</span>
+              <span class="action-name" data-copy="de">Lizenz</span>
+              <span class="action-note" data-copy="en">CC BY 4.0 and Apache 2.0, which material each one covers, and why commercial use needs no permission.</span>
+              <span class="action-note" data-copy="de">CC BY 4.0 und Apache 2.0, welches Material jeweils gilt, und warum kommerzielle Nutzung keine Erlaubnis braucht.</span>
+            </a>
+          </div>
+
+          <p class="micro-note" data-copy="en">The visible dates and the machine-readable publication record document when this project page was made public. They do not replace formal intellectual-property advice.</p>
+          <p class="micro-note" data-copy="de">Die sichtbaren Daten und der maschinenlesbare Publication Record dokumentieren, wann diese Projektseite öffentlich gemacht wurde. Sie ersetzen keine formale IP-Beratung.</p>
+
+          <div class="contact-line">
+            <div>
+              <span class="label" data-copy="en">Review, test, challenge</span>
+              <span class="label" data-copy="de">Prüfen, testen, hinterfragen</span>
+            </div>
+            <a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal" id="legal">
+        <div class="legal-title">
+          <h2 data-copy="en">Legal<br>notice</h2>
+          <h2 data-copy="de">Impres<br>sum</h2>
+        </div>
+        <div class="legal-copy">
+          <div class="legal-block">
+            <h3 data-copy="de">Impressum und Offenlegung</h3>
+            <h3 data-copy="en">Legal notice and disclosure</h3>
+            <p data-copy="de">Informationen gemäß § 5 E-Commerce-Gesetz sowie Impressum und Offenlegung gemäß §§ 24 und 25 Mediengesetz.</p>
+            <p data-copy="en">Information under section 5 of the Austrian E-Commerce Act and legal notice and disclosure under sections 24 and 25 of the Austrian Media Act. The German version is authoritative.</p>
+            <dl class="legal-data">
+              <dt data-copy="de">Medieninhaber und Herausgeber</dt><dt data-copy="en">Media owner and publisher</dt>
+              <dd>Kill The Dragon GmbH</dd>
+              <dt data-copy="de">Anschrift</dt><dt data-copy="en">Address</dt>
+              <dd>Dürergasse 3 / TOP 4 / HOF<br>1060 Wien<br>Österreich</dd>
+              <dt data-copy="de">Rechtsform</dt><dt data-copy="en">Legal form</dt>
+              <dd data-copy="de">Gesellschaft mit beschränkter Haftung</dd><dd data-copy="en">Limited liability company under Austrian law</dd>
+              <dt data-copy="de">Geschäftsführer</dt><dt data-copy="en">Managing director</dt>
+              <dd>Max Peter Jürschik</dd>
+              <dt data-copy="de">E-Mail</dt><dt data-copy="en">Email</dt>
+              <dd><a href="mailto:lets@killthedragon.com">lets@killthedragon.com</a></dd>
+              <dt data-copy="de">Firmenbuch</dt><dt data-copy="en">Company register</dt>
+              <dd>FN 471464 f, Handelsgericht Wien</dd>
+              <dt data-copy="de">Aufsichtsbehörde gemäß ECG</dt><dt data-copy="en">Supervisory authority under the ECG</dt>
+              <dd data-copy="de">Magistrat der Stadt Wien, MBA 6/7</dd><dd data-copy="en">Municipal Authority of the City of Vienna, MBA 6/7</dd>
+              <dt data-copy="de">Kammermitgliedschaft</dt><dt data-copy="en">Chamber membership</dt>
+              <dd data-copy="de">Wirtschaftskammer Wien, Fachgruppe Werbung und Marktkommunikation, Werbeagentur</dd><dd data-copy="en">Vienna Economic Chamber, Advertising and Market Communication, advertising agency</dd>
+              <dt data-copy="de">UID</dt><dt data-copy="en">VAT ID</dt>
+              <dd>ATU72328938</dd>
+            </dl>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Unternehmensgegenstand und grundlegende Richtung</h3>
+            <h3 data-copy="en">Business purpose and editorial direction</h3>
+            <p data-copy="de"><strong>Unternehmensgegenstand:</strong> Werbung und Marktkommunikation, insbesondere Werbeagentur.</p>
+            <p data-copy="en"><strong>Business purpose:</strong> Advertising and market communication, in particular advertising agency services.</p>
+            <p data-copy="de"><strong>Grundlegende Richtung:</strong> Information über Entwicklung, Funktionsweise und Anwendung der Open Brand Definition Specification sowie verwandte Themen der Markenführung und des Einsatzes von AI-Systemen.</p>
+            <p data-copy="en"><strong>Editorial direction:</strong> Information about the development, operation and use of the Open Brand Definition Specification and related topics in brand management and AI systems.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Anwendbare Vorschriften</h3>
+            <h3 data-copy="en">Applicable rules</h3>
+            <p data-copy="de">Anwendbare Rechtsvorschriften sind insbesondere das E-Commerce-Gesetz, das Mediengesetz und die Gewerbeordnung. Die Rechtsvorschriften sind über das <a href="https://www.ris.bka.gv.at/" target="_blank" rel="noopener noreferrer">Rechtsinformationssystem des Bundes</a> abrufbar. Informationen zur Kammermitgliedschaft finden sich im <a href="https://firmen.wko.at/" target="_blank" rel="noopener noreferrer">Firmen A-Z der Wirtschaftskammer Österreich</a>.</p>
+            <p data-copy="en">Applicable rules include the Austrian E-Commerce Act, Media Act and Trade Regulation Act. The German legal texts are available through the <a href="https://www.ris.bka.gv.at/" target="_blank" rel="noopener noreferrer">Austrian Legal Information System</a>. Chamber information is available through the <a href="https://firmen.wko.at/" target="_blank" rel="noopener noreferrer">Austrian Economic Chamber directory</a>.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Haftung für Links</h3>
+            <h3 data-copy="en">External links</h3>
+            <p data-copy="de">Wir erklären ausdrücklich, dass wir keinen Einfluss auf die Gestaltung und die Inhalte verlinkter Seiten haben. Für die Inhalte externer Seiten sind ausschließlich deren Betreiber verantwortlich. Wir machen uns diese Inhalte nicht zu Eigen.</p>
+            <p data-copy="en">We have no control over the design or content of linked external websites. Their operators are solely responsible for their content. We do not adopt external content as our own.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Datenschutz</h3>
+            <h3 data-copy="en">Privacy</h3>
+            <p data-copy="de">Diese statische Seite setzt selbst keine Cookies und bindet keine Analyse-, Tracking- oder externen Schriftdienste ein. Technisch notwendige Server-Logdaten können durch den Hosting-Anbieter verarbeitet werden.</p>
+            <p data-copy="en">This static page does not set cookies or include analytics, tracking services or external font services. The hosting provider may process technically necessary server log data.</p>
+          </div>
+
+          <div class="legal-block">
+            <h3 data-copy="de">Copyright und Lizenzierung</h3>
+            <h3 data-copy="en">Copyright and licensing</h3>
+            <p data-copy="de">© 2026 Kill The Dragon GmbH. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. OBDS 4.0.4 ist der aktuelle stabile Release vom 6. September 2026. Spezifikation, Referenzimplementierung und Conformance Suite sind unter <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a> veröffentlicht. Die Spezifikation und die Dokumentation stehen unter der Creative Commons Attribution 4.0 International Lizenz. Die Schemas, die Release-Metadaten, die Referenzimplementierung, die Conformance Suite und die Beispiele stehen unter der Apache License 2.0. Beide Lizenztexte sind unverändert unter <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> und <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a> veröffentlicht, die Zuordnung steht in <a href="/LICENSE.md">LICENSE.md</a>. Kommerzielle Implementierung ist erlaubt und braucht keine gesonderte Erlaubnis. Auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme wird kein Anspruch erhoben. Namen, Logos und Marken werden von keiner der beiden Lizenzen eingeräumt und sind in <a href="/TRADEMARKS.md">TRADEMARKS.md</a> gesondert geregelt. Es wird keine Markenregistrierung beansprucht, und kein Zertifizierungsprogramm ist aktiv. Kontakt lets@killthedragon.com.</p>
+            <p data-copy="en">© 2026 Kill The Dragon GmbH. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. OBDS 4.0.4 is the current stable release, dated 6 September 2026. The specification, the reference implementation and the conformance suite are published at <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a>. The specification and the documentation are licensed under the Creative Commons Attribution 4.0 International Licence. The schemas, the release metadata, the reference implementation, the conformance suite and the examples are licensed under the Apache License 2.0. Both licence texts are published unmodified at <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> and <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a>, and the mapping is in <a href="/LICENSE.md">LICENSE.md</a>. Commercial implementation is permitted and requires no separate permission. No claim is made to general ideas, principles, methods or independently developed compatible systems. Names, logos and marks are granted by neither licence and are governed separately in <a href="/TRADEMARKS.md">TRADEMARKS.md</a>. No trademark registration is claimed and no certification programme is live. Contact lets@killthedragon.com.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 Kill The Dragon GmbH</span>
+      <span>Open Brand Definition / Vienna</span>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const buttons = [...document.querySelectorAll('[data-set-lang]')];
+      const setLanguage = (language) => {
+        root.dataset.lang = language;
+        root.lang = language;
+        buttons.forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.setLang === language));
+        });
+      };
+      const params = new URLSearchParams(window.location.search);
+      const requested = params.get('lang');
+      const initial = requested === 'de' || requested === 'en'
+        ? requested
+        : (navigator.language && navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en');
+      setLanguage(initial);
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        const language = button.dataset.setLang;
+        setLanguage(language);
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', language);
+        history.replaceState(null, '', url);
+      }));
+    })();
+  </script>
+</body>
+</html>

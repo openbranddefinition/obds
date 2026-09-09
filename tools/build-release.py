@@ -226,7 +226,7 @@ FOUNDATION_CLAIM_SCOPE = (
     "reference/foundation/conformance-suite.yaml, profile `foundation`, "
     "executed against the reference implementation. Every declared case ran and "
     "passed; none was skipped or changed. This run is deliberately not added to "
-    "the aggregate suiteCounts: 14 of its 15 cases exercise the same fixtures "
+    "the aggregate suiteCounts: the declared cases exercise existing fixtures "
     "and examples as the pytest suites, so aggregating both would double-count "
     "the same coverage."
 )
@@ -255,7 +255,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "4.0.3"
+PRIOR_RELEASE = "4.0.4"
 
 
 def _release_kind(release: str) -> str:
@@ -330,6 +330,8 @@ def version() -> str:
 
 
 def excluded(path: Path) -> bool:
+    if not _gate().public_package_member(path.relative_to(ROOT).as_posix()):
+        return True
     parts = path.relative_to(ROOT).parts
     if any(p in CACHE_DIRS or p in JUNK_DIRS or p.startswith(".venv") for p in parts):
         return True
@@ -393,7 +395,7 @@ def run_official_foundation_conformance(release: str) -> dict:
 
     Section 26 clause 1 requires passing every required case in the official
     Conformance Suite for the named profile. This run is deliberately NOT added
-    to `suiteCounts`: 14 of its 15 cases exercise the same fixtures and examples
+    to `suiteCounts`: the declared cases exercise existing fixtures and examples
     as the pytest suites, so adding them would double-count the same coverage.
     It is published as its own result with its own profile, counts and suite
     hash.
@@ -580,7 +582,11 @@ def write_archive(release: str, pairs: list[tuple[str, Path]]) -> Path:
     everything = pairs + [("PACKAGE-MANIFEST.json", ROOT / "PACKAGE-MANIFEST.json")]
     with zipfile.ZipFile(archive_path, "w", zipfile.ZIP_DEFLATED) as archive:
         for name, source in sorted(everything):
-            archive.write(source, f"{top}/{name}")
+            entry = zipfile.ZipInfo(f"{top}/{name}", date_time=(1980, 1, 1, 0, 0, 0))
+            entry.create_system = 3
+            entry.external_attr = 0o100644 << 16
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            archive.writestr(entry, source.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
     print(f"wrote {archive_path.relative_to(ROOT)} ({archive_path.stat().st_size} bytes)")
 
     # The published snapshot mirrors the flat release documents next to the archive,
@@ -592,6 +598,31 @@ def write_archive(release: str, pairs: list[tuple[str, Path]]) -> Path:
             shutil.copy2(source, snapshot / name)
     print(f"synced spec/{release}/ release documents")
     return archive_path
+
+
+def update_test_output_field(site, digest):
+    pattern = r'(<[^>]*>Test output SHA-256</[^>]*>.*?)(sha256:[0-9a-f]{64})'
+    updated, count = re.subn(pattern, lambda m: m.group(1) + digest, site, flags=re.S)
+    if not count:
+        # Baseline field has an English data-copy label on one line.
+        pattern = r'([^\n]*Test output[^\n]*?)(sha256:[0-9a-f]{64})'
+        updated, count = re.subn(pattern, lambda m: m.group(1) + digest, site)
+    if count != 1:
+        raise ValueError("Expected exactly one test-output hash field")
+    return updated
+
+
+def run_optional_suite(release):
+    import tempfile
+    subjects = []
+    for name, command in [("research-python", [sys.executable, "reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py"]), ("research-node", ["node", "reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs"])]:
+        with tempfile.TemporaryDirectory() as directory:
+            result = Path(directory) / "result.json"
+            subprocess.run([sys.executable, str(ROOT / "reference/task-facts/1.0/run-suite.py"), "--result", str(result), "--implementation-name", name, "--implementation-version", "frozen-cycle-1", "--", *command], cwd=ROOT, check=True)
+            subjects.append(load(result))
+    payload = {"kind": "obds-task-facts-conformance", "release": release, "suiteId": "task-facts-1.0", "suiteRevision": 1, "suiteHash": subjects[0]["suiteHash"], "subjects": subjects, "passed": all(s["passed"] for s in subjects), "productionIntegration": False}
+    (ROOT / f"OBDS-{release}-TASK-FACTS-CONFORMANCE.json").write_text(json.dumps(payload, indent=2) + "\n")
+    return payload
 
 
 def sync_publication_surface(release: str, counts: dict[str, int], archive: Path | None) -> None:
@@ -623,13 +654,7 @@ def sync_publication_surface(release: str, counts: dict[str, int], archive: Path
     index_html = ROOT / "index.html"
     if index_html.is_file():
         site = index_html.read_text(encoding="utf-8")
-        site = re.sub(
-            r"sha256:[0-9a-f]{64}",
-            lambda m: result["testOutputHash"]
-            if m.group(0) != record.get("schemaSurfaceFingerprint")
-            else m.group(0),
-            site,
-        )
+        site = update_test_output_field(site, result["testOutputHash"])
         index_html.write_text(site, encoding="utf-8")
         record["websiteIndexSha256"] = sha256(index_html)
 
@@ -647,11 +672,26 @@ def main() -> int:
     args = parser.parse_args()
 
     release = version()
+    _gate().verify_repository_version(ROOT, "repository")
     print(f"OBDS release build, version {release}")
     if args.run_tests:
+        _gate().require_neutral_execution(ROOT)
+    if args.run_tests:
         run_tests(release)
-    foundation_result = run_official_foundation_conformance(release)
+    if args.run_tests:
+        foundation_result = run_official_foundation_conformance(release)
+        run_optional_suite(release)
+    else:
+        # Reassembly uses frozen measured inputs; never rerun timing-producing tests.
+        foundation_result = load(ROOT / f"OBDS-{release}-FOUNDATION-CONFORMANCE.json")
+        optional = load(ROOT / f"OBDS-{release}-TASK-FACTS-CONFORMANCE.json")
+        if not optional.get("passed"):
+            raise ValueError("Missing successful measured Task Facts result")
 
+    _gate().verify_public_evidence(ROOT, "repository")
+    # The packager is where the two registries meet, so it refuses to build if the
+    # audit store it is excluding has drifted from the record of what it holds.
+    _gate().verify_historical_audit(ROOT, "repository")
     output = (ROOT / f"OBDS-{release}-TEST-OUTPUT.txt").read_text(encoding="utf-8")
     counts = suite_counts(output)
 
@@ -659,6 +699,8 @@ def main() -> int:
     pairs = package_files(release)
     write_metadata(release, counts, len(pairs), foundation_result)
     pairs = package_files(release)
+    for name, source in pairs:
+        _gate().verify_public_bytes(source.read_bytes(), name)
     write_manifest(release, pairs)
 
     archive = None

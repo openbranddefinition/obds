@@ -1,0 +1,20 @@
+{
+  "implementerInputZipSHA256": "35fd3c427d6aa1cf6d8c3cc253fa2d1b227891294ea1c1891f158b1b358b7b16",
+  "nodeVersion": "v26.8.1",
+  "dependencyVersions": {
+    "externalDependencies": [],
+    "nodeBuiltins": "v26.8.1"
+  },
+  "testCommand": "node --test test.mjs",
+  "testResult": {
+    "exitCode": 0,
+    "passed": 16,
+    "failed": 0
+  },
+  "fixtureRunnerCheck": {
+    "records": 102,
+    "exitCode": 2
+  },
+  "independenceStatement": "Only supplied ROLE.md and implementer-input.zip contents were used as task inputs. No sibling implementation or excluded expected/reference material was accessed. No contract edits were made.",
+  "frozen": true
+}

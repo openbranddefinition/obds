@@ -1,0 +1,18 @@
+{
+  "fixtures-python": {
+    "records": 66,
+    "matchesExpected": true
+  },
+  "fixtures-node": {
+    "records": 66,
+    "matchesExpected": true
+  },
+  "regressions-python": {
+    "records": 36,
+    "matchesExpected": true
+  },
+  "regressions-node": {
+    "records": 36,
+    "matchesExpected": true
+  }
+}

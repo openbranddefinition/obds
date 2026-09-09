@@ -1,0 +1,182 @@
+{
+  "kind": "task-facts-historical-audit-evidence-registry",
+  "role": "historical-non-public-audit-evidence",
+  "status": "preserved-immutable",
+  "publicSurface": false,
+  "note": "Immutable historical audit evidence, deliberately outside the public distributable surface. Membership here means the entry must exist in the preserved non-public audit evidence store and verify by identity, SHA-256 and byte size. It never means the entry ships in the public release package, and it never substitutes for fresh public conformance evidence. Truthful historical local paths inside these preserved records are retained unchanged; nothing here is rewritten, redacted or re-encoded.",
+  "inventory": {
+    "path": "EVIDENCE-MANIFEST.json",
+    "bytes": 110145,
+    "sha256": "2d72437b1c9ccfa8e506c79a883b1c0c691d1e33c0d654b5a83e5f9fc3527be8",
+    "files": 485
+  },
+  "publicSurfaceExclusions": [
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py",
+      "bytes": 8974,
+      "sha256": "f51a6a267f0f682328ed3f6fff1996b59f8ea64a1f47820b2448ad3fb22a0077"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py",
+      "bytes": 8974,
+      "sha256": "f51a6a267f0f682328ed3f6fff1996b59f8ea64a1f47820b2448ad3fb22a0077"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py",
+      "bytes": 11834,
+      "sha256": "cf9d36783265395318fee2d58cfd263753cbe8360e2f1bf22d73ebfd2e12e59c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/reports/verify_integrity.py",
+      "bytes": 1008,
+      "sha256": "f2c222e560621d2b171b42cf76e190ee4f388c5ca59f8cfae34bc677cfce5a12"
+    }
+  ],
+  "nonPublicExecutableSources": [
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/finalize_report.py",
+      "bytes": 7120,
+      "sha256": "b1b43fe78e7cc63f9b03f4d23c530e148a2a929d70c8bfd949fb4391b136ef0a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py",
+      "bytes": 8974,
+      "sha256": "f51a6a267f0f682328ed3f6fff1996b59f8ea64a1f47820b2448ad3fb22a0077"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/run-fixtures.mjs",
+      "bytes": 402,
+      "sha256": "951f75b44c766aeb65a05e0b27fe83c6a6ebc3618153c6ae8afc2d9338f6a205"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/test.mjs",
+      "bytes": 6197,
+      "sha256": "bd2b43a88806e2c5394d8bd77fe64f9d4bbecceebbb1c37e2cc6a68c8d5a12c6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/test_evaluate.py",
+      "bytes": 7362,
+      "sha256": "ace5a23d11590e99059984654913723c225fda6569baa66032790644c1c43214"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/finalize_report.py",
+      "bytes": 7120,
+      "sha256": "b1b43fe78e7cc63f9b03f4d23c530e148a2a929d70c8bfd949fb4391b136ef0a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py",
+      "bytes": 8974,
+      "sha256": "f51a6a267f0f682328ed3f6fff1996b59f8ea64a1f47820b2448ad3fb22a0077"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/evaluate.mjs",
+      "bytes": 10511,
+      "sha256": "a4e16653680b0e4127ff7da30bc3716a9f98c82b48ae77383439ce5cb4ef6c6f"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/run-fixtures.mjs",
+      "bytes": 402,
+      "sha256": "951f75b44c766aeb65a05e0b27fe83c6a6ebc3618153c6ae8afc2d9338f6a205"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/test.mjs",
+      "bytes": 6197,
+      "sha256": "bd2b43a88806e2c5394d8bd77fe64f9d4bbecceebbb1c37e2cc6a68c8d5a12c6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py",
+      "bytes": 11834,
+      "sha256": "cf9d36783265395318fee2d58cfd263753cbe8360e2f1bf22d73ebfd2e12e59c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/test_evaluate.py",
+      "bytes": 7362,
+      "sha256": "ace5a23d11590e99059984654913723c225fda6569baa66032790644c1c43214"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/ratification/reports/verify_integrity.py",
+      "bytes": 1008,
+      "sha256": "f2c222e560621d2b171b42cf76e190ee4f388c5ca59f8cfae34bc677cfce5a12"
+    }
+  ]
+}

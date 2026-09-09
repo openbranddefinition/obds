@@ -26,7 +26,7 @@ DEFAULT_BASE = "https://openbranddefinition.org"
 TIMEOUT = 25
 
 # Must NOT be served. Each entry is a path plus why it matters.
-MUST_BE_ABSENT = [
+MUST_BE_ABSENT = [("/release-work/", "internal candidate evidence"),
     ("/answers/", "the working-notes directory itself"),
     ("/openbranddefinition-site-0.9.5-public-draft.zip",
      "withdrawn draft site archive; the directory pattern in .vercelignore "
@@ -61,6 +61,37 @@ MUST_BE_ABSENT = [
     ("/.env.local", "local deployment token"),
     ("/.vercel/project.json", "local deployment link"),
     ("/node_modules/", "local dependencies"),
+
+    # The non-public Task Facts audit store. `reference/` is served, so nothing
+    # but .vercelignore keeps these off the website, and the release archive
+    # already excludes them: `public_package_member()` ships only the four
+    # evaluator sources named by
+    # reference/task-facts/1.0/PUBLIC-EVIDENCE-MANIFEST.json, which are asserted
+    # present below. A 404 on the directory proves nothing, so every branch of
+    # the store is probed by a real file, including two direct siblings of the
+    # public four: those two are what proves the re-inclusion is exactly four
+    # files and not their directories.
+    ("/reference/task-facts/1.0/EVIDENCE-MANIFEST.json",
+     "the audit-store inventory of all 485 historical records"),
+    ("/reference/task-facts/1.0/HISTORICAL-AUDIT-REGISTRY.json",
+     "the Historical Audit Evidence Registry"),
+    ("/reference/task-facts/1.0/evidence/", "the audit store itself"),
+    ("/reference/task-facts/1.0/evidence/ratification/reports/evidence-inventory.json",
+     "ratification audit inventory"),
+    ("/reference/task-facts/1.0/evidence/ratification/reviews/conformance-review.md",
+     "ratification review record"),
+    ("/reference/task-facts/1.0/evidence/interop/reports/FINAL-RESULT.md",
+     "historical interoperability report"),
+    ("/reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/"
+     "OBDS-TASK-FACTS-EXPERIMENT-v0.2.md", "the frozen research source document"),
+    ("/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/orchestration-evidence.json",
+     "cycle orchestration record"),
+    ("/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementer-input.zip",
+     "cycle input archive"),
+    ("/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/results.json",
+     "a direct sibling of a published evaluator source"),
+    ("/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/provenance.json",
+     "the same on the Python side"),
 ]
 
 # Must be served. A blocklist that also breaks the site is not a fix.
@@ -88,6 +119,19 @@ MUST_BE_PRESENT = [
     "/schemas/1.0.0/brand-manifest.schema.json",
     "/schemas/1.1.0/compiled-context.schema.json",
     "/value-schemas/1.0.0/colour.schema.json",
+
+    # The Task Facts public surface. The four evaluator sources are the only
+    # files under evidence/ this release publishes; .vercelignore re-includes
+    # exactly them out of 485. Asserted here so an over-broad exclusion fails
+    # loudly instead of quietly dropping a published dependency. The schema is
+    # the address OBDS-4.1.0-TASK-FACTS-SCHEMA-INDEX.json declares as its
+    # retrieval URL, which reference/release-gate.py pins.
+    "/reference/task-facts/1.0/PUBLIC-EVIDENCE-MANIFEST.json",
+    "/reference/task-facts/1.0/schemas/task-facts.schema.json",
+    "/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py",
+    "/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json",
+    "/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs",
+    "/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json",
 ]
 
 
@@ -103,6 +147,43 @@ def status(url: str) -> int:
         return 0
 
 
+def verify_exact_publication(base, root=None, fetch=None):
+    import hashlib
+    import importlib.util
+    import json
+    import tempfile
+    from pathlib import Path
+    root = root or Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location("release_gate_deploy", root / "reference/release-gate.py")
+    gate = importlib.util.module_from_spec(spec); spec.loader.exec_module(gate)
+    inventory = gate.load(root / "release-work/4.1.0/RC-INVENTORY.json")
+    gate.verify_publication(root, inventory)
+    if fetch is None:
+        def fetch(url):
+            try:
+                with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
+                    return response.status, response.read()
+            except urllib.error.HTTPError as error:
+                return error.code, error.read()
+    checked = []
+    with tempfile.TemporaryDirectory() as d:
+        copy = Path(d)
+        for entry in inventory["publication"]:
+            code, raw = fetch(base + entry["url"])
+            assert code == entry["status"], "Unexpected status: " + entry["url"]
+            assert hashlib.sha256(raw).hexdigest() == entry["sha256"], "Delivered byte drift: " + entry["url"]
+            dst = copy / entry["path"]; dst.parent.mkdir(parents=True, exist_ok=True); dst.write_bytes(raw)
+            checked.append(entry["url"])
+        gate.verify_publication(copy)
+        code, raw = fetch(base + "/__obds_release_missing__")
+        assert code == 404 and raw == (root / "404.html").read_bytes(), "Missing route must return exact 404 bytes and status"
+    for entry in inventory.get("publicArtifacts", []):
+        code, raw = fetch(base + entry["url"])
+        assert code == entry["status"] and hashlib.sha256(raw).hexdigest() == entry["sha256"], "Public artifact mismatch: " + entry["url"]
+        checked.append(entry["url"])
+    return checked
+
+
 def main() -> int:
     base = (sys.argv[1] if len(sys.argv) > 1 else DEFAULT_BASE).rstrip("/")
     print(f"deploy smoke test against {base}")
@@ -110,6 +191,10 @@ def main() -> int:
 
     failures: list[str] = []
 
+    try:
+        verify_exact_publication(base)
+    except (AssertionError, OSError, ValueError, KeyError) as exc:
+        failures.append(str(exc))
     print("must be absent")
     for path, why in MUST_BE_ABSENT:
         code = status(base + path)

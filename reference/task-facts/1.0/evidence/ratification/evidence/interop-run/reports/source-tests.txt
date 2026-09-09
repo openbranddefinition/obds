@@ -1,0 +1,64 @@
+test_multi_file_errors_preserve_other_family_results (test_contract_v02.ContractV02Tests.test_multi_file_errors_preserve_other_family_results) ... ok
+test_original_bytes_and_all_decisions_preserved (test_contract_v02.ContractV02Tests.test_original_bytes_and_all_decisions_preserved) ... ok
+test_regression_absent_operand (test_contract_v02.ContractV02Tests.test_regression_absent_operand) ... ok
+test_regression_duplicate_atoms (test_contract_v02.ContractV02Tests.test_regression_duplicate_atoms) ... ok
+test_regression_duplicate_before_typed (test_contract_v02.ContractV02Tests.test_regression_duplicate_before_typed) ... ok
+test_regression_duplicate_case_id (test_contract_v02.ContractV02Tests.test_regression_duplicate_case_id) ... ok
+test_regression_duplicate_condition_id (test_contract_v02.ContractV02Tests.test_regression_duplicate_condition_id) ... ok
+test_regression_empty_all (test_contract_v02.ContractV02Tests.test_regression_empty_all) ... ok
+test_regression_extra_condition_key (test_contract_v02.ContractV02Tests.test_regression_extra_condition_key) ... ok
+test_regression_extra_snapshot_key (test_contract_v02.ContractV02Tests.test_regression_extra_snapshot_key) ... ok
+test_regression_float (test_contract_v02.ContractV02Tests.test_regression_float) ... ok
+test_regression_infinity (test_contract_v02.ContractV02Tests.test_regression_infinity) ... ok
+test_regression_minus_zero (test_contract_v02.ContractV02Tests.test_regression_minus_zero) ... ok
+test_regression_missing_condition_id (test_contract_v02.ContractV02Tests.test_regression_missing_condition_id) ... ok
+test_regression_missing_context (test_contract_v02.ContractV02Tests.test_regression_missing_context) ... ok
+test_regression_missing_evidence_field (test_contract_v02.ContractV02Tests.test_regression_missing_evidence_field) ... ok
+test_regression_missing_requires_defined (test_contract_v02.ContractV02Tests.test_regression_missing_requires_defined) ... ok
+test_regression_missing_snapshot (test_contract_v02.ContractV02Tests.test_regression_missing_snapshot) ... ok
+test_regression_nan (test_contract_v02.ContractV02Tests.test_regression_nan) ... ok
+test_regression_null_snapshot (test_contract_v02.ContractV02Tests.test_regression_null_snapshot) ... ok
+test_regression_parse_before_tfj (test_contract_v02.ContractV02Tests.test_regression_parse_before_tfj) ... ok
+test_regression_surrogate (test_contract_v02.ContractV02Tests.test_regression_surrogate) ... ok
+test_regression_tfj_before_routing (test_contract_v02.ContractV02Tests.test_regression_tfj_before_routing) ... ok
+test_regression_unknown_operator (test_contract_v02.ContractV02Tests.test_regression_unknown_operator) ... ok
+test_regression_unsafe_integer (test_contract_v02.ContractV02Tests.test_regression_unsafe_integer) ... ok
+test_regression_wrong_contract_version (test_contract_v02.ContractV02Tests.test_regression_wrong_contract_version) ... ok
+test_all_conflict_evidence_must_be_accepted (test_experiment.ExperimentTests.test_all_conflict_evidence_must_be_accepted) ... ok
+test_boolean_and_integer_do_not_coerce (test_experiment.ExperimentTests.test_boolean_and_integer_do_not_coerce) ... ok
+test_canonical_known_bytes (test_experiment.ExperimentTests.test_canonical_known_bytes) ... ok
+test_cli_parse_error_is_machine_readable (test_experiment.ExperimentTests.test_cli_parse_error_is_machine_readable) ... ok
+test_complete_snapshot_verifier_binding (test_experiment.ExperimentTests.test_complete_snapshot_verifier_binding) ... ok
+test_dangling_cross_fact_and_orphan_evidence (test_experiment.ExperimentTests.test_dangling_cross_fact_and_orphan_evidence) ... ok
+test_date_validity (test_experiment.ExperimentTests.test_date_validity) ... ok
+test_duplicate_routing_ids_rejected (test_experiment.ExperimentTests.test_duplicate_routing_ids_rejected) ... ok
+test_empty_condition_and_duplicate_atom_invalid (test_experiment.ExperimentTests.test_empty_condition_and_duplicate_atom_invalid) ... ok
+test_every_snapshot_component_affects_hash (test_experiment.ExperimentTests.test_every_snapshot_component_affects_hash) ... ok
+test_fact_and_evidence_tampering (test_experiment.ExperimentTests.test_fact_and_evidence_tampering) ... ok
+test_false_and_zero_are_present (test_experiment.ExperimentTests.test_false_and_zero_are_present) ... ok
+test_false_does_not_hide_unknown_or_conflict (test_experiment.ExperimentTests.test_false_does_not_hide_unknown_or_conflict) ... ok
+test_frozen_vectors (test_experiment.ExperimentTests.test_frozen_vectors) ... ok
+test_json_parser_duplicates_nonfinite_and_syntax (test_experiment.ExperimentTests.test_json_parser_duplicates_nonfinite_and_syntax) ... ok
+test_malformed_unused_fact_invalidates_snapshot (test_experiment.ExperimentTests.test_malformed_unused_fact_invalidates_snapshot) ... ok
+test_manifest_inventory_and_raw_hashes (test_experiment.ExperimentTests.test_manifest_inventory_and_raw_hashes) ... ok
+test_noncanonical_inputs_reject (test_experiment.ExperimentTests.test_noncanonical_inputs_reject) ... ok
+test_object_key_order_does_not_change_hash (test_experiment.ExperimentTests.test_object_key_order_does_not_change_hash) ... ok
+test_operand_and_operator_errors (test_experiment.ExperimentTests.test_operand_and_operator_errors) ... ok
+test_ordinary_type_mutations_never_mean_false (test_experiment.ExperimentTests.test_ordinary_type_mutations_never_mean_false) ... ok
+test_reason_selection_is_order_independent (test_experiment.ExperimentTests.test_reason_selection_is_order_independent) ... ok
+test_relocated_cli_does_not_read_expected_results (test_experiment.ExperimentTests.test_relocated_cli_does_not_read_expected_results) ... ok
+test_replay_to_other_identity_is_unverified (test_experiment.ExperimentTests.test_replay_to_other_identity_is_unverified) ... ok
+test_schema_is_valid_and_closed (test_experiment.ExperimentTests.test_schema_is_valid_and_closed) ... ok
+test_set_permutation_semantics_and_identity (test_experiment.ExperimentTests.test_set_permutation_semantics_and_identity) ... ok
+test_time_domains_are_symmetric (test_experiment.ExperimentTests.test_time_domains_are_symmetric) ... ok
+test_time_syntax_calendar_and_unknown_offset (test_experiment.ExperimentTests.test_time_syntax_calendar_and_unknown_offset) ... ok
+test_undeclared_fact_is_invalid_not_missing (test_experiment.ExperimentTests.test_undeclared_fact_is_invalid_not_missing) ... ok
+test_untrusted_verified_label_and_empty_cannot_clear (test_experiment.ExperimentTests.test_untrusted_verified_label_and_empty_cannot_clear) ... ok
+test_unused_conflict_does_not_poison_independent_rule (test_experiment.ExperimentTests.test_unused_conflict_does_not_poison_independent_rule) ... ok
+
+----------------------------------------------------------------------
+Ran 57 tests in 2.184s
+
+OK
+
+Exit code: 0

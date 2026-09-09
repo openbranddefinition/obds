@@ -146,7 +146,9 @@ function readGovernedJson(text) {
 // malformed sequences, so this runtime silently read a *different* document
 // where the Python reader refused the bytes outright. `TextDecoder` in fatal
 // mode asks the same question Python's `read_text(encoding="utf-8")` asks.
-const UTF8 = new TextDecoder('utf-8', { fatal: true });
+// Preserve a UTF-8 BOM as U+FEFF, like Python utf-8: the strict JSON parser
+// must refuse it rather than accepting a different document with it stripped.
+const UTF8 = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
 
 const readGovernedFile = file => {
   try {
@@ -284,14 +286,22 @@ if (process.argv.includes('--read-parse')) {
     const keys = Object.keys(value).sort();
     return '{' + keys.map(k => asciiString(k) + ':' + stable(value[k])).join(',') + '}';
   };
-  process.stdout.write(Buffer.from(stable(document), 'utf8').toString('hex') + '\n');
+  // A pipe write can be asynchronous; finish the whole response before exiting.
+  await new Promise((resolve, reject) => {
+    process.stdout.write(Buffer.from(stable(document), 'utf8').toString('hex') + '\n',
+      error => error ? reject(error) : resolve());
+  });
   process.exit(0);
 }
 
 if (process.argv.includes('--read')) {
   const target = process.argv[process.argv.indexOf('--read') + 1];
   const document = loadGovernedData(target);
-  process.stdout.write(Buffer.from(canon(document), 'utf8').toString('hex') + '\n');
+  // A pipe write can be asynchronous; finish the whole response before exiting.
+  await new Promise((resolve, reject) => {
+    process.stdout.write(Buffer.from(canon(document), 'utf8').toString('hex') + '\n',
+      error => error ? reject(error) : resolve());
+  });
   process.exit(0);
 }
 

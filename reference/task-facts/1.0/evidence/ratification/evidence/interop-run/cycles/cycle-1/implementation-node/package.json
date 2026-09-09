@@ -1,0 +1,1 @@
+{"name":"task-facts-independent-node","version":"1.0.0","private":true,"type":"module","scripts":{"test":"node --test test.mjs"},"engines":{"node":">=20"}}

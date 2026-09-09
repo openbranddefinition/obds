@@ -1,0 +1,2440 @@
+{
+  "kind": "task-facts-evidence-inventory",
+  "hashAlgorithm": "SHA-256 raw bytes",
+  "selfExcluded": "EVIDENCE-MANIFEST.json",
+  "pathMappings": {
+    "_autonomous_interop_run/": "evidence/interop/",
+    "proposal-ratification/": "evidence/ratification/"
+  },
+  "upstreamInventories": {
+    "proposal-ratification/reports/evidence-inventory.json": "256adf3d4a46d9c4af172c3d3d162b779af68c65d51377530d9c670952c493d9",
+    "proposal-ratification/reports/candidate-v1-inventory.json": "a9468438d4aba8531829cd5c03355d0ead2a263aec17b692c350d4e161b0edf1"
+  },
+  "files": [
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/RESULTS-FROZEN.json",
+      "bytes": 755,
+      "sha256": "55cf83a8751d5f3c00cf7341b1a9133b7bf111a89c609ba9e80280bc6d075868"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/comparison.json",
+      "bytes": 2757,
+      "sha256": "88d7cfd02b4ef640860fa68e812c45c6a4e101d19f06b6544afcd8973c1f0772"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/execution.json",
+      "bytes": 29230,
+      "sha256": "ab7d0b4869a4ec2a638a7e4c2e0cca1b284d39fdb2882c4088f0e236c1789de9"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/finalize_report.py",
+      "bytes": 7120,
+      "sha256": "b1b43fe78e7cc63f9b03f4d23c530e148a2a929d70c8bfd949fb4391b136ef0a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/fixtures-node.json",
+      "bytes": 19205,
+      "sha256": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/fixtures-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/fixtures-python.json",
+      "bytes": 19205,
+      "sha256": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/fixtures-python.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/independent-hash-checks.json",
+      "bytes": 14230,
+      "sha256": "7fdc4a4f93eb7d07b34536436429025754afae2caf49e095feddcd7c0d00f506"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/informational-expected-comparison.json",
+      "bytes": 304,
+      "sha256": "fc5f262628041fad1ce2e9026f7fdea47b9ad42ea4f8b6f66ad59a179d98d969"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/integrity-after.json",
+      "bytes": 93,
+      "sha256": "d0801077683b3c2b44265f72fa12b883b243e9f78266a315228406841b0794ca"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/integrity-before.json",
+      "bytes": 93,
+      "sha256": "d0801077683b3c2b44265f72fa12b883b243e9f78266a315228406841b0794ca"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/absent-operand.json",
+      "bytes": 1535,
+      "sha256": "512bacd819b69f6aa61ef6e9a702ad41e504b3f802600727b7f49ab3639971f6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/association-conflict.json",
+      "bytes": 1528,
+      "sha256": "39c3d757975756d9616d3e86dfacdb19e31184d8184f534a78365424f4c95217"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/bad-op.json",
+      "bytes": 1519,
+      "sha256": "7df706e745a287c93e77400ca8c58b21dc5d0e981bd3b99b28e9bb74d8995b4f"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/base.json",
+      "bytes": 1521,
+      "sha256": "0e334b740243655c3eba20b0ab0b4a1fdcedb25332b78f8ce8abcb3d4a4dee7d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/campaign-claim.json",
+      "bytes": 2291,
+      "sha256": "19eacfa06ec4f0133efae7efe334421dd028602b5eaced07c405350dd11b524d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-action-stale.json",
+      "bytes": 1521,
+      "sha256": "00a8b1085e60ab5705ab37033c1127c8fe72f0a77aebd21361c21fc825cd115f"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-action-verified.json",
+      "bytes": 1521,
+      "sha256": "2da3330beb3174c795916848a4954aef6358636aa85fc02b0d6c4c5268c0f65c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-artifactHash-stale.json",
+      "bytes": 1521,
+      "sha256": "91c7305786741efab0d939fd5e3eb3ea57caa70a54c5d4e570904c79279669f5"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-artifactHash-verified.json",
+      "bytes": 1521,
+      "sha256": "76b316078883802a239c6f11c03a0bf248b78e7ac4364bc86f14f8232842d5bf"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-id-stale.json",
+      "bytes": 1523,
+      "sha256": "6dae5063efe442b86aebacb3066f5dad4538eebf6bcf54cb3f419476226dfd31"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-id-verified.json",
+      "bytes": 1527,
+      "sha256": "c7c888dd5403012aac7d9b62ef6b17c579a6a78013bcba7d22965f44def4170a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-inputPackageHash-stale.json",
+      "bytes": 1521,
+      "sha256": "b864894553f4575fb97afbac70df95b46a7547309eaeda26f069e2d680069041"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-inputPackageHash-verified.json",
+      "bytes": 1521,
+      "sha256": "413437c8ccaf714693a6e720fb9cde7d3063e7dd26414328b7e63dbfffcd5492"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/contradictory.json",
+      "bytes": 2070,
+      "sha256": "c31b65b45f3360d0eeba024ef1a96fd91d58531f35aa0feab3ed1baa40248689"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-association.json",
+      "bytes": 1528,
+      "sha256": "b332ff1ce101c49b9e717555f5b4793e76da31ab58867ba6cee606a440a00a49"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-atoms.json",
+      "bytes": 1557,
+      "sha256": "08a2940e2b606b43b11333818583a5c29c4eb5b40fb643284eb356db05315e45"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-case-id.json",
+      "bytes": 3000,
+      "sha256": "dda723987e1c93b10f2f5e8c72f3e7a988c607f403a8b0cf160101765b26c548"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-condition-id.json",
+      "bytes": 1607,
+      "sha256": "9d3b9947f390ed970438984af1a9944f433ef89b3be34019a41ec9b73b22f977"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-set.json",
+      "bytes": 1521,
+      "sha256": "4ab4b19f8d46a6005fd62538639da766ad5b4fb517af0e1ef5a66f4135c31d4e"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/empty.json",
+      "bytes": 1488,
+      "sha256": "65c4698cf02c78e6f48f8b5c3132d2abb66bd74db2dc33777244d94eb4a4ae12"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/extra-case.json",
+      "bytes": 1536,
+      "sha256": "77f3f2387a078c999ba548c3520ceaf66eaea76882bdf89d3a587de6d64d71c5"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-condition-valid-sibling.json",
+      "bytes": 1570,
+      "sha256": "1d6aea3fd222f0a4c3f402adc5832c4b64587733268b505779bbc45d94c995fe"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-array.json",
+      "bytes": 616,
+      "sha256": "0bff6bad32be997b887994f6267eb879d57b4e93e87c1cb4186240a3f287c188"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-boolean.json",
+      "bytes": 618,
+      "sha256": "4da9a6ff1adef32916085ee6424faa300da62fcac6b1e94f6dbab6e8dd91ed65"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-integer.json",
+      "bytes": 615,
+      "sha256": "4835f89764a113f3cb118ae7c05d65bd4b859ff235340d70987c0f2b98b7111c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-null.json",
+      "bytes": 618,
+      "sha256": "c611d2be34065d8ec057b8cd26fb2b7eb14cbe17b056c675f6a988563844cf18"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-object.json",
+      "bytes": 649,
+      "sha256": "13413f60930f07fe2e2ae0da392d4a80f73eb3bc54e342b122b86b629c46686f"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-string.json",
+      "bytes": 621,
+      "sha256": "e6c1389a78190878280b984786b6a32669e854d9c9f49b9446a06de2807945ed"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/missing-context.json",
+      "bytes": 1087,
+      "sha256": "d58073eca89d542d9824a747ea722403d3b28596ee8c0af958283488e50fac38"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/missing-requires.json",
+      "bytes": 1498,
+      "sha256": "07d7688a0389c6ba18e8d2e96c663fe43dcaf282d54216c33224c5ec8f24f235"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/missing.json",
+      "bytes": 873,
+      "sha256": "e5a2cc298102be72888c92481ffc91d1892e36ce8044575404a1cdeef89bd8f2"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/multiple-assets.json",
+      "bytes": 1535,
+      "sha256": "e5f90ba373c5962e4c51add793abed1587b044594d6af21ac2c202e9be27fe7f"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/multiple-claims.json",
+      "bytes": 1528,
+      "sha256": "e59e46832626eb1c795376c71389d2d0029f63b58d54c6f07b86c8967729a450"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/object-reordered.json",
+      "bytes": 1521,
+      "sha256": "a4304900015e356091840c498b63516de8848733690342e5cc3c640ac3d59e9c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/partner-portrait.json",
+      "bytes": 2300,
+      "sha256": "931b64d8aff5ba031577b38696422a9273f3ff13108399d5dafd789a620ba1a2"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-bom.json",
+      "bytes": 5,
+      "sha256": "aa25e978046d680ef8740d837e6de5bc1e2a2dc6089dbda1012544b538d53f65"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-duplicate-key.json",
+      "bytes": 13,
+      "sha256": "d38245cfdb5d2239d67fe2a719312768b668a6928d8d97d04fbce83215e50b44"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-escaped-duplicate-key.json",
+      "bytes": 18,
+      "sha256": "9b76ab5d01163a68899e361838ef85cf791c1a4aee792d8c714db00237a32647"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-exponent.json",
+      "bytes": 9,
+      "sha256": "fe0a7174116116d9794adf31e74e647187f7265072d28e61488c05b96da6a4c5"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-float.json",
+      "bytes": 9,
+      "sha256": "bf32f56236899e13ef54db875d136c6cbcc65244464829c54911aa9069b0ae25"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-infinity.json",
+      "bytes": 14,
+      "sha256": "504a7fad8d7687a0ca0c9eace25c99c63e8e3cf1ad8f4945644c781e4605c02d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-malformed-json.json",
+      "bytes": 10,
+      "sha256": "7a05a8c517ff5fdc97bc3e37d4cdcc65988915b84bee7ae21d02b9d0d95791b0"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-minus-zero.json",
+      "bytes": 2,
+      "sha256": "ed79f26d03f412bde3db206601a698e0bb451bea9e3cc25289636ac17ea74b0a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-nan-after-float.json",
+      "bytes": 9,
+      "sha256": "69d2002733bfddf91e57234caaf60466dd258b59bc14f85a1e37212e90a4ab65"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-nan.json",
+      "bytes": 9,
+      "sha256": "c238cb6e9ac5407491b0988102620ab9445290d2ed7713c516a2b28bd2388968"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-surrogate.json",
+      "bytes": 14,
+      "sha256": "7f3c6b6b4a88409efe4d2fba1cb3cf2b79b682fe4387678cba2e6b9645b58221"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-top-array.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-trailing.json",
+      "bytes": 4,
+      "sha256": "b51f08b698d88d8027a935d9db649774949f5fb41a0c559bfee6a9a13225c72d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-unsafe-integer.json",
+      "bytes": 22,
+      "sha256": "9799d751f6b78d19d7d2dfe1b3889007eb2de56c34a92e998389795b26cb14d3"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/set-reordered.json",
+      "bytes": 1521,
+      "sha256": "a4c36f6687808593193ea5d1f5e22fc6784a0f7885ebbd0dd66129ab3c4ca33a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/special-fact-constructor.json",
+      "bytes": 1550,
+      "sha256": "1a92a7025cbc4c8b2ee33d1d498fe0e5a4c375a6c81d370fb2088eafb9a297f0"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/special-fact-hasOwnProperty.json",
+      "bytes": 1574,
+      "sha256": "069215b1c9cacf27396fa35264a6d62f90c2173c04e0fa6a2cedde84d4ded9be"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/special-fact-toString.json",
+      "bytes": 1526,
+      "sha256": "08aff5e330624de767b8166f12a3609b9d289db8203b765bdcf5eec2bd298bdb"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-date-instant.json",
+      "bytes": 1529,
+      "sha256": "a6acb57d5f0aff07cb3ef86e68ef474488576add2805c20eea5d566131e372e8"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-instant-date.json",
+      "bytes": 1534,
+      "sha256": "a0f6367e19b1ca2c887165c7274a9fc664521c2814bfb19174828e53cf0f12cb"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-leap-invalid.json",
+      "bytes": 1519,
+      "sha256": "1252cf757404b6cb39bb721b2904f6bbf248f7aa78748a64da9924a3e03547db"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-leap-valid.json",
+      "bytes": 1519,
+      "sha256": "7ee051888447f0fc7aea156b4290cbf50303a19a6c8727c830a7a459f59c4b3c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-offset-equal.json",
+      "bytes": 1549,
+      "sha256": "70adafc981ec56e4db3a9d0e9378c69c89589fb28d437d7fd611dbb507ce8ca7"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-unknown-offset.json",
+      "bytes": 1549,
+      "sha256": "cff55f5d14f74cf0da188624c7d9d986a1ff5b31c361691614576624ce980520"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/time-year-one.json",
+      "bytes": 1544,
+      "sha256": "04735518b69db194e9d3a4a85622fd79c5be8814a826edd8d072af59712f8666"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/unknown.json",
+      "bytes": 1490,
+      "sha256": "a4e0b5bd35c5ac6a6cb6e7650f92605cec8302919a02d5724916b00814f80544"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-bool-as-int.json",
+      "bytes": 1514,
+      "sha256": "9999038c29297881aebf35b15038ac15440c641040703cf2146728231b6e5732"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-false.json",
+      "bytes": 1516,
+      "sha256": "020a31813fd046dbf8552d15af3ffb11f1775b8df332d4fbed5cdd18f42b18c2"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-int-as-bool.json",
+      "bytes": 1508,
+      "sha256": "9ab3cb62017f8e679ce9c76f1e6093f1b33b0665773596aed7e244ae00ece1bf"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-integer-as-string.json",
+      "bytes": 1509,
+      "sha256": "ad4be85fa0a69e2ef96f4b80259815de5016043ea127957110de8e6d9f67a49a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-maxint.json",
+      "bytes": 1538,
+      "sha256": "b1d5e8930c9cd983990545378bfc809a69017a60478ca12a77ab05370e8b180d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-minint.json",
+      "bytes": 1540,
+      "sha256": "8eb391c31f59c55ea527491f2f1b144914aeb40da93568ae0fa28e384c7bfeac"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-null.json",
+      "bytes": 1513,
+      "sha256": "e40b150b8f2000b8401e517a998f791edbb8266925f85f932b96e4f83fe2e521"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-numeric-string.json",
+      "bytes": 1521,
+      "sha256": "95c988f26eed8d8b312437453ca0726c5b5085d8d3ccf9082f9f54dcf2d5f08b"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-true.json",
+      "bytes": 1514,
+      "sha256": "02e48e32309e27517fb2c688821bd0d177738a6b2b338f2611612d686181f064"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-unicode.json",
+      "bytes": 1589,
+      "sha256": "a3a93ce1718e76ddd8cfc6c7438a40083b74364bc5b8a37905390bf609721cdb"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/value-zero.json",
+      "bytes": 1508,
+      "sha256": "0c3429b19e7e948f365754b6e484bd2bd7d0258df7f02312ce66013a89783cd8"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-inputs/wrong-scalar-set.json",
+      "bytes": 1508,
+      "sha256": "fa2b6d3cc266addd7ae0a02351df0ad95ef3a710f808462843fdad4ca3d2e329"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-relationships.json",
+      "bytes": 497,
+      "sha256": "7b25a20b48a1790090c49500321d1d0edf14d9794dea451c54e2d3a082482d5e"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probe-results-by-name.json",
+      "bytes": 45254,
+      "sha256": "cfa51dfcee7e09fb95554d26a581be7269ed8389407e1e7913fa35cd797d889e"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probes-node.json",
+      "bytes": 18848,
+      "sha256": "8361f6b28235279bf84db9ed72ecabe4c2b60244010d944f3a07617f23fe2825"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probes-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probes-python.json",
+      "bytes": 18848,
+      "sha256": "8361f6b28235279bf84db9ed72ecabe4c2b60244010d944f3a07617f23fe2825"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/probes-python.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/regressions-node.json",
+      "bytes": 8920,
+      "sha256": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/regressions-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/regressions-python.json",
+      "bytes": 8920,
+      "sha256": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/regressions-python.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py",
+      "bytes": 8974,
+      "sha256": "f51a6a267f0f682328ed3f6fff1996b59f8ea64a1f47820b2448ad3fb22a0077"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/OBDS-TASK-FACTS-EXPERIMENT-v0.2.md",
+      "bytes": 24477,
+      "sha256": "f56a3a84cb10ae5275577839c475dce610357cced4223f66f77b9cd8ca3a5951"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/PACKAGE-MANIFEST.json",
+      "bytes": 8839,
+      "sha256": "9b3f6acba6d1070e019b9ef6e2419e1a86530c7e33af3cc8b001db06f8b49ad4"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/README.md",
+      "bytes": 3338,
+      "sha256": "0f597205c6cf4de6ec83a0c583dd1fe34f8a4c7283464f72f91aac66b08e57c1"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/V0.1-TO-V0.2-DELTA.md",
+      "bytes": 4258,
+      "sha256": "a1366694b42d92f51661511047cd2e5991fa18ca86d26bac7c108ecbb27e9214"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/expected-results.json",
+      "bytes": 34356,
+      "sha256": "fc8376778a595f95a4f451e975e2bec8b9fe51f72b77f78a2fd63069ecc2c9ce"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/fixtures/01-two-claims.json",
+      "bytes": 15882,
+      "sha256": "6d97c0132205308842681f727569c034931fc633aaad5dde3062e4926fb7ad68"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/fixtures/02-two-assets.json",
+      "bytes": 16745,
+      "sha256": "2157e7e24a8f1946a2107265fd34eaea7d2188b588e6e7b96e32fee8d175415d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/fixtures/03-partner-plus-portrait.json",
+      "bytes": 12203,
+      "sha256": "a9ce93a3b9e897efee37c9e5e1fd503f7a95979f2ab1120b7e46bc8db0a0812c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/fixtures/04-campaign-plus-claim.json",
+      "bytes": 17022,
+      "sha256": "6f77644f914a3be7da9345cd2dd879e2b2397eb36d19a943af7147202fe6af24"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/fixtures/05-missing-contradictory.json",
+      "bytes": 20608,
+      "sha256": "83e130bfc909a1f6c8b2ace9d86565666027fa100ff8dea104757d633f8d2628"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/fixtures/06-ambiguous-time.json",
+      "bytes": 22743,
+      "sha256": "424a6bceb3dfda0649e5fccae54e6e403d782f298811da486314a9d735405403"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/expected-results.json",
+      "bytes": 15678,
+      "sha256": "73aef22f49db080c4fe654ee1019d94be9123de79af15f4e1d6496643dc2b639"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/absent-operand.json",
+      "bytes": 4041,
+      "sha256": "ebd8863df3bf3f6adc4165b0c71fad82a6fff6f4dbe4bd69b6189afe4fdd681a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-atoms.json",
+      "bytes": 3985,
+      "sha256": "d7df144910d04991c9ca60e44162c2e5878c3b2ebe83e5cc84d80983c00992f6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-before-typed.json",
+      "bytes": 3733,
+      "sha256": "605a1db1e331a50fe55c19cb242d44d4641d3d296484b33ace4af70e833c0258"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-case-id.json",
+      "bytes": 8028,
+      "sha256": "1a920473169f1e0f2d9a481c250d497abfee59aa7ecdfe8add3f5dfecad8ae98"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-condition-id.json",
+      "bytes": 4054,
+      "sha256": "f9ac6b918476375c1aa2a193e293e72378b88ca087fdf6e1c1f883bb4489b9c4"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/empty-all.json",
+      "bytes": 3717,
+      "sha256": "9b608a937b71b3e6e14d34979dab15a1cf4a14d737b8f6f6803fe0623e8c289c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/extra-condition-key.json",
+      "bytes": 4071,
+      "sha256": "45851c2963f3b7d7d3087594f82d692b0bfc5b620dc0b0c8cbdb5799e3305c65"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/extra-snapshot-key.json",
+      "bytes": 4069,
+      "sha256": "81abd8a6467830e38f35c787f700f1a6e6ce05b72da037cf98169afc953a9439"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/float.json",
+      "bytes": 4022,
+      "sha256": "52b2d00e71ef8917173630cf34cef8490cf1fa9bf5c9317eb47767d6d96681ec"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/infinity.json",
+      "bytes": 4030,
+      "sha256": "fb4b5297955e9b1e7b9c80735afdc8e3597f2fa6636dd952d53049d3b16e7b84"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/minus-zero.json",
+      "bytes": 4026,
+      "sha256": "2d67ff3a76df43735c14de8148eac4e958061b05858948d3b432763fe69e1fc9"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/missing-condition-id.json",
+      "bytes": 4017,
+      "sha256": "4019f5ae79052a0c785910eb7e7fabf56820bd1d4fa5e031c4651d0cb5ad60c2"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/missing-context.json",
+      "bytes": 3421,
+      "sha256": "b654dd0cb8d5c4917c450e34aa87afa3fe9381f4aa71b72a8c26f0e89efc90fb"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/missing-evidence-field.json",
+      "bytes": 4007,
+      "sha256": "ee7a2018f7e50899d0a465a4b9171a078e75643d60e274e122cf24c8bac92b98"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/missing-requires-defined.json",
+      "bytes": 3968,
+      "sha256": "6f9db6e3891785f9eecf53713429c201217ac93db6dbc6806455983eb9dc4c14"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/missing-snapshot.json",
+      "bytes": 1524,
+      "sha256": "12e7ed2ff2313f1e9f659e487a1e6245eeaefbe9074a9e7e1bd31f0deb4ae251"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/nan.json",
+      "bytes": 4020,
+      "sha256": "9cd39b55b3e5263a6ba79c5e914f317a99bb0e7bbd64b9354b2f294bc143addf"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/null-snapshot.json",
+      "bytes": 1545,
+      "sha256": "11782730eb57cda5d5c3074a63f85df31ad8848b8525dc5bfec19fa7da3cba9a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/parse-before-tfj.json",
+      "bytes": 10,
+      "sha256": "3b8951a7d5ed1422c3560a422e30f544fa2fe80c8c0c7dcde31a4099a3fd2810"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/surrogate.json",
+      "bytes": 4031,
+      "sha256": "86b177b89117e71783f4c50313294cb49f47b6a0324329bc2f544137360398e3"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/tfj-before-routing.json",
+      "bytes": 4021,
+      "sha256": "3160ba80f77c9aad9d4bbe44c87989ac98665f7b8e1d8d6342313e24525eaa4a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/unknown-operator.json",
+      "bytes": 4044,
+      "sha256": "ac343f66deea5f42a8c3dafb0f8c2210bf7a5a7305b928f21a1573d163b59937"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/unsafe-integer.json",
+      "bytes": 4044,
+      "sha256": "50ed3357318a63715c310e7e1dff043de3daff550e23a3bb26eca7f61c2c36ca"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/regressions/inputs/wrong-contract-version.json",
+      "bytes": 4051,
+      "sha256": "ddcacda69211c6171ae718dd97ab8ad9fc218a713ab348c64d2228e40e4ee28a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/frozen-contract-integrity.json",
+      "bytes": 4343,
+      "sha256": "a6f150889a0f2b7291aef9522bad2a85e3c0280586cdd0859adbfd555c1d1f27"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/FROZEN-MANIFEST.json",
+      "bytes": 959,
+      "sha256": "b3db24453cf0deb6084f4561eaabbc20011ddfe914c686324b6866cb659cf3f6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/PROVENANCE.json",
+      "bytes": 649,
+      "sha256": "962905c8bea50ad2f3388f52bfc78f788d36e2b0cb0c4b509ff9d869aa84599d"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/README.md",
+      "bytes": 2655,
+      "sha256": "9561e0f0382a3f3f0deff33ed77946dec734431dc57cef1979c70210b62128f8"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs",
+      "bytes": 10511,
+      "sha256": "a4e16653680b0e4127ff7da30bc3716a9f98c82b48ae77383439ce5cb4ef6c6f"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/package.json",
+      "bytes": 156,
+      "sha256": "9796ea91a179de0388f562061022fc82c4450d561f31faa4d77bbd3764c3fcd5"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/regression-results.json",
+      "bytes": 8920,
+      "sha256": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/results.json",
+      "bytes": 19205,
+      "sha256": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/run-fixtures.mjs",
+      "bytes": 402,
+      "sha256": "951f75b44c766aeb65a05e0b27fe83c6a6ebc3618153c6ae8afc2d9338f6a205"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/test-results.txt",
+      "bytes": 1178,
+      "sha256": "c73fe4339300a3075eec4bae2d2df49f857c9f46038da7e3343ac6bc1880fc47"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/test.mjs",
+      "bytes": 6197,
+      "sha256": "bd2b43a88806e2c5394d8bd77fe64f9d4bbecceebbb1c37e2cc6a68c8d5a12c6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node-integrity.json",
+      "bytes": 990,
+      "sha256": "5550990edafbbb3c13d8c967ba87ae81ed0f8b680692821f485ae1c2a3547e47"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/FROZEN-MANIFEST.json",
+      "bytes": 674,
+      "sha256": "a18ec0a92bc6acb638788e2a11b9c5da54e43ebff871621a1793894cb9afc5f1"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/README.md",
+      "bytes": 1556,
+      "sha256": "156535136c42442f227aed21873607bfeaa6aab54e834037d5e78064e61f31b6"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/evaluate.py",
+      "bytes": 11834,
+      "sha256": "cf9d36783265395318fee2d58cfd263753cbe8360e2f1bf22d73ebfd2e12e59c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/provenance.json",
+      "bytes": 1146,
+      "sha256": "ce8ffe12f4e8fb0e6ca2ac55d407237d532456b441430ceb3f2e9e7d64d6ef37"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/results.json",
+      "bytes": 28103,
+      "sha256": "3e2544cccc36f69c9e6c723ef21db85b0045d7400a92e2a8818a36dd9748ef18"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/test-output.txt",
+      "bytes": 1323,
+      "sha256": "d3bf29102c2b62964fc197bad8d358961801a8e96ee4ad872202c5b36ddd9d95"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/test_evaluate.py",
+      "bytes": 7362,
+      "sha256": "ace5a23d11590e99059984654913723c225fda6569baa66032790644c1c43214"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python-integrity.json",
+      "bytes": 715,
+      "sha256": "5d7fcb3f7f5b05e954d9138836aeba916dc4b133958b04afb9ff9de06d2bd6eb"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementer-input.sha256",
+      "bytes": 65,
+      "sha256": "1a52b04de512140525fcb4602a6d661575d59940e1a099befa8bff391c16b053"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementer-input.zip",
+      "bytes": 52456,
+      "sha256": "35fd3c427d6aa1cf6d8c3cc253fa2d1b227891294ea1c1891f158b1b358b7b16"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/interoperability-evaluation.md",
+      "bytes": 8159,
+      "sha256": "7e8e4a57abdec4e6cfd550aa60e3d874c6d9a1175f3bca52f2bfadbc8357f64b"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/orchestration-evidence.json",
+      "bytes": 954,
+      "sha256": "5ee0453a496a62a1c4153a6b72937e484a17164b262c73761b2e76821eb7ff3b"
+    },
+    {
+      "path": "evidence/interop/reports/FINAL-RESULT.md",
+      "bytes": 2582,
+      "sha256": "fff2f16b0073ad9a7e311706a21499e92b7ba8464b2fc75aea0ed487b7306193"
+    },
+    {
+      "path": "evidence/interop/reports/design-review.md",
+      "bytes": 2480,
+      "sha256": "10fb4a2920dfad1649f56c3e6f3e9a99b3af2d10a72d2361dc95511e2336514c"
+    },
+    {
+      "path": "evidence/interop/reports/orchestration.json",
+      "bytes": 570,
+      "sha256": "d5e27a6ab6f65f1b1a5beba8efd949252ebb6bbcb3bb72d1fe7db635f2055fb0"
+    },
+    {
+      "path": "evidence/interop/reports/source-integrity.json",
+      "bytes": 4343,
+      "sha256": "a6f150889a0f2b7291aef9522bad2a85e3c0280586cdd0859adbfd555c1d1f27"
+    },
+    {
+      "path": "evidence/interop/reports/source-tests.txt",
+      "bytes": 6766,
+      "sha256": "6f6f53f348c06a8dbe43b7d8071a673c5232c14aa50c22907a7e40cef1b46ef5"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/OBDS-TASK-FACTS-EXPERIMENT-v0.2.md",
+      "bytes": 24477,
+      "sha256": "f56a3a84cb10ae5275577839c475dce610357cced4223f66f77b9cd8ca3a5951"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/PACKAGE-MANIFEST.json",
+      "bytes": 8839,
+      "sha256": "9b3f6acba6d1070e019b9ef6e2419e1a86530c7e33af3cc8b001db06f8b49ad4"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/README.md",
+      "bytes": 3338,
+      "sha256": "0f597205c6cf4de6ec83a0c583dd1fe34f8a4c7283464f72f91aac66b08e57c1"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/V0.1-TO-V0.2-DELTA.md",
+      "bytes": 4258,
+      "sha256": "a1366694b42d92f51661511047cd2e5991fa18ca86d26bac7c108ecbb27e9214"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/expected-results.json",
+      "bytes": 34356,
+      "sha256": "fc8376778a595f95a4f451e975e2bec8b9fe51f72b77f78a2fd63069ecc2c9ce"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/fixtures/01-two-claims.json",
+      "bytes": 15882,
+      "sha256": "6d97c0132205308842681f727569c034931fc633aaad5dde3062e4926fb7ad68"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/fixtures/02-two-assets.json",
+      "bytes": 16745,
+      "sha256": "2157e7e24a8f1946a2107265fd34eaea7d2188b588e6e7b96e32fee8d175415d"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/fixtures/03-partner-plus-portrait.json",
+      "bytes": 12203,
+      "sha256": "a9ce93a3b9e897efee37c9e5e1fd503f7a95979f2ab1120b7e46bc8db0a0812c"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/fixtures/04-campaign-plus-claim.json",
+      "bytes": 17022,
+      "sha256": "6f77644f914a3be7da9345cd2dd879e2b2397eb36d19a943af7147202fe6af24"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/fixtures/05-missing-contradictory.json",
+      "bytes": 20608,
+      "sha256": "83e130bfc909a1f6c8b2ace9d86565666027fa100ff8dea104757d633f8d2628"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/fixtures/06-ambiguous-time.json",
+      "bytes": 22743,
+      "sha256": "424a6bceb3dfda0649e5fccae54e6e403d782f298811da486314a9d735405403"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/expected-results.json",
+      "bytes": 15678,
+      "sha256": "73aef22f49db080c4fe654ee1019d94be9123de79af15f4e1d6496643dc2b639"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/absent-operand.json",
+      "bytes": 4041,
+      "sha256": "ebd8863df3bf3f6adc4165b0c71fad82a6fff6f4dbe4bd69b6189afe4fdd681a"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-atoms.json",
+      "bytes": 3985,
+      "sha256": "d7df144910d04991c9ca60e44162c2e5878c3b2ebe83e5cc84d80983c00992f6"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-before-typed.json",
+      "bytes": 3733,
+      "sha256": "605a1db1e331a50fe55c19cb242d44d4641d3d296484b33ace4af70e833c0258"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-case-id.json",
+      "bytes": 8028,
+      "sha256": "1a920473169f1e0f2d9a481c250d497abfee59aa7ecdfe8add3f5dfecad8ae98"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-condition-id.json",
+      "bytes": 4054,
+      "sha256": "f9ac6b918476375c1aa2a193e293e72378b88ca087fdf6e1c1f883bb4489b9c4"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/empty-all.json",
+      "bytes": 3717,
+      "sha256": "9b608a937b71b3e6e14d34979dab15a1cf4a14d737b8f6f6803fe0623e8c289c"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/extra-condition-key.json",
+      "bytes": 4071,
+      "sha256": "45851c2963f3b7d7d3087594f82d692b0bfc5b620dc0b0c8cbdb5799e3305c65"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/extra-snapshot-key.json",
+      "bytes": 4069,
+      "sha256": "81abd8a6467830e38f35c787f700f1a6e6ce05b72da037cf98169afc953a9439"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/float.json",
+      "bytes": 4022,
+      "sha256": "52b2d00e71ef8917173630cf34cef8490cf1fa9bf5c9317eb47767d6d96681ec"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/infinity.json",
+      "bytes": 4030,
+      "sha256": "fb4b5297955e9b1e7b9c80735afdc8e3597f2fa6636dd952d53049d3b16e7b84"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/minus-zero.json",
+      "bytes": 4026,
+      "sha256": "2d67ff3a76df43735c14de8148eac4e958061b05858948d3b432763fe69e1fc9"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/missing-condition-id.json",
+      "bytes": 4017,
+      "sha256": "4019f5ae79052a0c785910eb7e7fabf56820bd1d4fa5e031c4651d0cb5ad60c2"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/missing-context.json",
+      "bytes": 3421,
+      "sha256": "b654dd0cb8d5c4917c450e34aa87afa3fe9381f4aa71b72a8c26f0e89efc90fb"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/missing-evidence-field.json",
+      "bytes": 4007,
+      "sha256": "ee7a2018f7e50899d0a465a4b9171a078e75643d60e274e122cf24c8bac92b98"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/missing-requires-defined.json",
+      "bytes": 3968,
+      "sha256": "6f9db6e3891785f9eecf53713429c201217ac93db6dbc6806455983eb9dc4c14"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/missing-snapshot.json",
+      "bytes": 1524,
+      "sha256": "12e7ed2ff2313f1e9f659e487a1e6245eeaefbe9074a9e7e1bd31f0deb4ae251"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/nan.json",
+      "bytes": 4020,
+      "sha256": "9cd39b55b3e5263a6ba79c5e914f317a99bb0e7bbd64b9354b2f294bc143addf"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/null-snapshot.json",
+      "bytes": 1545,
+      "sha256": "11782730eb57cda5d5c3074a63f85df31ad8848b8525dc5bfec19fa7da3cba9a"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/parse-before-tfj.json",
+      "bytes": 10,
+      "sha256": "3b8951a7d5ed1422c3560a422e30f544fa2fe80c8c0c7dcde31a4099a3fd2810"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/surrogate.json",
+      "bytes": 4031,
+      "sha256": "86b177b89117e71783f4c50313294cb49f47b6a0324329bc2f544137360398e3"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/tfj-before-routing.json",
+      "bytes": 4021,
+      "sha256": "3160ba80f77c9aad9d4bbe44c87989ac98665f7b8e1d8d6342313e24525eaa4a"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/unknown-operator.json",
+      "bytes": 4044,
+      "sha256": "ac343f66deea5f42a8c3dafb0f8c2210bf7a5a7305b928f21a1573d163b59937"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/unsafe-integer.json",
+      "bytes": 4044,
+      "sha256": "50ed3357318a63715c310e7e1dff043de3daff550e23a3bb26eca7f61c2c36ca"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/regressions/inputs/wrong-contract-version.json",
+      "bytes": 4051,
+      "sha256": "ddcacda69211c6171ae718dd97ab8ad9fc218a713ab348c64d2228e40e4ee28a"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/ratification/evidence/01-RESEARCH-TO-PROPOSAL-BRIEF.md",
+      "bytes": 4278,
+      "sha256": "77615b51981f34e2bf5f8298a0ec6a2fb0c92f92340f21dd6095311c30f3d604"
+    },
+    {
+      "path": "evidence/ratification/evidence/REPRODUCTION.json",
+      "bytes": 629,
+      "sha256": "dbd45217aa7eb6125d244bbfdbed7f0e5f86da39caecfaa2b9043f3cdb007c32"
+    },
+    {
+      "path": "evidence/ratification/evidence/VERIFICATION.json",
+      "bytes": 1526,
+      "sha256": "764f0fec5f065c5ee571320f89d4930d530c07443118b30398289f28ce7c2bc8"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/RESULTS-FROZEN.json",
+      "bytes": 755,
+      "sha256": "55cf83a8751d5f3c00cf7341b1a9133b7bf111a89c609ba9e80280bc6d075868"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/comparison.json",
+      "bytes": 2757,
+      "sha256": "88d7cfd02b4ef640860fa68e812c45c6a4e101d19f06b6544afcd8973c1f0772"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/execution.json",
+      "bytes": 29230,
+      "sha256": "ab7d0b4869a4ec2a638a7e4c2e0cca1b284d39fdb2882c4088f0e236c1789de9"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/finalize_report.py",
+      "bytes": 7120,
+      "sha256": "b1b43fe78e7cc63f9b03f4d23c530e148a2a929d70c8bfd949fb4391b136ef0a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/fixtures-node.json",
+      "bytes": 19205,
+      "sha256": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/fixtures-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/fixtures-python.json",
+      "bytes": 19205,
+      "sha256": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/fixtures-python.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/independent-hash-checks.json",
+      "bytes": 14230,
+      "sha256": "7fdc4a4f93eb7d07b34536436429025754afae2caf49e095feddcd7c0d00f506"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/informational-expected-comparison.json",
+      "bytes": 304,
+      "sha256": "fc5f262628041fad1ce2e9026f7fdea47b9ad42ea4f8b6f66ad59a179d98d969"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/integrity-after.json",
+      "bytes": 93,
+      "sha256": "d0801077683b3c2b44265f72fa12b883b243e9f78266a315228406841b0794ca"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/integrity-before.json",
+      "bytes": 93,
+      "sha256": "d0801077683b3c2b44265f72fa12b883b243e9f78266a315228406841b0794ca"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/absent-operand.json",
+      "bytes": 1535,
+      "sha256": "512bacd819b69f6aa61ef6e9a702ad41e504b3f802600727b7f49ab3639971f6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/association-conflict.json",
+      "bytes": 1528,
+      "sha256": "39c3d757975756d9616d3e86dfacdb19e31184d8184f534a78365424f4c95217"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/bad-op.json",
+      "bytes": 1519,
+      "sha256": "7df706e745a287c93e77400ca8c58b21dc5d0e981bd3b99b28e9bb74d8995b4f"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/base.json",
+      "bytes": 1521,
+      "sha256": "0e334b740243655c3eba20b0ab0b4a1fdcedb25332b78f8ce8abcb3d4a4dee7d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/campaign-claim.json",
+      "bytes": 2291,
+      "sha256": "19eacfa06ec4f0133efae7efe334421dd028602b5eaced07c405350dd11b524d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-action-stale.json",
+      "bytes": 1521,
+      "sha256": "00a8b1085e60ab5705ab37033c1127c8fe72f0a77aebd21361c21fc825cd115f"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-action-verified.json",
+      "bytes": 1521,
+      "sha256": "2da3330beb3174c795916848a4954aef6358636aa85fc02b0d6c4c5268c0f65c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-artifactHash-stale.json",
+      "bytes": 1521,
+      "sha256": "91c7305786741efab0d939fd5e3eb3ea57caa70a54c5d4e570904c79279669f5"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-artifactHash-verified.json",
+      "bytes": 1521,
+      "sha256": "76b316078883802a239c6f11c03a0bf248b78e7ac4364bc86f14f8232842d5bf"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-id-stale.json",
+      "bytes": 1523,
+      "sha256": "6dae5063efe442b86aebacb3066f5dad4538eebf6bcf54cb3f419476226dfd31"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-id-verified.json",
+      "bytes": 1527,
+      "sha256": "c7c888dd5403012aac7d9b62ef6b17c579a6a78013bcba7d22965f44def4170a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-inputPackageHash-stale.json",
+      "bytes": 1521,
+      "sha256": "b864894553f4575fb97afbac70df95b46a7547309eaeda26f069e2d680069041"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/changed-inputPackageHash-verified.json",
+      "bytes": 1521,
+      "sha256": "413437c8ccaf714693a6e720fb9cde7d3063e7dd26414328b7e63dbfffcd5492"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/contradictory.json",
+      "bytes": 2070,
+      "sha256": "c31b65b45f3360d0eeba024ef1a96fd91d58531f35aa0feab3ed1baa40248689"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-association.json",
+      "bytes": 1528,
+      "sha256": "b332ff1ce101c49b9e717555f5b4793e76da31ab58867ba6cee606a440a00a49"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-atoms.json",
+      "bytes": 1557,
+      "sha256": "08a2940e2b606b43b11333818583a5c29c4eb5b40fb643284eb356db05315e45"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-case-id.json",
+      "bytes": 3000,
+      "sha256": "dda723987e1c93b10f2f5e8c72f3e7a988c607f403a8b0cf160101765b26c548"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-condition-id.json",
+      "bytes": 1607,
+      "sha256": "9d3b9947f390ed970438984af1a9944f433ef89b3be34019a41ec9b73b22f977"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/duplicate-set.json",
+      "bytes": 1521,
+      "sha256": "4ab4b19f8d46a6005fd62538639da766ad5b4fb517af0e1ef5a66f4135c31d4e"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/empty.json",
+      "bytes": 1488,
+      "sha256": "65c4698cf02c78e6f48f8b5c3132d2abb66bd74db2dc33777244d94eb4a4ae12"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/extra-case.json",
+      "bytes": 1536,
+      "sha256": "77f3f2387a078c999ba548c3520ceaf66eaea76882bdf89d3a587de6d64d71c5"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-condition-valid-sibling.json",
+      "bytes": 1570,
+      "sha256": "1d6aea3fd222f0a4c3f402adc5832c4b64587733268b505779bbc45d94c995fe"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-array.json",
+      "bytes": 616,
+      "sha256": "0bff6bad32be997b887994f6267eb879d57b4e93e87c1cb4186240a3f287c188"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-boolean.json",
+      "bytes": 618,
+      "sha256": "4da9a6ff1adef32916085ee6424faa300da62fcac6b1e94f6dbab6e8dd91ed65"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-integer.json",
+      "bytes": 615,
+      "sha256": "4835f89764a113f3cb118ae7c05d65bd4b859ff235340d70987c0f2b98b7111c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-null.json",
+      "bytes": 618,
+      "sha256": "c611d2be34065d8ec057b8cd26fb2b7eb14cbe17b056c675f6a988563844cf18"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-object.json",
+      "bytes": 649,
+      "sha256": "13413f60930f07fe2e2ae0da392d4a80f73eb3bc54e342b122b86b629c46686f"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/malformed-snapshot-string.json",
+      "bytes": 621,
+      "sha256": "e6c1389a78190878280b984786b6a32669e854d9c9f49b9446a06de2807945ed"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/missing-context.json",
+      "bytes": 1087,
+      "sha256": "d58073eca89d542d9824a747ea722403d3b28596ee8c0af958283488e50fac38"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/missing-requires.json",
+      "bytes": 1498,
+      "sha256": "07d7688a0389c6ba18e8d2e96c663fe43dcaf282d54216c33224c5ec8f24f235"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/missing.json",
+      "bytes": 873,
+      "sha256": "e5a2cc298102be72888c92481ffc91d1892e36ce8044575404a1cdeef89bd8f2"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/multiple-assets.json",
+      "bytes": 1535,
+      "sha256": "e5f90ba373c5962e4c51add793abed1587b044594d6af21ac2c202e9be27fe7f"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/multiple-claims.json",
+      "bytes": 1528,
+      "sha256": "e59e46832626eb1c795376c71389d2d0029f63b58d54c6f07b86c8967729a450"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/object-reordered.json",
+      "bytes": 1521,
+      "sha256": "a4304900015e356091840c498b63516de8848733690342e5cc3c640ac3d59e9c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/partner-portrait.json",
+      "bytes": 2300,
+      "sha256": "931b64d8aff5ba031577b38696422a9273f3ff13108399d5dafd789a620ba1a2"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-bom.json",
+      "bytes": 5,
+      "sha256": "aa25e978046d680ef8740d837e6de5bc1e2a2dc6089dbda1012544b538d53f65"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-duplicate-key.json",
+      "bytes": 13,
+      "sha256": "d38245cfdb5d2239d67fe2a719312768b668a6928d8d97d04fbce83215e50b44"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-escaped-duplicate-key.json",
+      "bytes": 18,
+      "sha256": "9b76ab5d01163a68899e361838ef85cf791c1a4aee792d8c714db00237a32647"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-exponent.json",
+      "bytes": 9,
+      "sha256": "fe0a7174116116d9794adf31e74e647187f7265072d28e61488c05b96da6a4c5"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-float.json",
+      "bytes": 9,
+      "sha256": "bf32f56236899e13ef54db875d136c6cbcc65244464829c54911aa9069b0ae25"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-infinity.json",
+      "bytes": 14,
+      "sha256": "504a7fad8d7687a0ca0c9eace25c99c63e8e3cf1ad8f4945644c781e4605c02d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-malformed-json.json",
+      "bytes": 10,
+      "sha256": "7a05a8c517ff5fdc97bc3e37d4cdcc65988915b84bee7ae21d02b9d0d95791b0"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-minus-zero.json",
+      "bytes": 2,
+      "sha256": "ed79f26d03f412bde3db206601a698e0bb451bea9e3cc25289636ac17ea74b0a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-nan-after-float.json",
+      "bytes": 9,
+      "sha256": "69d2002733bfddf91e57234caaf60466dd258b59bc14f85a1e37212e90a4ab65"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-nan.json",
+      "bytes": 9,
+      "sha256": "c238cb6e9ac5407491b0988102620ab9445290d2ed7713c516a2b28bd2388968"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-surrogate.json",
+      "bytes": 14,
+      "sha256": "7f3c6b6b4a88409efe4d2fba1cb3cf2b79b682fe4387678cba2e6b9645b58221"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-top-array.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-trailing.json",
+      "bytes": 4,
+      "sha256": "b51f08b698d88d8027a935d9db649774949f5fb41a0c559bfee6a9a13225c72d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/raw-unsafe-integer.json",
+      "bytes": 22,
+      "sha256": "9799d751f6b78d19d7d2dfe1b3889007eb2de56c34a92e998389795b26cb14d3"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/set-reordered.json",
+      "bytes": 1521,
+      "sha256": "a4c36f6687808593193ea5d1f5e22fc6784a0f7885ebbd0dd66129ab3c4ca33a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/special-fact-constructor.json",
+      "bytes": 1550,
+      "sha256": "1a92a7025cbc4c8b2ee33d1d498fe0e5a4c375a6c81d370fb2088eafb9a297f0"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/special-fact-hasOwnProperty.json",
+      "bytes": 1574,
+      "sha256": "069215b1c9cacf27396fa35264a6d62f90c2173c04e0fa6a2cedde84d4ded9be"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/special-fact-toString.json",
+      "bytes": 1526,
+      "sha256": "08aff5e330624de767b8166f12a3609b9d289db8203b765bdcf5eec2bd298bdb"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-date-instant.json",
+      "bytes": 1529,
+      "sha256": "a6acb57d5f0aff07cb3ef86e68ef474488576add2805c20eea5d566131e372e8"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-instant-date.json",
+      "bytes": 1534,
+      "sha256": "a0f6367e19b1ca2c887165c7274a9fc664521c2814bfb19174828e53cf0f12cb"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-leap-invalid.json",
+      "bytes": 1519,
+      "sha256": "1252cf757404b6cb39bb721b2904f6bbf248f7aa78748a64da9924a3e03547db"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-leap-valid.json",
+      "bytes": 1519,
+      "sha256": "7ee051888447f0fc7aea156b4290cbf50303a19a6c8727c830a7a459f59c4b3c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-offset-equal.json",
+      "bytes": 1549,
+      "sha256": "70adafc981ec56e4db3a9d0e9378c69c89589fb28d437d7fd611dbb507ce8ca7"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-unknown-offset.json",
+      "bytes": 1549,
+      "sha256": "cff55f5d14f74cf0da188624c7d9d986a1ff5b31c361691614576624ce980520"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/time-year-one.json",
+      "bytes": 1544,
+      "sha256": "04735518b69db194e9d3a4a85622fd79c5be8814a826edd8d072af59712f8666"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/unknown.json",
+      "bytes": 1490,
+      "sha256": "a4e0b5bd35c5ac6a6cb6e7650f92605cec8302919a02d5724916b00814f80544"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-bool-as-int.json",
+      "bytes": 1514,
+      "sha256": "9999038c29297881aebf35b15038ac15440c641040703cf2146728231b6e5732"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-false.json",
+      "bytes": 1516,
+      "sha256": "020a31813fd046dbf8552d15af3ffb11f1775b8df332d4fbed5cdd18f42b18c2"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-int-as-bool.json",
+      "bytes": 1508,
+      "sha256": "9ab3cb62017f8e679ce9c76f1e6093f1b33b0665773596aed7e244ae00ece1bf"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-integer-as-string.json",
+      "bytes": 1509,
+      "sha256": "ad4be85fa0a69e2ef96f4b80259815de5016043ea127957110de8e6d9f67a49a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-maxint.json",
+      "bytes": 1538,
+      "sha256": "b1d5e8930c9cd983990545378bfc809a69017a60478ca12a77ab05370e8b180d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-minint.json",
+      "bytes": 1540,
+      "sha256": "8eb391c31f59c55ea527491f2f1b144914aeb40da93568ae0fa28e384c7bfeac"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-null.json",
+      "bytes": 1513,
+      "sha256": "e40b150b8f2000b8401e517a998f791edbb8266925f85f932b96e4f83fe2e521"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-numeric-string.json",
+      "bytes": 1521,
+      "sha256": "95c988f26eed8d8b312437453ca0726c5b5085d8d3ccf9082f9f54dcf2d5f08b"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-true.json",
+      "bytes": 1514,
+      "sha256": "02e48e32309e27517fb2c688821bd0d177738a6b2b338f2611612d686181f064"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-unicode.json",
+      "bytes": 1589,
+      "sha256": "a3a93ce1718e76ddd8cfc6c7438a40083b74364bc5b8a37905390bf609721cdb"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/value-zero.json",
+      "bytes": 1508,
+      "sha256": "0c3429b19e7e948f365754b6e484bd2bd7d0258df7f02312ce66013a89783cd8"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-inputs/wrong-scalar-set.json",
+      "bytes": 1508,
+      "sha256": "fa2b6d3cc266addd7ae0a02351df0ad95ef3a710f808462843fdad4ca3d2e329"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-relationships.json",
+      "bytes": 497,
+      "sha256": "7b25a20b48a1790090c49500321d1d0edf14d9794dea451c54e2d3a082482d5e"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probe-results-by-name.json",
+      "bytes": 45254,
+      "sha256": "cfa51dfcee7e09fb95554d26a581be7269ed8389407e1e7913fa35cd797d889e"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probes-node.json",
+      "bytes": 18848,
+      "sha256": "8361f6b28235279bf84db9ed72ecabe4c2b60244010d944f3a07617f23fe2825"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probes-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probes-python.json",
+      "bytes": 18848,
+      "sha256": "8361f6b28235279bf84db9ed72ecabe4c2b60244010d944f3a07617f23fe2825"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/probes-python.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/regressions-node.json",
+      "bytes": 8920,
+      "sha256": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/regressions-node.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/regressions-python.json",
+      "bytes": 8920,
+      "sha256": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/regressions-python.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py",
+      "bytes": 8974,
+      "sha256": "f51a6a267f0f682328ed3f6fff1996b59f8ea64a1f47820b2448ad3fb22a0077"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/OBDS-TASK-FACTS-EXPERIMENT-v0.2.md",
+      "bytes": 24477,
+      "sha256": "f56a3a84cb10ae5275577839c475dce610357cced4223f66f77b9cd8ca3a5951"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/PACKAGE-MANIFEST.json",
+      "bytes": 8839,
+      "sha256": "9b3f6acba6d1070e019b9ef6e2419e1a86530c7e33af3cc8b001db06f8b49ad4"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/README.md",
+      "bytes": 3338,
+      "sha256": "0f597205c6cf4de6ec83a0c583dd1fe34f8a4c7283464f72f91aac66b08e57c1"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/V0.1-TO-V0.2-DELTA.md",
+      "bytes": 4258,
+      "sha256": "a1366694b42d92f51661511047cd2e5991fa18ca86d26bac7c108ecbb27e9214"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/expected-results.json",
+      "bytes": 34356,
+      "sha256": "fc8376778a595f95a4f451e975e2bec8b9fe51f72b77f78a2fd63069ecc2c9ce"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/fixtures/01-two-claims.json",
+      "bytes": 15882,
+      "sha256": "6d97c0132205308842681f727569c034931fc633aaad5dde3062e4926fb7ad68"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/fixtures/02-two-assets.json",
+      "bytes": 16745,
+      "sha256": "2157e7e24a8f1946a2107265fd34eaea7d2188b588e6e7b96e32fee8d175415d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/fixtures/03-partner-plus-portrait.json",
+      "bytes": 12203,
+      "sha256": "a9ce93a3b9e897efee37c9e5e1fd503f7a95979f2ab1120b7e46bc8db0a0812c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/fixtures/04-campaign-plus-claim.json",
+      "bytes": 17022,
+      "sha256": "6f77644f914a3be7da9345cd2dd879e2b2397eb36d19a943af7147202fe6af24"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/fixtures/05-missing-contradictory.json",
+      "bytes": 20608,
+      "sha256": "83e130bfc909a1f6c8b2ace9d86565666027fa100ff8dea104757d633f8d2628"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/fixtures/06-ambiguous-time.json",
+      "bytes": 22743,
+      "sha256": "424a6bceb3dfda0649e5fccae54e6e403d782f298811da486314a9d735405403"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/expected-results.json",
+      "bytes": 15678,
+      "sha256": "73aef22f49db080c4fe654ee1019d94be9123de79af15f4e1d6496643dc2b639"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/absent-operand.json",
+      "bytes": 4041,
+      "sha256": "ebd8863df3bf3f6adc4165b0c71fad82a6fff6f4dbe4bd69b6189afe4fdd681a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-atoms.json",
+      "bytes": 3985,
+      "sha256": "d7df144910d04991c9ca60e44162c2e5878c3b2ebe83e5cc84d80983c00992f6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-before-typed.json",
+      "bytes": 3733,
+      "sha256": "605a1db1e331a50fe55c19cb242d44d4641d3d296484b33ace4af70e833c0258"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-case-id.json",
+      "bytes": 8028,
+      "sha256": "1a920473169f1e0f2d9a481c250d497abfee59aa7ecdfe8add3f5dfecad8ae98"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/duplicate-condition-id.json",
+      "bytes": 4054,
+      "sha256": "f9ac6b918476375c1aa2a193e293e72378b88ca087fdf6e1c1f883bb4489b9c4"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/empty-all.json",
+      "bytes": 3717,
+      "sha256": "9b608a937b71b3e6e14d34979dab15a1cf4a14d737b8f6f6803fe0623e8c289c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/extra-condition-key.json",
+      "bytes": 4071,
+      "sha256": "45851c2963f3b7d7d3087594f82d692b0bfc5b620dc0b0c8cbdb5799e3305c65"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/extra-snapshot-key.json",
+      "bytes": 4069,
+      "sha256": "81abd8a6467830e38f35c787f700f1a6e6ce05b72da037cf98169afc953a9439"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/float.json",
+      "bytes": 4022,
+      "sha256": "52b2d00e71ef8917173630cf34cef8490cf1fa9bf5c9317eb47767d6d96681ec"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/infinity.json",
+      "bytes": 4030,
+      "sha256": "fb4b5297955e9b1e7b9c80735afdc8e3597f2fa6636dd952d53049d3b16e7b84"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/minus-zero.json",
+      "bytes": 4026,
+      "sha256": "2d67ff3a76df43735c14de8148eac4e958061b05858948d3b432763fe69e1fc9"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/missing-condition-id.json",
+      "bytes": 4017,
+      "sha256": "4019f5ae79052a0c785910eb7e7fabf56820bd1d4fa5e031c4651d0cb5ad60c2"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/missing-context.json",
+      "bytes": 3421,
+      "sha256": "b654dd0cb8d5c4917c450e34aa87afa3fe9381f4aa71b72a8c26f0e89efc90fb"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/missing-evidence-field.json",
+      "bytes": 4007,
+      "sha256": "ee7a2018f7e50899d0a465a4b9171a078e75643d60e274e122cf24c8bac92b98"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/missing-requires-defined.json",
+      "bytes": 3968,
+      "sha256": "6f9db6e3891785f9eecf53713429c201217ac93db6dbc6806455983eb9dc4c14"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/missing-snapshot.json",
+      "bytes": 1524,
+      "sha256": "12e7ed2ff2313f1e9f659e487a1e6245eeaefbe9074a9e7e1bd31f0deb4ae251"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/nan.json",
+      "bytes": 4020,
+      "sha256": "9cd39b55b3e5263a6ba79c5e914f317a99bb0e7bbd64b9354b2f294bc143addf"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/null-snapshot.json",
+      "bytes": 1545,
+      "sha256": "11782730eb57cda5d5c3074a63f85df31ad8848b8525dc5bfec19fa7da3cba9a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/parse-before-tfj.json",
+      "bytes": 10,
+      "sha256": "3b8951a7d5ed1422c3560a422e30f544fa2fe80c8c0c7dcde31a4099a3fd2810"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/surrogate.json",
+      "bytes": 4031,
+      "sha256": "86b177b89117e71783f4c50313294cb49f47b6a0324329bc2f544137360398e3"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/tfj-before-routing.json",
+      "bytes": 4021,
+      "sha256": "3160ba80f77c9aad9d4bbe44c87989ac98665f7b8e1d8d6342313e24525eaa4a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/unknown-operator.json",
+      "bytes": 4044,
+      "sha256": "ac343f66deea5f42a8c3dafb0f8c2210bf7a5a7305b928f21a1573d163b59937"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/unsafe-integer.json",
+      "bytes": 4044,
+      "sha256": "50ed3357318a63715c310e7e1dff043de3daff550e23a3bb26eca7f61c2c36ca"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/regressions/inputs/wrong-contract-version.json",
+      "bytes": 4051,
+      "sha256": "ddcacda69211c6171ae718dd97ab8ad9fc218a713ab348c64d2228e40e4ee28a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract-integrity.json",
+      "bytes": 4343,
+      "sha256": "a6f150889a0f2b7291aef9522bad2a85e3c0280586cdd0859adbfd555c1d1f27"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/FROZEN-MANIFEST.json",
+      "bytes": 959,
+      "sha256": "b3db24453cf0deb6084f4561eaabbc20011ddfe914c686324b6866cb659cf3f6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/PROVENANCE.json",
+      "bytes": 649,
+      "sha256": "962905c8bea50ad2f3388f52bfc78f788d36e2b0cb0c4b509ff9d869aa84599d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/README.md",
+      "bytes": 2655,
+      "sha256": "9561e0f0382a3f3f0deff33ed77946dec734431dc57cef1979c70210b62128f8"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/evaluate.mjs",
+      "bytes": 10511,
+      "sha256": "a4e16653680b0e4127ff7da30bc3716a9f98c82b48ae77383439ce5cb4ef6c6f"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/package.json",
+      "bytes": 156,
+      "sha256": "9796ea91a179de0388f562061022fc82c4450d561f31faa4d77bbd3764c3fcd5"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/regression-results.json",
+      "bytes": 8920,
+      "sha256": "02bf5ceae54fab9c8cc54616502115eaaacbe2177dc569c919f505e93d85d526"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/results.json",
+      "bytes": 19205,
+      "sha256": "e4b8d1ed5da3c6fe4d56b7709fc820cabea01b8a79e912d5b6a750279a9777c9"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/run-fixtures.mjs",
+      "bytes": 402,
+      "sha256": "951f75b44c766aeb65a05e0b27fe83c6a6ebc3618153c6ae8afc2d9338f6a205"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/test-results.txt",
+      "bytes": 1178,
+      "sha256": "c73fe4339300a3075eec4bae2d2df49f857c9f46038da7e3343ac6bc1880fc47"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/test.mjs",
+      "bytes": 6197,
+      "sha256": "bd2b43a88806e2c5394d8bd77fe64f9d4bbecceebbb1c37e2cc6a68c8d5a12c6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node-integrity.json",
+      "bytes": 990,
+      "sha256": "5550990edafbbb3c13d8c967ba87ae81ed0f8b680692821f485ae1c2a3547e47"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/FROZEN-MANIFEST.json",
+      "bytes": 674,
+      "sha256": "a18ec0a92bc6acb638788e2a11b9c5da54e43ebff871621a1793894cb9afc5f1"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/README.md",
+      "bytes": 1556,
+      "sha256": "156535136c42442f227aed21873607bfeaa6aab54e834037d5e78064e61f31b6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py",
+      "bytes": 11834,
+      "sha256": "cf9d36783265395318fee2d58cfd263753cbe8360e2f1bf22d73ebfd2e12e59c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/provenance.json",
+      "bytes": 1146,
+      "sha256": "ce8ffe12f4e8fb0e6ca2ac55d407237d532456b441430ceb3f2e9e7d64d6ef37"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/results.json",
+      "bytes": 28103,
+      "sha256": "3e2544cccc36f69c9e6c723ef21db85b0045d7400a92e2a8818a36dd9748ef18"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/test-output.txt",
+      "bytes": 1323,
+      "sha256": "d3bf29102c2b62964fc197bad8d358961801a8e96ee4ad872202c5b36ddd9d95"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/test_evaluate.py",
+      "bytes": 7362,
+      "sha256": "ace5a23d11590e99059984654913723c225fda6569baa66032790644c1c43214"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python-integrity.json",
+      "bytes": 715,
+      "sha256": "5d7fcb3f7f5b05e954d9138836aeba916dc4b133958b04afb9ff9de06d2bd6eb"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementer-input.sha256",
+      "bytes": 65,
+      "sha256": "1a52b04de512140525fcb4602a6d661575d59940e1a099befa8bff391c16b053"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/implementer-input.zip",
+      "bytes": 52456,
+      "sha256": "35fd3c427d6aa1cf6d8c3cc253fa2d1b227891294ea1c1891f158b1b358b7b16"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/interoperability-evaluation.md",
+      "bytes": 8159,
+      "sha256": "7e8e4a57abdec4e6cfd550aa60e3d874c6d9a1175f3bca52f2bfadbc8357f64b"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/cycles/cycle-1/orchestration-evidence.json",
+      "bytes": 954,
+      "sha256": "5ee0453a496a62a1c4153a6b72937e484a17164b262c73761b2e76821eb7ff3b"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/reports/FINAL-RESULT.md",
+      "bytes": 2582,
+      "sha256": "fff2f16b0073ad9a7e311706a21499e92b7ba8464b2fc75aea0ed487b7306193"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/reports/design-review.md",
+      "bytes": 2480,
+      "sha256": "10fb4a2920dfad1649f56c3e6f3e9a99b3af2d10a72d2361dc95511e2336514c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/reports/orchestration.json",
+      "bytes": 570,
+      "sha256": "d5e27a6ab6f65f1b1a5beba8efd949252ebb6bbcb3bb72d1fe7db635f2055fb0"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/reports/source-integrity.json",
+      "bytes": 4343,
+      "sha256": "a6f150889a0f2b7291aef9522bad2a85e3c0280586cdd0859adbfd555c1d1f27"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/reports/source-tests.txt",
+      "bytes": 6766,
+      "sha256": "6f6f53f348c06a8dbe43b7d8071a673c5232c14aa50c22907a7e40cef1b46ef5"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/OBDS-TASK-FACTS-EXPERIMENT-v0.2.md",
+      "bytes": 24477,
+      "sha256": "f56a3a84cb10ae5275577839c475dce610357cced4223f66f77b9cd8ca3a5951"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/PACKAGE-MANIFEST.json",
+      "bytes": 8839,
+      "sha256": "9b3f6acba6d1070e019b9ef6e2419e1a86530c7e33af3cc8b001db06f8b49ad4"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/README.md",
+      "bytes": 3338,
+      "sha256": "0f597205c6cf4de6ec83a0c583dd1fe34f8a4c7283464f72f91aac66b08e57c1"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/V0.1-TO-V0.2-DELTA.md",
+      "bytes": 4258,
+      "sha256": "a1366694b42d92f51661511047cd2e5991fa18ca86d26bac7c108ecbb27e9214"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/expected-results.json",
+      "bytes": 34356,
+      "sha256": "fc8376778a595f95a4f451e975e2bec8b9fe51f72b77f78a2fd63069ecc2c9ce"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/fixtures/01-two-claims.json",
+      "bytes": 15882,
+      "sha256": "6d97c0132205308842681f727569c034931fc633aaad5dde3062e4926fb7ad68"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/fixtures/02-two-assets.json",
+      "bytes": 16745,
+      "sha256": "2157e7e24a8f1946a2107265fd34eaea7d2188b588e6e7b96e32fee8d175415d"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/fixtures/03-partner-plus-portrait.json",
+      "bytes": 12203,
+      "sha256": "a9ce93a3b9e897efee37c9e5e1fd503f7a95979f2ab1120b7e46bc8db0a0812c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/fixtures/04-campaign-plus-claim.json",
+      "bytes": 17022,
+      "sha256": "6f77644f914a3be7da9345cd2dd879e2b2397eb36d19a943af7147202fe6af24"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/fixtures/05-missing-contradictory.json",
+      "bytes": 20608,
+      "sha256": "83e130bfc909a1f6c8b2ace9d86565666027fa100ff8dea104757d633f8d2628"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/fixtures/06-ambiguous-time.json",
+      "bytes": 22743,
+      "sha256": "424a6bceb3dfda0649e5fccae54e6e403d782f298811da486314a9d735405403"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py",
+      "bytes": 11087,
+      "sha256": "8ea30176ad7ba1431cba1a7e35fe22c01f68a762bf90d8562844495c863f7e28"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/expected-results.json",
+      "bytes": 15678,
+      "sha256": "73aef22f49db080c4fe654ee1019d94be9123de79af15f4e1d6496643dc2b639"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/absent-operand.json",
+      "bytes": 4041,
+      "sha256": "ebd8863df3bf3f6adc4165b0c71fad82a6fff6f4dbe4bd69b6189afe4fdd681a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-atoms.json",
+      "bytes": 3985,
+      "sha256": "d7df144910d04991c9ca60e44162c2e5878c3b2ebe83e5cc84d80983c00992f6"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-before-typed.json",
+      "bytes": 3733,
+      "sha256": "605a1db1e331a50fe55c19cb242d44d4641d3d296484b33ace4af70e833c0258"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-case-id.json",
+      "bytes": 8028,
+      "sha256": "1a920473169f1e0f2d9a481c250d497abfee59aa7ecdfe8add3f5dfecad8ae98"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/duplicate-condition-id.json",
+      "bytes": 4054,
+      "sha256": "f9ac6b918476375c1aa2a193e293e72378b88ca087fdf6e1c1f883bb4489b9c4"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/empty-all.json",
+      "bytes": 3717,
+      "sha256": "9b608a937b71b3e6e14d34979dab15a1cf4a14d737b8f6f6803fe0623e8c289c"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/extra-condition-key.json",
+      "bytes": 4071,
+      "sha256": "45851c2963f3b7d7d3087594f82d692b0bfc5b620dc0b0c8cbdb5799e3305c65"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/extra-snapshot-key.json",
+      "bytes": 4069,
+      "sha256": "81abd8a6467830e38f35c787f700f1a6e6ce05b72da037cf98169afc953a9439"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/float.json",
+      "bytes": 4022,
+      "sha256": "52b2d00e71ef8917173630cf34cef8490cf1fa9bf5c9317eb47767d6d96681ec"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/infinity.json",
+      "bytes": 4030,
+      "sha256": "fb4b5297955e9b1e7b9c80735afdc8e3597f2fa6636dd952d53049d3b16e7b84"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/minus-zero.json",
+      "bytes": 4026,
+      "sha256": "2d67ff3a76df43735c14de8148eac4e958061b05858948d3b432763fe69e1fc9"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/missing-condition-id.json",
+      "bytes": 4017,
+      "sha256": "4019f5ae79052a0c785910eb7e7fabf56820bd1d4fa5e031c4651d0cb5ad60c2"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/missing-context.json",
+      "bytes": 3421,
+      "sha256": "b654dd0cb8d5c4917c450e34aa87afa3fe9381f4aa71b72a8c26f0e89efc90fb"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/missing-evidence-field.json",
+      "bytes": 4007,
+      "sha256": "ee7a2018f7e50899d0a465a4b9171a078e75643d60e274e122cf24c8bac92b98"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/missing-requires-defined.json",
+      "bytes": 3968,
+      "sha256": "6f9db6e3891785f9eecf53713429c201217ac93db6dbc6806455983eb9dc4c14"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/missing-snapshot.json",
+      "bytes": 1524,
+      "sha256": "12e7ed2ff2313f1e9f659e487a1e6245eeaefbe9074a9e7e1bd31f0deb4ae251"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/nan.json",
+      "bytes": 4020,
+      "sha256": "9cd39b55b3e5263a6ba79c5e914f317a99bb0e7bbd64b9354b2f294bc143addf"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/null-snapshot.json",
+      "bytes": 1545,
+      "sha256": "11782730eb57cda5d5c3074a63f85df31ad8848b8525dc5bfec19fa7da3cba9a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/parse-before-tfj.json",
+      "bytes": 10,
+      "sha256": "3b8951a7d5ed1422c3560a422e30f544fa2fe80c8c0c7dcde31a4099a3fd2810"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/surrogate.json",
+      "bytes": 4031,
+      "sha256": "86b177b89117e71783f4c50313294cb49f47b6a0324329bc2f544137360398e3"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/tfj-before-routing.json",
+      "bytes": 4021,
+      "sha256": "3160ba80f77c9aad9d4bbe44c87989ac98665f7b8e1d8d6342313e24525eaa4a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/unknown-operator.json",
+      "bytes": 4044,
+      "sha256": "ac343f66deea5f42a8c3dafb0f8c2210bf7a5a7305b928f21a1573d163b59937"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/unsafe-integer.json",
+      "bytes": 4044,
+      "sha256": "50ed3357318a63715c310e7e1dff043de3daff550e23a3bb26eca7f61c2c36ca"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/regressions/inputs/wrong-contract-version.json",
+      "bytes": 4051,
+      "sha256": "ddcacda69211c6171ae718dd97ab8ad9fc218a713ab348c64d2228e40e4ee28a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py",
+      "bytes": 2371,
+      "sha256": "f97a5143e1b4dfda3c954a869031a1d6afbe88e5f03868d560ddf4db5923d28a"
+    },
+    {
+      "path": "evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py",
+      "bytes": 16159,
+      "sha256": "8d953fdc8eb246f26400b5146c4f039152871309e9f5d66f33a5608c368e7ea6"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/AUTHOR-PROVENANCE.md",
+      "bytes": 1627,
+      "sha256": "507baa695e953f2a6a964dcef3cc39742ef3679337006ce3101951d9598deeb1"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/BACKWARD-COMPATIBILITY.md",
+      "bytes": 1970,
+      "sha256": "3b1331367617225fd7359e1c275c8c5385cac2eb6750383a76dc0ee93f46485d"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/BASELINE-SOURCES.json",
+      "bytes": 2773,
+      "sha256": "15af90bd179f3928b5ff6be725e5457790c1abe9370026ce07020d985b2592af"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/CONFORMANCE-IMPACT.md",
+      "bytes": 1844,
+      "sha256": "fe12b7413fa397b7e2a93f2a2a3474fa4b105d2fe3e1199276ba83f53d87b6f8"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/EVIDENCE-MAP.md",
+      "bytes": 1999,
+      "sha256": "26fa07b0e96003dd61e11902fcaa83584cd041a156b6fa055143860e746f8266"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/IMPLEMENTATION-GUIDANCE.md",
+      "bytes": 2890,
+      "sha256": "0de149813eed0cf8e51792341e64c6cd1a8c20280a303016c76a333ba5c2e544"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/NORMATIVE-DELTA.md",
+      "bytes": 2030,
+      "sha256": "00558367da90281fff8bcfe53e9356ff5190b9f8072d9247205608c7bac21589"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/OBDS-TASK-FACTS-OPTIONAL-CONTRACT-PROPOSAL.md",
+      "bytes": 3531,
+      "sha256": "b63751f7f12ac23c97483d675c131a66d79465caa2bba89d3ccef3d0e33c11c7"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/PACKAGE-CHECKS.json",
+      "bytes": 238,
+      "sha256": "5ecc6fe55f4f585d5006c44ec506d8c693133c7a1bedfa8a31bd116c0ea12c4b"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/PACKAGE-MANIFEST.json",
+      "bytes": 6487,
+      "sha256": "95877c7effb1fc3f42ef1b904ab955160c42ad7afeb4cece18dff79fc539ef94"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/TASK-FACTS-CONTRACT.md",
+      "bytes": 23666,
+      "sha256": "a92b5a1de66365c81543d939d104975c5ee139d6b7396f532bbd0a1163014046"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/VERSION",
+      "bytes": 6,
+      "sha256": "27aa16a537d00b66aa2a31a9e193efbd26861afa33a7bc14ea3345f6284cbcdc"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/schemas/3.0.0/build-plan.schema.json",
+      "bytes": 6821,
+      "sha256": "dd9f0a74d96b00e80e283d7d28ceb2eadb1d8e37901bfdf7986024dc906d5e8c"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/schemas/4.0.0/build-report.schema.json",
+      "bytes": 2096,
+      "sha256": "02156015a6549ec2730b853d6b8b180bc71b053e6bddf2ebaca097f4b159bea2"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/schemas/4.0.0/model-input-package.schema.json",
+      "bytes": 6775,
+      "sha256": "322344dd18a628f0c8ceb71b50330d3164b30728d4005ee51c9f09a798b4a919"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/schemas/4.0.0/runtime-decision-record.schema.json",
+      "bytes": 3133,
+      "sha256": "ebd87337b7f3a60692fe0382d2d7ef74c9fa818cfacb44c91cc0d87caea11b86"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/spec/4.0.4/OBDS-4.0.4-CAPABILITY-REGISTRY.json",
+      "bytes": 1597,
+      "sha256": "cc3bba7c94b68c202c2bb83baea8d9724a1b04b9efc6cf50c7e134e626d3413b"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/spec/4.0.4/OBDS-4.0.4-SCHEMA-INDEX.json",
+      "bytes": 7995,
+      "sha256": "25f252083cab8c49ddf6c31ada4e4f74e4e7502e32b1af008919e4e6710e6fc1"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/spec/4.0.4/OBDS-4.0.4.md",
+      "bytes": 164658,
+      "sha256": "89547d6111c7b3db1ba817ce8486eac70fcceea9115fa9e36d88d0e76e8f5761"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/baseline/website.html",
+      "bytes": 139545,
+      "sha256": "6698b7efd8e879df968336e332f68d8a3430b37f83556b6ee31a7b65c8d18cf0"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/expected-results.json",
+      "bytes": 15678,
+      "sha256": "73aef22f49db080c4fe654ee1019d94be9123de79af15f4e1d6496643dc2b639"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/absent-operand.json",
+      "bytes": 4041,
+      "sha256": "ebd8863df3bf3f6adc4165b0c71fad82a6fff6f4dbe4bd69b6189afe4fdd681a"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/duplicate-atoms.json",
+      "bytes": 3985,
+      "sha256": "d7df144910d04991c9ca60e44162c2e5878c3b2ebe83e5cc84d80983c00992f6"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/duplicate-before-typed.json",
+      "bytes": 3733,
+      "sha256": "605a1db1e331a50fe55c19cb242d44d4641d3d296484b33ace4af70e833c0258"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/duplicate-case-id.json",
+      "bytes": 8028,
+      "sha256": "1a920473169f1e0f2d9a481c250d497abfee59aa7ecdfe8add3f5dfecad8ae98"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/duplicate-condition-id.json",
+      "bytes": 4054,
+      "sha256": "f9ac6b918476375c1aa2a193e293e72378b88ca087fdf6e1c1f883bb4489b9c4"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/empty-all.json",
+      "bytes": 3717,
+      "sha256": "9b608a937b71b3e6e14d34979dab15a1cf4a14d737b8f6f6803fe0623e8c289c"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/extra-condition-key.json",
+      "bytes": 4071,
+      "sha256": "45851c2963f3b7d7d3087594f82d692b0bfc5b620dc0b0c8cbdb5799e3305c65"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/extra-snapshot-key.json",
+      "bytes": 4069,
+      "sha256": "81abd8a6467830e38f35c787f700f1a6e6ce05b72da037cf98169afc953a9439"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/float.json",
+      "bytes": 4022,
+      "sha256": "52b2d00e71ef8917173630cf34cef8490cf1fa9bf5c9317eb47767d6d96681ec"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/infinity.json",
+      "bytes": 4030,
+      "sha256": "fb4b5297955e9b1e7b9c80735afdc8e3597f2fa6636dd952d53049d3b16e7b84"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/minus-zero.json",
+      "bytes": 4026,
+      "sha256": "2d67ff3a76df43735c14de8148eac4e958061b05858948d3b432763fe69e1fc9"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/missing-condition-id.json",
+      "bytes": 4017,
+      "sha256": "4019f5ae79052a0c785910eb7e7fabf56820bd1d4fa5e031c4651d0cb5ad60c2"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/missing-context.json",
+      "bytes": 3421,
+      "sha256": "b654dd0cb8d5c4917c450e34aa87afa3fe9381f4aa71b72a8c26f0e89efc90fb"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/missing-evidence-field.json",
+      "bytes": 4007,
+      "sha256": "ee7a2018f7e50899d0a465a4b9171a078e75643d60e274e122cf24c8bac92b98"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/missing-requires-defined.json",
+      "bytes": 3968,
+      "sha256": "6f9db6e3891785f9eecf53713429c201217ac93db6dbc6806455983eb9dc4c14"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/missing-snapshot.json",
+      "bytes": 1524,
+      "sha256": "12e7ed2ff2313f1e9f659e487a1e6245eeaefbe9074a9e7e1bd31f0deb4ae251"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/nan.json",
+      "bytes": 4020,
+      "sha256": "9cd39b55b3e5263a6ba79c5e914f317a99bb0e7bbd64b9354b2f294bc143addf"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/null-snapshot.json",
+      "bytes": 1545,
+      "sha256": "11782730eb57cda5d5c3074a63f85df31ad8848b8525dc5bfec19fa7da3cba9a"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/parse-before-tfj.json",
+      "bytes": 10,
+      "sha256": "3b8951a7d5ed1422c3560a422e30f544fa2fe80c8c0c7dcde31a4099a3fd2810"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/surrogate.json",
+      "bytes": 4031,
+      "sha256": "86b177b89117e71783f4c50313294cb49f47b6a0324329bc2f544137360398e3"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/tfj-before-routing.json",
+      "bytes": 4021,
+      "sha256": "3160ba80f77c9aad9d4bbe44c87989ac98665f7b8e1d8d6342313e24525eaa4a"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/unknown-operator.json",
+      "bytes": 4044,
+      "sha256": "ac343f66deea5f42a8c3dafb0f8c2210bf7a5a7305b928f21a1573d163b59937"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/unsafe-integer.json",
+      "bytes": 4044,
+      "sha256": "50ed3357318a63715c310e7e1dff043de3daff550e23a3bb26eca7f61c2c36ca"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/conformance/regressions/inputs/wrong-contract-version.json",
+      "bytes": 4051,
+      "sha256": "ddcacda69211c6171ae718dd97ab8ad9fc218a713ab348c64d2228e40e4ee28a"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/01-two-claims.json",
+      "bytes": 15882,
+      "sha256": "6d97c0132205308842681f727569c034931fc633aaad5dde3062e4926fb7ad68"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/02-two-assets.json",
+      "bytes": 16745,
+      "sha256": "2157e7e24a8f1946a2107265fd34eaea7d2188b588e6e7b96e32fee8d175415d"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/03-partner-plus-portrait.json",
+      "bytes": 12203,
+      "sha256": "a9ce93a3b9e897efee37c9e5e1fd503f7a95979f2ab1120b7e46bc8db0a0812c"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/04-campaign-plus-claim.json",
+      "bytes": 17022,
+      "sha256": "6f77644f914a3be7da9345cd2dd879e2b2397eb36d19a943af7147202fe6af24"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/05-missing-contradictory.json",
+      "bytes": 20608,
+      "sha256": "83e130bfc909a1f6c8b2ace9d86565666027fa100ff8dea104757d633f8d2628"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/06-ambiguous-time.json",
+      "bytes": 22743,
+      "sha256": "424a6bceb3dfda0649e5fccae54e6e403d782f298811da486314a9d735405403"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/README.md",
+      "bytes": 1038,
+      "sha256": "212dde8afe1caef3efe37d1e2c5056279394f0e86fdf744e05f765968117020a"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/examples/expected-results.json",
+      "bytes": 34356,
+      "sha256": "fc8376778a595f95a4f451e975e2bec8b9fe51f72b77f78a2fd63069ecc2c9ce"
+    },
+    {
+      "path": "evidence/ratification/proposal/candidate-v1/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/ratification/ratification/ratifier-verdict.md",
+      "bytes": 8941,
+      "sha256": "b5a62adcc95e2194ca9bd695c7d68ff7261e3be2168db9855803dfebdabdea76"
+    },
+    {
+      "path": "evidence/ratification/reports/FINAL-RATIFICATION.md",
+      "bytes": 8299,
+      "sha256": "605ba458e3ecf9fa175aa28a748e2607ba0963eed8cfdaab44906240283081fa"
+    },
+    {
+      "path": "evidence/ratification/reports/candidate-v1-inventory.json",
+      "bytes": 6180,
+      "sha256": "a9468438d4aba8531829cd5c03355d0ead2a263aec17b692c350d4e161b0edf1"
+    },
+    {
+      "path": "evidence/ratification/reports/candidate-v1-inventory.sha256",
+      "bytes": 94,
+      "sha256": "668a303d17083fe3b0570d6073385b88a612607c8e72aff663da7440f030de55"
+    },
+    {
+      "path": "evidence/ratification/reports/evidence-inventory.json",
+      "bytes": 31244,
+      "sha256": "256adf3d4a46d9c4af172c3d3d162b779af68c65d51377530d9c670952c493d9"
+    },
+    {
+      "path": "evidence/ratification/reports/evidence-inventory.sha256",
+      "bytes": 90,
+      "sha256": "557852b00b46bb873610494e8d25d44948513c7ef8bafc83d860a50ab527f01a"
+    },
+    {
+      "path": "evidence/ratification/reports/final-integrity-check.txt",
+      "bytes": 367,
+      "sha256": "7790ad47e92389f1c1f3ef07f64ea814c7cd26ae97eafa9f4f9654fd44bc68bb"
+    },
+    {
+      "path": "evidence/ratification/reports/orchestration.json",
+      "bytes": 1683,
+      "sha256": "6c3b0b43eca65ca868e6360a5b671b0692cb5ba6d568c0e922aa9ab17b5e6f88"
+    },
+    {
+      "path": "evidence/ratification/reports/original-evidence-inventory.json",
+      "bytes": 28472,
+      "sha256": "9d8cc83caff3a9fa8f071a34fe4690d539a6244c9d1bbd2dba438f4141e89eb2"
+    },
+    {
+      "path": "evidence/ratification/reports/reviews-v1-inventory.json",
+      "bytes": 191,
+      "sha256": "8c89a4e617a4471649bab7912ca7cbccf30dc4dfac5006fd778b046cb69a3499"
+    },
+    {
+      "path": "evidence/ratification/reports/source-tests-reproduced.txt",
+      "bytes": 6752,
+      "sha256": "507fba6e56dd93ccc5f386e6db2f348e81608f969323802aa7466530c15d4295"
+    },
+    {
+      "path": "evidence/ratification/reports/verify_integrity.py",
+      "bytes": 1008,
+      "sha256": "f2c222e560621d2b171b42cf76e190ee4f388c5ca59f8cfae34bc677cfce5a12"
+    },
+    {
+      "path": "evidence/ratification/reviews/conformance-review.md",
+      "bytes": 8379,
+      "sha256": "fa02d355e03fa3321f31b0cb78aba046b4d63ed03dbbbf3633549116244ce29b"
+    },
+    {
+      "path": "evidence/ratification/reviews/semantics-review.md",
+      "bytes": 6565,
+      "sha256": "c8656ac743522336697b4f090765c7fee6f0296dd3e7c21f9f96dbdfd88e0f3a"
+    }
+  ]
+}

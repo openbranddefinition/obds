@@ -1,0 +1,53 @@
+{
+  "retrieved": "2026-09-08",
+  "commit": "e3464b5f863897260118b6c338a1061e9382c845",
+  "publishedBaseline": "4.0.4",
+  "githubLatestReleaseObserved": "v2.0.0",
+  "sources": [
+    {
+      "path": "VERSION",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/VERSION",
+      "sha256": "27aa16a537d00b66aa2a31a9e193efbd26861afa33a7bc14ea3345f6284cbcdc"
+    },
+    {
+      "path": "spec/4.0.4/OBDS-4.0.4.md",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/spec/4.0.4/OBDS-4.0.4.md",
+      "sha256": "89547d6111c7b3db1ba817ce8486eac70fcceea9115fa9e36d88d0e76e8f5761"
+    },
+    {
+      "path": "spec/4.0.4/OBDS-4.0.4-CAPABILITY-REGISTRY.json",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/spec/4.0.4/OBDS-4.0.4-CAPABILITY-REGISTRY.json",
+      "sha256": "cc3bba7c94b68c202c2bb83baea8d9724a1b04b9efc6cf50c7e134e626d3413b"
+    },
+    {
+      "path": "spec/4.0.4/OBDS-4.0.4-SCHEMA-INDEX.json",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/spec/4.0.4/OBDS-4.0.4-SCHEMA-INDEX.json",
+      "sha256": "25f252083cab8c49ddf6c31ada4e4f74e4e7502e32b1af008919e4e6710e6fc1"
+    },
+    {
+      "path": "schemas/3.0.0/build-plan.schema.json",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/schemas/3.0.0/build-plan.schema.json",
+      "sha256": "dd9f0a74d96b00e80e283d7d28ceb2eadb1d8e37901bfdf7986024dc906d5e8c"
+    },
+    {
+      "path": "schemas/4.0.0/model-input-package.schema.json",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/schemas/4.0.0/model-input-package.schema.json",
+      "sha256": "322344dd18a628f0c8ceb71b50330d3164b30728d4005ee51c9f09a798b4a919"
+    },
+    {
+      "path": "schemas/4.0.0/runtime-decision-record.schema.json",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/schemas/4.0.0/runtime-decision-record.schema.json",
+      "sha256": "ebd87337b7f3a60692fe0382d2d7ef74c9fa818cfacb44c91cc0d87caea11b86"
+    },
+    {
+      "path": "schemas/4.0.0/build-report.schema.json",
+      "url": "https://raw.githubusercontent.com/openbranddefinition/obds/e3464b5f863897260118b6c338a1061e9382c845/schemas/4.0.0/build-report.schema.json",
+      "sha256": "02156015a6549ec2730b853d6b8b180bc71b053e6bddf2ebaca097f4b159bea2"
+    },
+    {
+      "path": "website.html",
+      "url": "https://openbranddefinition.org/",
+      "sha256": "6698b7efd8e879df968336e332f68d8a3430b37f83556b6ee31a7b65c8d18cf0"
+    }
+  ]
+}

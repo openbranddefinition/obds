@@ -1,0 +1,6 @@
+{
+  "frozenInventoryFilesVerified": 40,
+  "schemaExamplesRegressionsByteIdentical": true,
+  "baselineSourcesVerified": 9,
+  "limitations": "Package integrity/copy checks only; author did not rerun implementations or integration tests."
+}

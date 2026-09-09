@@ -1,0 +1,31 @@
+{
+  "kind": "task-facts-public-evidence-inventory",
+  "historicalAuditInventorySha256": "2d72437b1c9ccfa8e506c79a883b1c0c691d1e33c0d654b5a83e5f9fc3527be8",
+  "files": [
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs",
+      "bytes": 10511,
+      "sha256": "a4e16653680b0e4127ff7da30bc3716a9f98c82b48ae77383439ce5cb4ef6c6f"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/evaluate.py",
+      "bytes": 11834,
+      "sha256": "cf9d36783265395318fee2d58cfd263753cbe8360e2f1bf22d73ebfd2e12e59c"
+    },
+    {
+      "path": "evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json",
+      "bytes": 9999,
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646"
+    }
+  ],
+  "freshReports": [
+    "OBDS-4.1.0-FOUNDATION-CONFORMANCE.json",
+    "OBDS-4.1.0-TASK-FACTS-CONFORMANCE.json"
+  ],
+  "note": "Historical audit trees are retained unchanged in the non-public audit store. These four unchanged source dependencies reproduce the fresh neutral release reports; they are not a distribution of historical audit records. The root package manifest binds all public report and source bytes."
+}

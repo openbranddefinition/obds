@@ -1,0 +1,262 @@
+{
+  "$id": "https://openbranddefinition.org/schemas/3.0.0/build-plan.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "description": "The Build Plan contract as republished in OBDS 3.0.0. styleTexture and stateMap are required and must declare a mode. Section 14.3a hashes the target verbatim and forbids inserting a default before hashing, so stating a default would have fixed the governed decision while leaving two spellings of one governed request hashing differently. Requiring presence gives one spelling. The document version moves with the contract: a consumer resolving the contract from the document's own schemaVersion must not land on the frozen 1.0.0 schema, which accepts exactly what this rejects. A projection mode that names a list requires that list to be non-empty: the compiler refuses `selected` with no elementIds and `kinds` with no kinds, and a contract that admits what the compiler refuses is the same interoperability defect wearing the other face.",
+  "properties": {
+    "asOf": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "compiler": {
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "id": {
+      "type": "string"
+    },
+    "kind": {
+      "const": "obds-build-plan"
+    },
+    "manifestRef": {
+      "properties": {
+        "contentHash": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "contentHash"
+      ],
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "3.0.0"
+    },
+    "targets": {
+      "items": {
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "styleTexture": {
+                  "properties": {
+                    "mode": {
+                      "const": "selected"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ]
+                }
+              },
+              "required": [
+                "styleTexture"
+              ]
+            },
+            "then": {
+              "properties": {
+                "styleTexture": {
+                  "properties": {
+                    "elementIds": {
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "elementIds"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "stateMap": {
+                  "properties": {
+                    "mode": {
+                      "const": "kinds"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ]
+                }
+              },
+              "required": [
+                "stateMap"
+              ]
+            },
+            "then": {
+              "properties": {
+                "stateMap": {
+                  "properties": {
+                    "kinds": {
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "kinds"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "properties": {
+          "contextAssembly": {
+            "additionalProperties": false,
+            "properties": {
+              "applicationMode": {
+                "enum": [
+                  "create",
+                  "review",
+                  "compliance"
+                ]
+              },
+              "deliveryMode": {
+                "enum": [
+                  "lookup",
+                  "reasoning",
+                  "full"
+                ]
+              },
+              "eligibleGuidanceIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              "noHitPolicy": {
+                "enum": [
+                  "resolve_before_answer"
+                ]
+              }
+            },
+            "required": [
+              "deliveryMode",
+              "applicationMode",
+              "eligibleGuidanceIds",
+              "noHitPolicy"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "type": "string"
+          },
+          "maxTokens": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "releasePolicy": {
+            "enum": [
+              "build_only",
+              "artifact_approval_required"
+            ]
+          },
+          "requiresDefined": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scope": {
+            "additionalProperties": {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "maxItems": 1,
+              "minItems": 1,
+              "type": "array"
+            },
+            "type": "object"
+          },
+          "stateMap": {
+            "properties": {
+              "kinds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "mode": {
+                "enum": [
+                  "none",
+                  "kinds",
+                  "all_applicable"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ],
+            "type": "object"
+          },
+          "styleTexture": {
+            "properties": {
+              "elementIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "mode": {
+                "enum": [
+                  "all",
+                  "selected",
+                  "none"
+                ]
+              }
+            },
+            "required": [
+              "mode"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "maxTokens",
+          "scope",
+          "stateMap",
+          "styleTexture"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "tokenizer": {
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "schemaVersion",
+    "asOf",
+    "manifestRef",
+    "compiler",
+    "tokenizer",
+    "targets"
+  ],
+  "title": "OBDS Build Plan 3.0.0",
+  "type": "object"
+}

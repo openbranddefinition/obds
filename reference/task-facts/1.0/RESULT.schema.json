@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:obds:task-facts:result:1.0",
+  "type": "object",
+  "required": [
+    "kind",
+    "passed",
+    "exitCode",
+    "suiteId",
+    "suiteHash",
+    "implementation",
+    "groups",
+    "failed",
+    "skipped",
+    "limitations"
+  ],
+  "properties": {
+    "kind": {
+      "const": "task-facts-conformance-result"
+    },
+    "passed": {
+      "type": "boolean"
+    },
+    "exitCode": {
+      "enum": [
+        0,
+        1,
+        2
+      ]
+    },
+    "suiteId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "suiteHash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "implementation": {
+      "type": "object"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "actual": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/record"
+            }
+          }
+        }
+      }
+    },
+    "failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "skipped": {
+      "const": 0
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family",
+        "caseId",
+        "conditionId",
+        "snapshotHash",
+        "outcome",
+        "reason"
+      ],
+      "properties": {
+        "family": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "caseId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "conditionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "snapshotHash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "APPLIES",
+            "DOES_NOT_APPLY",
+            "UNKNOWN",
+            "CONTRADICTORY",
+            "INVALID"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

@@ -270,6 +270,15 @@ def build_python(workdir: Path, given: str | None) -> str:
     return python
 
 
+def task_facts_commands(package, python):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("release_gate_docs", package / "reference/release-gate.py")
+    gate = importlib.util.module_from_spec(spec); spec.loader.exec_module(gate)
+    gate.verify_task_facts(package)
+    if package == ROOT:
+        gate.verify_publication(package)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="OBDS documentation smoke test")
     parser.add_argument(
@@ -296,6 +305,7 @@ def main() -> int:
         workdir = Path(tmp)
         python = build_python(workdir, args.python)
 
+        task_facts_commands(ROOT, python)
         run_cases(ROOT, python, "repository layout (schemas/1.0.0/)", "[3/4]", version)
 
         with zipfile.ZipFile(zip_path) as archive:
@@ -304,6 +314,7 @@ def main() -> int:
         if not package.is_dir():
             fail(f"unexpected archive layout in {zip_path.name}")
         else:
+            task_facts_commands(package, python)
             run_cases(package, python, "release archive layout (schemas/)", "[4/4]", version)
 
     print()

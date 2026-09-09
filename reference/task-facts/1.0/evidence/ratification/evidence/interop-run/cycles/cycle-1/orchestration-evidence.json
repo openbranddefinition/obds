@@ -1,0 +1,23 @@
+{
+  "input_zip_sha256": "35fd3c427d6aa1cf6d8c3cc253fa2d1b227891294ea1c1891f158b1b358b7b16",
+  "workspaces": {
+    "python": "/private/tmp/obds-cycle-1-python-zg63g1pk",
+    "node": "/private/tmp/obds-cycle-1-node-w5ejyjew"
+  },
+  "agents": {
+    "python": "/root/python_cycle_1; fresh Codex, no inherited context",
+    "node": "/root/node_cycle_1; fresh Codex, no inherited context"
+  },
+  "isolation": "Separate temporary workspaces; explicit access restrictions; no inherited parent context. Shared filesystem, no OS-enforced isolation.",
+  "outputs_frozen_before_copy": true,
+  "output_integrity": {
+    "python": {
+      "inventory": "implementation-python-integrity.json",
+      "tree_hash_sha256": "5d7fcb3f7f5b05e954d9138836aeba916dc4b133958b04afb9ff9de06d2bd6eb"
+    },
+    "node": {
+      "inventory": "implementation-node-integrity.json",
+      "tree_hash_sha256": "5550990edafbbb3c13d8c967ba87ae81ed0f8b680692821f485ae1c2a3547e47"
+    }
+  }
+}

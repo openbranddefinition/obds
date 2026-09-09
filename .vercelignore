@@ -49,3 +49,30 @@ __pycache__/
 .vercel
 .env*
 .DS_Store
+
+# Internal candidate evidence, never a public surface.
+release-work/
+
+# The non-public Task Facts audit store. `reference/` is served, so without
+# these lines the 485 historical research and ratification records under
+# reference/task-facts/1.0/evidence/, the inventory that lists them and the
+# Historical Audit Evidence Registry would all be publicly reachable. Same
+# failure mode as answers/ after 1.0.4, and the same fix.
+#
+# The release archive already excludes them: `public_package_member()` in
+# reference/release-gate.py ships only the four evaluator sources named by
+# reference/task-facts/1.0/PUBLIC-EVIDENCE-MANIFEST.json. These lines make the
+# deployment agree with the package.
+#
+# Deny the whole store, then re-include exactly those four. The directory
+# re-inclusion has to come first: a file inside an excluded directory can never
+# be re-included, so the store is denied file by file and its directories stay
+# walkable. Every sibling of the four stays denied.
+reference/task-facts/1.0/EVIDENCE-MANIFEST.json
+reference/task-facts/1.0/HISTORICAL-AUDIT-REGISTRY.json
+reference/task-facts/1.0/evidence/**
+!reference/task-facts/1.0/evidence/**/
+!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs
+!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json
+!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py
+!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json

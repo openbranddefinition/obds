@@ -39,6 +39,7 @@ import re
 import subprocess
 import textwrap
 import sys
+from html.parser import HTMLParser
 from contextlib import redirect_stdout
 from types import SimpleNamespace
 from pathlib import Path
@@ -71,7 +72,7 @@ EXPECTED_SUITE_COUNTS = {
     "adversarial": 38,
 }
 EXPECTED_TOTAL = 1158
-EXPECTED_RELEASE = "4.0.4"
+EXPECTED_RELEASE = "4.1.0"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -95,7 +96,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "4.0.3"
+PRIOR_RELEASE = "4.0.4"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -111,8 +112,8 @@ REQUIRED_LICENCE_FILES = {
 }
 REQUIRED_LICENCE_DOCS = ("LICENSE.md", "NOTICE", "TRADEMARKS.md", "GOVERNANCE.md", "CONTRIBUTING.md")
 
-# Wording that the 1.0.2 licensing model retired. None of it may survive anywhere
-# in the package.
+# Wording retired by the 1.0.2 licensing model is forbidden in current claims.
+# Authenticated history and reviewed non-claim executable payloads are distinct.
 RETIRED_LICENSING_WORDING = (
     "separate commercial licence",
     "commercial licence is required",
@@ -442,8 +443,8 @@ def contract_directories() -> list[tuple[Path, str, str]]:
     return found
 
 
-def is_generated_cache(path: Path) -> bool:
-    parts = path.relative_to(ROOT).parts
+def is_generated_cache(path: Path, root: Path = ROOT) -> bool:
+    parts = path.relative_to(root).parts
     if any(part in GENERATED_CACHE_DIRS for part in parts):
         return True
     if any(part.startswith(".venv") or part.endswith(".egg-info") for part in parts):
@@ -463,7 +464,7 @@ def package_paths() -> list[Path]:
     for directory in (*(ROOT / d for d in PACKAGE_DIRS), *contract_dirs):
         if directory.is_dir():
             found.extend(sorted(directory.rglob("*")))
-    return found
+    return [p for p in found if public_package_member(p.relative_to(ROOT).as_posix())]
 
 
 def package_text_files() -> list[Path]:
@@ -712,7 +713,668 @@ def check_manifest(audit) -> int:
     return len(entries)
 
 
+def verify_task_facts_schema(root=ROOT):
+    """Independent local retrieval for the preserved experimental URN."""
+    companion = load(root / "OBDS-4.1.0-TASK-FACTS-SCHEMA-INDEX.json")
+    assert companion["capability"] == "task-facts"
+    assert companion["payloadVersion"] == "0.1"
+    assert companion["canonicalization"] == "TFJ-0.1"
+    assert len(companion["schemas"]) == 1
+    entry = companion["schemas"][0]
+    raw = (root / entry["localPath"]).read_bytes()
+    assert raw == (root / entry["contractLocalPath"]).read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == entry["sha256"]
+    schema = json.loads(raw)
+    assert schema["$id"] == entry["id"] and entry["id"].startswith("urn:")
+    assert entry["retrievalUrl"] == "https://openbranddefinition.org/" + entry["localPath"]
+    from jsonschema import Draft202012Validator
+    from referencing import Registry, Resource
+    Draft202012Validator.check_schema(schema)
+    registry = Registry().with_resource(entry["id"], Resource.from_contents(schema))
+    assert registry.resolver().lookup(entry["id"]).contents == schema
+    return companion
+
+
+def prior_registry(registry):
+    import copy
+    result = copy.deepcopy(registry)
+    entries = result["runtimeCapabilities"]
+    added = [entry for entry in entries if entry.get("id") == "task-facts"]
+    assert added == [{"id": "task-facts", "conformanceSection": "26.10"}], "Task Facts must be exactly one optional runtime registration"
+    result["runtimeCapabilities"] = [entry for entry in entries if entry.get("id") != "task-facts"]
+    return result
+
+
+PUBLICATION_EXPECTATIONS = {'index.html': ['<meta name="description" content="Open, implementation-ready specification for determining which brand truth applies to an AI task, resolving conflicts and failing closed when required truth is missing. Machine-readable brand guidelines with governed applicability. OBDS 4.1.0, CC BY 4.0 and Apache 2.0.">', '<meta property="og:image:alt" content="OBDS — Governed Brand Truth for AI — Open Brand Definition Specification 4.1.0">', '<meta property="og:description" content="Which brand truth applies to this AI task, and may it run? An open specification for governed applicability, conflict resolution and fail-closed execution. OBDS 4.1.0.">', '<meta name="obds-version" content="4.1.0">', '"version": "4.1.0",', '"url": "https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-FINAL.zip",', '"version": "4.1.0",', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Open Brand Definition Specification 4.1.0</span>', '<div><span class="label">Status</span><span class="value" data-copy="en">4.1.0 stable. 9 September 2026.</span><span class="value" data-copy="de">4.1.0 stabil. 9. September 2026.</span></div>', '<h2 data-copy="en">4.1.0 is the current release.</h2>', '<h2 data-copy="de">4.1.0 ist der aktuelle Release.</h2>', '<div class="publication-row"><div class="publication-key" data-copy="en">Specification</div><div class="publication-key" data-copy="de">Spezifikation</div><div class="publication-value">OBDS 4.1.0</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0.md">OBDS-4.1.0.md</a></span></div><div data-copy="en">The normative specification. One document.</div><div data-copy="de">Die normative Spezifikation. Ein Dokument.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-FINAL.zip">OBDS-4.1.0-FINAL.zip</a></span></div><div data-copy="en">The complete package: specification, 35 existing public contracts plus optional Task Facts, reference implementation and the full conformance suite.</div><div data-copy="de">Das vollständige Paket: Spezifikation, 35 bestehende öffentliche Contracts plus optionale Task Facts, Referenzimplementierung und die komplette Conformance Suite.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md">QUICKSTART.md</a></span></div><div data-copy="en">Five concepts and the smallest conforming implementation.</div><div data-copy="de">Fünf Konzepte und die kleinste konforme Implementierung.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-SCHEMA-INDEX.json">SCHEMA-INDEX.json</a></span></div><div data-copy="en">All 21 schemas, 6 value schemas and the versioned 1.1.0 and 3.0.0 contracts beside them, with their identifiers.</div><div data-copy="de">Alle 21 Schemas, 6 Value Schemas und die versionierten 1.1.0- und 3.0.0-Contracts daneben, mit Identifiern.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-PUBLICATION-MAP.json">PUBLICATION-MAP.json</a></span></div><div data-copy="en">Every schema identifier mapped to the exact address that serves it.</div><div data-copy="de">Jeder Schema-Identifier auf die Adresse gemappt, die ihn ausliefert.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-TEST-REQUIREMENTS.md">TEST-REQUIREMENTS.md</a></span></div><div data-copy="en">Everything needed to reproduce 1158 of 1158 yourself.</div><div data-copy="de">Alles, was nötig ist, um 1158 von 1158 selbst zu reproduzieren.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-CHANGELOG.md">CHANGELOG.md</a></span></div><div data-copy="en">What 4.0 changed, and the complete list of what it did not.</div><div data-copy="de">Was 4.0 geändert hat, und die vollständige Liste dessen, was unverändert blieb.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.0/OBDS-4.1.0-MIGRATION.md">MIGRATION.md</a></span></div><div data-copy="en">Existing valid packages require no migration; Task Facts adoption is voluntary.</div><div data-copy="de">Bestehende gültige Pakete benötigen keine Migration; Task Facts bleibt optional.</div></div>', '<a href="/spec/4.1.0/OBDS-4.1.0.md">', '<a href="/spec/4.1.0/OBDS-4.1.0-FINAL.zip">', '<p data-copy="de">© 2026 Kill The Dragon GmbH. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. OBDS 4.1.0 ist der aktuelle stabile Release vom 9. September 2026. Spezifikation, Referenzimplementierung und Conformance Suite sind unter <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a> veröffentlicht. Die Spezifikation und die Dokumentation stehen unter der Creative Commons Attribution 4.0 International Lizenz. Die Schemas, die Release-Metadaten, die Referenzimplementierung, die Conformance Suite und die Beispiele stehen unter der Apache License 2.0. Beide Lizenztexte sind unverändert unter <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> und <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a> veröffentlicht, die Zuordnung steht in <a href="/LICENSE.md">LICENSE.md</a>. Kommerzielle Implementierung ist erlaubt und braucht keine gesonderte Erlaubnis. Auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme wird kein Anspruch erhoben. Namen, Logos und Marken werden von keiner der beiden Lizenzen eingeräumt und sind in <a href="/TRADEMARKS.md">TRADEMARKS.md</a> gesondert geregelt. Es wird keine Markenregistrierung beansprucht, und kein Zertifizierungsprogramm ist aktiv. Kontakt lets@killthedragon.com.</p>', '<p data-copy="en">© 2026 Kill The Dragon GmbH. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. OBDS 4.1.0 is the current stable release, dated 9 September 2026. The specification, the reference implementation and the conformance suite are published at <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a>. The specification and the documentation are licensed under the Creative Commons Attribution 4.0 International Licence. The schemas, the release metadata, the reference implementation, the conformance suite and the examples are licensed under the Apache License 2.0. Both licence texts are published unmodified at <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> and <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a>, and the mapping is in <a href="/LICENSE.md">LICENSE.md</a>. Commercial implementation is permitted and requires no separate permission. No claim is made to general ideas, principles, methods or independently developed compatible systems. Names, logos and marks are granted by neither licence and are governed separately in <a href="/TRADEMARKS.md">TRADEMARKS.md</a>. No trademark registration is claimed and no certification programme is live. Contact lets@killthedragon.com.</p>'], 'authoring/index.html': ['<meta property="og:image:alt" content="Authoring and curation — Open Brand Definition Specification 4.1.0">', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>', '<a href="/spec/4.1.0/OBDS-4.1.0.md#7-brand-manifest">', '<a href="/spec/4.1.0/OBDS-4.1.0.md#24-selective-extraction-and-curation">', '<a href="/spec/4.1.0/OBDS-4.1.0.md#26-conformance-claims">'], 'examples/index.html': ['<meta property="og:image:alt" content="See OBDS decide — Open Brand Definition Specification 4.1.0">', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>', '<p class="code-caption">Or download <a href="/spec/4.1.0/OBDS-4.1.0-FINAL.zip">OBDS-4.1.0-FINAL.zip</a>, extract it, and run the same commands from the extracted directory.</p>', '<a href="/spec/4.1.0/OBDS-4.1.0.md">', '<a href="/spec/4.1.0/OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md">'], 'what-is-obds/index.html': ['<meta property="og:image:alt" content="What is OBDS? — Open Brand Definition Specification 4.1.0">', '"version": "4.1.0",', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>', '<a href="/spec/4.1.0/OBDS-4.1.0.md">'], 'research/index.html': ['<meta property="og:image:alt" content="OBDS Research — Open Brand Definition Specification 4.1.0">', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>'], 'machine-readable-brand-guidelines/index.html': ['<meta property="og:image:alt" content="Machine-readable brand guidelines — Open Brand Definition Specification 4.1.0">', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>'], 'brand-governance-for-ai/index.html': ['<meta property="og:image:alt" content="Brand governance for AI — Open Brand Definition Specification 4.1.0">', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>'], 'compare/machine-readable-brand-specifications/index.html': ['<meta property="og:image:alt" content="Machine-readable brand specifications compared — Open Brand Definition Specification 4.1.0">', '<div class="status">OBDS / 4.1.0 stable</div>', '<span>Companion to OBDS 4.1.0</span>', '<td><a href="/spec/4.1.0/OBDS-4.1.0.md">OBDS</a></td>', '<td>4.1.0</td>', '<th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>Brando 1.3</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.1.0</th>', '<a href="/spec/4.1.0/OBDS-4.1.0.md">', '<a href="/spec/4.1.0/OBDS-4.1.0.md">OBDS-4.1.0.md</a>'], '404.html': ['<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>404 | Open Brand Definition</title><style>html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;color:#000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif}main{width:min(90vw,900px);border:1px solid;padding:24px}h1{font-size:clamp(64px,20vw,220px);line-height:.75;letter-spacing:-.08em;margin:0 0 60px}a{color:inherit}</style></head><body><main><h1>404</h1><p>Nothing is defined here. OBDS 4.1.0 stable.</p><p><a href="/">Return to Open Brand Definition</a> &middot; <a href="/what-is-obds/">What is OBDS</a> &middot; <a href="/examples/">Examples</a> &middot; <a href="/spec/4.1.0/OBDS-4.1.0.md">Specification</a></p></main></body></html>'], 'llms.txt': ['Current release: 4.1.0 (stable, 9 September 2026)', 'https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0.md', 'Schema index: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-SCHEMA-INDEX.json', 'Publication map: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-PUBLICATION-MAP.json', 'Complete package: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-FINAL.zip', 'Quickstart: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md', 'Changelog: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-CHANGELOG.md', 'Migration: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-MIGRATION.md', 'the licensing wording that was current at the time. Section 32.1 of 4.1.0 is']}
+PUBLICATION_URLS = {p: ("/" if p == "index.html" else "/" + p.removesuffix("index.html")) for p in PUBLICATION_EXPECTATIONS}
+PUBLICATION_URLS.update({"publication-record.json": "/publication-record.json", "sitemap.xml": "/sitemap.xml"})
+
+
+# Frozen occurrence multiplicities from the approved publication surface. Counts
+# are constants, never derived from candidate bytes. Overlapping expectations
+# retain their own contracts (for example a complete row and each link in it).
+PUBLICATION_OCCURRENCE_COUNTS = {'index.html': [1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1], 'authoring/index.html': [1, 1, 1, 1, 1, 1], 'examples/index.html': [1, 1, 1, 1, 1, 1], 'what-is-obds/index.html': [1, 1, 1, 1, 1], 'research/index.html': [1, 1, 1], 'machine-readable-brand-guidelines/index.html': [1, 1, 1], 'brand-governance-for-ai/index.html': [1, 1, 1], 'compare/machine-readable-brand-specifications/index.html': [1, 1, 1, 1, 1, 1, 3, 1], '404.html': [1], 'llms.txt': [1, 1, 1, 1, 1, 1, 1, 1, 1]}
+# These exact legacy entries are superseded by object/key checks below. Keep the
+# complete legacy expectations available to the independent mutation matrix.
+PUBLICATION_STRUCTURED_FIELDS = {"index.html": {4, 5, 6}, "what-is-obds/index.html": {1}}
+
+
+# Each textual HTML occurrence is bound to the approved element path. A copy
+# elsewhere (including comments or other elements) cannot satisfy that location.
+PUBLICATION_ELEMENT_PATHS = {'index.html': {0: [(('html', 1), ('head', 1), ('meta', 6))], 1: [(('html', 1), ('head', 1), ('meta', 15))], 2: [(('html', 1), ('head', 1), ('meta', 16))], 3: [(('html', 1), ('head', 1), ('meta', 25))], 7: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 8: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 1))], 9: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 2), ('div', 3))], 10: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('h2', 1))], 11: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('h2', 2))], 12: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 1), ('div', 1))], 13: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 1))], 14: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2))], 15: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 3))], 16: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 4))], 17: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 5))], 18: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 6))], 19: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 8))], 20: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 9))], 21: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 1), ('div', 1), ('span', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 1))], 22: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2), ('div', 1), ('span', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 4))], 23: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 14), ('div', 2), ('div', 6), ('p', 1))], 24: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 14), ('div', 2), ('div', 6), ('p', 2))]}, 'authoring/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 1))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 2))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 3))]}, 'examples/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('p', 2))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 5), ('div', 2), ('div', 1), ('a', 2))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 5), ('div', 2), ('div', 1), ('a', 3))]}, 'what-is-obds/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 2: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 7), ('a', 2))]}, 'research/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'machine-readable-brand-guidelines/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'brand-governance-for-ai/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'compare/machine-readable-brand-specifications/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 1))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 4))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 4), ('div', 1), ('table', 1), ('tr', 1), ('th', 1))], 6: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 4), ('a', 3)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 5), ('div', 1), ('div', 2), ('a', 7))], 7: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 5), ('div', 1), ('div', 2), ('a', 7))]}, '404.html': {0: [()]}}
+
+
+class _PublicationLocations(HTMLParser):
+    """Element paths count same-tag siblings; whitespace and JSON key order do not move them."""
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
+
+    def __init__(self, text):
+        super().__init__(convert_charrefs=False)
+        self.text = text
+        self.lines = text.splitlines(keepends=True)
+        self.stack = [((), {})]
+        self.locations = {}
+        self.feed(text)
+        self.close()
+
+    def handle_starttag(self, tag, attrs):
+        parent, counts = self.stack[-1]
+        counts[tag] = counts.get(tag, 0) + 1
+        path = parent + ((tag, counts[tag]),)
+        line, column = self.getpos()
+        self.locations[path] = sum(map(len, self.lines[:line - 1])) + column
+        if tag not in self.VOID:
+            self.stack.append((path, {}))
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in self.VOID:
+            self.handle_endtag(tag)
+
+    def handle_endtag(self, tag):
+        for index in range(len(self.stack) - 1, 0, -1):
+            if self.stack[index][0][-1][0] == tag:
+                del self.stack[index:]
+                break
+
+
+class _PublicationScripts(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=False)
+        self.active = None
+        self.documents = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "script":
+            assert self.active is None, "Nested publication script"
+            types = [value for key, value in attrs if key == "type"]
+            assert len(types) <= 1, "Ambiguous publication script type"
+            self.active = [] if types == ["application/ld+json"] else None
+
+    def handle_data(self, data):
+        if self.active is not None:
+            self.active.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "script" and self.active is not None:
+            self.documents.append("".join(self.active))
+            self.active = None
+
+
+def _publication_object(pairs):
+    result = {}
+    for key, value in pairs:
+        assert key not in result, "Duplicate publication JSON-LD key: " + key
+        result[key] = value
+    return result
+
+
+def _publication_invalid_constant(value):
+    raise ValueError("Invalid publication JSON-LD number: " + value)
+
+
+def verify_publication_structured(text, rel):
+    """Bind each required version/download to its semantic object, not text order."""
+    parser = _PublicationScripts()
+    parser.feed(text)
+    parser.close()
+    assert parser.active is None, rel + ": unterminated JSON-LD script"
+    documents = [json.loads(raw, object_pairs_hook=_publication_object, parse_constant=_publication_invalid_constant) for raw in parser.documents]
+    assert all(isinstance(doc, dict) for doc in documents), rel + ": malformed JSON-LD document"
+    def objects(value):
+        if isinstance(value, dict):
+            yield value
+            for child in value.values():
+                yield from objects(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from objects(child)
+    all_objects = list(objects(documents))
+    if rel == "index.html":
+        graphs = [doc["@graph"] for doc in documents if "@graph" in doc]
+        assert len(graphs) == 1 and isinstance(graphs[0], list), "Missing/ambiguous homepage JSON-LD graph"
+        graph = graphs[0]
+        assert all(isinstance(node, dict) for node in graph), "Malformed homepage JSON-LD graph"
+        for identity, kind in [("implementation", "SoftwareSourceCode"), ("obds", "TechArticle")]:
+            nodes = [node for node in graph if node.get("@id") == "https://openbranddefinition.org/#" + identity]
+            definitions = [node for node in all_objects if node.get("@id") == "https://openbranddefinition.org/#" + identity and set(node) != {"@id"}]
+            assert len(definitions) == 1, "Ambiguous JSON-LD definition: " + identity
+            assert len(nodes) == 1, "Missing/ambiguous JSON-LD identity: " + identity
+            node = nodes[0]
+            assert node.get("@type") == kind and node.get("version") == EXPECTED_RELEASE, "Stale/missing JSON-LD version: " + identity
+            if identity == "implementation":
+                assert node.get("url") == "https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-FINAL.zip", "Stale/missing implementation download"
+    elif rel == "what-is-obds/index.html":
+        articles = [doc for doc in documents if doc.get("url") == "https://openbranddefinition.org/what-is-obds/"]
+        assert len(articles) == 1 and articles[0].get("@type") == "TechArticle", "Missing/ambiguous what-is-obds article"
+        about = articles[0].get("about")
+        assert isinstance(about, dict) and about.get("@type") == "SoftwareSourceCode", "Missing what-is-obds about object"
+        assert about.get("version") == EXPECTED_RELEASE, "Stale/missing what-is-obds about version"
+
+
+# Plain-text declarations retain their approved section and nonblank-line
+# occurrence. Blank-line formatting is irrelevant; moving a copy to another
+# section cannot repair a stale current declaration or historical qualifier.
+PUBLICATION_TEXT_LOCATIONS = {0: [('', 3, 'Current release: 4.1.0 (stable, 9 September 2026)')], 1: [('## Authoritative specification', 0, 'https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0.md')], 2: [('## Schemas', 0, 'Schema index: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-SCHEMA-INDEX.json')], 3: [('## Schemas', 1, 'Publication map: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-PUBLICATION-MAP.json')], 4: [('## Downloads', 0, 'Complete package: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-FINAL.zip')], 5: [('## Downloads', 1, 'Quickstart: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md')], 6: [('## Downloads', 2, 'Changelog: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-CHANGELOG.md')], 7: [('## Downloads', 3, 'Migration: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-MIGRATION.md')], 8: [('## Previous releases', 24, 'the licensing wording that was current at the time. Section 32.1 of 4.1.0 is')]}
+
+
+def verify_publication_text(text):
+    sections = {"": []}
+    heading = ""
+    for line in text.splitlines():
+        if line.startswith("## "):
+            heading = line
+            assert heading not in sections, "Duplicate llms publication section"
+            sections[heading] = []
+        elif line.strip():
+            sections[heading].append(line)
+    for index, locations in PUBLICATION_TEXT_LOCATIONS.items():
+        field = PUBLICATION_EXPECTATIONS["llms.txt"][index]
+        for heading, occurrence, expected_line in locations:
+            lines = sections.get(heading, [])
+            assert occurrence < len(lines) and lines[occurrence] == expected_line, "Missing/stale llms publication occurrence: " + field
+
+
+
+# The only historical root changelog retained by this release. An exemption is
+# conditional on its pinned historical bytes, never its wording or directory.
+HISTORICAL_CHANGELOG = "OBDS-4.0.4-CHANGELOG.md"
+HISTORICAL_CHANGELOG_SHA256 = "sha256:24f794f4ae98bd138b65dbb3a3739379b2a2ec2df2db881231dd67727494dd5e"
+
+
+# Explicit semantic-role review: this mandatory executable invokes
+# verify_changelog_history and verify_licensing_test_source from main. Its
+# literals locate authenticated history and construct rejected current claims;
+# they publish no operative terms. The digest binds that review to ALL bytes,
+# including comments, docstrings and the entry point. Any edit requires a fresh
+# role review and digest update: a test filename or marker never establishes it.
+# Publication roles take precedence even over an authenticated registration.
+NON_CLAIM_EXECUTABLE_SOURCES = {
+    "tools/test-task-facts-release.py": {
+        "role": "non-claim executable release regression",
+        "sha256": 'sha256:819425ef7e08fcc16d3bf3a7da496507e2c6d0c42a0822a1e64e1050d54e4b8e',
+    },
+}
+
+
+def non_claim_executable_source(root, rel):
+    """Authenticate an explicit reviewed role; conflicts and drift fail closed."""
+    if rel not in NON_CLAIM_EXECUTABLE_SOURCES:
+        return False
+    record = NON_CLAIM_EXECUTABLE_SOURCES[rel]
+    if (rel in PUBLICATION_URLS or not rel.endswith(".py")
+            or not isinstance(record, dict)
+            or set(record) != {"role", "sha256"}
+            or record.get("role") != "non-claim executable release regression"
+            or not isinstance(record.get("sha256"), str)
+            or not re.fullmatch(r"sha256:[0-9a-f]{64}", record["sha256"])):
+        raise ValueError("conflicting or malformed executable regression role")
+    if sha256_file(root / rel) != record["sha256"]:
+        raise ValueError("executable regression differs from reviewed non-claim bytes")
+    return True
+
+
+def current_licensing_paths(root, package_files, context):
+    """Repository publication claims supplement archived package surfaces."""
+    paths = list(package_files)
+    if context == "repository":
+        paths.extend(root / rel for rel in PUBLICATION_URLS)
+    return paths
+
+
+def current_changelog_claims(raw):
+    """Bind retained version records to immutable history, returning current text.
+
+    The complete 4.0.4 document is retained as a suffix, including its legacy
+    titles and non-version headings. Its digest authenticates that structure;
+    merely adding an old version heading never grants historical treatment.
+    This works in standalone archives without Git or a second historical file.
+    """
+    boundary = list(re.finditer(rb"(?m)^# OBDS 4\.0\.4(?: [^\r\n]*)?\n(?=\n## 4\.0\.4\n)", raw))
+    if len(boundary) != 1:
+        raise ValueError("missing or ambiguous historical changelog boundary")
+    prefix, history = raw[:boundary[0].start()], raw[boundary[0].start():]
+    if "sha256:" + hashlib.sha256(history).hexdigest() != HISTORICAL_CHANGELOG_SHA256:
+        raise ValueError("historical changelog suffix differs from verified 4.0.4 bytes")
+    text = prefix.decode("utf-8")
+    # Current sections use canonical ATX headings. Reject ambiguous Markdown
+    # containers that could turn the historical boundary into current prose.
+    if not text.startswith("# OBDS changelog\n\n") or not text.endswith("\n\n"):
+        raise ValueError("malformed current changelog document structure")
+    if re.search(r"(?m)^\s*(?:`{3,}|~{3,}|={3,}|-{3,})|<!--|<[^>]*>", text):
+        raise ValueError("ambiguous current changelog markup")
+    current = 0
+    for line in text.splitlines():
+        if not line.lstrip().startswith("#"):
+            continue
+        if line == "# OBDS changelog":
+            if current or line != text.splitlines()[0]:
+                raise ValueError("duplicate current changelog title")
+            continue
+        if line == "## " + EXPECTED_RELEASE:
+            current += 1
+        elif (not re.fullmatch(r"#{3,6} [^#\s].*", line)
+              or re.search(r"\d+\.\d+(?:\.\d+)?", line)):
+            raise ValueError("unclassified or malformed current changelog heading")
+    if current != 1 or text.count("# OBDS changelog\n") != 1:
+        raise ValueError("missing or duplicate current release section")
+    versions = [tuple(map(int, match.groups())) for match in
+                re.finditer(rb"(?m)^## (\d+)\.(\d+)\.(\d+)\n", history)]
+    if (not versions or versions[0] != (4, 0, 4)
+            or any(a <= b for a, b in zip(versions, versions[1:]))):
+        raise ValueError("ambiguous historical version section order")
+    return text
+
+
+def retired_licensing_failures(root, paths):
+    diagnostics = []
+    for path in sorted(set(paths)):
+        rel = path.relative_to(root).as_posix()
+        try:
+            if non_claim_executable_source(root, rel):
+                continue
+        except (ValueError, OSError) as exc:
+            diagnostics.append(f"Invalid licensing surface classification in {rel}: {exc}")
+            continue
+        if rel == HISTORICAL_CHANGELOG:
+            if sha256_file(path) != HISTORICAL_CHANGELOG_SHA256:
+                diagnostics.append("Historical changelog bytes changed: " + rel)
+            continue
+        if rel == "reference/release-gate.py" or rel.startswith("LICENSES/"):
+            continue
+        if path.suffix.lower() == ".zip":
+            continue
+        if rel == f"OBDS-{EXPECTED_RELEASE}-CHANGELOG.md":
+            try:
+                text = current_changelog_claims(path.read_bytes())
+            except (ValueError, OSError) as exc:
+                diagnostics.append(f"Invalid changelog history/current structure in {rel}: {exc}")
+                continue
+        else:
+            try:
+                text = path.read_text(encoding="utf-8")
+            except (UnicodeDecodeError, OSError):
+                continue
+        for phrase in RETIRED_LICENSING_WORDING:
+            if phrase.lower() in text.lower():
+                diagnostics.append(f"retired licensing wording {phrase!r} in {rel}")
+    return diagnostics
+
+
+class _ContractClaims(_PublicationLocations):
+    """Visible English claims, bound to their existing publication element paths."""
+    INLINE = {"strong", "em", "b", "i", "span"}
+
+    def __init__(self, text):
+        self.claims = {}
+        self.active_claims = []
+        super().__init__(text)
+
+    def handle_starttag(self, tag, attrs):
+        super().handle_starttag(tag, attrs)
+        path = self.stack[-1][0]
+        if ("data-copy", "en") in attrs:
+            hidden = any(key in {"hidden", "style"} or (key == "aria-hidden" and value == "true") for key, value in attrs)
+            self.active_claims.append((path, [" [markup] "] if hidden else [], self.locations[path], tag))
+        elif self.active_claims and ((tag in self.INLINE and not attrs) or tag in {"code", "a"}):
+            pass
+        elif self.active_claims:
+            for _, parts, _, _ in self.active_claims:
+                parts.append(" [markup] ")
+
+    def handle_data(self, data):
+        for _, parts, _, _ in self.active_claims:
+            parts.append(data)
+
+    def handle_entityref(self, name):
+        from html import unescape
+        self.handle_data(unescape("&" + name + ";"))
+
+    def handle_charref(self, name):
+        from html import unescape
+        self.handle_data(unescape("&#" + name + ";"))
+
+    def handle_endtag(self, tag):
+        path = self.stack[-1][0]
+        for claim in list(self.active_claims):
+            if claim[0] == path and claim[3] == tag:
+                line, column = self.getpos()
+                end = sum(map(len, self.lines[:line - 1])) + column + len("</" + tag + ">")
+                self.claims[path] = (" ".join("".join(claim[1]).split()), claim[2], end)
+                self.active_claims.remove(claim)
+        super().handle_endtag(tag)
+
+
+# Filled from the approved four English count-bearing elements, independently
+# of the candidate. Existing PUBLICATION_ELEMENT_PATHS remain unchanged.
+HOMEPAGE_CONTRACT_PATHS = ((('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 12), ('div', 2), ('div', 1), ('div', 2), ('div', 3), ('p', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2), ('div', 2)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 3), ('div', 2), ('p', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 4), ('span', 3)))
+
+
+def verify_homepage_contracts(text, count=35):
+    assert count == 35, "Existing public contract baseline must remain 35"
+    parsed = _ContractClaims(text)
+    replacements = []
+    claim_pattern = re.compile(r"\b35 existing public contracts plus optional Task Facts\b")
+    for path in HOMEPAGE_CONTRACT_PATHS:
+        assert path in parsed.claims, "Missing homepage public contract claim"
+        claim, start, end = parsed.claims[path]
+        assert "[markup]" not in claim, "Non-visible or unsupported contract claim markup"
+        matches = list(claim_pattern.finditer(claim))
+        assert len(matches) == 1, "Homepage must state 35 existing public contracts plus optional Task Facts at " + repr(path)
+        remainder = claim[:matches[0].start()] + claim[matches[0].end():]
+        assert not re.search(r"\b(?:contracts|Task Facts|including|includes|included|total|nonoptional|required|mandatory|not optional)\b", remainder, re.I), "Conflicting homepage contract claim"
+        # Only these count-bearing elements normalize harmless inline formatting;
+        # all original required row text, paths, links and multiplicities survive.
+        opening_end = text.index(">", start) + 1
+        closing_start = text.rfind("</", start, end)
+        replacements.append((opening_end, closing_start, claim))
+    for path, (claim, _, _) in parsed.claims.items():
+        if path not in HOMEPAGE_CONTRACT_PATHS:
+            assert not re.search(r"\b(?:\d+|total)\s+(?:existing\s+)?public contracts\b", claim, re.I), "Unclassified homepage public contract count"
+    for start, end, claim in sorted(replacements, reverse=True):
+        text = text[:start] + claim + text[end:]
+    return text
+
+
+def verify_publication(root=ROOT, inventory=None):
+    """Exact required current fields, with separately retained historical fields."""
+    ignored = {".git", "reference", "spec", "release-work", "schemas", "value-schemas", "node_modules"}
+    pages = {p.relative_to(root).as_posix() for p in root.rglob("*.html") if not (set(p.relative_to(root).parts) & ignored)}
+    assert pages == {p for p in PUBLICATION_EXPECTATIONS if p.endswith(".html")}, "Publication HTML inventory missing/extra page"
+    for rel, required in PUBLICATION_EXPECTATIONS.items():
+        text = (root / rel).read_text(encoding="utf-8")
+        if rel == "index.html":
+            text = verify_homepage_contracts(text)
+        if rel.endswith(".html"):
+            verify_publication_structured(text, rel)
+        elif rel == "llms.txt":
+            verify_publication_text(text)
+        locations = _PublicationLocations(text).locations if rel.endswith(".html") else {}
+        counts = PUBLICATION_OCCURRENCE_COUNTS[rel]
+        assert len(counts) == len(required), "Incomplete publication occurrence contract"
+        for index, field in enumerate(required):
+            if index in PUBLICATION_STRUCTURED_FIELDS.get(rel, set()):
+                continue
+            for path in PUBLICATION_ELEMENT_PATHS.get(rel, {}).get(index, []):
+                offset = 0 if path == () else locations.get(path)
+                assert offset is not None and text.startswith(field, offset), f"{rel}: missing/stale required element {path}: {field[:100]}"
+            assert text.count(field) == counts[index], f"{rel}: missing/stale/extra required current occurrence: {field[:100]}"
+    record = load(root / "publication-record.json")
+    assert record["currentRelease"] == EXPECTED_RELEASE
+    assert EXPECTED_RELEASE in record["releases"] and "4.0.4" in record["releases"]
+    sitemap = (root / "sitemap.xml").read_text()
+    assert "/spec/4.1.0/" in sitemap and "/spec/4.0.4/" in sitemap
+    if inventory is not None:
+        entries = inventory["publication"]
+        assert {e["path"] for e in entries} == set(PUBLICATION_URLS)
+        for entry in entries:
+            assert entry["url"] == PUBLICATION_URLS[entry["path"]]
+            assert hashlib.sha256((root / entry["path"]).read_bytes()).hexdigest() == entry["sha256"], "Frozen publication byte mismatch: " + entry["path"]
+    return True
+
+
+# The human final-closure decision preserves history outside the distributable.
+PUBLIC_EVIDENCE_SOURCES = frozenset(['evidence/interop/cycles/cycle-1/implementation-python/evaluate.py', 'evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json', 'evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs', 'evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json'])
+PUBLIC_EVIDENCE_MANIFEST_SHA256 = "sha256:cae1605f07f0a84913b4d56f7fdbd57bf7d51a948c4a45897520e4948b8fc122"
+NEUTRAL_WORKSPACES = ("/workspace/obds-release", "/private/tmp/obds-release", "/tmp/obds-release")
+
+# The Historical Audit Evidence Registry, the other half of the 4.1.0 boundary.
+# Membership means the entry must exist in the preserved non-public audit store
+# and verify by identity, SHA-256 and byte size. It never means the entry ships,
+# and it never stands in for a fresh public conformance result. The registry is
+# pinned by its own raw bytes, so a quiet edit to the record of what history
+# contains is itself a gate failure.
+HISTORICAL_AUDIT_REGISTRY_FILE = "HISTORICAL-AUDIT-REGISTRY.json"
+HISTORICAL_AUDIT_REGISTRY_SHA256 = "sha256:73d54c24723695a7aa38304d06b0a0d06c17e32b5ca8a8d67474801a8af84f56"
+
+
+def public_package_member(rel):
+    prefix = "reference/task-facts/1.0/"
+    if rel in (prefix + "EVIDENCE-MANIFEST.json", prefix + HISTORICAL_AUDIT_REGISTRY_FILE):
+        return False
+    if rel.startswith(prefix + "evidence/"):
+        return rel[len(prefix):] in PUBLIC_EVIDENCE_SOURCES
+    return True
+
+
+# Root documents of an earlier release. A published release is immutable, so the
+# repository keeps 4.0.4's own artefacts exactly as they were published, and one
+# of them truthfully records the absolute fixture paths of the machine that built
+# it. The private/local-path rule is a rule about what this release distributes,
+# not about what the working tree remembers, so it follows distribution: these
+# files are exempt from the scan and must stay byte-identical. The exemption is
+# not taken on trust — `main` refuses it for anything the package actually ships.
+PRIOR_RELEASE_ROOT_DOCUMENT = re.compile(r"^OBDS-(?:PUBLIC-README-)?(\d+\.\d+\.\d+)[^/]*$")
+
+
+def prior_release_artifact(rel):
+    match = PRIOR_RELEASE_ROOT_DOCUMENT.fullmatch(rel)
+    return match is not None and match.group(1) != EXPECTED_RELEASE
+
+
+def neutral_path(value):
+    return any(value == base or value.startswith(base + "/") or
+               value.startswith(base + "-runtime/") for base in NEUTRAL_WORKSPACES)
+
+
+def require_neutral_execution(root):
+    assert neutral_path(str(root.resolve())), "Fresh release execution requires a neutral workspace"
+    assert neutral_path(sys.executable), "Fresh release Python must use a neutral runtime path"
+    import shutil
+    node = shutil.which("node")
+    assert node and neutral_path(node), "Fresh release Node must use a neutral runtime path"
+
+
+def verify_repository_version(root, context):
+    if context == "repository":
+        assert (root / "VERSION").read_text(encoding="utf-8").strip() == EXPECTED_RELEASE, "Repository VERSION must equal 4.1.0"
+
+
+def verify_public_bytes(raw, label):
+    # Scan bytes, including binary members and nested archives, without rewriting.
+    assert not re.search(rb"/(?:Users|home)/[^/\s]+|(?:[A-Za-z]:)?[\\/](?:Users|Documents and Settings)[\\/]|/(?:private/)?var/folders/", raw), "Private/local path in public member: " + label
+    import zipfile
+    if zipfile.is_zipfile(io.BytesIO(raw)):
+        with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+            for name in archive.namelist():
+                verify_public_bytes(archive.read(name), label + "!" + name)
+
+
+def verify_fresh_provenance(root):
+    def visit(value):
+        if isinstance(value, dict):
+            for item in value.values():
+                visit(item)
+        elif isinstance(value, list):
+            for item in value:
+                visit(item)
+        elif isinstance(value, str) and value.startswith("/"):
+            assert neutral_path(value), "Non-neutral fresh evidence provenance"
+    for name in ("OBDS-4.1.0-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.0-TASK-FACTS-CONFORMANCE.json"):
+        raw = (root / name).read_bytes()
+        verify_public_bytes(raw, name)
+        visit(load(root / name))
+
+
+def verify_public_evidence(root, context):
+    tf = root / "reference/task-facts/1.0"
+    assert sha256_file(tf / "PUBLIC-EVIDENCE-MANIFEST.json") == PUBLIC_EVIDENCE_MANIFEST_SHA256, "Public evidence inventory differs"
+    manifest = load(tf / "PUBLIC-EVIDENCE-MANIFEST.json")
+    assert {e["path"] for e in manifest["files"]} == PUBLIC_EVIDENCE_SOURCES
+    for entry in manifest["files"]:
+        source = tf / entry["path"]
+        assert source.stat().st_size == entry["bytes"] and sha256_file(source) == "sha256:" + entry["sha256"], "Public source evidence differs"
+    if context == "extracted-archive":
+        assert not (tf / "EVIDENCE-MANIFEST.json").exists(), "Historical audit inventory must remain non-public"
+        observed = {p.relative_to(tf).as_posix() for p in (tf / "evidence").rglob("*") if p.is_file() and not is_generated_cache(p, root)}
+        assert observed == PUBLIC_EVIDENCE_SOURCES, "Public evidence contains historical or extra records"
+    verify_fresh_provenance(root)
+
+
+def verify_historical_audit(root, context):
+    """Audit-store integrity, deliberately not a conformance result.
+
+    `verify_public_evidence` answers what the public archive may contain. This
+    answers the other half of the 4.1.0 boundary: whether the history the
+    release says it preserved is still that history, byte for byte, in a store
+    the public archive never needs. The two are separate on purpose. Private
+    evidence that verifies here proves nothing about a public claim, and a
+    public claim that passes there is not allowed to lean on this store.
+
+    Substitution is the failure worth naming: a member still present, still the
+    declared size, no longer the declared bytes. Size and digest are therefore
+    both checked against two independent records, the registry and the
+    inventory, and the two have to agree with each other as well as with disk.
+    """
+    tf = root / "reference/task-facts/1.0"
+    registry_path = tf / HISTORICAL_AUDIT_REGISTRY_FILE
+    inventory_name = "EVIDENCE-MANIFEST.json"
+    if context != "repository":
+        assert not registry_path.exists(), "Historical audit registry must remain non-public"
+        assert not (tf / inventory_name).exists(), "Historical audit inventory must remain non-public"
+        return True
+
+    assert sha256_file(registry_path) == HISTORICAL_AUDIT_REGISTRY_SHA256, "Historical audit registry differs"
+    registry = load(registry_path)
+    assert registry["kind"] == "task-facts-historical-audit-evidence-registry"
+    assert registry["role"] == "historical-non-public-audit-evidence", "Historical audit role differs"
+    assert registry["status"] == "preserved-immutable", "Historical audit status differs"
+    assert registry["publicSurface"] is False, "Historical audit evidence is not a public surface"
+
+    declared = registry["inventory"]
+    assert declared["path"] == inventory_name
+    inventory_path = tf / declared["path"]
+    raw = inventory_path.read_bytes()
+    assert len(raw) == declared["bytes"], "Historical audit inventory size differs"
+    assert hashlib.sha256(raw).hexdigest() == declared["sha256"], "Historical audit inventory differs"
+    inventory = load(inventory_path)
+    assert len(inventory["files"]) == declared["files"], "Historical audit inventory count differs"
+    members = {entry["path"]: entry for entry in inventory["files"]}
+    assert len(members) == len(inventory["files"]), "Duplicate historical audit inventory path"
+
+    observed = {p.relative_to(tf).as_posix() for p in (tf / "evidence").rglob("*")
+                if p.is_file() and not is_generated_cache(p, root)}
+    assert observed == set(members), "Historical audit store membership differs"
+
+    for entry in inventory["files"]:
+        source = tf / entry["path"]
+        assert source.is_file(), "Missing historical audit member: " + entry["path"]
+        raw = source.read_bytes()
+        assert len(raw) == entry["bytes"], "Historical audit size mismatch: " + entry["path"]
+        assert hashlib.sha256(raw).hexdigest() == entry["sha256"], "Historical audit hash mismatch: " + entry["path"]
+
+    for group in ("publicSurfaceExclusions", "nonPublicExecutableSources"):
+        for entry in registry[group]:
+            recorded = members.get(entry["path"])
+            assert recorded is not None, "Historical audit member outside the inventory: " + entry["path"]
+            assert recorded["bytes"] == entry["bytes"] and recorded["sha256"] == entry["sha256"], \
+                "Historical audit registry and inventory disagree: " + entry["path"]
+            assert not public_package_member("reference/task-facts/1.0/" + entry["path"]), \
+                "Historical audit member is also a public package member: " + entry["path"]
+    return True
+
+
+def verify_task_facts(root=ROOT, execute=True):
+    import importlib.util
+    import tempfile
+    verify_task_facts_schema(root)
+    tf = root / "reference/task-facts/1.0"
+    context = package_context(root)
+    verify_public_evidence(root, context)
+    if context == "repository":
+        manifest = load(tf / "EVIDENCE-MANIFEST.json")
+        observed = {p.relative_to(tf).as_posix() for p in (tf / "evidence").rglob("*") if p.is_file()}
+        assert observed == {e["path"] for e in manifest["files"]}, "Evidence membership differs"
+        for entry in manifest["files"]:
+            raw = (tf / entry["path"]).read_bytes()
+            assert len(raw) == entry["bytes"] and hashlib.sha256(raw).hexdigest() == entry["sha256"], "Evidence digest mismatch: " + entry["path"]
+    spec = importlib.util.spec_from_file_location("task_facts_protocol", tf / "compare.py")
+    protocol = importlib.util.module_from_spec(spec); spec.loader.exec_module(protocol)
+    suite, suite_root, suite_hash = protocol.load_suite(tf / "SUITE.json")
+    result = load(root / "OBDS-4.1.0-TASK-FACTS-CONFORMANCE.json")
+    assert result["passed"] is True and result["productionIntegration"] is False
+    assert result["suiteHash"] == suite_hash and len(result["subjects"]) == 2
+    from jsonschema import Draft202012Validator
+    validator = Draft202012Validator(json.loads((tf / "RESULT.schema.json").read_text()))
+    for subject, (name, command) in zip(result["subjects"], [("research-python", [sys.executable, str(tf / "evidence/interop/cycles/cycle-1/implementation-python/evaluate.py")]), ("research-node", ["node", str(tf / "evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs")])]):
+        validator.validate(subject)
+        assert subject["implementation"]["name"] == name and subject["suiteHash"] == suite_hash
+        assert subject["passed"] and subject["failed"] == subject["skipped"] == 0
+        assert len(subject["groups"]) == 2
+        for measured, group in zip(subject["groups"], suite["groups"]):
+            assert measured["name"] == group["name"] and measured["passed"]
+            actual, mismatches = protocol.compare(__import__("base64").b64decode(measured["stdout"]["base64"]), measured["processExit"], protocol.expected(suite_root, group))
+            assert not mismatches and actual == measured["actual"]
+        if execute:
+            with tempfile.TemporaryDirectory() as d:
+                output = Path(d) / "result.json"
+                subprocess.run([sys.executable, str(tf / "run-suite.py"), "--suite", str(tf / "SUITE.json"), "--result", str(output), "--implementation-name", name, "--implementation-version", "frozen-cycle-1", "--", *command], cwd=root, check=True)
+                fresh = load(output)
+                assert fresh["passed"] and fresh["suiteHash"] == suite_hash
+                assert [g["actual"] for g in fresh["groups"]] == [g["actual"] for g in subject["groups"]]
+                assert fresh["implementation"]["executables"][-1]["sha256"] == subject["implementation"]["executables"][-1]["sha256"]
+    return True
+
+
+def package_context(root=ROOT):
+    """An archive is identified by positive flattened contract layout and manifest."""
+    if (root / "schemas/1.0.0/brand-manifest.schema.json").is_file():
+        return "repository"
+    manifest = load(root / "PACKAGE-MANIFEST.json")
+    assert manifest["version"] == EXPECTED_RELEASE
+    assert (root / "schemas/brand-manifest.schema.json").is_file()
+    assert manifest["normativeSpecification"] == "OBDS-4.1.0.md"
+    return "extracted-archive"
+
+
 def main() -> int:
+    try:
+        context = package_context()
+        verify_repository_version(ROOT, context)
+        verify_historical_audit(ROOT, context)
+        verify_task_facts()
+        exempt = []
+        for path in package_text_files():
+            rel = path.relative_to(ROOT).as_posix()
+            if prior_release_artifact(rel):
+                exempt.append(rel)
+                continue
+            verify_public_bytes(path.read_bytes(), rel)
+        # The exemption is a claim about distribution, so distribution answers it,
+        # and only this release's own manifest is allowed to answer.
+        manifest = load(ROOT / "PACKAGE-MANIFEST.json")
+        assert manifest["version"] == EXPECTED_RELEASE, "Package manifest is not this release"
+        shipped = {entry["path"] for entry in manifest["files"]}
+        leaked = sorted(set(exempt) & shipped)
+        assert not leaked, "Prior-release artefacts in the current release package: " + ", ".join(leaked)
+        if context == "repository":
+            inventory_path = ROOT / "release-work/4.1.0/RC-INVENTORY.json"
+            inventory = load(inventory_path) if inventory_path.is_file() else None
+            verify_publication(inventory=inventory)
+        print("Release verification context:", context)
+    except (AssertionError, OSError, ValueError, KeyError, subprocess.SubprocessError) as exc:
+        print("RELEASE GATE: FAIL Task Facts/publication:", exc)
+        return 1
     test_result = load(ROOT / f"OBDS-{EXPECTED_RELEASE}-TEST-RESULT.json")
     audit = load(ROOT / f"OBDS-{EXPECTED_RELEASE}-FINAL-AUDIT.json")
 
@@ -955,7 +1617,7 @@ def main() -> int:
         ]
 
     actual_contract = {
-        "capability-registry": _canon_fingerprint(registry),
+        "capability-registry": _canon_fingerprint(prior_registry(registry)),
         "schema-index": _canon_fingerprint(
             {"schemas": index["schemas"], "valueSchemas": index["valueSchemas"]}
         ),
@@ -987,22 +1649,10 @@ def main() -> int:
     for name in REQUIRED_LICENCE_DOCS:
         check((ROOT / name).is_file(), f"missing {name}")
 
-    # 5e. no retired licensing wording anywhere in the package. Historical
-    #     changelog entries describe what was removed, so the changelog is exempt.
-    exempt = {f"OBDS-{EXPECTED_RELEASE}-CHANGELOG.md", "reference/release-gate.py"}
-    for path in package_text_files():
-        rel = path.relative_to(ROOT).as_posix()
-        if rel in exempt or rel.startswith("LICENSES/"):
-            continue
-        if path.suffix.lower() in {".zip"}:
-            continue
-        try:
-            text = path.read_text(encoding="utf-8")
-        except (UnicodeDecodeError, OSError):
-            continue
-        for phrase in RETIRED_LICENSING_WORDING:
-            if phrase.lower() in text.lower():
-                failures.append(f"retired licensing wording {phrase!r} in {rel}")
+    # 5e. Package claims and the complete active publication inventory are current
+    # surfaces. Historical bytes have one exact, digest-checked exception.
+    licensing_paths = current_licensing_paths(ROOT, package_text_files(), context)
+    failures.extend(retired_licensing_failures(ROOT, licensing_paths))
 
     # 6. package junk. Generated caches are not junk; shipped junk is.
     junk = find_junk()
@@ -1265,10 +1915,10 @@ def main() -> int:
                         stated == str(suite_count),
                         f"the website states {suite_name} {stated}, expected {suite_count}",
                     )
-            check(
-                f"{len(served)} schemas" in site or f"{len(served)} public contracts" in site,
-                f"the website does not state the {len(served)} public contracts it ships",
-            )
+            try:
+                verify_homepage_contracts(site, len(served))
+            except AssertionError as exc:
+                failures.append(str(exc))
 
     # 13. normative and published examples must satisfy the published contracts.
     #     The 1.1.0 section 14 artefact example and the authoring page's only
@@ -1413,8 +2063,6 @@ def main() -> int:
             if not fragment:
                 continue
             for named in set(release_re.findall(fragment)):
-                if named.startswith("4."):        # licence versions
-                    continue
                 check(
                     named == EXPECTED_RELEASE,
                     f"{rel_page} {label} names release {named}, "
@@ -1452,8 +2100,6 @@ def main() -> int:
             if fragment is None:
                 continue
             for named in set(version_pattern.findall(fragment.group(1))):
-                if named.startswith("4."):        # licence versions, not releases
-                    continue
                 check(
                     named == EXPECTED_RELEASE,
                     f"the website {label} names release {named}, "

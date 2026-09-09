@@ -47,7 +47,10 @@ from systemic_surface import (
     CONTRACT_VERSION_CONSUMERS,
     CONTRACT_VERSION_MODULES,
     HASH_CALL_SITES,
+    HISTORICAL_AUDIT_INVENTORY,
+    HISTORICAL_AUDIT_REGISTRY,
     PACKAGE_ROOT,
+    PUBLIC_SURFACE_HISTORICAL_EXCLUSIONS,
     PUBLISHED_3_0_CONTRACTS,
     REFERENCE,
     SEMANTIC_PRIMITIVE_IMPLEMENTATIONS,
@@ -238,7 +241,22 @@ def test_every_path_the_surface_registries_name_reaches_the_release_package():
     where the files exist, and only the post-deployment docs smoke test unpacks
     the archive. So the invariant is asserted here, where it is cheap: every path
     a registry names is a path the packager ships.
+
+    4.1.0 adds one distinction to that sentence, and only one. Naming a file and
+    shipping a file are two claims. The registries classify a call site, which
+    stays true in every layout where the file exists; the package decides
+    distribution. Eight immutable historical audit sources are classified here
+    and deliberately kept out of the public archive, so under a single reading of
+    a single list they had to ship and had to be absent at once.
+
+    The eight are named explicitly, never inferred from absence, and the
+    exclusion is answered rather than granted: an excluded path must still be
+    classified, must not be packaged, and must be an identity-bound member of the
+    Historical Audit Evidence Registry. A path cannot hold both memberships, and
+    a path cannot leave both.
     """
+    import hashlib
+
     builder = _load("parity_builder_surface", PACKAGE_ROOT / "tools" / "build-release.py")
     packaged = {path for _, path in builder.package_files(_release())}
 
@@ -257,8 +275,10 @@ def test_every_path_the_surface_registries_name_reaches_the_release_package():
     for copies in BYTE_IDENTICAL_COPIES.values():
         named.update(copies)
 
+    public_named = named - PUBLIC_SURFACE_HISTORICAL_EXCLUSIONS
+
     missing = sorted(
-        relative for relative in named
+        relative for relative in public_named
         if (PACKAGE_ROOT / relative).is_file() and (PACKAGE_ROOT / relative) not in packaged
     )
     assert not missing, (
@@ -266,6 +286,55 @@ def test_every_path_the_surface_registries_name_reaches_the_release_package():
         "archive, so the archive cannot run the suite it was verified with:\n  "
         + "\n  ".join(missing)
     )
+
+    # The other direction. An exclusion is a transfer, not a hole, so each one is
+    # checked three ways before it counts.
+    present = sorted(
+        relative for relative in PUBLIC_SURFACE_HISTORICAL_EXCLUSIONS
+        if (PACKAGE_ROOT / relative).is_file()
+    )
+
+    stale = sorted(relative for relative in present if relative not in named)
+    assert not stale, (
+        "these paths are excluded from the public surface but no registry classifies "
+        "them any more, so the exclusion outlived its reason:\n  " + "\n  ".join(stale)
+    )
+
+    leaked = sorted(relative for relative in present if (PACKAGE_ROOT / relative) in packaged)
+    assert not leaked, (
+        "these paths are declared historical audit evidence and the packager ships them "
+        "anyway, so one path claims both registries:\n  " + "\n  ".join(leaked)
+    )
+
+    if present:
+        assert HISTORICAL_AUDIT_REGISTRY.is_file(), (
+            "paths were excluded from the public surface with no Historical Audit "
+            "Evidence Registry to receive them"
+        )
+        registry = load_data(HISTORICAL_AUDIT_REGISTRY)
+        assert registry["publicSurface"] is False and registry["role"], HISTORICAL_AUDIT_REGISTRY
+        declared = {entry["path"]: entry for entry in registry["publicSurfaceExclusions"]}
+        prefix = "reference/task-facts/1.0/"
+        assert set(declared) == {relative[len(prefix):] for relative in present}, (
+            "the registry's declared exclusions and the parity exclusions are two lists "
+            "of the same thing"
+        )
+
+        inventory = load_data(HISTORICAL_AUDIT_INVENTORY)
+        members = {entry["path"]: entry for entry in inventory["files"]}
+        unregistered = []
+        for relative in present:
+            key = relative[len(prefix):]
+            raw = (PACKAGE_ROOT / relative).read_bytes()
+            digest = hashlib.sha256(raw).hexdigest()
+            for source in (declared[key], members.get(key)):
+                if source is None or source["bytes"] != len(raw) or source["sha256"] != digest:
+                    unregistered.append(relative)
+                    break
+        assert not unregistered, (
+            "these paths left the public surface without an identity-bound entry in the "
+            "historical audit evidence store:\n  " + "\n  ".join(sorted(unregistered))
+        )
 
 
 def test_the_package_builder_and_the_release_gate_share_one_contract_list():

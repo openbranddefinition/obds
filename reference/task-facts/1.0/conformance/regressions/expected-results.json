@@ -1,0 +1,460 @@
+{
+  "vectors": [
+    {
+      "id": "duplicate-atoms",
+      "input": "inputs/duplicate-atoms.json",
+      "expected": [
+        {
+          "family": "regression-duplicate-atoms",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-duplicate-atoms",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "APPLIES",
+          "reason": "ALL_TRUE"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "empty-all",
+      "input": "inputs/empty-all.json",
+      "expected": [
+        {
+          "family": "regression-empty-all",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-empty-all",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "APPLIES",
+          "reason": "ALL_TRUE"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "missing-requires-defined",
+      "input": "inputs/missing-requires-defined.json",
+      "expected": [
+        {
+          "family": "regression-missing-requires-defined",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-missing-requires-defined",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "APPLIES",
+          "reason": "ALL_TRUE"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "extra-condition-key",
+      "input": "inputs/extra-condition-key.json",
+      "expected": [
+        {
+          "family": "regression-extra-condition-key",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-extra-condition-key",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "APPLIES",
+          "reason": "ALL_TRUE"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "unknown-operator",
+      "input": "inputs/unknown-operator.json",
+      "expected": [
+        {
+          "family": "regression-unknown-operator",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-unknown-operator",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "APPLIES",
+          "reason": "ALL_TRUE"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "absent-operand",
+      "input": "inputs/absent-operand.json",
+      "expected": [
+        {
+          "family": "regression-absent-operand",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-absent-operand",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "APPLIES",
+          "reason": "ALL_TRUE"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "extra-snapshot-key",
+      "input": "inputs/extra-snapshot-key.json",
+      "expected": [
+        {
+          "family": "regression-extra-snapshot-key",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:03c7edb2c41ed267a99c46af6b0c298aef6e5c70e7fc680831b644e652a6336d",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-extra-snapshot-key",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:03c7edb2c41ed267a99c46af6b0c298aef6e5c70e7fc680831b644e652a6336d",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "wrong-contract-version",
+      "input": "inputs/wrong-contract-version.json",
+      "expected": [
+        {
+          "family": "regression-wrong-contract-version",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:c91892246405015ba740eb64f78d47606049129b312a1bac1889be0e85d882ea",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-wrong-contract-version",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:c91892246405015ba740eb64f78d47606049129b312a1bac1889be0e85d882ea",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "missing-evidence-field",
+      "input": "inputs/missing-evidence-field.json",
+      "expected": [
+        {
+          "family": "regression-missing-evidence-field",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:b4e0cb5f837dc69981ae89df477998f08ba996ce901fb83ac4e041299153c836",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-missing-evidence-field",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:b4e0cb5f837dc69981ae89df477998f08ba996ce901fb83ac4e041299153c836",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "minus-zero",
+      "input": "inputs/minus-zero.json",
+      "expected": [
+        {
+          "family": "regression-minus-zero",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:325d044f4372fd477eb2ee9539b520a781dff1f4916ada3922daff29d31b058d",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-minus-zero",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:325d044f4372fd477eb2ee9539b520a781dff1f4916ada3922daff29d31b058d",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "duplicate-condition-id",
+      "input": "inputs/duplicate-condition-id.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "DUPLICATE_ID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "duplicate-case-id",
+      "input": "inputs/duplicate-case-id.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "DUPLICATE_ID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "nan",
+      "input": "inputs/nan.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "JSON_PARSE_ERROR"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "infinity",
+      "input": "inputs/infinity.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "JSON_PARSE_ERROR"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "float",
+      "input": "inputs/float.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "NON_CANONICAL_INPUT"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "unsafe-integer",
+      "input": "inputs/unsafe-integer.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "NON_CANONICAL_INPUT"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "surrogate",
+      "input": "inputs/surrogate.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "NON_CANONICAL_INPUT"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "missing-condition-id",
+      "input": "inputs/missing-condition-id.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "missing-snapshot",
+      "input": "inputs/missing-snapshot.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "missing-context",
+      "input": "inputs/missing-context.json",
+      "expected": [
+        {
+          "family": "regression-missing-context",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-missing-context",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:50690e2c9a59adf4422effb955d63008e5ffdad4323fa473cd90d2cbb1c199c5",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "null-snapshot",
+      "input": "inputs/null-snapshot.json",
+      "expected": [
+        {
+          "family": "regression-null-snapshot",
+          "caseId": "claims-both",
+          "conditionId": "claim-C06-C2",
+          "snapshotHash": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        },
+        {
+          "family": "regression-null-snapshot",
+          "caseId": "claims-both",
+          "conditionId": "claim-C01",
+          "snapshotHash": "sha256:74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "outcome": "INVALID",
+          "reason": "SCHEMA_INVALID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "duplicate-before-typed",
+      "input": "inputs/duplicate-before-typed.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "DUPLICATE_ID"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "tfj-before-routing",
+      "input": "inputs/tfj-before-routing.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "NON_CANONICAL_INPUT"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    },
+    {
+      "id": "parse-before-tfj",
+      "input": "inputs/parse-before-tfj.json",
+      "expected": [
+        {
+          "family": null,
+          "caseId": null,
+          "conditionId": null,
+          "snapshotHash": null,
+          "outcome": "INVALID",
+          "reason": "JSON_PARSE_ERROR"
+        }
+      ],
+      "basis": "Literal expectation from v0.2 validation layers; unaffected sibling retains frozen applicability."
+    }
+  ]
+}

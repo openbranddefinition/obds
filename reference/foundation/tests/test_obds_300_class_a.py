@@ -250,6 +250,10 @@ def _scanned_sources():
 # itself, with the reason it is not a governed read. A line that moves keeps its
 # entry; a line that changes loses it and has to be re-justified.
 RAW_PARSER_ALLOWLIST = {
+    ("tools/test-task-facts-release.py", "document = json.loads(match[2])"):
+        "Publication regression helper decodes copied baseline JSON-LD solely to construct stale/malformed/reordered site mutations; no governed input or evaluator semantics",
+    ("reference/release-gate.py", "documents = [json.loads(raw, object_pairs_hook=_publication_object, parse_constant=_publication_invalid_constant) for raw in parser.documents]"):
+        "Publication-only JSON-LD metadata; exact decoder call rejects duplicate keys and non-JSON constants, validates semantic object identities and required version/download fields, and never reads governed Core or Task Facts input",
     ('reference/adversarial/canonical_js.mjs', 'if (text[at] === \'"\') { at += 1; return JSON.parse(text.slice(start, at)); }'):
         'inside the governed reader itself: unescaping one already-delimited JSON string token',
     ('reference/adversarial/canonical_js.mjs', 'const parsed=JSON.parse(raw);'):
@@ -335,6 +339,160 @@ RAW_PARSER_ALLOWLIST = {
     ('reference/integration/test_integration.py', "index=json.loads((ROOT/f'OBDS-{RELEASE}-SCHEMA-INDEX.json').read_text())"):
         'release packaging metadata, not a governed document',
 }
+
+
+# 4.1.0 bounded closure: exact Task Facts sites, individually justified.
+RAW_PARSER_ALLOWLIST.update({
+    ('reference/release-gate.py', 'schema = json.loads(raw)'):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/release-gate.py', 'validator = Draft202012Validator(json.loads((tf / "RESULT.schema.json").read_text()))'):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/compare.py', "value = json.loads(raw.decode('utf-8'), object_pairs_hook=pairs, parse_constant=reject)"):
+        'Task Facts RUNNER-CONTRACT strict raw transport parser for suite metadata, expectations and six-field child output; rejects duplicate keys/nonstandard numbers/invalid UTF-8, preserves the distinct Task Facts contract without Core normalization',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/finalize_report.py', 'def read(p):return json.loads(p.read_text())'):
+        'Preserved historical research report formatter reads its frozen comparison/probe result files; these historical records do not establish current release conformance',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py', "results[suite,impl]=json.loads(p.stdout)['results'];metadata[suite+'-'+impl]={'command':cmd+list(map(str,paths)),'cwd':str(TMP),'exitCode':p.returncode,'files':[p.name for p in paths],'records':len(results[suite,impl])}"):
+        'Preserved research evaluation script decodes child Task Facts results envelope for fixture/regression/probe interoperability comparison; not Core governed input',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/run_evaluation.py', "p=subprocess.run(cmd+[str(path)],cwd=TMP,env=env,capture_output=True);byname[path.stem][impl]=json.loads(p.stdout)['results']"):
+        'Preserved research evaluation script decodes child Task Facts results envelope for fixture/regression/probe interoperability comparison; not Core governed input',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py', "SCHEMA = json.loads((ROOT / 'schemas/task-facts.schema.json').read_text())"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/reference/evaluate.py', "return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=pairs,"):
+        'Preserved Task Facts evaluator strict raw-input parser with duplicate-key and number checks; implements frozen parse/TFJ-0.1 ordering, not the Core governed-reader contract',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "VECTORS = json.loads((ROOT / 'regressions/expected-results.json').read_text())['vectors']"):
+        'Preserved experiment test loads literal Task Facts regression expectations for ordered result assertions',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout)['results'],"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout), {'results': vector['expected']})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "FAMILIES = [json.loads(p.read_text()) for p in sorted((ROOT / 'fixtures').glob('*.json'))]"):
+        'Preserved experiment test loads its Task Facts fixture families for evaluator assertions, not Core governed documents',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "self.assertEqual(len(json.loads(result.stdout)['results']), 66)"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "self.assertEqual(json.loads(result.stdout), {'results': [e.unbound('JSON_PARSE_ERROR')]})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs', "if(!closed)fail('JSON_PARSE_ERROR');try{return JSON.parse(s.slice(start,i));}catch{fail('JSON_PARSE_ERROR');}"):
+        'Inside preserved Task Facts Node strict parser: unescapes one delimited string token; outer parser enforces frozen duplicate-key/number rules',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs', "const schema=JSON.parse(fs.readFileSync(new URL('./schemas/task-facts.schema.json',import.meta.url),'utf8'));"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/test.mjs', "const dir=fs.mkdtempSync(new URL('./cli-test-',import.meta.url));try{const good=path.join(dir,'good.json'),bad=path.join(dir,'bad.json');fs.writeFileSync(good,JSON.stringify(family(setup())));fs.writeFileSync(bad,'[1.0,NaN]');const cli=fileURLToPath(new URL('./evaluate.mjs',import.meta.url));let run=spawnSync(process.execPath,[cli,good],{encoding:'utf8'});assert.equal(run.status,0);assert.equal(JSON.parse(run.stdout).results[0].outcome,'APPLIES');run=spawnSync(process.execPath,[cli,bad,good],{encoding:'utf8'});assert.equal(run.status,2);const r=JSON.parse(run.stdout).results;assert.equal(r.length,2);assert.equal(r[0].reason,'JSON_PARSE_ERROR');assert.equal(r[0].snapshotHash,null);assert.equal(r[1].outcome,'APPLIES');}finally{fs.rmSync(dir,{recursive:true});}"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py', "SCHEMA = json.loads(Path(__file__).with_name('task-facts.schema.json').read_text())"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py', 'result = json.loads(text, object_pairs_hook=pairs, parse_constant=constant, parse_int=integer)'):
+        'Preserved Task Facts evaluator strict raw-input parser with duplicate-key and number checks; implements frozen parse/TFJ-0.1 ordering, not the Core governed-reader contract',
+    ('reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/test_evaluate.py', "rows=json.loads(completed.stdout)['results'];self.assertEqual(len(rows),2);self.assertEqual(rows[0]['outcome'],'APPLIES');self.assertEqual(rows[1],e.unbound('INPUT_IO_ERROR'))"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py', "SCHEMA = json.loads((ROOT / 'schemas/task-facts.schema.json').read_text())"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/reference/evaluate.py', "return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=pairs,"):
+        'Preserved Task Facts evaluator strict raw-input parser with duplicate-key and number checks; implements frozen parse/TFJ-0.1 ordering, not the Core governed-reader contract',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "VECTORS = json.loads((ROOT / 'regressions/expected-results.json').read_text())['vectors']"):
+        'Preserved experiment test loads literal Task Facts regression expectations for ordered result assertions',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout)['results'],"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout), {'results': vector['expected']})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py', "FAMILIES = [json.loads(p.read_text()) for p in sorted((ROOT / 'fixtures').glob('*.json'))]"):
+        'Preserved experiment test loads its Task Facts fixture families for evaluator assertions, not Core governed documents',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py', "self.assertEqual(len(json.loads(result.stdout)['results']), 66)"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/interop/source/task-facts-experiment-v0.2/tests/test_experiment.py', "self.assertEqual(json.loads(result.stdout), {'results': [e.unbound('JSON_PARSE_ERROR')]})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/finalize_report.py', 'def read(p):return json.loads(p.read_text())'):
+        'Preserved historical research report formatter reads its frozen comparison/probe result files; these historical records do not establish current release conformance',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py', "results[suite,impl]=json.loads(p.stdout)['results'];metadata[suite+'-'+impl]={'command':cmd+list(map(str,paths)),'cwd':str(TMP),'exitCode':p.returncode,'files':[p.name for p in paths],'records':len(results[suite,impl])}"):
+        'Preserved research evaluation script decodes child Task Facts results envelope for fixture/regression/probe interoperability comparison; not Core governed input',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/evaluation-evidence/run_evaluation.py', "p=subprocess.run(cmd+[str(path)],cwd=TMP,env=env,capture_output=True);byname[path.stem][impl]=json.loads(p.stdout)['results']"):
+        'Preserved research evaluation script decodes child Task Facts results envelope for fixture/regression/probe interoperability comparison; not Core governed input',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py', "SCHEMA = json.loads((ROOT / 'schemas/task-facts.schema.json').read_text())"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/reference/evaluate.py', "return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=pairs,"):
+        'Preserved Task Facts evaluator strict raw-input parser with duplicate-key and number checks; implements frozen parse/TFJ-0.1 ordering, not the Core governed-reader contract',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "VECTORS = json.loads((ROOT / 'regressions/expected-results.json').read_text())['vectors']"):
+        'Preserved experiment test loads literal Task Facts regression expectations for ordered result assertions',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout)['results'],"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout), {'results': vector['expected']})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "FAMILIES = [json.loads(p.read_text()) for p in sorted((ROOT / 'fixtures').glob('*.json'))]"):
+        'Preserved experiment test loads its Task Facts fixture families for evaluator assertions, not Core governed documents',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "self.assertEqual(len(json.loads(result.stdout)['results']), 66)"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/frozen-contract/tests/test_experiment.py', "self.assertEqual(json.loads(result.stdout), {'results': [e.unbound('JSON_PARSE_ERROR')]})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/evaluate.mjs', "if(!closed)fail('JSON_PARSE_ERROR');try{return JSON.parse(s.slice(start,i));}catch{fail('JSON_PARSE_ERROR');}"):
+        'Inside preserved Task Facts Node strict parser: unescapes one delimited string token; outer parser enforces frozen duplicate-key/number rules',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/evaluate.mjs', "const schema=JSON.parse(fs.readFileSync(new URL('./schemas/task-facts.schema.json',import.meta.url),'utf8'));"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-node/test.mjs', "const dir=fs.mkdtempSync(new URL('./cli-test-',import.meta.url));try{const good=path.join(dir,'good.json'),bad=path.join(dir,'bad.json');fs.writeFileSync(good,JSON.stringify(family(setup())));fs.writeFileSync(bad,'[1.0,NaN]');const cli=fileURLToPath(new URL('./evaluate.mjs',import.meta.url));let run=spawnSync(process.execPath,[cli,good],{encoding:'utf8'});assert.equal(run.status,0);assert.equal(JSON.parse(run.stdout).results[0].outcome,'APPLIES');run=spawnSync(process.execPath,[cli,bad,good],{encoding:'utf8'});assert.equal(run.status,2);const r=JSON.parse(run.stdout).results;assert.equal(r.length,2);assert.equal(r[0].reason,'JSON_PARSE_ERROR');assert.equal(r[0].snapshotHash,null);assert.equal(r[1].outcome,'APPLIES');}finally{fs.rmSync(dir,{recursive:true});}"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py', "SCHEMA = json.loads(Path(__file__).with_name('task-facts.schema.json').read_text())"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/evaluate.py', 'result = json.loads(text, object_pairs_hook=pairs, parse_constant=constant, parse_int=integer)'):
+        'Preserved Task Facts evaluator strict raw-input parser with duplicate-key and number checks; implements frozen parse/TFJ-0.1 ordering, not the Core governed-reader contract',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/cycles/cycle-1/implementation-python/test_evaluate.py', "rows=json.loads(completed.stdout)['results'];self.assertEqual(len(rows),2);self.assertEqual(rows[0]['outcome'],'APPLIES');self.assertEqual(rows[1],e.unbound('INPUT_IO_ERROR'))"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py', "SCHEMA = json.loads((ROOT / 'schemas/task-facts.schema.json').read_text())"):
+        'JSON Schema contract for Task Facts validation; validated against, not a governed payload or Core canonical value',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/reference/evaluate.py', "return json.loads(Path(path).read_text(encoding='utf-8'), object_pairs_hook=pairs,"):
+        'Preserved Task Facts evaluator strict raw-input parser with duplicate-key and number checks; implements frozen parse/TFJ-0.1 ordering, not the Core governed-reader contract',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "VECTORS = json.loads((ROOT / 'regressions/expected-results.json').read_text())['vectors']"):
+        'Preserved experiment test loads literal Task Facts regression expectations for ordered result assertions',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout)['results'],"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_contract_v02.py', "self.assertEqual(json.loads(result.stdout), {'results': vector['expected']})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py', "FAMILIES = [json.loads(p.read_text()) for p in sorted((ROOT / 'fixtures').glob('*.json'))]"):
+        'Preserved experiment test loads its Task Facts fixture families for evaluator assertions, not Core governed documents',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py', "expected = json.loads((ROOT / 'expected-results.json').read_text())['results']"):
+        'Preserved experiment test loads literal Task Facts fixture expected records, not release claims or Core documents',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py', "manifest = json.loads((ROOT / 'PACKAGE-MANIFEST.json').read_text())"):
+        'Preserved experiment test reads its historical experiment PACKAGE-MANIFEST to check original fixture/package inventory; not the active release manifest',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py', "self.assertEqual(len(json.loads(result.stdout)['results']), 66)"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/evidence/interop-run/source/task-facts-experiment-v0.2/tests/test_experiment.py', "self.assertEqual(json.loads(result.stdout), {'results': [e.unbound('JSON_PARSE_ERROR')]})"):
+        'Preserved evaluator CLI test decodes its child Task Facts results envelope to assert outcomes, bound/unbound records and exit protocol; not a Core governed document',
+    ('reference/task-facts/1.0/evidence/ratification/reports/verify_integrity.py', 'expected = json.loads(record.read_text())'):
+        'Preserved ratification integrity script reads original historical raw-file inventory records for byte preservation, not active release metadata',
+    ('reference/task-facts/1.0/tests/test_runner.py', "rows=json.loads(self.payload())['results']"):
+        'Task Facts protocol fault test parses its own synthetic payload solely to mutate ordered result records; reads no external governed document',
+})
+
+
+# Explicit layout projection of reviewed historical audit readers only.
+from systemic_surface import HISTORICAL_AUDIT_ONLY_SOURCES, PUBLIC_ARCHIVE_LAYOUT
+if PUBLIC_ARCHIVE_LAYOUT:
+    RAW_PARSER_ALLOWLIST = {key: value for key, value in RAW_PARSER_ALLOWLIST.items()
+                            if key[0] not in HISTORICAL_AUDIT_ONLY_SOURCES}
 
 
 def test_a1_no_module_reads_a_governed_document_with_a_raw_parser():

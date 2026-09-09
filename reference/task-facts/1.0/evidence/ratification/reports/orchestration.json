@@ -1,0 +1,48 @@
+{
+  "workflow": "OBDS-TASK-FACTS-PROPOSAL-RATIFICATION-KIT-v1",
+  "maxCycles": 2,
+  "noGemini": true,
+  "isolation": "Fresh fork_turns=none subagents with bounded input allowlists; procedural shared filesystem isolation, not OS-enforced.",
+  "roles": [
+    {
+      "role": "author",
+      "agent": "/root/proposal_author_v1",
+      "candidate": "proposal/candidate-v1",
+      "context": "none"
+    },
+    {
+      "role": "semantics reviewer",
+      "agent": "/root/semantics_review_v1",
+      "candidate": "proposal/candidate-v1",
+      "context": "none"
+    },
+    {
+      "role": "conformance reviewer",
+      "agent": "/root/conformance_review_v1",
+      "candidate": "proposal/candidate-v1",
+      "context": "none"
+    },
+    {
+      "role": "ratifier",
+      "agent": "/root/ratifier_v1",
+      "candidate": "proposal/candidate-v1",
+      "context": "none"
+    }
+  ],
+  "evidenceVerification": "Passed raw inventories and manifests; unchanged copied executables reproduce all 178 records per implementation and 57 source tests.",
+  "obdsModified": false,
+  "released": false,
+  "cycle1Freeze": {
+    "inventorySha256": "a9468438d4aba8531829cd5c03355d0ead2a263aec17b692c350d4e161b0edf1",
+    "manifestSha256": "95877c7effb1fc3f42ef1b904ab955160c42ad7afeb4cece18dff79fc539ef94",
+    "manifestVerified": true
+  },
+  "cyclesUsed": 1,
+  "reviewVerdicts": {
+    "semantics": "APPROVE WITH NON-BLOCKING FINDINGS",
+    "conformance": "APPROVE WITH NON-BLOCKING FINDINGS"
+  },
+  "ratifierVerdict": "RATIFY WITH NON-BLOCKING FINDINGS",
+  "finalStatus": "RATIFIED WITH NON-BLOCKING FINDINGS",
+  "ratifierReportSha256": "b5a62adcc95e2194ca9bd695c7d68ff7261e3be2168db9855803dfebdabdea76"
+}

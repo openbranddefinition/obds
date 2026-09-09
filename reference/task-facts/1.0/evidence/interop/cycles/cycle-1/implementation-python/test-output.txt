@@ -1,0 +1,21 @@
+test_association (test_evaluate.Tests.test_association) ... ok
+test_bound_bad_snapshot (test_evaluate.Tests.test_bound_bad_snapshot) ... ok
+test_canonical (test_evaluate.Tests.test_canonical) ... ok
+test_cli_batch (test_evaluate.Tests.test_cli_batch) ... ok
+test_condition_isolation (test_evaluate.Tests.test_condition_isolation) ... ok
+test_conservative_conjunction (test_evaluate.Tests.test_conservative_conjunction) ... ok
+test_duplicate_ids (test_evaluate.Tests.test_duplicate_ids) ... ok
+test_empty_absent_and_unknown (test_evaluate.Tests.test_empty_absent_and_unknown) ... ok
+test_hash_binding_and_evidence_tampering (test_evaluate.Tests.test_hash_binding_and_evidence_tampering) ... ok
+test_known_false_and_zero_present (test_evaluate.Tests.test_known_false_and_zero_present) ... ok
+test_layer_precedence (test_evaluate.Tests.test_layer_precedence) ... ok
+test_missing (test_evaluate.Tests.test_missing) ... ok
+test_routing_before_duplicates (test_evaluate.Tests.test_routing_before_duplicates) ... ok
+test_single_api_unbound (test_evaluate.Tests.test_single_api_unbound) ... ok
+test_temporal (test_evaluate.Tests.test_temporal) ... ok
+test_transport_precedence (test_evaluate.Tests.test_transport_precedence) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.037s
+
+OK

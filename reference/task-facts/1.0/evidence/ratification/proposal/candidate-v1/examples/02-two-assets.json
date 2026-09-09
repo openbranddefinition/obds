@@ -1,0 +1,476 @@
+{
+  "family": "02-two-assets",
+  "cases": [
+    {
+      "id": "assets-two-rights-unknown",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:assets-two-rights-unknown",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:322c466a10a0ebf0e3538e93bd878b5c98a1cc7626dd5027ec245fd4b8f67884",
+          "inputPackageHash": "sha256:009a351333a41adafdb9a98f7eb7d2aa4bebc196b2ef470b2f49d8da84ad4138"
+        },
+        "declarations": {
+          "assetsUsed": {
+            "type": "string-set"
+          },
+          "assetRights": {
+            "type": "association-set"
+          },
+          "portraitRightsStatus": {
+            "type": "string"
+          }
+        },
+        "facts": {
+          "assetsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "assetsUsed:0"
+            ],
+            "value": [
+              "portrait",
+              "trial-font"
+            ]
+          },
+          "assetRights": {
+            "state": "known",
+            "evidenceRefs": [
+              "assetRights:0"
+            ],
+            "value": [
+              [
+                "portrait",
+                "rights-portrait"
+              ],
+              [
+                "trial-font",
+                "rights-font"
+              ]
+            ]
+          },
+          "portraitRightsStatus": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "portraitRightsStatus:0"
+            ]
+          }
+        },
+        "evidence": {
+          "assetsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-two-rights-unknown:assetsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "assetsUsed",
+            "assertionHash": "sha256:7b50b8a2fd98d93fd2d6f01ef50f33338a09930a61a5e22384ce17f0c3c8407e",
+            "taskId": "task:assets-two-rights-unknown",
+            "artifactHash": "sha256:322c466a10a0ebf0e3538e93bd878b5c98a1cc7626dd5027ec245fd4b8f67884",
+            "inputPackageHash": "sha256:009a351333a41adafdb9a98f7eb7d2aa4bebc196b2ef470b2f49d8da84ad4138",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "assetRights:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-two-rights-unknown:assetRights:0",
+            "method": "fixture-attestation",
+            "fact": "assetRights",
+            "assertionHash": "sha256:493e021d06d90abb5dbdb7e0753605fefe192a95fe0e55d02dba6ff9390cb87c",
+            "taskId": "task:assets-two-rights-unknown",
+            "artifactHash": "sha256:322c466a10a0ebf0e3538e93bd878b5c98a1cc7626dd5027ec245fd4b8f67884",
+            "inputPackageHash": "sha256:009a351333a41adafdb9a98f7eb7d2aa4bebc196b2ef470b2f49d8da84ad4138",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "portraitRightsStatus:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-two-rights-unknown:portraitRightsStatus:0",
+            "method": "fixture-attestation",
+            "fact": "portraitRightsStatus",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:assets-two-rights-unknown",
+            "artifactHash": "sha256:322c466a10a0ebf0e3538e93bd878b5c98a1cc7626dd5027ec245fd4b8f67884",
+            "inputPackageHash": "sha256:009a351333a41adafdb9a98f7eb7d2aa4bebc196b2ef470b2f49d8da84ad4138",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:assets-two-rights-unknown",
+        "artifactHash": "sha256:322c466a10a0ebf0e3538e93bd878b5c98a1cc7626dd5027ec245fd4b8f67884",
+        "inputPackageHash": "sha256:009a351333a41adafdb9a98f7eb7d2aa4bebc196b2ef470b2f49d8da84ad4138",
+        "acceptedEvidence": {
+          "assetsUsed:0": "sha256:a8bbc50d661beb6adc9d54e3a7a55692f81f2468e05f7a4a6329d8cfbaebb89b",
+          "assetRights:0": "sha256:72dda4bd37eef76cc81d9876b7dbcb2feda1b829faeee4ed2765b173e5684337",
+          "portraitRightsStatus:0": "sha256:56a82914e6c8b109b2d7050903285988726da9a188871502be29f2623b353da7"
+        },
+        "snapshotHash": "sha256:86b6a7a650d8fbc85b434b19ea6952c3c66b5d494ccb6eeaf8b1a8b23cdc9ec7"
+      },
+      "conditions": [
+        {
+          "id": "portrait-rights-dependency",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "portrait"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.portrait"
+          ]
+        },
+        {
+          "id": "font-rights-dependency",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "trial-font"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.font"
+          ]
+        },
+        {
+          "id": "portrait-rights-associated",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "portrait"
+            },
+            {
+              "fact": "assetRights",
+              "op": "contains",
+              "value": [
+                "portrait",
+                "rights-portrait"
+              ]
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "portrait-rights-record",
+          "all": [
+            {
+              "fact": "portraitRightsStatus",
+              "op": "equals",
+              "value": "released"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "assets-font-only",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:assets-font-only",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:e4ea3d4d4417cdd376f2cb5026a7b15d2518b77819a6b34f9c6c419a76869ad2",
+          "inputPackageHash": "sha256:16248c811707c8626e8402111f54c374efb37418cd20520c0d0dca0257a02d7c"
+        },
+        "declarations": {
+          "assetsUsed": {
+            "type": "string-set"
+          },
+          "assetRights": {
+            "type": "association-set"
+          },
+          "portraitRightsStatus": {
+            "type": "string"
+          }
+        },
+        "facts": {
+          "assetsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "assetsUsed:0"
+            ],
+            "value": [
+              "trial-font"
+            ]
+          },
+          "assetRights": {
+            "state": "empty",
+            "evidenceRefs": [
+              "assetRights:0"
+            ]
+          },
+          "portraitRightsStatus": {
+            "state": "unknown",
+            "evidenceRefs": [
+              "portraitRightsStatus:0"
+            ]
+          }
+        },
+        "evidence": {
+          "assetsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-font-only:assetsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "assetsUsed",
+            "assertionHash": "sha256:4810cd4824edb9813b06a8639addefbdf4f02f49106dadac7a9f550fb7aaef3d",
+            "taskId": "task:assets-font-only",
+            "artifactHash": "sha256:e4ea3d4d4417cdd376f2cb5026a7b15d2518b77819a6b34f9c6c419a76869ad2",
+            "inputPackageHash": "sha256:16248c811707c8626e8402111f54c374efb37418cd20520c0d0dca0257a02d7c",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "assetRights:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-font-only:assetRights:0",
+            "method": "fixture-attestation",
+            "fact": "assetRights",
+            "assertionHash": "sha256:56ef94ec99d69a08e969e38d2900adbf141817fcb5e5a5c3069577687f4c1942",
+            "taskId": "task:assets-font-only",
+            "artifactHash": "sha256:e4ea3d4d4417cdd376f2cb5026a7b15d2518b77819a6b34f9c6c419a76869ad2",
+            "inputPackageHash": "sha256:16248c811707c8626e8402111f54c374efb37418cd20520c0d0dca0257a02d7c",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "portraitRightsStatus:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-font-only:portraitRightsStatus:0",
+            "method": "fixture-attestation",
+            "fact": "portraitRightsStatus",
+            "assertionHash": "sha256:f541413ebb09af03bdff97175eb38a6287051010326377c031b16ff6ed29a999",
+            "taskId": "task:assets-font-only",
+            "artifactHash": "sha256:e4ea3d4d4417cdd376f2cb5026a7b15d2518b77819a6b34f9c6c419a76869ad2",
+            "inputPackageHash": "sha256:16248c811707c8626e8402111f54c374efb37418cd20520c0d0dca0257a02d7c",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:assets-font-only",
+        "artifactHash": "sha256:e4ea3d4d4417cdd376f2cb5026a7b15d2518b77819a6b34f9c6c419a76869ad2",
+        "inputPackageHash": "sha256:16248c811707c8626e8402111f54c374efb37418cd20520c0d0dca0257a02d7c",
+        "acceptedEvidence": {
+          "assetsUsed:0": "sha256:53b3d57e3297518b4fc4f77c4ff4dfbed13b69d32ff8ba99bc46958bf90376a6",
+          "assetRights:0": "sha256:7a9cbc4ce4d0aac318a885ebac989e83361517138c9d3759823e403635081d59",
+          "portraitRightsStatus:0": "sha256:b5c9cc5523189cae4f21f0e1312ad20a9d8a556d318c89977a79ee55a06385cf"
+        },
+        "snapshotHash": "sha256:a632ad2f8e6ef06fe74007f6e29e65fbba048fe62d24e08ec4c36b5bde623981"
+      },
+      "conditions": [
+        {
+          "id": "portrait-rights-dependency",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "portrait"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.portrait"
+          ]
+        },
+        {
+          "id": "font-rights-dependency",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "trial-font"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.font"
+          ]
+        },
+        {
+          "id": "portrait-rights-associated",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "portrait"
+            },
+            {
+              "fact": "assetRights",
+              "op": "contains",
+              "value": [
+                "portrait",
+                "rights-portrait"
+              ]
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    },
+    {
+      "id": "assets-wrong-rights",
+      "snapshot": {
+        "contractVersion": "0.1",
+        "task": {
+          "id": "task:assets-wrong-rights",
+          "action": "inspect-draft",
+          "artifactHash": "sha256:f55280b3d3fc589db76bdf1c3594878e5326e1200742ebd578d6dbc3b300a6e6",
+          "inputPackageHash": "sha256:38d15c67c3971688a0b15cd82c7b2dda2afc7ab98d15e45ae7d5237b9ed91c94"
+        },
+        "declarations": {
+          "assetsUsed": {
+            "type": "string-set"
+          },
+          "assetRights": {
+            "type": "association-set"
+          },
+          "portraitRightsStatus": {
+            "type": "string"
+          }
+        },
+        "facts": {
+          "assetsUsed": {
+            "state": "known",
+            "evidenceRefs": [
+              "assetsUsed:0"
+            ],
+            "value": [
+              "portrait",
+              "trial-font"
+            ]
+          },
+          "assetRights": {
+            "state": "known",
+            "evidenceRefs": [
+              "assetRights:0"
+            ],
+            "value": [
+              [
+                "portrait",
+                "rights-font"
+              ],
+              [
+                "trial-font",
+                "rights-portrait"
+              ]
+            ]
+          },
+          "portraitRightsStatus": {
+            "state": "known",
+            "evidenceRefs": [
+              "portraitRightsStatus:0"
+            ],
+            "value": "released"
+          }
+        },
+        "evidence": {
+          "assetsUsed:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-wrong-rights:assetsUsed:0",
+            "method": "fixture-attestation",
+            "fact": "assetsUsed",
+            "assertionHash": "sha256:7b50b8a2fd98d93fd2d6f01ef50f33338a09930a61a5e22384ce17f0c3c8407e",
+            "taskId": "task:assets-wrong-rights",
+            "artifactHash": "sha256:f55280b3d3fc589db76bdf1c3594878e5326e1200742ebd578d6dbc3b300a6e6",
+            "inputPackageHash": "sha256:38d15c67c3971688a0b15cd82c7b2dda2afc7ab98d15e45ae7d5237b9ed91c94",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "assetRights:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-wrong-rights:assetRights:0",
+            "method": "fixture-attestation",
+            "fact": "assetRights",
+            "assertionHash": "sha256:3f946c51b364d99146d343cb8cbff0b6c8bf66d3f18313191b6de215ab8c1795",
+            "taskId": "task:assets-wrong-rights",
+            "artifactHash": "sha256:f55280b3d3fc589db76bdf1c3594878e5326e1200742ebd578d6dbc3b300a6e6",
+            "inputPackageHash": "sha256:38d15c67c3971688a0b15cd82c7b2dda2afc7ab98d15e45ae7d5237b9ed91c94",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          },
+          "portraitRightsStatus:0": {
+            "supplier": "synthetic-output-reviewer",
+            "sourceRef": "fixture:assets-wrong-rights:portraitRightsStatus:0",
+            "method": "fixture-attestation",
+            "fact": "portraitRightsStatus",
+            "assertionHash": "sha256:6489a562201144229f61cba9b3e27eb2a2d27c0835adb6d9908edbf3c3e9c13c",
+            "taskId": "task:assets-wrong-rights",
+            "artifactHash": "sha256:f55280b3d3fc589db76bdf1c3594878e5326e1200742ebd578d6dbc3b300a6e6",
+            "inputPackageHash": "sha256:38d15c67c3971688a0b15cd82c7b2dda2afc7ab98d15e45ae7d5237b9ed91c94",
+            "status": "verified",
+            "verifier": "fixture-reviewer"
+          }
+        }
+      },
+      "verificationContext": {
+        "taskId": "task:assets-wrong-rights",
+        "artifactHash": "sha256:f55280b3d3fc589db76bdf1c3594878e5326e1200742ebd578d6dbc3b300a6e6",
+        "inputPackageHash": "sha256:38d15c67c3971688a0b15cd82c7b2dda2afc7ab98d15e45ae7d5237b9ed91c94",
+        "acceptedEvidence": {
+          "assetsUsed:0": "sha256:99e755ec13e395a4d56fccb5497fa2ccc725a9c6839574520c88c859340f5492",
+          "assetRights:0": "sha256:ff213f31445fe6be0cb22a87495147792bdf53f13a2c6ee86cfee74b466c9962",
+          "portraitRightsStatus:0": "sha256:6426453f60607a2d0875a3a4a138c7a6f1feb36121c2cf60d6da512c2908fed6"
+        },
+        "snapshotHash": "sha256:c30cfae918d06be25e7308c962278037ea249cf2794e77c27a7389bf6cdece52"
+      },
+      "conditions": [
+        {
+          "id": "portrait-rights-dependency",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "portrait"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.portrait"
+          ]
+        },
+        {
+          "id": "font-rights-dependency",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "trial-font"
+            }
+          ],
+          "requiresDefined": [
+            "experimental.rights.font"
+          ]
+        },
+        {
+          "id": "portrait-rights-associated",
+          "all": [
+            {
+              "fact": "assetsUsed",
+              "op": "contains",
+              "value": "portrait"
+            },
+            {
+              "fact": "assetRights",
+              "op": "contains",
+              "value": [
+                "portrait",
+                "rights-portrait"
+              ]
+            }
+          ],
+          "requiresDefined": []
+        },
+        {
+          "id": "portrait-rights-record",
+          "all": [
+            {
+              "fact": "portraitRightsStatus",
+              "op": "equals",
+              "value": "released"
+            }
+          ],
+          "requiresDefined": []
+        }
+      ]
+    }
+  ]
+}
