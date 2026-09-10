@@ -1,0 +1,18 @@
+{
+  "kind": "obds-task-facts-schema-index",
+  "release": "4.1.2",
+  "capability": "task-facts",
+  "capabilityVersion": "1.0",
+  "payloadVersion": "0.1",
+  "canonicalization": "TFJ-0.1",
+  "adoption": "reference/task-facts/1.0/ADOPTION.md",
+  "schemas": [
+    {
+      "id": "urn:task-facts-experiment:0.2:schema",
+      "sha256": "acaa7a2157e9e5788cefd9f7b96d4f04e18d7b263119016c872ae316646d7646",
+      "localPath": "reference/task-facts/1.0/schemas/task-facts.schema.json",
+      "contractLocalPath": "reference/task-facts/1.0/contract/schemas/task-facts.schema.json",
+      "retrievalUrl": "https://openbranddefinition.org/reference/task-facts/1.0/schemas/task-facts.schema.json"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Focused final-closure boundary regressions; synthetic fixtures are not reports."""
+import hashlib
 import importlib.util
 import io
 import json
@@ -29,13 +30,13 @@ def main():
 
     with tempfile.TemporaryDirectory(prefix="obds-final-closure-") as directory:
         root = Path(directory)
-        for value in ("4.1.1\n", "4.1.0\n", "4.1.2\n", "", "4.1.1 extra\n"):
+        for value in ("4.1.2\n", "4.1.1\n", "4.1.3\n", "", "4.1.2 extra\n"):
             (root / "VERSION").write_text(value)
-            trial("repository VERSION " + repr(value), lambda: gate.verify_repository_version(root, "repository"), value != "4.1.1\n")
+            trial("repository VERSION " + repr(value), lambda: gate.verify_repository_version(root, "repository"), value != "4.1.2\n")
         (root / "VERSION").unlink()
         trial("missing repository VERSION", lambda: gate.verify_repository_version(root, "repository"), True)
         trial("historical flat layout without VERSION", lambda: gate.verify_repository_version(root, "extracted-archive"))
-        (root / "VERSION").write_text("4.1.0\n")
+        (root / "VERSION").write_text("4.1.1\n")
         trial("historical flat layout retains old VERSION", lambda: gate.verify_repository_version(root, "extracted-archive"))
         for base in gate.NEUTRAL_WORKSPACES:
             trial("neutral workspace " + base, lambda: gate.verify_public_bytes((base + "/reference/input.json").encode(), "synthetic fixture"))
@@ -49,10 +50,10 @@ def main():
         with zipfile.ZipFile(stream, "w") as archive:
             archive.writestr("fixture.txt", private)
         trial("private path nested ZIP", lambda: gate.verify_public_bytes(stream.getvalue(), "synthetic nested ZIP"), True)
-        for name in ("OBDS-4.1.1-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.1-TASK-FACTS-CONFORMANCE.json"):
+        for name in ("OBDS-4.1.2-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.2-TASK-FACTS-CONFORMANCE.json"):
             (root / name).write_text(json.dumps({"syntheticProvenance": "/workspace/obds-release/reference/input.json"}))
         trial("neutral synthetic evidence provenance", lambda: gate.verify_fresh_provenance(root))
-        (root / "OBDS-4.1.1-TASK-FACTS-CONFORMANCE.json").write_text(json.dumps({"syntheticProvenance": "/opt/personal-build/input.json"}))
+        (root / "OBDS-4.1.2-TASK-FACTS-CONFORMANCE.json").write_text(json.dumps({"syntheticProvenance": "/opt/personal-build/input.json"}))
         trial("non-neutral synthetic evidence provenance", lambda: gate.verify_fresh_provenance(root), True)
         tf = ROOT / "reference/task-facts/1.0"
         public = gate.load(tf / "PUBLIC-EVIDENCE-MANIFEST.json")
@@ -181,26 +182,93 @@ def main():
         cases.append({"name": "historical local paths preserved and non-public", "passed": True, "expectedRejection": False})
 
         # ---- Prior-release artefacts ----------------------------------------
-        # A published release is immutable, so the working tree keeps 4.1.0's own
+        # A published release is immutable, so the working tree keeps 4.1.1's own
         # documents exactly as published. The scan follows distribution, not the
         # working tree, and the exemption is scoped by version and to root
         # documents only.
-        for name in ("OBDS-4.1.0-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.0-CHANGELOG.md",
-                     "OBDS-4.1.0.md", "OBDS-PUBLIC-README-4.1.0.md", "OBDS-3.0.0-TEST-RESULT.json"):
+        for name in ("OBDS-4.1.1-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.1-CHANGELOG.md",
+                     "OBDS-4.1.1.md", "OBDS-PUBLIC-README-4.1.1.md", "OBDS-3.0.0-TEST-RESULT.json"):
             assert gate.prior_release_artifact(name), name
-        for name in ("OBDS-4.1.1-TEST-RESULT.json", "OBDS-4.1.1.md", "OBDS-PUBLIC-README-4.1.1.md",
+        for name in ("OBDS-4.1.2-TEST-RESULT.json", "OBDS-4.1.2.md", "OBDS-PUBLIC-README-4.1.2.md",
                      "PACKAGE-MANIFEST.json", "README.md", "reference/release-gate.py",
-                     "spec/4.1.0/OBDS-4.1.0.md", "reference/task-facts/1.0/OBDS-4.1.0-note.md"):
+                     "spec/4.1.1/OBDS-4.1.1.md", "reference/task-facts/1.0/OBDS-4.1.1-note.md"):
             assert not gate.prior_release_artifact(name), name
         cases.append({"name": "prior-release exemption is version-scoped and root-only", "passed": True, "expectedRejection": False})
 
         # The rule itself is unchanged for everything this release distributes.
-        trial("current-release member private path", lambda: gate.verify_public_bytes(private, "OBDS-4.1.1-TEST-RESULT.json"), True)
-        historical_root = ROOT / "OBDS-4.1.0-CHANGELOG.md"
+        trial("current-release member private path", lambda: gate.verify_public_bytes(private, "OBDS-4.1.2-TEST-RESULT.json"), True)
+        historical_root = ROOT / "OBDS-4.1.1-CHANGELOG.md"
         if historical_root.is_file():
             gate.verify_public_bytes(historical_root.read_bytes(), historical_root.name)
             assert gate.prior_release_artifact(historical_root.name)
-            cases.append({"name": "published 4.1.0 artefact exempt and unchanged", "passed": True, "expectedRejection": False})
+            cases.append({"name": "published 4.1.1 artefact exempt and unchanged", "passed": True, "expectedRejection": False})
+        # ---- deploy smoke RC inventory path ---------------------------------
+        # 4.1.1 shipped tools/deploy-smoke-test.py with "release-work/4.1.0/"
+        # written into it, so a correct 4.1.1 deployment failed its own smoke test
+        # against the previous release's frozen bytes. The path now comes from the
+        # gate, which owns the current release. These cases prove it stays that way.
+        # The synthetic gate below states its inventory as a Python literal and
+        # records the path it was asked for, so the fixture parses no document and
+        # the proof is the requested path itself rather than an inference from it.
+        import re as _re
+        smoke_spec = importlib.util.spec_from_file_location(
+            "deploy_smoke_closure", ROOT / "tools/deploy-smoke-test.py")
+        smoke = importlib.util.module_from_spec(smoke_spec)
+        smoke_spec.loader.exec_module(smoke)
+
+        smoke_source = (ROOT / "tools/deploy-smoke-test.py").read_text(encoding="utf-8")
+        lookup = [line for line in smoke_source.splitlines() if "RC-INVENTORY.json" in line]
+        assert len(lookup) == 1, lookup
+        assert "gate.EXPECTED_RELEASE" in lookup[0], lookup[0]
+        assert not _re.search(r"\d+\.\d+\.\d+", lookup[0]), lookup[0]
+        cases.append({"name": "deploy smoke resolves the RC inventory from the gate, with no release of its own",
+                      "passed": True, "expectedRejection": False})
+
+        assert len(smoke.MUST_BE_ABSENT) == 34, len(smoke.MUST_BE_ABSENT)
+        assert len(smoke.MUST_BE_PRESENT) == 24, len(smoke.MUST_BE_PRESENT)
+        assert len({path for path, _ in smoke.MUST_BE_ABSENT}) == 34
+        assert len(set(smoke.MUST_BE_PRESENT)) == 24
+        cases.append({"name": "deploy smoke keeps 34 absence and 24 presence assertions",
+                      "passed": True, "expectedRejection": False})
+
+        marker = b"synthetic publication surface"
+        digest = hashlib.sha256(marker).hexdigest()
+        for synthetic in ("4.1.2", "9.9.9"):
+            fixture = root / ("smoke-" + synthetic)
+            (fixture / "reference").mkdir(parents=True)
+            asked = fixture / "asked-for.txt"
+            url = "/marker-" + synthetic
+            (fixture / "reference/release-gate.py").write_text(
+                f"EXPECTED_RELEASE = {synthetic!r}\n"
+                f"INVENTORY = {{'publication': [{{'path': 'marker.txt', 'url': {url!r},"
+                f" 'status': 200, 'sha256': {digest!r}}}]}}\n"
+                f"def load(path):\n"
+                f"    open({str(asked)!r}, 'a', encoding='utf-8').write(str(path) + '\\n')\n"
+                f"    return INVENTORY\n"
+                f"def verify_publication(root, inventory=None):\n    return True\n",
+                encoding="utf-8")
+            (fixture / "404.html").write_bytes(b"synthetic 404")
+
+            def fetch(target, _url=url):
+                return (200, marker) if target.endswith(_url) else (404, b"synthetic 404")
+
+            checked = smoke.verify_exact_publication("https://example.invalid", root=fixture, fetch=fetch)
+            assert checked == [url], (synthetic, checked)
+            requested = asked.read_text(encoding="utf-8").split()
+            expected_path = str(fixture / ("release-work/" + synthetic) / "RC-INVENTORY.json")
+            assert requested == [expected_path], (synthetic, requested)
+            cases.append({"name": "deploy smoke asks for release-work/" + synthetic + "/RC-INVENTORY.json",
+                          "passed": True, "expectedRejection": False})
+
+        # the current release must actually be the one the gate declares
+        assert gate.EXPECTED_RELEASE == (ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        real = [line for line in
+                (ROOT / f"release-work/{gate.EXPECTED_RELEASE}/RC-INVENTORY.json").read_text(encoding="utf-8").splitlines()
+                if '"url"' in line]
+        assert real, "current-release RC inventory is empty"
+        cases.append({"name": "current-release RC inventory exists at the derived path",
+                      "passed": True, "expectedRejection": False})
+
     print(json.dumps({"kind": "final-closure-focused-regressions", "passed": True, "count": len(cases), "cases": cases}, indent=2))
     return 0
 

@@ -121,25 +121,25 @@
     <priority>0.4</priority>
   </url>
 <url>
-    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2.md</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 <url>
-    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-MIGRATION.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-MIGRATION.md</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 <url>
-    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-CHANGELOG.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-CHANGELOG.md</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
 <url>
-    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md</loc>
+    <loc>https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -165,6 +165,30 @@
 <url>
     <loc>https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md</loc>
     <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+<url>
+    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1.md</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+<url>
+    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-MIGRATION.md</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+<url>
+    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-CHANGELOG.md</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+<url>
+    <loc>https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md</loc>
+    <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

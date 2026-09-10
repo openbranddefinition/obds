@@ -1,7 +1,7 @@
 {
   "kind": "obds-schema-index",
-  "note": "`schemas` and `valueSchemas` are the frozen OBDS 1.0.0 contract surface, unchanged since 1.0.0. `versionedSchemas` carries the contracts published beside it at their own version. Informative optional Task Facts retrieval: OBDS-4.1.1-TASK-FACTS-SCHEMA-INDEX.json.",
-  "release": "4.1.1",
+  "note": "`schemas` and `valueSchemas` are the frozen OBDS 1.0.0 contract surface, unchanged since 1.0.0. `versionedSchemas` carries the contracts published beside it at their own version. Informative optional Task Facts retrieval: OBDS-4.1.2-TASK-FACTS-SCHEMA-INDEX.json.",
+  "release": "4.1.2",
   "schemaContractVersion": "1.0.0",
   "schemaVersion": "1.0.0",
   "schemas": [

@@ -124,8 +124,8 @@ MUST_BE_PRESENT = [
     # files under evidence/ this release publishes; .vercelignore re-includes
     # exactly them out of 485. Asserted here so an over-broad exclusion fails
     # loudly instead of quietly dropping a published dependency. The schema is
-    # the address OBDS-4.1.0-TASK-FACTS-SCHEMA-INDEX.json declares as its
-    # retrieval URL, which reference/release-gate.py pins.
+    # the address the Task Facts schema index declares as its retrieval URL,
+    # which reference/release-gate.py pins.
     "/reference/task-facts/1.0/PUBLIC-EVIDENCE-MANIFEST.json",
     "/reference/task-facts/1.0/schemas/task-facts.schema.json",
     "/reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py",
@@ -156,7 +156,12 @@ def verify_exact_publication(base, root=None, fetch=None):
     root = root or Path(__file__).resolve().parents[1]
     spec = importlib.util.spec_from_file_location("release_gate_deploy", root / "reference/release-gate.py")
     gate = importlib.util.module_from_spec(spec); spec.loader.exec_module(gate)
-    inventory = gate.load(root / "release-work/4.1.0/RC-INVENTORY.json")
+    # One authoritative current-release value, the gate's. 4.1.1 shipped this
+    # path with 4.1.0 written into it a second time, so the smoke test compared
+    # the live surface against the previous release's frozen bytes and failed on
+    # a correct deployment. A version number that appears twice is a version
+    # number that can disagree with itself.
+    inventory = gate.load(root / f"release-work/{gate.EXPECTED_RELEASE}/RC-INVENTORY.json")
     gate.verify_publication(root, inventory)
     if fetch is None:
         def fetch(url):

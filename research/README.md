@@ -1,6 +1,6 @@
 # OBDS Research
 
-Open Brand Definition Specification, current release 4.1.1. This directory is the public
+Open Brand Definition Specification, current release 4.1.2. This directory is the public
 research surface: the evidence, and the boundary of the evidence. It is not a
 second specification. Nothing here changes a normative artefact.
 
@@ -99,7 +99,7 @@ normative artefact; it links to them.
 
 Current normative specification:
 
-- [`OBDS 4.1.1`](../spec/4.1.1/OBDS-4.1.1.md)
+- [`OBDS 4.1.2`](../spec/4.1.2/OBDS-4.1.2.md)
 
 Current schemas and implementation:
 

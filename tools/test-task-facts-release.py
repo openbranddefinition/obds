@@ -121,52 +121,52 @@ def verify_publication_occurrences():
         homepage = 'index.html'
         for kind in ['SoftwareSourceCode', 'TechArticle']:
             def stale(document, kind=kind):
-                next(node for node in document['@graph'] if node.get('@type') == kind)['version'] = '4.1.0'
+                next(node for node in document['@graph'] if node.get('@type') == kind)['version'] = '4.1.1'
             trial(kind + ' stale, other current', homepage, structured(homepage, stale))
             def missing(document, kind=kind):
                 del next(node for node in document['@graph'] if node.get('@type') == kind)['version']
             trial(kind + ' version missing', homepage, structured(homepage, missing))
         def stale_download(document):
-            next(node for node in document['@graph'] if node.get('@type') == 'SoftwareSourceCode')['url'] = 'https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-FINAL.zip'
+            next(node for node in document['@graph'] if node.get('@type') == 'SoftwareSourceCode')['url'] = 'https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-FINAL.zip'
         trial('download stale with current versions', homepage, structured(homepage, stale_download))
         trial('homepage reordered keys and graph', homepage,
               structured(homepage, lambda document: document['@graph'].reverse()), accepted=True)
         companion = 'what-is-obds/index.html'
         trial('companion reordered keys', companion, structured(companion, lambda document: None), accepted=True)
         trial('companion about stale', companion,
-              structured(companion, lambda document: document['about'].update(version='4.1.0')))
+              structured(companion, lambda document: document['about'].update(version='4.1.1')))
         trial('companion decoy current version cannot satisfy about', companion,
-              structured(companion, lambda document: (document['about'].update(version='4.1.0'), document.update(version='4.1.1'))))
+              structured(companion, lambda document: (document['about'].update(version='4.1.1'), document.update(version='4.1.2'))))
         for rel in [homepage, companion]:
             original = originals[rel]
             trial(rel + ' malformed JSON-LD', rel, original.replace('"@context":', '"@context" invalid:', 1))
             trial(rel + ' unterminated JSON-LD', rel, original.replace('</script>', '', 1))
-            trial(rel + ' duplicate JSON key', rel, original.replace('"version": "4.1.1"', '"version": "4.1.0", "version": "4.1.1"', 1))
+            trial(rel + ' duplicate JSON key', rel, original.replace('"version": "4.1.2"', '"version": "4.1.1", "version": "4.1.2"', 1))
             trial(rel + ' non-JSON constant', rel, original.replace('"@context":', '"invalid": NaN, "@context":', 1))
         def duplicate_identity(document):
             document['@graph'].append(dict(next(node for node in document['@graph'] if node.get('@type') == 'SoftwareSourceCode')))
         trial('duplicate semantic identity', homepage, structured(homepage, duplicate_identity))
         trial('duplicate identity in separate script', homepage,
-              originals[homepage].replace('</head>', '<script type="application/ld+json">{"@id":"https://openbranddefinition.org/#implementation","@type":"SoftwareSourceCode","version":"4.1.1"}</script></head>'))
-        status = '<div class="status">OBDS / 4.1.1 stable</div>'
-        stale_status = originals[homepage].replace(status, status.replace('4.1.1', '4.1.0'), 1)
+              originals[homepage].replace('</head>', '<script type="application/ld+json">{"@id":"https://openbranddefinition.org/#implementation","@type":"SoftwareSourceCode","version":"4.1.2"}</script></head>'))
+        status = '<div class="status">OBDS / 4.1.2 stable</div>'
+        stale_status = originals[homepage].replace(status, status.replace('4.1.2', '4.1.1'), 1)
         trial('stale status plus current comment decoy', homepage,
               stale_status.replace('</body>', '<!--' + status + '--></body>'))
         trial('stale status plus current element decoy', homepage,
               stale_status.replace('</body>', status + '</body>'))
         # This is the pre-existing explicitly historical footer sentence, not a
         # new whole-page historical exemption. The baseline retains it exactly.
-        assert '4.1.0' in originals['llms.txt']
-        trial('existing intentional 4.1.0 history remains valid', accepted=True)
-        current_line = 'Current release: 4.1.1 (stable, 10 September 2026)'
+        assert '4.1.1' in originals['llms.txt']
+        trial('existing intentional 4.1.1 history remains valid', accepted=True)
+        current_line = 'Current release: 4.1.2 (stable, 10 September 2026)'
         trial('llms stale declaration plus current copy in other section', 'llms.txt',
-              originals['llms.txt'].replace(current_line, current_line.replace('4.1.1', '4.1.0'), 1) + '\n' + current_line + '\n')
-        anchor = '<a href="/spec/4.1.1/OBDS-4.1.1.md">'
+              originals['llms.txt'].replace(current_line, current_line.replace('4.1.2', '4.1.1'), 1) + '\n' + current_line + '\n')
+        anchor = '<a href="/spec/4.1.2/OBDS-4.1.2.md">'
         positions = [match.start() for match in re.finditer(re.escape(anchor), originals[homepage])]
         assert len(positions) > 1
         for index, offset in enumerate(positions):
             original = originals[homepage]
-            replacement = original[:offset] + anchor.replace('4.1.1', '4.1.0') + original[offset + len(anchor):]
+            replacement = original[:offset] + anchor.replace('4.1.2', '4.1.1') + original[offset + len(anchor):]
             trial('repeated anchor occurrence ' + str(index), homepage, replacement)
     return results
 
@@ -226,7 +226,7 @@ def verify_repository_gate_closure():
         historical.write_bytes(historical.read_bytes() + b'\n')
         assert gate.retired_licensing_failures(site, [historical])
         records.append({'case': 'historical byte drift refused', 'passed': True})
-        for rel in ['OBDS-4.1.1-CHANGELOG.md', 'OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md',
+        for rel in ['OBDS-4.1.2-CHANGELOG.md', 'OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md',
                     'README.md', *gate.PUBLICATION_URLS]:
             target = site / rel
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -246,7 +246,7 @@ def verify_changelog_history():
     spec = importlib.util.spec_from_file_location('changelog_gate', ROOT / 'reference/release-gate.py')
     gate = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(gate)
-    name = 'OBDS-4.1.1-CHANGELOG.md'
+    name = 'OBDS-4.1.2-CHANGELOG.md'
     original = (ROOT / name).read_bytes()
     history = (ROOT / gate.HISTORICAL_CHANGELOG).read_bytes()
     assert original.endswith(history)
@@ -287,26 +287,26 @@ def verify_changelog_history():
             encoded = phrase.encode()
             trial('current section rejects ' + phrase, prefix + encoded + b'\n\n' + history, wording=True)
             trial('unclassified preamble rejects ' + phrase,
-                  prefix.replace(b'## 4.1.1', encoded + b'\n\n## 4.1.1', 1) + history, wording=True)
+                  prefix.replace(b'## 4.1.2', encoded + b'\n\n## 4.1.2', 1) + history, wording=True)
             trial('verified historical heading cannot shelter new ' + phrase,
                   prefix + history.replace(b'## 1.0.2\n', b'## 1.0.2\n' + encoded + b'\n', 1))
-            for rel in ['README.md', 'OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md', *gate.PUBLICATION_URLS]:
+            for rel in ['README.md', 'OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md', *gate.PUBLICATION_URLS]:
                 base = (ROOT / rel).read_bytes()
                 trial(rel + ' intact current surface rejects ' + phrase,
                       base + b'\n' + encoded + b'\n', rel=rel, wording=True)
                 (site / rel).write_bytes(base)
-        for heading in [b'', b'## 4.1.1\n\n## 4.1.1', b'### 4.1.1', b'##4.1.1',
-                        b'## 4.1', b'## 4.1.1 trailing', b'## 4.1.1 ##', b' ## 4.1.1',
-                        b'## 4.1.0', b'## 4.2.0', b'4.1.1\n------']:
+        for heading in [b'', b'## 4.1.2\n\n## 4.1.2', b'### 4.1.2', b'##4.1.2',
+                        b'## 4.1', b'## 4.1.2 trailing', b'## 4.1.2 ##', b' ## 4.1.2',
+                        b'## 4.1.1', b'## 4.2.0', b'4.1.2\n------']:
             trial('missing/malformed/conflicting current heading ' + repr(heading),
-                  prefix.replace(b'## 4.1.1', heading, 1) + history)
+                  prefix.replace(b'## 4.1.2', heading, 1) + history)
         for label, mutation in [
             ('duplicate document title', prefix + b'# OBDS changelog\n\n' + history),
             ('unknown historical heading before boundary', prefix + b'## 3.9.0\n\nFree Use\n\n' + history),
             ('non-version section before boundary', prefix + b'## History\n\nFree Use\n\n' + history),
             ('duplicate historical boundary', original + history),
             ('missing history', prefix),
-            ('malformed historical title', original.replace(b'# OBDS 4.1.0 -', b'## OBDS 4.1.0 -', 1)),
+            ('malformed historical title', original.replace(b'# OBDS 4.1.1 -', b'## OBDS 4.1.1 -', 1)),
             ('malformed historical version', original.replace(b'## 1.0.2\n', b'### 1.0.2\n', 1)),
             ('duplicate historical version', original.replace(b'## 1.0.2\n', b'## 1.0.2\n\n## 1.0.2\n', 1)),
             ('unrelated historical record altered', original.replace(b'## 3.0.3\n', b'## 3.0.3\nNew note\n', 1)),
@@ -365,11 +365,11 @@ def verify_licensing_test_source():
         # move the role to unknown bytes or to documentation in a tools folder.
         for rel in ['tools/test-other.py', 'tests/test-other.py', 'tools/README.md',
                     'tests/README.md', 'README.md', 'RELEASE-NOTES.md',
-                    'OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md', *gate.PUBLICATION_URLS]:
+                    'OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md', *gate.PUBLICATION_URLS]:
             trial('copied test source into ' + rel, rel, source)
         for retired in gate.RETIRED_LICENSING_WORDING:
             for rel in ['README.md', 'RELEASE-NOTES.md', 'tools/README.md', 'tests/README.md',
-                        'OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md', *gate.PUBLICATION_URLS]:
+                        'OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md', *gate.PUBLICATION_URLS]:
                 trial('moved payload into ' + rel + ': ' + retired, rel, retired.encode())
         original_registry = gate.NON_CLAIM_EXECUTABLE_SOURCES
         try:

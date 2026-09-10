@@ -1,3 +1,42 @@
+# OBDS changelog
+
+## 4.1.2
+
+10 September 2026.
+
+**Release-tooling release. PATCH.**
+
+OBDS 4.1.2 changes one line of behaviour in the release tooling and nothing
+else. No normative contract, no schema, no value schema, no Task Facts
+semantic, no governed hash, no conformance behaviour, no website copy. The
+1.0.0 contract surface stays frozen and every contract fingerprint is unchanged
+against 4.1.1.
+
+### What moved
+
+- `tools/deploy-smoke-test.py` looked up the frozen publication inventory at a
+  path with the release written into it: `release-work/4.1.0/RC-INVENTORY.json`.
+  4.1.1 moved the same pin inside `reference/release-gate.py` and left this one
+  behind, so a correct 4.1.1 deployment failed its own smoke test by comparing
+  the live surface against the previous release's frozen bytes. The path now
+  comes from `gate.EXPECTED_RELEASE`, which is where the current release is
+  already defined. A version number that appears twice is a version number that
+  can disagree with itself.
+
+- `tools/test-final-closure.py` gains five focused cases for that lookup: it
+  resolves from the gate, it carries no release of its own, it follows a
+  synthetic release value to that release's inventory, and it refuses a working
+  tree whose current-release inventory is missing. The 34 absence and 24
+  presence assertions of the smoke test are asserted unchanged.
+
+### What did not move
+
+No normative section, no schema, no Task Facts contract, fixture, vector, suite
+identity or evaluator behaviour, no TFJ or snapshot identity, no governed hash,
+no public page, no llms.txt content beyond the current and previous release
+identity. `spec/4.1.1/` and every earlier snapshot are byte-identical and their
+tags are unchanged.
+
 # OBDS 4.1.1 - Public surface
 
 ## 4.1.1
