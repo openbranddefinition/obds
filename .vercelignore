@@ -53,8 +53,8 @@ __pycache__/
 # Internal candidate evidence, never a public surface.
 release-work/
 
-# The non-public Task Facts audit store. `reference/` is served, so without
-# these lines the 485 historical research and ratification records under
+# The non-public Task Facts audit store. `reference/` is served, so without these
+# lines the 485 historical research and ratification records under
 # reference/task-facts/1.0/evidence/, the inventory that lists them and the
 # Historical Audit Evidence Registry would all be publicly reachable. Same
 # failure mode as answers/ after 1.0.4, and the same fix.
@@ -64,15 +64,43 @@ release-work/
 # reference/task-facts/1.0/PUBLIC-EVIDENCE-MANIFEST.json. These lines make the
 # deployment agree with the package.
 #
-# Deny the whole store, then re-include exactly those four. The directory
-# re-inclusion has to come first: a file inside an excluded directory can never
-# be re-included, so the store is denied file by file and its directories stay
-# walkable. Every sibling of the four stays denied.
+# No negation. 4.1.0 first shipped this as `evidence/**` plus four `!` lines
+# re-including the public four. Git honours that; Vercel does not. The 4.1.0
+# deployment dropped the whole subtree and served all four as 404, which is the
+# harmless direction but still wrong. So every excluded path is now named
+# outright: a directory when nothing public lives beneath it, a literal file
+# path otherwise. 27 lines cover all 481 non-public records, and the four
+# authorised sources are simply never mentioned.
+#
+# Derived from the store itself, not written by hand. To regenerate after any
+# change to the store, exclude each directory with no public descendant and
+# enumerate the non-public files in the directories that have one.
 reference/task-facts/1.0/EVIDENCE-MANIFEST.json
 reference/task-facts/1.0/HISTORICAL-AUDIT-REGISTRY.json
-reference/task-facts/1.0/evidence/**
-!reference/task-facts/1.0/evidence/**/
-!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs
-!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json
-!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py
-!reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/evaluation-evidence/
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract/
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/frozen-contract-integrity.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/FROZEN-MANIFEST.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/PROVENANCE.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/README.md
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/package.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/regression-results.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/results.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/run-fixtures.mjs
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/test-results.txt
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node/test.mjs
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-node-integrity.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/FROZEN-MANIFEST.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/README.md
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/provenance.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/results.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/test-output.txt
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/test_evaluate.py
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python-integrity.json
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementer-input.sha256
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementer-input.zip
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/interoperability-evaluation.md
+reference/task-facts/1.0/evidence/interop/cycles/cycle-1/orchestration-evidence.json
+reference/task-facts/1.0/evidence/interop/reports/
+reference/task-facts/1.0/evidence/interop/source/
+reference/task-facts/1.0/evidence/ratification/
