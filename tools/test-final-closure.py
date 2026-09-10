@@ -29,13 +29,13 @@ def main():
 
     with tempfile.TemporaryDirectory(prefix="obds-final-closure-") as directory:
         root = Path(directory)
-        for value in ("4.1.0\n", "4.0.4\n", "4.1.1\n", "", "4.1.0 extra\n"):
+        for value in ("4.1.1\n", "4.1.0\n", "4.1.2\n", "", "4.1.1 extra\n"):
             (root / "VERSION").write_text(value)
-            trial("repository VERSION " + repr(value), lambda: gate.verify_repository_version(root, "repository"), value != "4.1.0\n")
+            trial("repository VERSION " + repr(value), lambda: gate.verify_repository_version(root, "repository"), value != "4.1.1\n")
         (root / "VERSION").unlink()
         trial("missing repository VERSION", lambda: gate.verify_repository_version(root, "repository"), True)
         trial("historical flat layout without VERSION", lambda: gate.verify_repository_version(root, "extracted-archive"))
-        (root / "VERSION").write_text("4.0.4\n")
+        (root / "VERSION").write_text("4.1.0\n")
         trial("historical flat layout retains old VERSION", lambda: gate.verify_repository_version(root, "extracted-archive"))
         for base in gate.NEUTRAL_WORKSPACES:
             trial("neutral workspace " + base, lambda: gate.verify_public_bytes((base + "/reference/input.json").encode(), "synthetic fixture"))
@@ -49,10 +49,10 @@ def main():
         with zipfile.ZipFile(stream, "w") as archive:
             archive.writestr("fixture.txt", private)
         trial("private path nested ZIP", lambda: gate.verify_public_bytes(stream.getvalue(), "synthetic nested ZIP"), True)
-        for name in ("OBDS-4.1.0-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.0-TASK-FACTS-CONFORMANCE.json"):
+        for name in ("OBDS-4.1.1-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.1-TASK-FACTS-CONFORMANCE.json"):
             (root / name).write_text(json.dumps({"syntheticProvenance": "/workspace/obds-release/reference/input.json"}))
         trial("neutral synthetic evidence provenance", lambda: gate.verify_fresh_provenance(root))
-        (root / "OBDS-4.1.0-TASK-FACTS-CONFORMANCE.json").write_text(json.dumps({"syntheticProvenance": "/opt/personal-build/input.json"}))
+        (root / "OBDS-4.1.1-TASK-FACTS-CONFORMANCE.json").write_text(json.dumps({"syntheticProvenance": "/opt/personal-build/input.json"}))
         trial("non-neutral synthetic evidence provenance", lambda: gate.verify_fresh_provenance(root), True)
         tf = ROOT / "reference/task-facts/1.0"
         public = gate.load(tf / "PUBLIC-EVIDENCE-MANIFEST.json")
@@ -181,27 +181,26 @@ def main():
         cases.append({"name": "historical local paths preserved and non-public", "passed": True, "expectedRejection": False})
 
         # ---- Prior-release artefacts ----------------------------------------
-        # A published release is immutable, so the working tree keeps 4.0.4's own
+        # A published release is immutable, so the working tree keeps 4.1.0's own
         # documents exactly as published. The scan follows distribution, not the
         # working tree, and the exemption is scoped by version and to root
         # documents only.
-        for name in ("OBDS-4.0.4-FOUNDATION-CONFORMANCE.json", "OBDS-4.0.4-CHANGELOG.md",
-                     "OBDS-4.0.4.md", "OBDS-PUBLIC-README-4.0.4.md", "OBDS-3.0.0-TEST-RESULT.json"):
+        for name in ("OBDS-4.1.0-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.0-CHANGELOG.md",
+                     "OBDS-4.1.0.md", "OBDS-PUBLIC-README-4.1.0.md", "OBDS-3.0.0-TEST-RESULT.json"):
             assert gate.prior_release_artifact(name), name
-        for name in ("OBDS-4.1.0-TEST-RESULT.json", "OBDS-4.1.0.md", "OBDS-PUBLIC-README-4.1.0.md",
+        for name in ("OBDS-4.1.1-TEST-RESULT.json", "OBDS-4.1.1.md", "OBDS-PUBLIC-README-4.1.1.md",
                      "PACKAGE-MANIFEST.json", "README.md", "reference/release-gate.py",
-                     "spec/4.0.4/OBDS-4.0.4.md", "reference/task-facts/1.0/OBDS-4.0.4-note.md"):
+                     "spec/4.1.0/OBDS-4.1.0.md", "reference/task-facts/1.0/OBDS-4.1.0-note.md"):
             assert not gate.prior_release_artifact(name), name
         cases.append({"name": "prior-release exemption is version-scoped and root-only", "passed": True, "expectedRejection": False})
 
         # The rule itself is unchanged for everything this release distributes.
-        trial("current-release member private path", lambda: gate.verify_public_bytes(private, "OBDS-4.1.0-TEST-RESULT.json"), True)
-        historical_root = ROOT / "OBDS-4.0.4-FOUNDATION-CONFORMANCE.json"
+        trial("current-release member private path", lambda: gate.verify_public_bytes(private, "OBDS-4.1.1-TEST-RESULT.json"), True)
+        historical_root = ROOT / "OBDS-4.1.0-CHANGELOG.md"
         if historical_root.is_file():
-            trial("prior-release artefact still carries its truthful local path",
-                  lambda: gate.verify_public_bytes(historical_root.read_bytes(), historical_root.name), True)
+            gate.verify_public_bytes(historical_root.read_bytes(), historical_root.name)
             assert gate.prior_release_artifact(historical_root.name)
-            cases.append({"name": "published 4.0.4 artefact exempt, unchanged, still truthful", "passed": True, "expectedRejection": False})
+            cases.append({"name": "published 4.1.0 artefact exempt and unchanged", "passed": True, "expectedRejection": False})
     print(json.dumps({"kind": "final-closure-focused-regressions", "passed": True, "count": len(cases), "cases": cases}, indent=2))
     return 0
 

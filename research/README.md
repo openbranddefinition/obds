@@ -1,6 +1,6 @@
 # OBDS Research
 
-Open Brand Definition Specification, current release 4.0.2. This directory is the public
+Open Brand Definition Specification, current release 4.1.1. This directory is the public
 research surface: the evidence, and the boundary of the evidence. It is not a
 second specification. Nothing here changes a normative artefact.
 
@@ -91,12 +91,23 @@ kept explicit throughout:
 No internal review, audit or evaluation is offered here as technical proof. The
 proofs are executable or they are not proofs.
 
-## Normative artefacts
+## Relationship to the current release
 
-The research does not modify them. It links to them.
+This research remains published as evidence from the version it was run against.
+It is not silently re-baselined when OBDS advances. The research modifies no
+normative artefact; it links to them.
 
-- specification: [`OBDS-3.0.2.md`](../OBDS-3.0.2.md)
-- schemas: [`schemas/`](../schemas/), [`value-schemas/`](../value-schemas/)
-- reference implementation: [`reference/`](../reference/)
-- conformance result: [`OBDS-3.0.2-FOUNDATION-CONFORMANCE.json`](../OBDS-3.0.2-FOUNDATION-CONFORMANCE.json)
-- full suite result: [`OBDS-3.0.2-TEST-RESULT.json`](../OBDS-3.0.2-TEST-RESULT.json)
+Current normative specification:
+
+- [`OBDS 4.1.1`](../spec/4.1.1/OBDS-4.1.1.md)
+
+Current schemas and implementation:
+
+- [`schemas/`](../schemas/), [`value-schemas/`](../value-schemas/)
+- [`reference/`](../reference/)
+
+Historical benchmark baseline, the version these measurements were taken under:
+
+- [`OBDS 3.0.2`](../spec/3.0.2/OBDS-3.0.2.md)
+- [`3.0.2 Foundation conformance`](../spec/3.0.2/OBDS-3.0.2-FOUNDATION-CONFORMANCE.json)
+- [`3.0.2 full suite result`](../spec/3.0.2/OBDS-3.0.2-TEST-RESULT.json)

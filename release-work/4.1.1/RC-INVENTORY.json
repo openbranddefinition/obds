@@ -1,0 +1,78 @@
+{
+  "notPublished": true,
+  "purpose": "Frozen publication bytes of the 4.1.1 release candidate; not an approved RC until the release gates and reviews pass",
+  "publication": [
+    {
+      "path": "index.html",
+      "url": "/",
+      "status": 200,
+      "sha256": "5e6e581f3d765a206033ef29c3a7896b246f5b277a9d3ff1dc76417f8ece4201"
+    },
+    {
+      "path": "authoring/index.html",
+      "url": "/authoring/",
+      "status": 200,
+      "sha256": "bf11eb222592d14f8badbf6b1ec6a1c78b504dd55414f08dedc634936bf996a0"
+    },
+    {
+      "path": "examples/index.html",
+      "url": "/examples/",
+      "status": 200,
+      "sha256": "ead447191f924099245203901ec9811e8b85de4692bbd4ccc08e23c63ad5ae06"
+    },
+    {
+      "path": "what-is-obds/index.html",
+      "url": "/what-is-obds/",
+      "status": 200,
+      "sha256": "a29566da1d9dda208efbb78ba6ed024d9df19ce2a49222298e0a6f7cdfe5def9"
+    },
+    {
+      "path": "research/index.html",
+      "url": "/research/",
+      "status": 200,
+      "sha256": "f198ace47c03efa5afc614b18f22b436eeb4015bb2ff6fe33739b7f4c49bef2d"
+    },
+    {
+      "path": "machine-readable-brand-guidelines/index.html",
+      "url": "/machine-readable-brand-guidelines/",
+      "status": 200,
+      "sha256": "fd95bf8ed9c7389b2bfc43ffeea059fe8a4807d863219d62ba8a505ceac629fe"
+    },
+    {
+      "path": "brand-governance-for-ai/index.html",
+      "url": "/brand-governance-for-ai/",
+      "status": 200,
+      "sha256": "2cece6149318892ffd8a1b0623b8f4434754cd0381369efa363cadf0cf00d0e3"
+    },
+    {
+      "path": "compare/machine-readable-brand-specifications/index.html",
+      "url": "/compare/machine-readable-brand-specifications/",
+      "status": 200,
+      "sha256": "770aaccd5d4017f2472f8313f218a5179154e9c129eba4d56500de17f30f29ef"
+    },
+    {
+      "path": "404.html",
+      "url": "/404.html",
+      "status": 200,
+      "sha256": "111659f7a1eee41743610e1996b7290417b0dab0f8c9db4af0773867f4f477c8"
+    },
+    {
+      "path": "llms.txt",
+      "url": "/llms.txt",
+      "status": 200,
+      "sha256": "ec94c04c1c1971fb5ea1dfeb62a6653e842baf25b9ae3c61f14c0fd4e9cb27aa"
+    },
+    {
+      "path": "publication-record.json",
+      "url": "/publication-record.json",
+      "status": 200,
+      "sha256": "a0fc6ac6fa14c05fd6ad9e0be55de310ee47bb5c740303678622c4707549d845"
+    },
+    {
+      "path": "sitemap.xml",
+      "url": "/sitemap.xml",
+      "status": 200,
+      "sha256": "3631ee7f414df4b98580b17a17902109d691fdbc876c9d778abe89fc693692d7"
+    }
+  ]
+}

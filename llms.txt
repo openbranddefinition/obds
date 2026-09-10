@@ -2,7 +2,7 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 4.1.0 (stable, 9 September 2026)
+Current release: 4.1.1 (stable, 10 September 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
@@ -86,6 +86,25 @@ Optional Brand Profile identifiers in 1.0:
 Every manifest declares obds-foundation. Section 4.2 of the specification
 describes the minimal implementation path.
 
+## Optional Task Facts evaluator
+
+OBDS 4.1 adds the voluntary `task-facts` evaluator capability.
+
+Task Facts binds facts about the exact current task or artefact, for example claims used,
+assets used, partners used or campaign identity, to a deterministic snapshot that an
+implementation can evaluate against declared conditions.
+
+It is optional and separately conformant. It does not change existing OBDS acceptance
+rules, Build Plans, Model Input Packages, Runtime Decision Records, governed hashes or
+existing valid packages. Production adapter integration is not claimed by the 4.1 line.
+
+Overview: https://openbranddefinition.org/reference/task-facts/1.0/README.md
+Contract: https://openbranddefinition.org/reference/task-facts/1.0/contract/TASK-FACTS-CONTRACT.md
+Adoption and limits: https://openbranddefinition.org/reference/task-facts/1.0/ADOPTION.md
+Suite identity: https://openbranddefinition.org/reference/task-facts/1.0/SUITE.json
+Conformance result: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-TASK-FACTS-CONFORMANCE.json
+Schema index: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-TASK-FACTS-SCHEMA-INDEX.json
+
 ## Core principles
 
 Facts establish truth.
@@ -103,7 +122,7 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0.md
+https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1.md
 
 ## Authoring and curation
 
@@ -117,8 +136,8 @@ what it requires: both build successfully with valid hashes.
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
@@ -131,7 +150,7 @@ Brand governance for AI: https://openbranddefinition.org/brand-governance-for-ai
 Comparison of approaches:
                          https://openbranddefinition.org/compare/machine-readable-brand-specifications/
 
-The comparison page describes BRAND.md, the Brand Context Protocol, MRBS and OBDS from
+The comparison page describes BRAND.md, Brando Schema, the Brand Context Protocol, MRBS and OBDS from
 their own primary sources, with the version read and the date it was read. It contains no
 ranking and no adoption claim about any project, including OBDS.
 
@@ -146,10 +165,10 @@ Known limits of OBDS:    https://openbranddefinition.org/research/limits/README.
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-CHANGELOG.md
-Migration: https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0-MIGRATION.md
+Complete package: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-CHANGELOG.md
+Migration: https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1-MIGRATION.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 
@@ -191,6 +210,8 @@ Written walkthrough:   https://openbranddefinition.org/examples/README.md
 
 Published as released, not modified, historical.
 
+OBDS 4.1.0  https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0.md
+OBDS 4.0.4  https://openbranddefinition.org/spec/4.0.4/OBDS-4.0.4.md
 OBDS 4.0.3  https://openbranddefinition.org/spec/4.0.3/OBDS-4.0.3.md
 OBDS 4.0.2  https://openbranddefinition.org/spec/4.0.2/OBDS-4.0.2.md
 OBDS 4.0.1  https://openbranddefinition.org/spec/4.0.1/OBDS-4.0.1.md
@@ -215,7 +236,7 @@ OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 4.1.0 is
+the licensing wording that was current at the time. Section 32.1 of 4.1.1 is
 the operative one, unchanged from 1.0.2.
 
 OBDS 4.0 closes five production-boundary failures found after 3.x: filesystem containment,
@@ -231,7 +252,10 @@ plan, and left artifactHash and its meaning untouched. Precedence, the scope voc
 tokenizer, the validator registry and the build failure codes became defined rather than
 inferred.
 
-The OBDS 1.0.0 contract surface remains frozen and byte-identical across 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 4.0.0 and 4.0.2. OBDS 1.1 added one versioned contract beside it, OBDS 3.0 added four more and OBDS 4.0 adds three, changing none of the frozen surface.
+The OBDS 1.0.0 contract surface remains frozen and byte-identical in the current release.
+Later releases add versioned contracts beside that frozen surface rather than rewriting it.
+OBDS 4.1 additionally adds the voluntary Task Facts 1.0 evaluator contract as a separately
+conformant optional capability; existing acceptance rules and governed hashes are unchanged.
 Eight versioned contracts stand beside the frozen 21 schemas and 6 value schemas, 35 public
 contracts in total. Manifests stay at schemaVersion 1.0.0.
 

@@ -1,3 +1,56 @@
+# OBDS changelog
+
+## 4.1.1
+
+10 September 2026.
+
+**Public-surface release. PATCH.**
+
+OBDS 4.1.1 corrects the public surface. It changes no normative contract, no
+schema, no Task Facts semantics, no governed hash and no conformance behaviour.
+The 1.0.0 contract surface stays frozen and byte-identical, and every contract
+fingerprint is unchanged against 4.1.0.
+
+### What moved
+
+- The homepage still carried 4.0-era release metadata below the fold: release
+  date 05.09.2026 and previous release 4.0.3, while the top of the page and the
+  footer already said 4.1.0. It now states the current release once, correctly,
+  everywhere, and the previous release links to /spec/4.1.0/OBDS-4.1.0.md.
+
+- The homepage release narrative explained what OBDS 4.0 closed. That was the
+  right explanation for 4.0.x and the wrong one for 4.1. It now explains the
+  optional Task Facts evaluator contract, that acceptance rules and governed
+  hashes are unchanged, and that adoption is voluntary. Two helper lines that
+  still described 4.0 and an outdated versioned-contract list follow the same
+  correction.
+
+- `llms.txt` named 4.1.0 as the current release but never mentioned Task Facts,
+  skipped 4.0.4 in its previous-release list, and carried a version enumeration
+  that had to be edited every release and had already fallen behind. It now
+  carries a Task Facts section, the complete previous-release list, and a
+  statement about the frozen surface that does not need editing again.
+
+- `research/README.md` announced OBDS 4.0.2 as the current release. It now names
+  the current release and keeps the Governed Communications Benchmark labelled
+  as measured under the 3.0.2 reference compiler, which is what happened.
+
+- The comparison page compares five specifications and said four in its title,
+  meta description, Open Graph description and opening sentence. Brando Schema
+  is named in all four.
+
+- The examples page JSON-LD described "a Foundation build that produces a
+  Compiled Brand Context". Foundation does not own that execution. It now says a
+  Foundation manifest executed through Compiled Runtime.
+
+### What did not move
+
+No normative section, no schema, no value schema, no Task Facts contract,
+fixture, vector, suite identity or evaluator behaviour, no TFJ or snapshot
+identity, no governed hash, no Build Plan, Model Input Package or Runtime
+Decision Record semantics, no conformance decision semantics. `spec/4.1.0/` and
+every earlier snapshot are byte-identical and their tags are unchanged.
+
 # OBDS 4.1.0 - Optional Task Facts capability
 
 ## 4.1.0

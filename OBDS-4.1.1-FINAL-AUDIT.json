@@ -7,7 +7,7 @@
   "packageJunkFiles": 0,
   "publicSchemaCount": 21,
   "publicValueSchemaCount": 6,
-  "release": "4.1.0",
+  "release": "4.1.1",
   "schemaSurfaceFingerprint": "sha256:517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90cf1e5f469",
   "schemaSurfaceUnchangedSince": "1.0.0",
   "schemaVersion": "1.0.0",
@@ -22,7 +22,7 @@
     "golden": 6,
     "integration": 15
   },
-  "testOutputHash": "sha256:9fdbcba2bf8ba151d4510a9fd7695cbd551bcd1eebe5fd1d40057692c53fdc62",
+  "testOutputHash": "sha256:4f17a4601bc9f40837fa586fdea13c8ee0bd5c2c41e327e4521fa0b567c029dd",
   "testsFailed": 0,
   "testsPassed": 1158,
   "testsSkipped": 0,
