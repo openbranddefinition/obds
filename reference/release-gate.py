@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""OBDS 4.1.2 release gate.
+"""OBDS 4.1.3 release gate.
 
 Validates the release metadata of this package, proves the normative contract
 has not moved, and proves the package ships no junk.
@@ -72,7 +72,7 @@ EXPECTED_SUITE_COUNTS = {
     "adversarial": 38,
 }
 EXPECTED_TOTAL = 1158
-EXPECTED_RELEASE = "4.1.2"
+EXPECTED_RELEASE = "4.1.3"
 EXPECTED_STATUS = "stable"
 EXPECTED_PUBLIC_SCHEMAS = 21
 EXPECTED_PUBLIC_VALUE_SCHEMAS = 6
@@ -96,7 +96,7 @@ FROZEN_SCHEMA_SURFACE = "517683bb3496867daa2346ceb2f7844e46015f926ff757a9c23da90
 # the index and the map but excluded here, because including it would make the
 # frozen-surface proof impossible to state. A maintenance release must not move
 # any of them.
-PRIOR_RELEASE = "4.1.1"
+PRIOR_RELEASE = "4.1.2"
 PRIOR_CONTRACT_FINGERPRINTS = {
     "capability-registry": "68fb26cc27f0db658b80de805fc0e27ed271c3881b67de18763a620f2e6107b1",
     "schema-index": "6899ccd33e780c54529e17f5e13320d782863e830c0f6648bf10dab337a55b83",
@@ -715,7 +715,7 @@ def check_manifest(audit) -> int:
 
 def verify_task_facts_schema(root=ROOT):
     """Independent local retrieval for the preserved experimental URN."""
-    companion = load(root / "OBDS-4.1.2-TASK-FACTS-SCHEMA-INDEX.json")
+    companion = load(root / "OBDS-4.1.3-TASK-FACTS-SCHEMA-INDEX.json")
     assert companion["capability"] == "task-facts"
     assert companion["payloadVersion"] == "0.1"
     assert companion["canonicalization"] == "TFJ-0.1"
@@ -745,7 +745,7 @@ def prior_registry(registry):
     return result
 
 
-PUBLICATION_EXPECTATIONS = {'index.html': ['<meta name="description" content="Open, implementation-ready specification for determining which brand truth applies to an AI task, resolving conflicts and failing closed when required truth is missing. Machine-readable brand guidelines with governed applicability. OBDS 4.1.2, CC BY 4.0 and Apache 2.0.">', '<meta property="og:image:alt" content="OBDS — Governed Brand Truth for AI — Open Brand Definition Specification 4.1.2">', '<meta property="og:description" content="Which brand truth applies to this AI task, and may it run? An open specification for governed applicability, conflict resolution and fail-closed execution. OBDS 4.1.2.">', '<meta name="obds-version" content="4.1.2">', '"version": "4.1.2",', '"url": "https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-FINAL.zip",', '"version": "4.1.2",', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Open Brand Definition Specification 4.1.2</span>', '<div><span class="label">Status</span><span class="value" data-copy="en">4.1.2 stable. 10 September 2026.</span><span class="value" data-copy="de">4.1.2 stabil. 10. September 2026.</span></div>', '<h2 data-copy="en">4.1.2 is the current release.</h2>', '<h2 data-copy="de">4.1.2 ist der aktuelle Release.</h2>', '<div class="publication-row"><div class="publication-key" data-copy="en">Specification</div><div class="publication-key" data-copy="de">Spezifikation</div><div class="publication-value">OBDS 4.1.2</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2.md">OBDS-4.1.2.md</a></span></div><div data-copy="en">The normative specification. One document.</div><div data-copy="de">Die normative Spezifikation. Ein Dokument.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-FINAL.zip">OBDS-4.1.2-FINAL.zip</a></span></div><div data-copy="en">The complete package: specification, 35 existing public contracts plus optional Task Facts, reference implementation and the full conformance suite.</div><div data-copy="de">Das vollständige Paket: Spezifikation, 35 bestehende öffentliche Contracts plus optionale Task Facts, Referenzimplementierung und die komplette Conformance Suite.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md">QUICKSTART.md</a></span></div><div data-copy="en">Five concepts and the smallest conforming implementation.</div><div data-copy="de">Fünf Konzepte und die kleinste konforme Implementierung.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-SCHEMA-INDEX.json">SCHEMA-INDEX.json</a></span></div><div data-copy="en">All 21 schemas, 6 value schemas and the versioned 1.1.0, 3.0.0 and 4.0.0 contracts beside them, with their identifiers.</div><div data-copy="de">Alle 21 Schemas, 6 Value Schemas und die versionierten 1.1.0-, 3.0.0- und 4.0.0-Contracts daneben, mit Identifiern.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-PUBLICATION-MAP.json">PUBLICATION-MAP.json</a></span></div><div data-copy="en">Every schema identifier mapped to the exact address that serves it.</div><div data-copy="de">Jeder Schema-Identifier auf die Adresse gemappt, die ihn ausliefert.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-TEST-REQUIREMENTS.md">TEST-REQUIREMENTS.md</a></span></div><div data-copy="en">Everything needed to reproduce 1158 of 1158 yourself.</div><div data-copy="de">Alles, was nötig ist, um 1158 von 1158 selbst zu reproduzieren.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-CHANGELOG.md">CHANGELOG.md</a></span></div><div data-copy="en">What 4.1.2 adds, and the complete list of what remains unchanged.</div><div data-copy="de">Was 4.1.2 ergänzt, und die vollständige Liste dessen, was unverändert bleibt.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.2/OBDS-4.1.2-MIGRATION.md">MIGRATION.md</a></span></div><div data-copy="en">Existing valid packages require no migration; Task Facts adoption is voluntary.</div><div data-copy="de">Bestehende gültige Pakete benötigen keine Migration; Task Facts bleibt optional.</div></div>', '<a href="/spec/4.1.2/OBDS-4.1.2.md">', '<a href="/spec/4.1.2/OBDS-4.1.2-FINAL.zip">', '<p data-copy="de">© 2026 Kill The Dragon GmbH. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. OBDS 4.1.2 ist der aktuelle stabile Release vom 10. September 2026. Spezifikation, Referenzimplementierung und Conformance Suite sind unter <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a> veröffentlicht. Die Spezifikation und die Dokumentation stehen unter der Creative Commons Attribution 4.0 International Lizenz. Die Schemas, die Release-Metadaten, die Referenzimplementierung, die Conformance Suite und die Beispiele stehen unter der Apache License 2.0. Beide Lizenztexte sind unverändert unter <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> und <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a> veröffentlicht, die Zuordnung steht in <a href="/LICENSE.md">LICENSE.md</a>. Kommerzielle Implementierung ist erlaubt und braucht keine gesonderte Erlaubnis. Auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme wird kein Anspruch erhoben. Namen, Logos und Marken werden von keiner der beiden Lizenzen eingeräumt und sind in <a href="/TRADEMARKS.md">TRADEMARKS.md</a> gesondert geregelt. Es wird keine Markenregistrierung beansprucht, und kein Zertifizierungsprogramm ist aktiv. Kontakt lets@killthedragon.com.</p>', '<p data-copy="en">© 2026 Kill The Dragon GmbH. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. OBDS 4.1.2 is the current stable release, dated 10 September 2026. The specification, the reference implementation and the conformance suite are published at <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a>. The specification and the documentation are licensed under the Creative Commons Attribution 4.0 International Licence. The schemas, the release metadata, the reference implementation, the conformance suite and the examples are licensed under the Apache License 2.0. Both licence texts are published unmodified at <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> and <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a>, and the mapping is in <a href="/LICENSE.md">LICENSE.md</a>. Commercial implementation is permitted and requires no separate permission. No claim is made to general ideas, principles, methods or independently developed compatible systems. Names, logos and marks are granted by neither licence and are governed separately in <a href="/TRADEMARKS.md">TRADEMARKS.md</a>. No trademark registration is claimed and no certification programme is live. Contact lets@killthedragon.com.</p>'], 'authoring/index.html': ['<meta property="og:image:alt" content="Authoring and curation — Open Brand Definition Specification 4.1.2">', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>', '<a href="/spec/4.1.2/OBDS-4.1.2.md#7-brand-manifest">', '<a href="/spec/4.1.2/OBDS-4.1.2.md#24-selective-extraction-and-curation">', '<a href="/spec/4.1.2/OBDS-4.1.2.md#26-conformance-claims">'], 'examples/index.html': ['<meta property="og:image:alt" content="See OBDS decide — Open Brand Definition Specification 4.1.2">', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>', '<p class="code-caption">Or download <a href="/spec/4.1.2/OBDS-4.1.2-FINAL.zip">OBDS-4.1.2-FINAL.zip</a>, extract it, and run the same commands from the extracted directory.</p>', '<a href="/spec/4.1.2/OBDS-4.1.2.md">', '<a href="/spec/4.1.2/OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md">'], 'what-is-obds/index.html': ['<meta property="og:image:alt" content="What is OBDS? — Open Brand Definition Specification 4.1.2">', '"version": "4.1.2",', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>', '<a href="/spec/4.1.2/OBDS-4.1.2.md">'], 'research/index.html': ['<meta property="og:image:alt" content="OBDS Research — Open Brand Definition Specification 4.1.2">', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>'], 'machine-readable-brand-guidelines/index.html': ['<meta property="og:image:alt" content="Machine-readable brand guidelines — Open Brand Definition Specification 4.1.2">', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>'], 'brand-governance-for-ai/index.html': ['<meta property="og:image:alt" content="Brand governance for AI — Open Brand Definition Specification 4.1.2">', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>'], 'compare/machine-readable-brand-specifications/index.html': ['<meta property="og:image:alt" content="Machine-readable brand specifications compared — Open Brand Definition Specification 4.1.2">', '<div class="status">OBDS / 4.1.2 stable</div>', '<span>Companion to OBDS 4.1.2</span>', '<td><a href="/spec/4.1.2/OBDS-4.1.2.md">OBDS</a></td>', '<td>4.1.2</td>', '<th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>Brando 1.3</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.1.2</th>', '<a href="/spec/4.1.2/OBDS-4.1.2.md">', '<a href="/spec/4.1.2/OBDS-4.1.2.md">OBDS-4.1.2.md</a>'], '404.html': ['<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>404 | Open Brand Definition</title><style>html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;color:#000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif}main{width:min(90vw,900px);border:1px solid;padding:24px}h1{font-size:clamp(64px,20vw,220px);line-height:.75;letter-spacing:-.08em;margin:0 0 60px}a{color:inherit}</style></head><body><main><h1>404</h1><p>Nothing is defined here. OBDS 4.1.2 stable.</p><p><a href="/">Return to Open Brand Definition</a> &middot; <a href="/what-is-obds/">What is OBDS</a> &middot; <a href="/examples/">Examples</a> &middot; <a href="/spec/4.1.2/OBDS-4.1.2.md">Specification</a></p></main></body></html>'], 'llms.txt': ['Current release: 4.1.2 (stable, 10 September 2026)', 'https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2.md', 'Schema index: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-SCHEMA-INDEX.json', 'Publication map: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-PUBLICATION-MAP.json', 'Complete package: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-FINAL.zip', 'Quickstart: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md', 'Changelog: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-CHANGELOG.md', 'Migration: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-MIGRATION.md', 'the licensing wording that was current at the time. Section 32.1 of 4.1.2 is']}
+PUBLICATION_EXPECTATIONS = {'index.html': ['<meta name="description" content="Open, implementation-ready specification for determining which brand truth applies to an AI task, resolving conflicts and failing closed when required truth is missing. Machine-readable brand guidelines with governed applicability. OBDS 4.1.3, CC BY 4.0 and Apache 2.0.">', '<meta property="og:image:alt" content="OBDS — Governed Brand Truth for AI — Open Brand Definition Specification 4.1.3">', '<meta property="og:description" content="Which brand truth applies to this AI task, and may it run? An open specification for governed applicability, conflict resolution and fail-closed execution. OBDS 4.1.3.">', '<meta name="obds-version" content="4.1.3">', '"version": "4.1.3",', '"url": "https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-FINAL.zip",', '"version": "4.1.3",', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Open Brand Definition Specification 4.1.3</span>', '<div><span class="label">Status</span><span class="value" data-copy="en">4.1.3 stable. 12 September 2026.</span><span class="value" data-copy="de">4.1.3 stabil. 12. September 2026.</span></div>', '<h2 data-copy="en">4.1.3 is the current release.</h2>', '<h2 data-copy="de">4.1.3 ist der aktuelle Release.</h2>', '<div class="publication-row"><div class="publication-key" data-copy="en">Specification</div><div class="publication-key" data-copy="de">Spezifikation</div><div class="publication-value">OBDS 4.1.3</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3.md">OBDS-4.1.3.md</a></span></div><div data-copy="en">The normative specification. One document.</div><div data-copy="de">Die normative Spezifikation. Ein Dokument.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-FINAL.zip">OBDS-4.1.3-FINAL.zip</a></span></div><div data-copy="en">The complete package: specification, 35 existing public contracts plus optional Task Facts, reference implementation and the full conformance suite.</div><div data-copy="de">Das vollständige Paket: Spezifikation, 35 bestehende öffentliche Contracts plus optionale Task Facts, Referenzimplementierung und die komplette Conformance Suite.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-IMPLEMENTER-QUICKSTART.md">QUICKSTART.md</a></span></div><div data-copy="en">Five concepts and the smallest conforming implementation.</div><div data-copy="de">Fünf Konzepte und die kleinste konforme Implementierung.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-SCHEMA-INDEX.json">SCHEMA-INDEX.json</a></span></div><div data-copy="en">All 21 schemas, 6 value schemas and the versioned 1.1.0, 3.0.0 and 4.0.0 contracts beside them, with their identifiers.</div><div data-copy="de">Alle 21 Schemas, 6 Value Schemas und die versionierten 1.1.0-, 3.0.0- und 4.0.0-Contracts daneben, mit Identifiern.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-PUBLICATION-MAP.json">PUBLICATION-MAP.json</a></span></div><div data-copy="en">Every schema identifier mapped to the exact address that serves it.</div><div data-copy="de">Jeder Schema-Identifier auf die Adresse gemappt, die ihn ausliefert.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-TEST-REQUIREMENTS.md">TEST-REQUIREMENTS.md</a></span></div><div data-copy="en">Everything needed to reproduce 1158 of 1158 yourself.</div><div data-copy="de">Alles, was nötig ist, um 1158 von 1158 selbst zu reproduzieren.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-CHANGELOG.md">CHANGELOG.md</a></span></div><div data-copy="en">What 4.1.3 adds, and the complete list of what remains unchanged.</div><div data-copy="de">Was 4.1.3 ergänzt, und die vollständige Liste dessen, was unverändert bleibt.</div></div>', '<div class="state-row"><div><span class="state-name"><a href="/spec/4.1.3/OBDS-4.1.3-MIGRATION.md">MIGRATION.md</a></span></div><div data-copy="en">Existing valid packages require no migration; Task Facts adoption is voluntary.</div><div data-copy="de">Bestehende gültige Pakete benötigen keine Migration; Task Facts bleibt optional.</div></div>', '<a href="/spec/4.1.3/OBDS-4.1.3.md">', '<a href="/spec/4.1.3/OBDS-4.1.3-FINAL.zip">', '<p data-copy="de">© 2026 Kill The Dragon GmbH. Open Brand Definition und OBDS werden seit 22. Juli 2026 auf dieser Website öffentlich dokumentiert. OBDS 4.1.3 ist der aktuelle stabile Release vom 12. September 2026. Spezifikation, Referenzimplementierung und Conformance Suite sind unter <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a> veröffentlicht. Die Spezifikation und die Dokumentation stehen unter der Creative Commons Attribution 4.0 International Lizenz. Die Schemas, die Release-Metadaten, die Referenzimplementierung, die Conformance Suite und die Beispiele stehen unter der Apache License 2.0. Beide Lizenztexte sind unverändert unter <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> und <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a> veröffentlicht, die Zuordnung steht in <a href="/LICENSE.md">LICENSE.md</a>. Kommerzielle Implementierung ist erlaubt und braucht keine gesonderte Erlaubnis. Auf allgemeine Ideen, Prinzipien, Methoden oder unabhängig entwickelte kompatible Systeme wird kein Anspruch erhoben. Namen, Logos und Marken werden von keiner der beiden Lizenzen eingeräumt und sind in <a href="/TRADEMARKS.md">TRADEMARKS.md</a> gesondert geregelt. Es wird keine Markenregistrierung beansprucht, und kein Zertifizierungsprogramm ist aktiv. Kontakt lets@killthedragon.com.</p>', '<p data-copy="en">© 2026 Kill The Dragon GmbH. Open Brand Definition and OBDS have been publicly documented on this website since 22 July 2026. OBDS 4.1.3 is the current stable release, dated 12 September 2026. The specification, the reference implementation and the conformance suite are published at <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">github.com/openbranddefinition/obds</a>. The specification and the documentation are licensed under the Creative Commons Attribution 4.0 International Licence. The schemas, the release metadata, the reference implementation, the conformance suite and the examples are licensed under the Apache License 2.0. Both licence texts are published unmodified at <a href="/LICENSES/CC-BY-4.0.txt">/LICENSES/CC-BY-4.0.txt</a> and <a href="/LICENSES/Apache-2.0.txt">/LICENSES/Apache-2.0.txt</a>, and the mapping is in <a href="/LICENSE.md">LICENSE.md</a>. Commercial implementation is permitted and requires no separate permission. No claim is made to general ideas, principles, methods or independently developed compatible systems. Names, logos and marks are granted by neither licence and are governed separately in <a href="/TRADEMARKS.md">TRADEMARKS.md</a>. No trademark registration is claimed and no certification programme is live. Contact lets@killthedragon.com.</p>'], 'authoring/index.html': ['<meta property="og:image:alt" content="Authoring and curation — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>', '<a href="/spec/4.1.3/OBDS-4.1.3.md#7-brand-manifest">', '<a href="/spec/4.1.3/OBDS-4.1.3.md#24-selective-extraction-and-curation">', '<a href="/spec/4.1.3/OBDS-4.1.3.md#26-conformance-claims">'], 'examples/index.html': ['<meta property="og:image:alt" content="See OBDS decide — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>', '<p class="code-caption">Or download <a href="/spec/4.1.3/OBDS-4.1.3-FINAL.zip">OBDS-4.1.3-FINAL.zip</a>, extract it, and run the same commands from the extracted directory.</p>', '<a href="/spec/4.1.3/OBDS-4.1.3.md">', '<a href="/spec/4.1.3/OBDS-4.1.3-IMPLEMENTER-QUICKSTART.md">'], 'what-is-obds/index.html': ['<meta property="og:image:alt" content="What is OBDS? — Open Brand Definition Specification 4.1.3">', '"version": "4.1.3",', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>', '<a href="/spec/4.1.3/OBDS-4.1.3.md">'], 'research/index.html': ['<meta property="og:image:alt" content="OBDS Research — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>'], 'research/supabrand/index.html': ['<meta property="og:image:alt" content="SUPABRAND research — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>'], 'machine-readable-brand-guidelines/index.html': ['<meta property="og:image:alt" content="Machine-readable brand guidelines — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>'], 'brand-governance-for-ai/index.html': ['<meta property="og:image:alt" content="Brand governance for AI — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>'], 'compare/machine-readable-brand-specifications/index.html': ['<meta property="og:image:alt" content="Machine-readable brand specifications compared — Open Brand Definition Specification 4.1.3">', '<div class="status">OBDS / 4.1.3 stable</div>', '<span>Companion to OBDS 4.1.3</span>', '<td><a href="/spec/4.1.3/OBDS-4.1.3.md">OBDS</a></td>', '<td>4.1.3</td>', '<th>Defined in the specification text</th><th>BRAND.md 0.3.0</th><th>Brando 1.3</th><th>BCP 0.8</th><th>MRBS 1.0.0</th><th>OBDS 4.1.3</th>', '<a href="/spec/4.1.3/OBDS-4.1.3.md">', '<a href="/spec/4.1.3/OBDS-4.1.3.md">OBDS-4.1.3.md</a>'], '404.html': ['<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,follow"><title>404 | Open Brand Definition</title><style>html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;color:#000;font-family:Helvetica Neue,Helvetica,Arial,sans-serif}main{width:min(90vw,900px);border:1px solid;padding:24px}h1{font-size:clamp(64px,20vw,220px);line-height:.75;letter-spacing:-.08em;margin:0 0 60px}a{color:inherit}</style></head><body><main><h1>404</h1><p>Nothing is defined here. OBDS 4.1.3 stable.</p><p><a href="/">Return to Open Brand Definition</a> &middot; <a href="/what-is-obds/">What is OBDS</a> &middot; <a href="/examples/">Examples</a> &middot; <a href="/spec/4.1.3/OBDS-4.1.3.md">Specification</a></p></main></body></html>'], 'llms.txt': ['Current release: 4.1.3 (stable, 12 September 2026)', 'https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3.md', 'Schema index: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-SCHEMA-INDEX.json', 'Publication map: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-PUBLICATION-MAP.json', 'Complete package: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-FINAL.zip', 'Quickstart: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-IMPLEMENTER-QUICKSTART.md', 'Changelog: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-CHANGELOG.md', 'Migration: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-MIGRATION.md', 'the licensing wording that was current at the time. Section 32.1 of 4.1.3 is']}
 PUBLICATION_URLS = {p: ("/" if p == "index.html" else "/" + p.removesuffix("index.html")) for p in PUBLICATION_EXPECTATIONS}
 PUBLICATION_URLS.update({"publication-record.json": "/publication-record.json", "sitemap.xml": "/sitemap.xml"})
 
@@ -753,7 +753,7 @@ PUBLICATION_URLS.update({"publication-record.json": "/publication-record.json", 
 # Frozen occurrence multiplicities from the approved publication surface. Counts
 # are constants, never derived from candidate bytes. Overlapping expectations
 # retain their own contracts (for example a complete row and each link in it).
-PUBLICATION_OCCURRENCE_COUNTS = {'index.html': [1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1], 'authoring/index.html': [1, 1, 1, 1, 1, 1], 'examples/index.html': [1, 1, 1, 1, 1, 1], 'what-is-obds/index.html': [1, 1, 1, 1, 1], 'research/index.html': [1, 1, 1], 'machine-readable-brand-guidelines/index.html': [1, 1, 1], 'brand-governance-for-ai/index.html': [1, 1, 1], 'compare/machine-readable-brand-specifications/index.html': [1, 1, 1, 1, 1, 1, 3, 1], '404.html': [1], 'llms.txt': [1, 1, 1, 1, 1, 1, 1, 1, 1]}
+PUBLICATION_OCCURRENCE_COUNTS = {'index.html': [1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1], 'authoring/index.html': [1, 1, 1, 1, 1, 1], 'examples/index.html': [1, 1, 1, 1, 1, 1], 'what-is-obds/index.html': [1, 1, 1, 1, 1], 'research/index.html': [1, 1, 1], 'research/supabrand/index.html': [1, 1, 1], 'machine-readable-brand-guidelines/index.html': [1, 1, 1], 'brand-governance-for-ai/index.html': [1, 1, 1], 'compare/machine-readable-brand-specifications/index.html': [1, 1, 1, 1, 1, 1, 3, 1], '404.html': [1], 'llms.txt': [1, 1, 1, 1, 1, 1, 1, 1, 1]}
 # These exact legacy entries are superseded by object/key checks below. Keep the
 # complete legacy expectations available to the independent mutation matrix.
 PUBLICATION_STRUCTURED_FIELDS = {"index.html": {4, 5, 6}, "what-is-obds/index.html": {1}}
@@ -761,7 +761,7 @@ PUBLICATION_STRUCTURED_FIELDS = {"index.html": {4, 5, 6}, "what-is-obds/index.ht
 
 # Each textual HTML occurrence is bound to the approved element path. A copy
 # elsewhere (including comments or other elements) cannot satisfy that location.
-PUBLICATION_ELEMENT_PATHS = {'index.html': {0: [(('html', 1), ('head', 1), ('meta', 6))], 1: [(('html', 1), ('head', 1), ('meta', 15))], 2: [(('html', 1), ('head', 1), ('meta', 16))], 3: [(('html', 1), ('head', 1), ('meta', 25))], 7: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 8: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 1))], 9: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 2), ('div', 3))], 10: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('h2', 1))], 11: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('h2', 2))], 12: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 1), ('div', 1))], 13: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 1))], 14: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2))], 15: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 3))], 16: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 4))], 17: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 5))], 18: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 6))], 19: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 8))], 20: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 9))], 21: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 1), ('div', 1), ('span', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 1))], 22: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2), ('div', 1), ('span', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 4))], 23: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 14), ('div', 2), ('div', 6), ('p', 1))], 24: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 14), ('div', 2), ('div', 6), ('p', 2))]}, 'authoring/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 1))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 2))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 3))]}, 'examples/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('p', 2))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 5), ('div', 2), ('div', 1), ('a', 2))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 5), ('div', 2), ('div', 1), ('a', 3))]}, 'what-is-obds/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 2: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 7), ('a', 2))]}, 'research/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'machine-readable-brand-guidelines/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'brand-governance-for-ai/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'compare/machine-readable-brand-specifications/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 1))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 4))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 4), ('div', 1), ('table', 1), ('tr', 1), ('th', 1))], 6: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 4), ('a', 3)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 5), ('div', 1), ('div', 2), ('a', 7))], 7: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 5), ('div', 1), ('div', 2), ('a', 7))]}, '404.html': {0: [()]}}
+PUBLICATION_ELEMENT_PATHS = {'index.html': {0: [(('html', 1), ('head', 1), ('meta', 6))], 1: [(('html', 1), ('head', 1), ('meta', 15))], 2: [(('html', 1), ('head', 1), ('meta', 16))], 3: [(('html', 1), ('head', 1), ('meta', 25))], 7: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 8: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 1))], 9: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 2), ('div', 3))], 10: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('h2', 1))], 11: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('h2', 2))], 12: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 1), ('div', 1))], 13: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 1))], 14: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2))], 15: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 3))], 16: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 4))], 17: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 5))], 18: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 6))], 19: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 8))], 20: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 9))], 21: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 1), ('div', 1), ('span', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 1))], 22: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 2), ('div', 2), ('div', 1), ('span', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 13), ('div', 2), ('div', 4), ('a', 4))], 23: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 14), ('div', 2), ('div', 6), ('p', 1))], 24: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 14), ('div', 2), ('div', 6), ('p', 2))]}, 'authoring/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 1))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 2))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 7), ('div', 2), ('div', 2), ('a', 3))]}, 'examples/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('p', 2))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 5), ('div', 2), ('div', 1), ('a', 2))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 5), ('div', 2), ('div', 1), ('a', 3))]}, 'what-is-obds/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 2: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 7), ('a', 2))]}, 'research/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'research/supabrand/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'machine-readable-brand-guidelines/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'brand-governance-for-ai/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))]}, 'compare/machine-readable-brand-specifications/index.html': {0: [(('html', 1), ('head', 1), ('meta', 15))], 1: [(('html', 1), ('body', 1), ('div', 1), ('header', 1), ('div', 1))], 2: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 1), ('div', 1), ('div', 1), ('span', 2))], 3: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 1))], 4: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 4))], 5: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 4), ('div', 1), ('table', 1), ('tr', 1), ('th', 1))], 6: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 2), ('div', 2), ('div', 3), ('div', 1), ('table', 1), ('tr', 6), ('td', 1), ('a', 1)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 4), ('a', 3)), (('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 5), ('div', 1), ('div', 2), ('a', 7))], 7: [(('html', 1), ('body', 1), ('div', 1), ('main', 1), ('section', 3), ('div', 2), ('div', 5), ('div', 1), ('div', 2), ('a', 7))]}, '404.html': {0: [()]}}
 
 
 class _PublicationLocations(HTMLParser):
@@ -863,7 +863,7 @@ def verify_publication_structured(text, rel):
             node = nodes[0]
             assert node.get("@type") == kind and node.get("version") == EXPECTED_RELEASE, "Stale/missing JSON-LD version: " + identity
             if identity == "implementation":
-                assert node.get("url") == "https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-FINAL.zip", "Stale/missing implementation download"
+                assert node.get("url") == "https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-FINAL.zip", "Stale/missing implementation download"
     elif rel == "what-is-obds/index.html":
         articles = [doc for doc in documents if doc.get("url") == "https://openbranddefinition.org/what-is-obds/"]
         assert len(articles) == 1 and articles[0].get("@type") == "TechArticle", "Missing/ambiguous what-is-obds article"
@@ -875,7 +875,7 @@ def verify_publication_structured(text, rel):
 # Plain-text declarations retain their approved section and nonblank-line
 # occurrence. Blank-line formatting is irrelevant; moving a copy to another
 # section cannot repair a stale current declaration or historical qualifier.
-PUBLICATION_TEXT_LOCATIONS = {0: [('', 3, 'Current release: 4.1.2 (stable, 10 September 2026)')], 1: [('## Authoritative specification', 0, 'https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2.md')], 2: [('## Schemas', 0, 'Schema index: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-SCHEMA-INDEX.json')], 3: [('## Schemas', 1, 'Publication map: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-PUBLICATION-MAP.json')], 4: [('## Downloads', 0, 'Complete package: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-FINAL.zip')], 5: [('## Downloads', 1, 'Quickstart: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md')], 6: [('## Downloads', 2, 'Changelog: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-CHANGELOG.md')], 7: [('## Downloads', 3, 'Migration: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-MIGRATION.md')], 8: [('## Previous releases', 27, 'the licensing wording that was current at the time. Section 32.1 of 4.1.2 is')]}
+PUBLICATION_TEXT_LOCATIONS = {0: [('', 3, 'Current release: 4.1.3 (stable, 12 September 2026)')], 1: [('## Authoritative specification', 0, 'https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3.md')], 2: [('## Schemas', 0, 'Schema index: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-SCHEMA-INDEX.json')], 3: [('## Schemas', 1, 'Publication map: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-PUBLICATION-MAP.json')], 4: [('## Downloads', 0, 'Complete package: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-FINAL.zip')], 5: [('## Downloads', 1, 'Quickstart: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-IMPLEMENTER-QUICKSTART.md')], 6: [('## Downloads', 2, 'Changelog: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-CHANGELOG.md')], 7: [('## Downloads', 3, 'Migration: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-MIGRATION.md')], 8: [('## Previous releases', 28, 'the licensing wording that was current at the time. Section 32.1 of 4.1.3 is')]}
 
 
 def verify_publication_text(text):
@@ -898,8 +898,8 @@ def verify_publication_text(text):
 
 # The only historical root changelog retained by this release. An exemption is
 # conditional on its pinned historical bytes, never its wording or directory.
-HISTORICAL_CHANGELOG = "OBDS-4.1.1-CHANGELOG.md"
-HISTORICAL_CHANGELOG_SHA256 = "sha256:a76e5f112e75fa065daefa01b65d56ca72a5aceb4ebb72697ea73109f919eedf"
+HISTORICAL_CHANGELOG = "OBDS-4.1.2-CHANGELOG.md"
+HISTORICAL_CHANGELOG_SHA256 = "sha256:2179678add99a28714a2f7231b07145f7e72224d344e9ee9dd52a0cdfbfe2bca"
 
 
 # Explicit semantic-role review: this mandatory executable invokes
@@ -912,7 +912,7 @@ HISTORICAL_CHANGELOG_SHA256 = "sha256:a76e5f112e75fa065daefa01b65d56ca72a5aceb4e
 NON_CLAIM_EXECUTABLE_SOURCES = {
     "tools/test-task-facts-release.py": {
         "role": "non-claim executable release regression",
-        "sha256": 'sha256:3974b2a590fa80d6a6f66aed1d34b032df56c137550d2dbdbbb0edc3b7e34894',
+        "sha256": 'sha256:0930ee43dbde624c6f65b1e0e8697bdabb8e6dbdb18ed8f8d346a6af53bbb921',
     },
 }
 
@@ -945,17 +945,17 @@ def current_licensing_paths(root, package_files, context):
 def current_changelog_claims(raw):
     """Bind retained version records to immutable history, returning current text.
 
-    The complete 4.1.1 document is retained as a suffix, including its legacy
+    The complete 4.1.2 document is retained as a suffix, including its legacy
     titles and non-version headings. Its digest authenticates that structure;
     merely adding an old version heading never grants historical treatment.
     This works in standalone archives without Git or a second historical file.
     """
-    boundary = list(re.finditer(rb"(?m)^# OBDS 4\.1\.1(?: [^\r\n]*)?\n(?=\n## 4\.1\.1\n)", raw))
+    boundary = list(re.finditer(rb"(?m)^# OBDS 4\.1\.2(?: [^\r\n]*)?\n(?=\n## 4\.1\.2\n)", raw))
     if len(boundary) != 1:
         raise ValueError("missing or ambiguous historical changelog boundary")
     prefix, history = raw[:boundary[0].start()], raw[boundary[0].start():]
     if "sha256:" + hashlib.sha256(history).hexdigest() != HISTORICAL_CHANGELOG_SHA256:
-        raise ValueError("historical changelog suffix differs from verified 4.1.1 bytes")
+        raise ValueError("historical changelog suffix differs from verified 4.1.2 bytes")
     text = prefix.decode("utf-8")
     # Current sections use canonical ATX headings. Reject ambiguous Markdown
     # containers that could turn the historical boundary into current prose.
@@ -980,7 +980,7 @@ def current_changelog_claims(raw):
         raise ValueError("missing or duplicate current release section")
     versions = [tuple(map(int, match.groups())) for match in
                 re.finditer(rb"(?m)^## (\d+)\.(\d+)\.(\d+)\n", history)]
-    if (not versions or versions[0] != (4, 1, 1)
+    if (not versions or versions[0] != (4, 1, 2)
             or any(a <= b for a, b in zip(versions, versions[1:]))):
         raise ValueError("ambiguous historical version section order")
     return text
@@ -1121,9 +1121,9 @@ def verify_publication(root=ROOT, inventory=None):
             assert text.count(field) == counts[index], f"{rel}: missing/stale/extra required current occurrence: {field[:100]}"
     record = load(root / "publication-record.json")
     assert record["currentRelease"] == EXPECTED_RELEASE
-    assert EXPECTED_RELEASE in record["releases"] and "4.1.1" in record["releases"]
+    assert EXPECTED_RELEASE in record["releases"] and "4.1.2" in record["releases"]
     sitemap = (root / "sitemap.xml").read_text()
-    assert "/spec/4.1.2/" in sitemap and "/spec/4.1.1/" in sitemap
+    assert "/spec/4.1.3/" in sitemap and "/spec/4.1.2/" in sitemap
     if inventory is not None:
         entries = inventory["publication"]
         assert {e["path"] for e in entries} == set(PUBLICATION_URLS)
@@ -1135,7 +1135,7 @@ def verify_publication(root=ROOT, inventory=None):
 
 # The human final-closure decision preserves history outside the distributable.
 PUBLIC_EVIDENCE_SOURCES = frozenset(['evidence/interop/cycles/cycle-1/implementation-python/evaluate.py', 'evidence/interop/cycles/cycle-1/implementation-python/task-facts.schema.json', 'evidence/interop/cycles/cycle-1/implementation-node/evaluate.mjs', 'evidence/interop/cycles/cycle-1/implementation-node/schemas/task-facts.schema.json'])
-PUBLIC_EVIDENCE_MANIFEST_SHA256 = "sha256:1cf13c7e7c11bd3bebff37deb155108cdf0ffe9cdb033022cead3595fdf6b424"
+PUBLIC_EVIDENCE_MANIFEST_SHA256 = "sha256:62ade7d044608b6a353b89b88ee1548587ed60aa39217bae3f4312010545fea7"
 NEUTRAL_WORKSPACES = ("/workspace/obds-release", "/private/tmp/obds-release", "/tmp/obds-release")
 
 # The Historical Audit Evidence Registry, the other half of the 4.1 boundary.
@@ -1158,7 +1158,7 @@ def public_package_member(rel):
 
 
 # Root documents of an earlier release. A published release is immutable, so the
-# repository keeps 4.1.1's own artefacts exactly as they were published, and one
+# repository keeps 4.1.2's own artefacts exactly as they were published, and one
 # of them truthfully records the absolute fixture paths of the machine that built
 # it. The private/local-path rule is a rule about what this release distributes,
 # not about what the working tree remembers, so it follows distribution: these
@@ -1187,7 +1187,7 @@ def require_neutral_execution(root):
 
 def verify_repository_version(root, context):
     if context == "repository":
-        assert (root / "VERSION").read_text(encoding="utf-8").strip() == EXPECTED_RELEASE, "Repository VERSION must equal 4.1.2"
+        assert (root / "VERSION").read_text(encoding="utf-8").strip() == EXPECTED_RELEASE, "Repository VERSION must equal 4.1.3"
 
 
 def verify_public_bytes(raw, label):
@@ -1210,7 +1210,7 @@ def verify_fresh_provenance(root):
                 visit(item)
         elif isinstance(value, str) and value.startswith("/"):
             assert neutral_path(value), "Non-neutral fresh evidence provenance"
-    for name in ("OBDS-4.1.2-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.2-TASK-FACTS-CONFORMANCE.json"):
+    for name in ("OBDS-4.1.3-FOUNDATION-CONFORMANCE.json", "OBDS-4.1.3-TASK-FACTS-CONFORMANCE.json"):
         raw = (root / name).read_bytes()
         verify_public_bytes(raw, name)
         visit(load(root / name))
@@ -1311,7 +1311,7 @@ def verify_task_facts(root=ROOT, execute=True):
     spec = importlib.util.spec_from_file_location("task_facts_protocol", tf / "compare.py")
     protocol = importlib.util.module_from_spec(spec); spec.loader.exec_module(protocol)
     suite, suite_root, suite_hash = protocol.load_suite(tf / "SUITE.json")
-    result = load(root / "OBDS-4.1.2-TASK-FACTS-CONFORMANCE.json")
+    result = load(root / "OBDS-4.1.3-TASK-FACTS-CONFORMANCE.json")
     assert result["passed"] is True and result["productionIntegration"] is False
     assert result["suiteHash"] == suite_hash and len(result["subjects"]) == 2
     from jsonschema import Draft202012Validator
@@ -1343,8 +1343,258 @@ def package_context(root=ROOT):
     manifest = load(root / "PACKAGE-MANIFEST.json")
     assert manifest["version"] == EXPECTED_RELEASE
     assert (root / "schemas/brand-manifest.schema.json").is_file()
-    assert manifest["normativeSpecification"] == "OBDS-4.1.2.md"
+    assert manifest["normativeSpecification"] == "OBDS-4.1.3.md"
     return "extracted-archive"
+
+
+# ---------------------------------------------------------------------------
+# Current-state surfaces that step 15 claimed and never read. Added in 4.1.3.
+#
+# Step 15's comment has said since 1.1.3 that "the README" is a checked
+# current-release surface. The code never checked the README's current release;
+# step 8 reads it only for count claims. 4.1.1 and 4.1.2 shipped a README that
+# named 4.1.0 as the current release and linked five 4.1.0 root documents: four
+# left the root with 4.1.1 and the changelog with 4.1.2, so on GitHub the links
+# to the specification, the quickstart and the test result were dead. The public
+# README credited 4.0.0's five production-boundary closures to 4.1.0, a
+# sentence carried forward by version replacement, and the Task Facts pages
+# still introduced a published capability as a prospective internal candidate.
+# Each function returns the problems it finds rather than asserting, so
+# tools/test-final-closure.py can drive it with the exact defective text.
+# ---------------------------------------------------------------------------
+
+README_CURRENT_LINE = re.compile(r"^OBDS (\d+\.\d+\.\d+), stable, (\d{1,2} [A-Z][a-z]+ \d{4})\. Published at", re.M)
+README_CRITICAL_DOCUMENTS = ("OBDS-{r}.md", "OBDS-{r}-IMPLEMENTER-QUICKSTART.md",
+                             "OBDS-{r}-TEST-RESULT.json", "OBDS-{r}-CHANGELOG.md",
+                             "OBDS-{r}-MIGRATION.md")
+ROOT_RELEASE_DOCUMENT = re.compile(r"(?<![\w-])(?:spec/(\d+\.\d+\.\d+)/)?OBDS-(?:PUBLIC-README-)?(\d+\.\d+\.\d+)(?=[-.])")
+PRESENT_TENSE_RELEASE = re.compile(
+    r"\bOBDS (\d+\.\d+\.\d+) (?:is|adds|closes|changes|corrects|repairs|fixes|introduces)\b"
+    r"|\bcurrent (?:stable )?release (?:is|:) ?(?:OBDS )?(\d+\.\d+\.\d+)", re.I)
+PROSPECTIVE_WORDING = re.compile(r"(?i)\bprospective\b|\binternal candidate\b")
+MARKDOWN_LINK = re.compile(r"\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
+TASK_FACTS_STATUS = "> **Status: published.**"
+MONTHS = ("January", "February", "March", "April", "May", "June", "July",
+          "August", "September", "October", "November", "December")
+
+
+def long_date(iso):
+    year, month, day = (int(part) for part in iso.split("-"))
+    return f"{day} {MONTHS[month - 1]} {year}"
+
+
+def current_release_date(root=ROOT, release=EXPECTED_RELEASE):
+    """ISO date of this release, read from its own changelog section.
+
+    The changelog ships in both layouts; publication-record.json does not, so it
+    is cross-checked against the changelog in the repository rather than used as
+    the source.
+    """
+    text = (root / f"OBDS-{release}-CHANGELOG.md").read_text(encoding="utf-8")
+    match = re.search(r"(?m)^## " + re.escape(release) + r"\n\n(\d{1,2}) ([A-Z][a-z]+) (\d{4})\.\n", text)
+    if match is None:
+        raise ValueError(f"OBDS-{release}-CHANGELOG.md carries no dated {release} section")
+    day, month, year = match.groups()
+    return f"{int(year):04d}-{MONTHS.index(month) + 1:02d}-{int(day):02d}"
+
+
+def root_document_versions(text):
+    """Releases named by root release documents. A path under spec/<v>/ naming
+    that same release is a deliberate link into history, not a current document."""
+    found = set()
+    for snapshot, named in ROOT_RELEASE_DOCUMENT.findall(text):
+        if snapshot != named:
+            found.add(named)
+    return found
+
+
+def markdown_targets(text):
+    """Relative link targets, without anchors. External and in-page links are skipped."""
+    targets = []
+    for target in MARKDOWN_LINK.findall(text):
+        if target.startswith(("http://", "https://", "mailto:", "#")):
+            continue
+        targets.append(target.split("#", 1)[0])
+    return [t for t in targets if t]
+
+
+def package_path_exists(root, rel, context="repository"):
+    """Whether a package-relative link target exists in the layout being gated.
+
+    The README is written for the repository, where every contract sits at its
+    published URL path, and there every link must resolve. An extracted archive
+    flattens the frozen contract surface, so its links into schemas/ and
+    value-schemas/ are not resolved there; every other link still is.
+    """
+    import posixpath
+    rel = posixpath.normpath(rel.rstrip("/") or ".")
+    if rel == ".." or rel.startswith(("../", "/")):
+        return False
+    if context != "repository" and rel.startswith(("schemas/", "value-schemas/")):
+        return True
+    return (root / rel).exists()
+
+
+def package_relative_exists(root, base, target, context="repository"):
+    """A link target relative to `base`, which must stay inside the package."""
+    import posixpath
+    rel = posixpath.normpath(posixpath.join(base, target))
+    return not (rel == ".." or rel.startswith("../")) and package_path_exists(root, rel, context)
+
+
+def current_claim_problems(label, text, release=EXPECTED_RELEASE):
+    problems = []
+    for named in sorted({a or b for a, b in PRESENT_TENSE_RELEASE.findall(text)}):
+        if named != release:
+            problems.append(f"{label} describes OBDS {named} in the present tense as if it were current")
+    if PROSPECTIVE_WORDING.search(text):
+        problems.append(f"{label} still describes a published release or capability as prospective")
+    return problems
+
+
+def readme_problems(text, release, release_date, exists):
+    """Current-state checks for README.md. `exists(rel)` resolves a link target."""
+    problems = []
+    lines = README_CURRENT_LINE.findall(text)
+    if len(lines) != 1:
+        problems.append(f"README.md carries {len(lines)} current release lines, expected exactly one")
+    for named, date in lines:
+        if named != release:
+            problems.append(f"README.md announces OBDS {named} as the current release, not {release}")
+        if date != long_date(release_date):
+            problems.append(f"README.md dates the current release {date}, not {long_date(release_date)}")
+    for named in sorted(root_document_versions(text)):
+        if named != release:
+            problems.append(f"README.md names a root release document of OBDS {named}, not {release}")
+    targets = markdown_targets(text)
+    for pattern in README_CRITICAL_DOCUMENTS:
+        name = pattern.format(r=release)
+        if name not in targets:
+            problems.append(f"README.md does not link {name}")
+    for target in sorted(set(targets)):
+        if not exists(target):
+            problems.append(f"README.md links a file that does not exist: {target}")
+    problems.extend(current_claim_problems("README.md", text, release))
+    return problems
+
+
+def task_facts_status_problems(suite_readme, adoption, release, exists):
+    """The suite README states the current status; ADOPTION.md keeps its record under a status block.
+
+    `exists(rel)` resolves a target relative to reference/task-facts/1.0/.
+    """
+    label = "reference/task-facts/1.0/README.md"
+    problems = current_claim_problems(label, suite_readme, release)
+    if "published, optional" not in suite_readme:
+        problems.append(f"{label} does not state that Task Facts 1.0 is published and optional")
+    if "`productionIntegration: false`" not in suite_readme:
+        problems.append(f"{label} does not state the productionIntegration: false limitation")
+    for named in sorted(root_document_versions(suite_readme)):
+        if named != release:
+            problems.append(f"{label} names a root release document of OBDS {named}, not {release}")
+    for target in sorted(set(markdown_targets(suite_readme))):
+        if not exists(target):
+            problems.append(f"{label} links a file that does not exist: {target}")
+    # The record below the block keeps its pre-publication wording on purpose,
+    # so only the block is read, and the block quotes that wording to explain it.
+    status = adoption.split("\n\n", 1)[0]
+    if not status.startswith(TASK_FACTS_STATUS):
+        problems.append("reference/task-facts/1.0/ADOPTION.md does not open with its published status block")
+    elif "`productionIntegration: false`" not in status:
+        problems.append("reference/task-facts/1.0/ADOPTION.md status block drops the productionIntegration: false limitation")
+    return problems
+
+
+# Open Graph cards. The eight cards under og/ were rendered for 4.0.4, and the
+# cards published with 4.1.0, 4.1.1 and 4.1.2 still printed 4.0.4 while each
+# page's og:image:alt named the current release. A PNG cannot be read for its
+# text, so tools/build-og-images.py stamps each card with the release it was
+# rendered for, in a tEXt chunk, and this reads the stamp back. og/ is website
+# material, not package material, so the check runs in the repository only.
+OG_STAMP_KEYWORD = "OBDS-Release"
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+OG_IMAGE_META = re.compile(r'<meta property="og:image" content="https://openbranddefinition\.org/(og/[a-z0-9-]+\.png)">')
+
+
+def png_text_chunks(raw):
+    """Every tEXt chunk of a PNG as keyword -> text. Raises ValueError on anything that is not a PNG."""
+    import struct
+    import zlib
+    if not raw.startswith(PNG_SIGNATURE):
+        raise ValueError("not a PNG")
+    chunks, offset = {}, len(PNG_SIGNATURE)
+    while offset < len(raw):
+        if offset + 8 > len(raw):
+            raise ValueError("truncated PNG chunk header")
+        length, kind = struct.unpack(">I4s", raw[offset:offset + 8])
+        body = raw[offset + 8:offset + 8 + length]
+        crc = raw[offset + 8 + length:offset + 12 + length]
+        if len(body) != length or len(crc) != 4 or struct.unpack(">I", crc)[0] != zlib.crc32(kind + body):
+            raise ValueError("corrupt PNG chunk")
+        if kind == b"tEXt" and b"\0" in body:
+            keyword, text = body.split(b"\0", 1)
+            chunks[keyword.decode("latin-1")] = text.decode("latin-1")
+        offset += 12 + length
+        if kind == b"IEND":
+            return chunks
+    raise ValueError("PNG ends before IEND")
+
+
+def og_card_problems(root=ROOT, release=EXPECTED_RELEASE):
+    problems = []
+    pages = [p for p in PUBLICATION_EXPECTATIONS if p.endswith("index.html")]
+    for page in pages:
+        found = OG_IMAGE_META.findall((root / page).read_text(encoding="utf-8"))
+        if len(found) != 1:
+            problems.append(f"{page} declares {len(found)} og:image cards, expected one")
+            continue
+        card = root / found[0]
+        if not card.is_file():
+            problems.append(f"{page}: Open Graph card {found[0]} is missing")
+            continue
+        try:
+            stamp = png_text_chunks(card.read_bytes()).get(OG_STAMP_KEYWORD)
+        except ValueError as exc:
+            problems.append(f"{found[0]} is not a readable PNG: {exc}")
+            continue
+        if stamp != release:
+            problems.append(f"{found[0]} was rendered for {stamp or 'no recorded release'}, not {release}")
+    return problems
+
+
+def spec_date_problems(spec_text, release, release_date):
+    """Step 14 reads the specification's own Version line. Its Date line moves
+    with every release too, and nothing read it."""
+    stamped = re.findall(r"(?m)^\*\*Date:\*\*\s*(\S+)", spec_text.split("\n---", 1)[0])
+    if stamped != [release_date]:
+        return [f"OBDS-{release}.md is dated {stamped or 'nowhere'}, not {release_date}"]
+    return []
+
+
+def current_surface_problems(root=ROOT, context="repository", release=EXPECTED_RELEASE):
+    """Everything above, for the layout being gated."""
+    problems = []
+    release_date = current_release_date(root, release)
+    problems += readme_problems((root / "README.md").read_text(encoding="utf-8"), release, release_date,
+                                lambda rel: package_path_exists(root, rel, context))
+    problems += spec_date_problems((root / f"OBDS-{release}.md").read_text(encoding="utf-8"), release, release_date)
+    public = (root / f"OBDS-PUBLIC-README-{release}.md").read_text(encoding="utf-8")
+    problems += current_claim_problems(f"OBDS-PUBLIC-README-{release}.md", public, release)
+    if f"**OBDS {release}. Stable. {release_date}.**" not in public:
+        problems.append(f"OBDS-PUBLIC-README-{release}.md does not state **OBDS {release}. Stable. {release_date}.**")
+    for name in ("IMPLEMENTER-QUICKSTART.md", "ARCHITECTURE.md", "TEST-REQUIREMENTS.md", "MIGRATION.md"):
+        rel = f"OBDS-{release}-{name}"
+        problems += current_claim_problems(rel, (root / rel).read_text(encoding="utf-8"), release)
+    tf = root / "reference/task-facts/1.0"
+    problems += task_facts_status_problems(
+        (tf / "README.md").read_text(encoding="utf-8"), (tf / "ADOPTION.md").read_text(encoding="utf-8"),
+        release, lambda rel: package_relative_exists(root, "reference/task-facts/1.0", rel, context))
+    if context == "repository":
+        record = load(root / "publication-record.json")
+        if record.get("stableReleaseDate") != release_date or record.get("releases", {}).get(release, {}).get("date") != release_date:
+            problems.append(f"publication-record.json does not date {release} {release_date}, as its changelog does")
+        problems += og_card_problems(root, release)
+    return problems
 
 
 def main() -> int:
@@ -2045,7 +2295,9 @@ def main() -> int:
     #     1.1.3: 1.1.2 checked index.html only, and /authoring/ shipped
     #     announcing OBDS 1.1.0 in its title, badge and subtitle for a whole
     #     release. Every HTML page, llms.txt, the README and the publication
-    #     metadata are current-release surfaces and are all checked here.
+    #     metadata are current-release surfaces. This step checks the pages and
+    #     llms.txt; until 4.1.3 nothing checked the README's current release
+    #     (step 8 reads it for count claims only), which is what 15a adds.
     for page in sorted(ROOT.glob("*.html")) + sorted(ROOT.glob("*/index.html")):
         if not page.is_file():
             continue
@@ -2105,6 +2357,15 @@ def main() -> int:
                     f"the website {label} names release {named}, "
                     f"not {EXPECTED_RELEASE}",
                 )
+
+    # 15a. README.md, the public README, the current release documents, the Task
+    #      Facts status pages and, in the repository, the Open Graph cards. See
+    #      current_surface_problems() for what step 15 had been claiming since 1.1.3.
+    try:
+        for problem in current_surface_problems(ROOT, context):
+            check(False, problem)
+    except (OSError, ValueError, KeyError) as exc:
+        check(False, f"current-state surfaces could not be read: {exc}")
 
     # 16. a historical changelog section must keep its own numbers. Correcting
     #     the current release's count by string replacement rewrote 1.1.0's

@@ -1,6 +1,6 @@
 {
   "kind": "obds-task-facts-conformance",
-  "release": "4.1.2",
+  "release": "4.1.3",
   "suiteId": "task-facts-1.0",
   "suiteRevision": 1,
   "suiteHash": "8882209ebb4c9b87083cac751b06b39872b59f570d7be254b2471ec49487e9c9",

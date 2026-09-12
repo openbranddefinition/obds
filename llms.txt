@@ -2,7 +2,7 @@
 
 Project: Open Brand Definition
 Specification: OBDS
-Current release: 4.1.2 (stable, 10 September 2026)
+Current release: 4.1.3 (stable, 12 September 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
@@ -102,8 +102,8 @@ Overview: https://openbranddefinition.org/reference/task-facts/1.0/README.md
 Contract: https://openbranddefinition.org/reference/task-facts/1.0/contract/TASK-FACTS-CONTRACT.md
 Adoption and limits: https://openbranddefinition.org/reference/task-facts/1.0/ADOPTION.md
 Suite identity: https://openbranddefinition.org/reference/task-facts/1.0/SUITE.json
-Conformance result: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-TASK-FACTS-CONFORMANCE.json
-Schema index: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-TASK-FACTS-SCHEMA-INDEX.json
+Conformance result: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-TASK-FACTS-CONFORMANCE.json
+Schema index: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-TASK-FACTS-SCHEMA-INDEX.json
 
 ## Core principles
 
@@ -122,7 +122,7 @@ HARD_BOUNDARIES, FACT_GROUNDING, STATE_MAP, GUIDANCE_CONTEXT, TASK_INPUT.
 
 ## Authoritative specification
 
-https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2.md
+https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3.md
 
 ## Authoring and curation
 
@@ -136,8 +136,8 @@ what it requires: both build successfully with valid hashes.
 
 ## Schemas
 
-Schema index: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-SCHEMA-INDEX.json
-Publication map: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-PUBLICATION-MAP.json
+Schema index: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-SCHEMA-INDEX.json
+Publication map: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-PUBLICATION-MAP.json
 Schema base: https://openbranddefinition.org/schemas/1.0.0/
 Value schema base: https://openbranddefinition.org/value-schemas/1.0.0/
 
@@ -161,14 +161,16 @@ Deterministic governed result hash, 59 of 59 cross-language vectors:
                          https://openbranddefinition.org/research/governed-result-hash/README.md
 Governed Communications Benchmark, 14 cases including one published failure:
                          https://openbranddefinition.org/research/governed-communications-benchmark/README.md
+SUPABRAND, governed brand truth across two implementations, Round 4 mixed:
+                         https://openbranddefinition.org/research/supabrand/
 Known limits of OBDS:    https://openbranddefinition.org/research/limits/README.md
 
 ## Downloads
 
-Complete package: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-FINAL.zip
-Quickstart: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-IMPLEMENTER-QUICKSTART.md
-Changelog: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-CHANGELOG.md
-Migration: https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2-MIGRATION.md
+Complete package: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-FINAL.zip
+Quickstart: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-IMPLEMENTER-QUICKSTART.md
+Changelog: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-CHANGELOG.md
+Migration: https://openbranddefinition.org/spec/4.1.3/OBDS-4.1.3-MIGRATION.md
 Publication record: https://openbranddefinition.org/publication-record.json
 Source repository: https://github.com/openbranddefinition/obds
 
@@ -210,6 +212,7 @@ Written walkthrough:   https://openbranddefinition.org/examples/README.md
 
 Published as released, not modified, historical.
 
+OBDS 4.1.2  https://openbranddefinition.org/spec/4.1.2/OBDS-4.1.2.md
 OBDS 4.1.1  https://openbranddefinition.org/spec/4.1.1/OBDS-4.1.1.md
 OBDS 4.1.0  https://openbranddefinition.org/spec/4.1.0/OBDS-4.1.0.md
 OBDS 4.0.4  https://openbranddefinition.org/spec/4.0.4/OBDS-4.0.4.md
@@ -237,7 +240,7 @@ OBDS 1.0.1  https://openbranddefinition.org/spec/1.0.1/OBDS-1.0.1.md
 OBDS 1.0.0  https://openbranddefinition.org/spec/1.0.0/OBDS-1.0.0.md
 
 Section 32 of the 1.0.0 document and section 32.1 of the 1.0.1 document carry
-the licensing wording that was current at the time. Section 32.1 of 4.1.2 is
+the licensing wording that was current at the time. Section 32.1 of 4.1.3 is
 the operative one, unchanged from 1.0.2.
 
 OBDS 4.0 closes five production-boundary failures found after 3.x: filesystem containment,

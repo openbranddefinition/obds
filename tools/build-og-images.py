@@ -13,6 +13,14 @@ Rendering is done by `rsvg-convert` (Homebrew `librsvg`). The SVG sources are
 temporary; only the PNGs under `og/` are kept, and `tools/` never ships to the
 site, so the generator stays private while its output is public.
 
+Every card is stamped with the release it was rendered for, in a PNG tEXt
+chunk named `OBDS-Release`. The cards print the release in their top-right
+corner, and the cards published with 4.1.0, 4.1.1 and 4.1.2 still printed 4.0.4
+because nothing in the release process re-rendered them. The stamp makes that mechanical:
+reference/release-gate.py reads it back and refuses a stale or unstamped card,
+tools/build-release.py refuses to build with one, and tools/deploy-smoke-test.py
+checks the cards the site actually serves.
+
 Usage, from the repository root:
 
     python3 tools/build-og-images.py            # render og/*.png and patch the HTML
@@ -23,10 +31,13 @@ Usage, from the repository root:
 from __future__ import annotations
 
 import html
+import importlib.util
 import re
+import struct
 import subprocess
 import sys
 import tempfile
+import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -199,6 +210,27 @@ def patch(page: Path, slug: str, title: str) -> bool:
     return True
 
 
+def _gate():
+    spec = importlib.util.spec_from_file_location("og_release_gate", ROOT / "reference" / "release-gate.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def stamp(raw: bytes, release: str) -> bytes:
+    """Insert one tEXt chunk `OBDS-Release` = release directly after IHDR."""
+    gate = _gate()
+    signature = gate.PNG_SIGNATURE
+    if not raw.startswith(signature) or raw[12:16] != b"IHDR":
+        raise ValueError("rsvg-convert did not produce a PNG with a leading IHDR")
+    ihdr_end = len(signature) + 12 + struct.unpack(">I", raw[8:12])[0]
+    body = gate.OG_STAMP_KEYWORD.encode("latin-1") + b"\0" + release.encode("latin-1")
+    chunk = struct.pack(">I", len(body)) + b"tEXt" + body + struct.pack(">I", zlib.crc32(b"tEXt" + body))
+    stamped = raw[:ihdr_end] + chunk + raw[ihdr_end:]
+    assert gate.png_text_chunks(stamped).get(gate.OG_STAMP_KEYWORD) == release
+    return stamped
+
+
 def main() -> int:
     args = set(sys.argv[1:])
     check = "--check" in args
@@ -222,6 +254,7 @@ def main() -> int:
             check=True,
         )
         Path(svg).unlink()
+        png.write_bytes(stamp(png.read_bytes(), VERSION))
         print(f"og/{slug}.png  {title}")
         if not render_only and patch(page, slug, title):
             patched.append(page.relative_to(ROOT).as_posix())
@@ -229,7 +262,10 @@ def main() -> int:
     if check:
         for m in missing:
             print(f"missing: {m}")
-        return 1 if missing else 0
+        stale = [] if missing else _gate().og_card_problems(ROOT, VERSION)
+        for problem in stale:
+            print(f"stale: {problem}")
+        return 1 if missing or stale else 0
 
     for p in patched:
         print(f"patched  {p}")

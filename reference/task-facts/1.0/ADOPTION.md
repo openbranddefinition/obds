@@ -1,3 +1,5 @@
+> **Status: published.** Task Facts 1.0 became a published, optional OBDS capability with OBDS 4.1.0 on 9 September 2026 and is unchanged in every later release. This file is the adoption record and is kept as it was written before that publication: "prospective" and "internal candidate" below describe the state at the time of adoption, not the current one, and its file references name the 4.1.0 artefacts. The current specification and result files are linked from [README.md](README.md). No production integration is claimed; every published Task Facts conformance result carries `productionIntegration: false`.
+
 # Prospective OBDS 4.1.0 adoption of optional Task Facts 1.0
 
 Internal candidate, not published. Adoption becomes effective only on authorized OBDS 4.1.0 publication; no current public status is changed here.

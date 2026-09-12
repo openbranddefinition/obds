@@ -199,21 +199,21 @@
   },
   "kind": "obds-release-test-result",
   "notes": [
-    "OBDS 4.1.2 is a PATCH release: Release-tooling release. tools/deploy-smoke-test.py resolved the frozen publication inventory from a path with the release written into it, so a correct 4.1.1 deployment failed its own smoke test against the previous release frozen bytes. The path now comes from the release gate, which owns the current release, and a focused regression proves it. No normative OBDS contract, schema, Task Facts semantic, governed hash, conformance behaviour or public page content changed.",
-    "The frozen 1.0.0 public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 3.0.4, 4.0.0, 4.0.1, 4.0.2, 4.0.3, 4.0.4, 4.1.0 and 4.1.1. New 4.0.0 contracts are published beside it.",
+    "OBDS 4.1.3 is a PATCH release: Public-surface and documentation release. It repairs the repository README, which still named 4.1.0 as the current release and linked five root documents that no longer exist, restates the public README so that the five production-boundary closures are credited to 4.0.0, marks Task Facts 1.0 as published and optional on its status pages while keeping the adoption record, adds release-gate checks for the README and for the release stamp of the Open Graph cards, and re-renders those cards. No normative OBDS contract, schema, Task Facts semantic, suite identity, governed hash or conformance behaviour changed.",
+    "The frozen 1.0.0 public schema surface is byte-identical to OBDS 1.0.0, 1.0.1, 1.0.2, 1.0.3, 1.0.4, 1.1.0, 1.1.1, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.6, 2.0.0, 3.0.0, 3.0.1, 3.0.2, 3.0.3, 3.0.4, 4.0.0, 4.0.1, 4.0.2, 4.0.3, 4.0.4, 4.1.0, 4.1.1 and 4.1.2. New 4.0.0 contracts are published beside it.",
     "The specification and the documentation are licensed under CC BY 4.0. The schemas, release metadata, reference implementation, conformance suite and examples are licensed under the Apache License 2.0.",
     "This file carries the section 26 identifiers: implementation, obdsVersion, suiteHash, conformanceProfiles, the counts and requiredCasesSkippedOrChanged.",
     "suiteHash covers the suite runner and the seven suite directories with their fixtures. It excludes reference/foundation/src/, which is the implementation under test and is identified by the implementation field.",
     "A profile is listed under conformanceProfiles because the executed suite contains cases for that conformance section. It is evidence for the section, not an independent certification.",
     "This release runs 1158 cases, adversarial 38, context-assembly 24, context-delivery 3, design-space 20, foundation 1052, golden 6, integration 15.",
     "The result is reproducible in two layouts: the repository, where the public schemas sit at schemas/1.0.0/, and an unpacked release archive, where they are flat.",
-    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-4.1.2-TEST-REQUIREMENTS.md."
+    "Node.js is required to execute the cross-language canonicalisation tests. See OBDS-4.1.3-TEST-REQUIREMENTS.md."
   ],
-  "obdsVersion": "4.1.2",
+  "obdsVersion": "4.1.3",
   "passed": true,
   "passedCount": 1158,
-  "promotedFrom": "4.1.1",
-  "release": "4.1.2",
+  "promotedFrom": "4.1.2",
+  "release": "4.1.3",
   "requiredCasesSkippedOrChanged": false,
   "schemaVersion": "1.0.0",
   "skippedCount": 0,
@@ -229,5 +229,5 @@
   },
   "suiteFileCount": 160,
   "suiteHash": "sha256:da65dab455da04fdbf50d9917509ee70e5cf24207dffa086dc91aa039be9091e",
-  "testOutputHash": "sha256:b66fae36eb5f2ffefcf761d955a1f48ab2a82c5c3f1672b8815f3998f2a79a6b"
+  "testOutputHash": "sha256:13126da04046b44962a42e2b5789383d63ab23c0838c695f97c9aaf8302e1da8"
 }

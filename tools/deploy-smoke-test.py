@@ -189,6 +189,40 @@ def verify_exact_publication(base, root=None, fetch=None):
     return checked
 
 
+def verify_og_cards(base, root=None, fetch=None):
+    """Every served page's Open Graph card must be stamped for the current release.
+
+    The live site served cards printing 4.0.4 through the 4.1.2 release, because
+    nothing that ran after a deployment looked at them. The page and the card are both
+    read from the deployment, and the stamp is read back with the gate's reader.
+    """
+    import importlib.util
+    from pathlib import Path
+    root = root or Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location("release_gate_og", root / "reference/release-gate.py")
+    gate = importlib.util.module_from_spec(spec); spec.loader.exec_module(gate)
+    if fetch is None:
+        def fetch(url):
+            try:
+                with urllib.request.urlopen(url, timeout=TIMEOUT) as response:
+                    return response.status, response.read()
+            except urllib.error.HTTPError as error:
+                return error.code, error.read()
+    checked = []
+    for page in (p for p in gate.PUBLICATION_URLS if p.endswith("index.html")):
+        code, raw = fetch(base + gate.PUBLICATION_URLS[page])
+        assert code == 200, "Page not served: " + page
+        cards = gate.OG_IMAGE_META.findall(raw.decode("utf-8"))
+        assert len(cards) == 1, "Expected one og:image on " + page
+        code, image = fetch(base + "/" + cards[0])
+        assert code == 200, "Open Graph card not served: " + cards[0]
+        release = gate.png_text_chunks(image).get(gate.OG_STAMP_KEYWORD)
+        assert release == gate.EXPECTED_RELEASE, (
+            f"Open Graph card {cards[0]} is stamped {release or 'with no release'}, not {gate.EXPECTED_RELEASE}")
+        checked.append("/" + cards[0])
+    return checked
+
+
 def main() -> int:
     base = (sys.argv[1] if len(sys.argv) > 1 else DEFAULT_BASE).rstrip("/")
     print(f"deploy smoke test against {base}")
@@ -198,6 +232,11 @@ def main() -> int:
 
     try:
         verify_exact_publication(base)
+    except (AssertionError, OSError, ValueError, KeyError) as exc:
+        failures.append(str(exc))
+    try:
+        cards = verify_og_cards(base)
+        print(f"open graph cards\n  ok    {len(cards)} served cards stamped for the current release\n")
     except (AssertionError, OSError, ValueError, KeyError) as exc:
         failures.append(str(exc))
     print("must be absent")

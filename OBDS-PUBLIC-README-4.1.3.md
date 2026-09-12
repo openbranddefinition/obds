@@ -1,6 +1,6 @@
 # Open Brand Definition
 
-**OBDS 4.1.2** is the stable Open Brand Definition Specification.
+**OBDS 4.1.3** is the stable Open Brand Definition Specification.
 
 It defines a vendor-neutral control layer for approved brand truth used by AI systems and renderers.
 
@@ -21,9 +21,13 @@ For dynamic rendering:
 
 ## Status
 
-**OBDS 4.1.2. Stable. 2026-09-10.**
+**OBDS 4.1.3. Stable. 2026-09-12.**
 
-OBDS 4.1.0 closes five production boundaries: contained output paths, immutable explicitly selected generations, provenance of all four model-projection slots, schema-first manifest validation, and provider failure evidence. Runtime Decision Record, Model Input Package and Build Report now have 4.0.0 contracts. The new closed-enum decision `model_failed` makes this a major release.
+OBDS 4.1.3 is a public-surface and documentation patch. It repairs the repository README, this document and the Task Facts status pages, adds release-gate checks that hold them current, and re-renders the social preview cards. It changes no normative contract, no schema, no Task Facts semantics, no governed hash and no conformance behaviour.
+
+OBDS 4.1.0 added the optional Task Facts 1.0 evaluator capability, with its own separate conformance suite. 4.1.1 and 4.1.2 were public-surface and release-tooling patches on top of it.
+
+OBDS 4.0.0 was the Production Boundary Closure release. It closed five production boundaries: contained output paths, immutable explicitly selected generations, provenance of all four model-projection slots, schema-first manifest validation, and provider failure evidence. Runtime Decision Record, Model Input Package and Build Report gained 4.0.0 contracts, and the new closed-enum decision `model_failed` made 4.0.0 a major release. 4.0.1 to 4.0.4 changed no normative contract.
 
 OBDS 3.0 was the Semantic Closure release.
 
@@ -56,4 +60,4 @@ Neither licence grants trademark rights. Truthful compatibility statements such 
 
 ## Optional Task Facts
 
-Prospective OBDS 4.1.0 adds optional Task Facts 1.0, preserving payload 0.1 and TFJ-0.1. [Adoption and limits](reference/task-facts/1.0/ADOPTION.md) and [separate runnable conformance](reference/task-facts/1.0/README.md) identify the exact contract and suite. Existing packages need no migration or new dependency. No production integration is claimed.
+Task Facts 1.0 is a published, optional OBDS capability, added in 4.1.0 and unchanged since. It preserves payload 0.1 and TFJ-0.1. [Adoption and limits](reference/task-facts/1.0/ADOPTION.md) and [separate runnable conformance](reference/task-facts/1.0/README.md) identify the exact contract and suite. Existing packages need no migration or new dependency. No production integration is claimed.

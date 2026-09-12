@@ -1,3 +1,89 @@
+# OBDS changelog
+
+## 4.1.3
+
+12 September 2026.
+
+**Public-surface and documentation release. PATCH.**
+
+OBDS 4.1.3 repairs the public and implementer surface and closes the release-gate
+gap that let it drift. No normative contract, no schema, no value schema, no Task
+Facts semantic, no suite identity, no governed hash, no conformance behaviour and
+no conformance case count changed. The 1.0.0 contract surface stays frozen and
+every contract fingerprint is unchanged against 4.1.2.
+
+### What moved
+
+- `README.md`, the page GitHub shows first and the README inside the release
+  archive, still named 4.1.0 as the current release, dated 9 September 2026. Its
+  repository table linked `OBDS-4.1.0.md`, `OBDS-4.1.0-IMPLEMENTER-QUICKSTART.md`,
+  `OBDS-4.1.0-TEST-RESULT.json`, `OBDS-4.1.0-CHANGELOG.md` and
+  `OBDS-4.1.0-MIGRATION.md`. Four of them left the root with 4.1.1 and the
+  changelog with 4.1.2, so the links to the specification, the quickstart and the
+  test result were dead.
+  It now names the current files and the current release, describes Task Facts
+  1.0 as published and optional, and states the 1.0.0 contract identity without
+  the release list that had to be edited every release and had stopped at 4.1.0.
+
+- The public README said "OBDS 4.1.0 closes five production boundaries" and that
+  `model_failed` "makes this a major release". Those closures are 4.0.0, the
+  Production Boundary Closure release; the sentence had been carried forward by
+  version replacement since 4.0.x. `OBDS-PUBLIC-README-4.1.3.md` credits them to
+  4.0.0, says what 4.1.0 added and what 4.1.3 is.
+
+- Task Facts status. The suite `README.md` introduced itself as a "Prospective
+  OBDS 4.1.0 internal candidate", and the quickstart, architecture and
+  test-requirements documents called the release that carries Task Facts "this
+  prospective release". They now say that Task Facts 1.0 is published and
+  optional, added in 4.1.0 and unchanged since, and the suite README links the
+  current specification. `ADOPTION.md` is the adoption record and keeps its text
+  byte for byte under a new status block that says the record predates
+  publication and that no production integration is claimed.
+  `RUNNER-CONTRACT.md` is not edited: it is one of the suite identity files in
+  `SUITE.json`, so its bytes are part of the Task Facts suite hash. The suite
+  README says so instead.
+
+- `reference/release-gate.py` step 15 has said since 1.1.3 that it checks the
+  README and never checked its current release. The new step 15a does: `README.md` must carry
+  exactly one current release line with this release and its date, must name no
+  root document of another release, must link the current specification,
+  quickstart, test result, changelog and migration, and every relative link in it
+  must resolve in the repository. In an extracted archive, which flattens the
+  frozen contract surface, links into `schemas/` and `value-schemas/` are not
+  resolved and every other link is. The
+  README, the public README, the current quickstart, architecture,
+  test-requirements and migration documents and the Task Facts suite README may
+  not describe another release in the present tense or anything as prospective.
+  The Task Facts suite README must state the published, optional status and the
+  `productionIntegration: false` limitation, and `ADOPTION.md` must open with
+  its status block. The release date is read from this changelog; the
+  specification's own **Date:** line and the public README must carry it, and in
+  the repository `publication-record.json` must agree.
+
+- Open Graph cards. The eight cards under `og/` were rendered for 4.0.4, and the
+  cards published with 4.1.0, 4.1.1 and 4.1.2 still printed 4.0.4 on every social
+  preview, while the pages' `og:image:alt` named the current release. A
+  re-render for 4.1.2 was prepared but never published. `tools/build-og-images.py` now stamps
+  each card with the release it was rendered for, in a PNG `tEXt` chunk named
+  `OBDS-Release`, and its `--check` reads the stamps back. The gate refuses a
+  missing, unreadable, unstamped or stale card in the repository,
+  `tools/build-release.py` refuses to build while one exists, and
+  `tools/deploy-smoke-test.py` reads the stamps of the cards the site serves. The
+  cards are re-rendered for 4.1.3.
+
+- `tools/test-final-closure.py` gains focused regressions for every new check,
+  including the README and the public README exactly as 4.1.2 shipped them, which
+  the gate now refuses for each defect they carried.
+
+### What did not move
+
+No normative section, no schema, no value schema, no Task Facts contract,
+fixture, vector, suite identity or evaluator behaviour, no TFJ or snapshot
+identity, no governed hash, no Build Plan, Model Input Package or Runtime
+Decision Record semantics, no conformance decision semantics, no conformance
+case. `spec/4.1.2/` and every earlier snapshot are byte-identical and their tags
+are unchanged.
+
 # OBDS 4.1.2 - Release tooling
 
 ## 4.1.2

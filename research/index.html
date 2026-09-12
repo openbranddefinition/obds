@@ -6,8 +6,8 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<title>OBDS Research: Deterministic Interoperability, Governed Communications Benchmark, Known Limits</title>
-<meta name="description" content="The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark whose wrong claims are all downstream transformations of correct source material, and a written statement of what OBDS does not prove.">
+<title>OBDS Research: Deterministic Interoperability, Governed Communications Benchmark, SUPABRAND, Known Limits</title>
+<meta name="description" content="The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark whose wrong claims are all downstream transformations of correct source material, the SUPABRAND synthetic brand corpus, and a written statement of what OBDS does not prove.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://openbranddefinition.org/research/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -18,7 +18,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/png">
-  <meta property="og:image:alt" content="OBDS Research — Open Brand Definition Specification 4.1.2">
+  <meta property="og:image:alt" content="OBDS Research — Open Brand Definition Specification 4.1.3">
 <meta property="og:description" content="Deterministic cross-language result hashes, a 14-case governed communications benchmark including a published failure, and what OBDS does not prove.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://openbranddefinition.org/og/research.png">
@@ -32,9 +32,9 @@
    "@id": "https://openbranddefinition.org/research/#page",
    "headline": "OBDS Research",
    "name": "OBDS Research",
-   "description": "The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark whose wrong claims are all downstream transformations of correct source material, and a written statement of what OBDS does not prove.",
+   "description": "The OBDS research surface publishes the evidence and the boundary of the evidence: deterministic cross-language result hashes, a governed communications benchmark whose wrong claims are all downstream transformations of correct source material, the SUPABRAND synthetic brand corpus, and a written statement of what OBDS does not prove.",
    "url": "https://openbranddefinition.org/research/",
-   "dateModified": "2026-09-10",
+   "dateModified": "2026-09-12",
    "inLanguage": "en",
    "license": "https://creativecommons.org/licenses/by/4.0/",
    "isPartOf": {
@@ -58,7 +58,7 @@
     "@type": "Organization",
     "name": "Kill The Dragon GmbH"
    },
-   "dateModified": "2026-09-10",
+   "dateModified": "2026-09-12",
    "isAccessibleForFree": true,
    "measurementTechnique": "Deterministic governed build and runtime decision under the OBDS reference implementation",
    "distribution": [
@@ -411,7 +411,7 @@
 <div class="site">
   <header class="topbar">
     <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
-    <div class="status">OBDS / 4.1.2 stable</div>
+    <div class="status">OBDS / 4.1.3 stable</div>
     <div class="lang-note" lang="en">English only</div>
     <a class="back" href="/">&larr; Back</a>
   </header>
@@ -421,7 +421,7 @@
       <div class="hero-main">
         <div class="eyebrow">
           <span>Research</span>
-          <span>Companion to OBDS 4.1.2</span>
+          <span>Companion to OBDS 4.1.3</span>
         </div>
         <h1 class="hero-title">The evidence,<br>and its<br><span class="outline">boundary</span></h1>
         <p class="hero-statement">Can an AI system retrieve the right evidence and still make the wrong governed decision? Yes. This is the reproducible evidence for that, and the written statement of what it does not prove.</p>
@@ -458,6 +458,14 @@
           <p>Case 14 is adversarial: it was written to defeat OBDS, and it does. It is published as a failure rather than removed, because an under-declared build target builds successfully with valid hashes and no governance layer can see it.</p>
           <ul class="plain">
             <li><a href="/research/governed-communications-benchmark/README.md">Read the benchmark</a> &middot; <a href="/research/governed-communications-benchmark/results-table.md">results table</a> &middot; <a href="/research/governed-communications-benchmark/raw-results.json">raw results (JSON)</a> &middot; <a href="/research/governed-communications-benchmark/run_benchmark.py">run_benchmark.py</a></li>
+          </ul>
+        </div>
+
+        <div class="q">
+          <h3>SUPABRAND &mdash; governed brand truth across two implementations</h3>
+          <p>A synthetic, deliberately difficult brand corpus: twelve markets, five languages, overlapping and expiring sources, and twenty hidden cases the participants never see. In Round 4, against OBDS 4.1.2, two implementations each reached 39 of 40 curation points and returned the same 93 of 93 Task Facts decisions in a bounded replay. Neither completed a governed end-to-end run: 0 of 20. The verdict is mixed, and the page states where the boundary sits.</p>
+          <ul class="plain">
+            <li><a href="/research/supabrand/">Read the SUPABRAND research</a></li>
           </ul>
         </div>
 

@@ -5,7 +5,7 @@
  "conformanceTestsSkipped": 0,
  "contact": "lets@killthedragon.com",
  "contributingUrl": "https://openbranddefinition.org/CONTRIBUTING.md",
- "currentRelease": "4.1.2",
+ "currentRelease": "4.1.3",
  "currentReleaseStatus": "stable",
  "examplesUrl": "https://openbranddefinition.org/examples/README.md",
  "fullName": "Open Brand Definition Specification",
@@ -42,8 +42,8 @@
   "trademarksReserved": true
  },
  "note": "This record documents the publication of the project page. It is not a grant of rights or a substitute for formal IP advice.",
- "packageZipSha256": "sha256:bd1fb222ac84bb612ed2178009489d1f11545d694aa4c7d38bf46ed0c0b9e5c4",
- "previousRelease": "4.1.1",
+ "packageZipSha256": "sha256:18292e8a047883721313728bbf2d51e8f75397b533920c925b0c7508e884ae01",
+ "previousRelease": "4.1.2",
  "project": "Open Brand Definition",
  "publicSchemaCount": 21,
  "publicValueSchemaCount": 6,
@@ -249,6 +249,14 @@
    "packageZipSha256": "sha256:bd1fb222ac84bb612ed2178009489d1f11545d694aa4c7d38bf46ed0c0b9e5c4",
    "status": "stable",
    "testOutputHash": "sha256:b66fae36eb5f2ffefcf761d955a1f48ab2a82c5c3f1672b8815f3998f2a79a6b"
+  },
+  "4.1.3": {
+   "baseUrl": "https://openbranddefinition.org/spec/4.1.3/",
+   "date": "2026-09-12",
+   "note": "Public-surface and documentation release. It repairs the repository README, which still named 4.1.0 as the current release and linked five root documents that no longer exist, restates the public README so that the five production-boundary closures are credited to 4.0.0, marks Task Facts 1.0 as published and optional on its status pages while keeping the adoption record, adds release-gate checks for the README and for the release stamp of the Open Graph cards, and re-renders those cards. No normative OBDS contract, schema, Task Facts semantic, suite identity, governed hash or conformance behaviour changed",
+   "packageZipSha256": "sha256:18292e8a047883721313728bbf2d51e8f75397b533920c925b0c7508e884ae01",
+   "status": "stable",
+   "testOutputHash": "sha256:13126da04046b44962a42e2b5789383d63ab23c0838c695f97c9aaf8302e1da8"
   }
  },
  "schemaBaseUrl": "https://openbranddefinition.org/schemas/1.0.0/",
@@ -257,13 +265,13 @@
  "schemaVersion": "1.0",
  "sourceRepository": "https://github.com/openbranddefinition/obds",
  "specification": "OBDS",
- "specificationBaseUrl": "https://openbranddefinition.org/spec/4.1.2/",
+ "specificationBaseUrl": "https://openbranddefinition.org/spec/4.1.3/",
  "specificationFilesPublished": true,
- "specificationPublishedAt": "2026-09-10",
- "stableReleaseDate": "2026-09-10",
- "testOutputHash": "sha256:b66fae36eb5f2ffefcf761d955a1f48ab2a82c5c3f1672b8815f3998f2a79a6b",
+ "specificationPublishedAt": "2026-09-12",
+ "stableReleaseDate": "2026-09-12",
+ "testOutputHash": "sha256:13126da04046b44962a42e2b5789383d63ab23c0838c695f97c9aaf8302e1da8",
  "totalPublicContracts": 35,
  "valueSchemaBaseUrl": "https://openbranddefinition.org/value-schemas/1.0.0/",
  "versionedSchemaCount": 8,
- "websiteIndexSha256": "sha256:069ee1af442c0fc5d43585b3a74df7c61ac7362a3e10584b4006aabce5eab3e1"
+ "websiteIndexSha256": "sha256:a069bab70f6ff0de07ad0e5972fcf064fdb60057711621561edc6f3216e56882"
 }

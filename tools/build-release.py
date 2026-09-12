@@ -255,7 +255,7 @@ CLAIM_SCOPE = (
 )
 
 
-PRIOR_RELEASE = "4.1.1"
+PRIOR_RELEASE = "4.1.2"
 
 
 def _release_kind(release: str) -> str:
@@ -665,6 +665,17 @@ def sync_publication_surface(release: str, counts: dict[str, int], archive: Path
     print("synced publication-record.json and index.html to the built artefacts")
 
 
+def require_current_og_cards(root: Path, release: str) -> None:
+    """The Open Graph cards are website material, not package material, but they
+    print the release, and the cards published with 4.1.0, 4.1.1 and 4.1.2 still
+    printed 4.0.4 because nothing in this build re-rendered them. A release is not
+    built while any card is stamped for another release: run
+    tools/build-og-images.py first."""
+    stale = _gate().og_card_problems(root, release)
+    if stale:
+        sys.exit("Open Graph cards are not current; run tools/build-og-images.py:\n  " + "\n  ".join(stale))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build the OBDS release package")
     parser.add_argument("--run-tests", action="store_true", help="regenerate the test output first")
@@ -674,6 +685,7 @@ def main() -> int:
     release = version()
     _gate().verify_repository_version(ROOT, "repository")
     print(f"OBDS release build, version {release}")
+    require_current_og_cards(ROOT, release)
     if args.run_tests:
         _gate().require_neutral_execution(ROOT)
     if args.run_tests:

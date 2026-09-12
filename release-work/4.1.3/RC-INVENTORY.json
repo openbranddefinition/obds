@@ -1,0 +1,84 @@
+{
+  "notPublished": true,
+  "purpose": "Frozen publication bytes of the 4.1.3 candidate; not approved until the gates and reviews pass",
+  "publication": [
+    {
+      "path": "index.html",
+      "url": "/",
+      "status": 200,
+      "sha256": "a069bab70f6ff0de07ad0e5972fcf064fdb60057711621561edc6f3216e56882"
+    },
+    {
+      "path": "authoring/index.html",
+      "url": "/authoring/",
+      "status": 200,
+      "sha256": "6c0f452aa6d0c88601305bfd6939c1bd866efeb3148f0ea5a35ceb022f7130aa"
+    },
+    {
+      "path": "examples/index.html",
+      "url": "/examples/",
+      "status": 200,
+      "sha256": "3ba7aed419ea2cb7fd9af519aea470ab0cc93caf3df8698eaf1d8011f354c322"
+    },
+    {
+      "path": "what-is-obds/index.html",
+      "url": "/what-is-obds/",
+      "status": 200,
+      "sha256": "fd8ad82c9c5b59ba55522380d999e39a74ae9be41862eb8073d2ab937de79df9"
+    },
+    {
+      "path": "research/index.html",
+      "url": "/research/",
+      "status": 200,
+      "sha256": "e9b275c6018b87f08e6f41ac95a712a2f54cb4a2339d2e993c3c6151c6ebfc29"
+    },
+    {
+      "path": "research/supabrand/index.html",
+      "url": "/research/supabrand/",
+      "status": 200,
+      "sha256": "d82cdce734b45eda82af9444920d1f3210c3021cc93bb65063286845c0a9474d"
+    },
+    {
+      "path": "machine-readable-brand-guidelines/index.html",
+      "url": "/machine-readable-brand-guidelines/",
+      "status": 200,
+      "sha256": "1fea1ba16ce423efbd7b3ab3cc0c37d14ba09c3827f987fbad8ea547f6c8cfe8"
+    },
+    {
+      "path": "brand-governance-for-ai/index.html",
+      "url": "/brand-governance-for-ai/",
+      "status": 200,
+      "sha256": "8f1edae4695b7f86aa9a084421738ca526167ed5af1ecc47df9925850b3b7244"
+    },
+    {
+      "path": "compare/machine-readable-brand-specifications/index.html",
+      "url": "/compare/machine-readable-brand-specifications/",
+      "status": 200,
+      "sha256": "e6e6996e2c9c3bdf1dca8cbee81641cd23e62f88b745dd33ddb688366b176f52"
+    },
+    {
+      "path": "404.html",
+      "url": "/404.html",
+      "status": 200,
+      "sha256": "e86d7943cf23ffa8273b82472fcd94b5c52945afc044fef60e5abc0fea66c548"
+    },
+    {
+      "path": "llms.txt",
+      "url": "/llms.txt",
+      "status": 200,
+      "sha256": "3ca1489897b84b4591b51e8f994321ba65e3d11620def276493e539aea6445e4"
+    },
+    {
+      "path": "publication-record.json",
+      "url": "/publication-record.json",
+      "status": 200,
+      "sha256": "74aad5b3dcb2e6e97a2640d10c759343f764e3ec89126a4c164f25e0b6438061"
+    },
+    {
+      "path": "sitemap.xml",
+      "url": "/sitemap.xml",
+      "status": 200,
+      "sha256": "03f926c2047a59af5b48111307b0d57e23053997d0b209844e7ab13349b70dd7"
+    }
+  ]
+}

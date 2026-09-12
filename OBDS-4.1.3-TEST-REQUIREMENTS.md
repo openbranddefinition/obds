@@ -1,4 +1,4 @@
-# OBDS 4.1.2 Test and Runtime Requirements
+# OBDS 4.1.3 Test and Runtime Requirements
 
 This file declares every dependency needed to reproduce the official 1158/1158 conformance run.
 It separates what a consumer of OBDS needs from what the reference conformance suite needs.
@@ -9,15 +9,15 @@ The 4.0.0 closure cases exercise F1 path and symlink containment, F2 failed-gene
 
 **None imposed by the specification.**
 
-OBDS 4.1.2 is a data and contract specification. A conforming implementation may be written in
+OBDS 4.1.3 is a data and contract specification. A conforming implementation may be written in
 any language. The normative artefacts are plain text:
 
-- `OBDS-4.1.2.md` (normative specification);
+- `OBDS-4.1.3.md` (normative specification);
 - `schemas/*.json` (21 public JSON Schemas, draft 2020-12) plus the versioned
   contracts beside them under `schemas/1.1.0/`, `schemas/3.0.0/` and `schemas/4.0.0/`;
 - `value-schemas/*.json` (6 public value-contract JSON Schemas, draft 2020-12) plus
   `value-schemas/3.0.0/rule.schema.json`;
-- `OBDS-4.1.2-SCHEMA-INDEX.json` and `OBDS-4.1.2-CAPABILITY-REGISTRY.json`.
+- `OBDS-4.1.3-SCHEMA-INDEX.json` and `OBDS-4.1.3-CAPABILITY-REGISTRY.json`.
 
 To consume OBDS you need a JSON Schema validator for your platform, a JSON reader and, if you
 accept governed YAML, a YAML 1.2 reader that rejects duplicate keys. Nothing in this package is
@@ -87,7 +87,7 @@ refused a release the repository had passed. `tools/` is part of the package fro
 packaging test asserts the invariant directly.
 
 ```bash
-unzip OBDS-4.1.2-FINAL.zip && cd OBDS-4.1.2-FINAL
+unzip OBDS-4.1.3-FINAL.zip && cd OBDS-4.1.3-FINAL
 python -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python reference/run_all.py
 .venv/bin/python reference/release-gate.py
@@ -200,7 +200,7 @@ JavaScript reader has to refuse what the Python reader refuses.
 
 ## Optional Task Facts 1.0
 
-This prospective release adds the separately claimed optional evaluator [adoption contract](reference/task-facts/1.0/ADOPTION.md) and [raw-file suite](reference/task-facts/1.0/README.md). Existing packages need no migration or evaluator dependency. No production integration is claimed. Payload 0.1 and TFJ-0.1 remain unchanged.
+Task Facts 1.0 is a published, optional capability, added in OBDS 4.1.0 and unchanged since: the separately claimed evaluator [adoption contract](reference/task-facts/1.0/ADOPTION.md) and [raw-file suite](reference/task-facts/1.0/README.md). Existing packages need no migration or evaluator dependency. No production integration is claimed. Payload 0.1 and TFJ-0.1 remain unchanged.
 
 ```sh
 python3 reference/task-facts/1.0/run-suite.py --result /tmp/task-facts-python.json --implementation-name research-python --implementation-version frozen-cycle-1 -- python3 reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py

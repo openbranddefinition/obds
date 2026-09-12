@@ -24,8 +24,8 @@
     }
   ],
   "freshReports": [
-    "OBDS-4.1.2-FOUNDATION-CONFORMANCE.json",
-    "OBDS-4.1.2-TASK-FACTS-CONFORMANCE.json"
+    "OBDS-4.1.3-FOUNDATION-CONFORMANCE.json",
+    "OBDS-4.1.3-TASK-FACTS-CONFORMANCE.json"
   ],
   "note": "Historical audit trees are retained unchanged in the non-public audit store. These four unchanged source dependencies reproduce the fresh neutral release reports; they are not a distribution of historical audit records. The root package manifest binds all public report and source bytes."
 }

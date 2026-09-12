@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>SUPABRAND: testing governed brand truth across two submissions</title>
+<meta name="description" content="SUPABRAND is a synthetic, deliberately difficult brand corpus used to test governed applicability. In Round 4, against OBDS 4.1.2, two separately authored submissions each scored 39/40 on hidden-case curation and returned the same 93/93 Task Facts decisions, and neither completed a governed end-to-end run: 0 of 20. Verdict: mixed.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://openbranddefinition.org/research/supabrand/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://openbranddefinition.org/research/supabrand/">
+<meta property="og:title" content="SUPABRAND research">
+  <meta property="og:image" content="https://openbranddefinition.org/og/research-supabrand.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="SUPABRAND research — Open Brand Definition Specification 4.1.3">
+<meta property="og:description" content="Round 4, against OBDS 4.1.2: 39/40 curation in both submissions, 93/93 identical Task Facts decisions in a bounded replay, 0 of 20 hidden cases completed end to end. Verdict: mixed.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://openbranddefinition.org/og/research-supabrand.png">
+<meta name="author" content="Kill The Dragon GmbH">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "TechArticle",
+ "@id": "https://openbranddefinition.org/research/supabrand/#page",
+ "headline": "SUPABRAND: testing governed brand truth across two submissions",
+ "name": "SUPABRAND research",
+ "description": "A synthetic adversarial brand corpus used to test governed applicability, curation and portability. Round 4, against OBDS 4.1.2, ended mixed: 39/40 curation in both submissions, 93/93 identical Task Facts decisions in a bounded replay, and 0 of 20 hidden cases completed end to end.",
+ "url": "https://openbranddefinition.org/research/supabrand/",
+ "dateModified": "2026-09-12",
+ "inLanguage": "en",
+ "license": "https://creativecommons.org/licenses/by/4.0/",
+ "isPartOf": {
+  "@type": "WebSite",
+  "name": "Open Brand Definition",
+  "url": "https://openbranddefinition.org/"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "Kill The Dragon GmbH"
+ }
+}
+</script>
+<style>
+  :root {
+    --paper: #fff;
+    --ink: #000;
+    --line: #000;
+    --pad: clamp(18px, 2.6vw, 42px);
+    --max: 1680px;
+    --step: clamp(14px, 1.05vw, 18px);
+    --display: clamp(46px, 8.6vw, 148px);
+    --headline: clamp(34px, 5.5vw, 92px);
+    --subhead: clamp(22px, 2.7vw, 42px);
+    --body: clamp(17px, 1.35vw, 23px);
+    --small: clamp(12px, .82vw, 15px);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: var(--paper); color: var(--ink); }
+  body {
+    margin: 0;
+    /* German sets longer words than English; a display word must break rather
+       than force the page wider than the viewport. */
+    overflow-wrap: break-word;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: var(--body);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
+  a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .16em; }
+  a:hover { text-decoration-thickness: 3px; }
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  .skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-110%);
+  }
+  .skip-link:focus { transform: translateY(0); }
+
+  .site {
+    width: min(100%, var(--max));
+    margin: 0 auto;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    min-height: 64px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(12px);
+  }
+  .mark, .status, .back {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--pad);
+    white-space: nowrap;
+  }
+  .mark { font-weight: 700; text-transform: uppercase; letter-spacing: -.04em; }
+  .status, .back { border-left: 1px solid var(--line); font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+  a:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+
+  .hero {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-main {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-content: space-between;
+    gap: 0;
+    padding: var(--pad);
+  }
+  .eyebrow {
+    grid-column: 1 / 13;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .11em;
+  }
+  .hero-title {
+    grid-column: 1 / 13;
+    margin: clamp(40px, 8vh, 96px) 0 0;
+    font-size: var(--display);
+    line-height: .8;
+    letter-spacing: -.075em;
+    text-transform: uppercase;
+    font-weight: 700;
+    max-width: 15ch;
+  }
+  .hero-title .outline {
+    color: var(--paper);
+    -webkit-text-stroke: max(1px, .012em) var(--ink);
+    text-stroke: max(1px, .012em) var(--ink);
+  }
+  .hero-statement {
+    grid-column: 1 / 13;
+    align-self: end;
+    margin: clamp(40px, 8vh, 100px) 0 0;
+    font-size: var(--subhead);
+    line-height: 1.06;
+    letter-spacing: -.045em;
+    max-width: 44ch;
+  }
+  .hero-foot {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+  }
+  .hero-foot > div {
+    min-height: 112px;
+    padding: 18px var(--pad);
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .hero-foot > div:first-child { border-left: 0; }
+  .label { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+  .value { font-size: clamp(18px, 1.9vw, 28px); letter-spacing: -.04em; }
+
+  .section {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    border-bottom: 1px solid var(--line);
+  }
+  .section-number {
+    grid-column: 1 / 3;
+    padding: var(--pad);
+    border-right: 1px solid var(--line);
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+  }
+  .section-content { grid-column: 3 / 13; padding: var(--pad); }
+  .section h2 {
+    margin: 0 0 clamp(40px, 7vw, 110px);
+    font-size: var(--headline);
+    line-height: .93;
+    letter-spacing: -.07em;
+    font-weight: 700;
+    max-width: 14ch;
+  }
+  .lead { margin: 0; font-size: var(--subhead); line-height: 1.08; letter-spacing: -.045em; max-width: 30ch; }
+  .inverse { background: var(--ink); color: var(--paper); --line: var(--paper); }
+
+  .pull {
+    margin: clamp(46px, 6vw, 90px) 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: clamp(22px, 2.5vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -.05em;
+    max-width: 30ch;
+  }
+  .micro-note { margin-top: 28px; max-width: 74ch; font-size: var(--small); line-height: 1.45; }
+
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .9em;
+    overflow-wrap: anywhere;
+  }
+
+  /* callout */
+  .callout { margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); display: grid; grid-template-columns: minmax(180px, .5fr) 1.5fr; }
+  .callout > div { padding: 20px; }
+  .callout > div + div { border-left: 1px solid var(--line); }
+  .callout .callout-key { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(15px, 1.3vw, 21px); font-weight: 700; }
+  .callout p { margin: 0; max-width: 58ch; }
+
+  /* chain */
+  .chain { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(50px, 7vw, 110px); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+  .chain > div { position: relative; padding: 18px 14px 22px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
+  .chain-step { font-size: clamp(16px, 1.5vw, 24px); letter-spacing: -.03em; text-transform: uppercase; font-weight: 700; }
+  .chain-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; max-width: 22ch; opacity: .72; }
+  .chain-index { font-size: var(--small); letter-spacing: .1em; }
+  .inverse .chain { border-color: var(--line); }
+
+  /* code block */
+  .code-block { margin-top: clamp(30px, 4vw, 50px); border: 1px solid var(--line); padding: 20px; overflow-x: auto; }
+  .code-block pre { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(12.5px, 1.05vw, 15.5px); line-height: 1.55; white-space: pre; }
+  .code-caption { margin-top: 10px; font-size: var(--small); opacity: .72; max-width: 60ch; }
+
+  /* state list */
+  .state-list { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .state-row { display: grid; grid-template-columns: minmax(170px, .55fr) 1.45fr; border-bottom: 1px solid var(--line); }
+  .state-row > div { padding: 18px 0; }
+  .state-row > div:not(:first-child) { border-left: 1px solid var(--line); padding-left: 28px; }
+  .state-name { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(16px, 1.4vw, 22px); font-weight: 700; }
+
+  /* boundary (is / is not) */
+  .boundary { margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .boundary-head { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); }
+  .boundary-head > div { padding: 18px 20px; }
+  .boundary-head > div + div { border-left: 1px solid var(--line); }
+  .boundary-term { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(20px, 2.2vw, 36px); font-weight: 700; letter-spacing: -.03em; margin-top: 8px; }
+  .boundary-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .boundary-body > div { padding: 20px; min-height: 180px; }
+  .boundary-body > div + div { border-left: 1px solid var(--line); }
+  .boundary-body ul { margin: 18px 0 0; padding: 0; list-style: none; }
+  .boundary-body li { padding: 7px 0; border-top: 1px solid var(--line); font-size: clamp(17px, 1.6vw, 26px); letter-spacing: -.04em; }
+  .boundary-foot { border-top: 1px solid var(--line); padding: 18px 20px; font-size: var(--small); line-height: 1.45; max-width: 84ch; }
+
+  /* proof chain */
+  .proof-chain { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .proof-row { display: grid; grid-template-columns: 1fr 58px 1fr; align-items: center; border-bottom: 1px solid var(--line); }
+  .proof-row > * { padding: 16px 0; }
+  .proof-a { font-size: clamp(20px, 2.2vw, 36px); letter-spacing: -.05em; text-transform: uppercase; }
+  .proof-arrow { text-align: center; }
+  .proof-b { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(13px, 1.1vw, 17px); letter-spacing: .02em; border-left: 1px solid var(--line); padding-left: 22px; }
+
+  /* integrity list (numbered) */
+  .integrity-list { margin-top: clamp(46px, 6vw, 90px); counter-reset: integrity; border-top: 1px solid var(--line); }
+  .integrity-item { counter-increment: integrity; display: grid; grid-template-columns: 74px 1fr; border-bottom: 1px solid var(--line); }
+  .integrity-item::before { content: counter(integrity, decimal-leading-zero); padding: 22px 18px; font-size: var(--small); letter-spacing: .1em; border-right: 1px solid var(--line); }
+  .integrity-item > div { padding: 22px 28px; }
+  .integrity-item h3 { margin: 0 0 8px; font-size: clamp(21px, 2.1vw, 34px); letter-spacing: -.045em; }
+  .integrity-item p { margin: 0; max-width: 64ch; }
+
+  /* actions */
+  .actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(46px, 6vw, 90px); border: 1px solid var(--line); }
+  .actions > a { padding: 22px 20px 26px; min-height: 170px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+  .actions > a + a { border-left: 1px solid var(--line); }
+  .actions > a:hover { background: var(--ink); color: var(--paper); }
+  .action-name { font-size: clamp(23px, 2.3vw, 38px); line-height: .96; letter-spacing: -.05em; text-transform: uppercase; font-weight: 700; }
+  .action-note { font-size: var(--small); line-height: 1.4; max-width: 26ch; }
+
+  .contact-line { margin-top: clamp(56px, 8vw, 130px); padding-top: 22px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+  .contact-line a { font-size: clamp(26px, 4vw, 62px); line-height: .9; letter-spacing: -.06em; overflow-wrap: anywhere; }
+
+  footer { display: grid; grid-template-columns: 1fr auto; gap: 30px; padding: 20px var(--pad); font-size: var(--small); text-transform: uppercase; letter-spacing: .07em; }
+
+  @media (max-width: 900px) {
+    .site { border-left: 0; border-right: 0; }
+    .topbar { grid-template-columns: 1fr auto; min-height: 58px; }
+    .status { display: none; }
+    .mark { padding: 0 16px; }
+    .hero-main { padding: 20px 16px 34px; }
+    .hero-title { font-size: clamp(46px, 15vw, 90px); }
+    .hero-statement { margin-top: 60px; font-size: clamp(24px, 6.5vw, 34px); }
+    .hero-foot { grid-template-columns: 1fr; }
+    .hero-foot > div { min-height: 90px; padding: 14px 16px; border-left: 0; border-top: 1px solid var(--line); }
+    .hero-foot > div:first-child { border-top: 0; }
+    .section { grid-template-columns: 1fr; }
+    .section-number { grid-column: 1; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+    .section-content { grid-column: 1; padding: 44px 16px 60px; }
+    .section h2 { margin-bottom: 56px; font-size: clamp(38px, 11vw, 64px); }
+    .callout { grid-template-columns: 1fr; }
+    .callout > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .chain { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .chain > div { min-height: 130px; }
+    .state-row { grid-template-columns: 1fr; }
+    .state-row > div:not(:first-child) { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+    .boundary-head, .boundary-body { grid-template-columns: 1fr; }
+    .boundary-head > div + div, .boundary-body > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .boundary-body > div { min-height: 0; }
+    .proof-row { grid-template-columns: 1fr 40px 1fr; }
+    .proof-b { padding-left: 14px; }
+    .actions { grid-template-columns: 1fr; }
+    .actions > a + a { border-left: 0; border-top: 1px solid var(--line); }
+    .actions > a { min-height: 140px; }
+    .contact-line { grid-template-columns: 1fr; }
+    footer { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #000; --ink: #fff; --line: #fff; }
+    .topbar { background: color-mix(in srgb, var(--paper) 94%, transparent); }
+  }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  @media print {
+    .topbar { display: none; }
+    .site { border: 0; }
+    .section { break-inside: avoid; }
+  }
+
+  .lang-note {
+    font-size: var(--small);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin-left: auto;
+    margin-right: 1.5rem;
+    white-space: nowrap;
+  }
+
+  .lang-disclosure {
+    margin-top: 40px;
+    max-width: 60ch;
+    font-size: var(--small);
+    line-height: 1.6;
+    opacity: .6;
+  }
+</style>
+
+<style>
+  .answer { margin: 0 0 clamp(40px, 6vw, 80px); padding: 22px 24px; border: 1px solid var(--line); }
+  .answer p { margin: 0; font-size: clamp(19px, 1.7vw, 27px); line-height: 1.22; letter-spacing: -.035em; max-width: 46ch; }
+  .answer .answer-label { display: block; margin-bottom: 12px; font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; }
+  .q { margin-top: clamp(46px, 6vw, 90px); border-top: 1px solid var(--line); }
+  .q h3 { margin: 0; padding: 22px 0 6px; font-size: clamp(21px, 2.1vw, 34px); letter-spacing: -.045em; }
+  .q p { margin: 0 0 22px; max-width: 68ch; }
+  table.cmp { width: 100%; border-collapse: collapse; margin-top: clamp(40px, 5vw, 70px); font-size: clamp(14px, 1.15vw, 18px); }
+  table.cmp th, table.cmp td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; letter-spacing: 0; line-height: 1.4; }
+  table.cmp th { font-size: var(--small); text-transform: uppercase; letter-spacing: .08em; }
+  .scroll-x { overflow-x: auto; }
+  ul.plain { margin: 18px 0 0; padding: 0; list-style: none; max-width: 68ch; }
+  ul.plain li { padding: 10px 0; border-top: 1px solid var(--line); }
+  .breadcrumb { font-size: var(--small); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; }
+</style>
+<style>
+  .result-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: clamp(40px, 5vw, 70px); border: 1px solid var(--line); }
+  .result-grid > div { padding: 22px 20px 26px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
+  .result-grid > div + div { border-left: 1px solid var(--line); }
+  .result-figure { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(30px, 3.4vw, 54px); font-weight: 700; letter-spacing: -.05em; }
+  .result-note { font-size: var(--small); line-height: 1.45; max-width: 30ch; }
+  @media (max-width: 900px) {
+    .result-grid { grid-template-columns: 1fr; }
+    .result-grid > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .result-grid > div { min-height: 0; }
+    /* A grid item defaults to min-width:auto, so a wide table or diagram pushes
+       the whole column past the viewport instead of scrolling inside its own
+       container. These four lines keep the page itself at viewport width. */
+    .section, .section-content { min-width: 0; }
+    .scroll-x, .code-block { min-width: 0; max-width: 100%; }
+    table.cmp { min-width: 0; }
+  }
+</style>
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="site">
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
+    <div class="status">OBDS / 4.1.3 stable</div>
+    <div class="lang-note" lang="en">English only</div>
+    <a class="back" href="/research/">&larr; Research</a>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-main">
+        <div class="eyebrow">
+          <span>Research / SUPABRAND</span>
+          <span>Companion to OBDS 4.1.3</span>
+        </div>
+        <h1 class="hero-title">Governed brand truth,<br>across two<br><span class="outline">submissions</span></h1>
+        <p class="hero-statement">Two separately authored submissions reached 39/40 on hidden-case curation and made the same 93/93 Task Facts decisions. Neither completed full governed enforcement: 0 of 20 end to end.</p>
+      </div>
+      <div class="hero-foot">
+        <div><span class="label">Corpus</span><span class="value">SUPABRAND, a synthetic and deliberately difficult brand archive.</span></div>
+        <div><span class="label">Round 4</span><span class="value">Run against OBDS 4.1.2, September 2026.</span></div>
+        <div><span class="label">Verdict</span><span class="value">Mixed.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="section-number">01 / The problem</div>
+      <div class="section-content">
+        <div class="answer">
+          <span class="answer-label">In one sentence</span>
+          <p>The governed semantics aligned strongly. Complete execution did not.</p>
+        </div>
+
+        <h2>Retrieval can find the right source and still use the wrong truth</h2>
+        <p class="lead">A retrieval system ranks passages by relevance. A brand decision needs something else: which approved truth is authoritative here, whether it is still valid, whether it applies to this market and channel, and whether anything may be produced at all.</p>
+
+        <div class="scroll-x">
+        <table class="cmp">
+          <tr><th>Retrieved passage</th><th>Relevant</th><th>May it govern this task</th></tr>
+          <tr><td>A 2024 range claim, approved at the time</td><td>Yes</td><td>No. Its approval period has ended.</td></tr>
+          <tr><td>A current range claim approved for the United Kingdom only</td><td>Yes</td><td>No. Wrong market.</td></tr>
+          <tr><td>A current range claim approved for the EU, with a required footnote</td><td>Yes</td><td>Yes, with the footnote.</td></tr>
+        </table>
+        </div>
+        <p class="code-caption">An illustrative case in the style of SUPABRAND, not taken from the benchmark: a post for Germany, published today, about an e-bike.</p>
+
+        <p class="micro-note">Only one of the three may govern the post. If that one were missing, the correct outcome is to stop and ask, not to fall back on the closest alternative.</p>
+
+        <div class="code-block">
+          <pre>Access / retrieval  -&gt;  possible information
+OBDS                -&gt;  governed applicability
+Execution           -&gt;  action</pre>
+        </div>
+        <p class="code-caption">OBDS does not replace retrieval, and it does not judge whether a claim is true in the world. It records which approved truth applies to which task, and when execution must not proceed.</p>
+      </div>
+    </section>
+
+    <section class="section" id="corpus">
+      <div class="section-number">02 / The corpus</div>
+      <div class="section-content">
+        <h2>What SUPABRAND is</h2>
+        <p class="lead">SUPABRAND Mobility SE is a fictional mobility manufacturer headquartered in Vienna. Everything in it is invented: no real company, certification, partnership or product performance is asserted.</p>
+
+        <div class="state-list">
+          <div class="state-row"><div><span class="state-name">Architecture</span></div><div>A masterbrand, four endorsed subbrands and a repair and parts programme.</div></div>
+          <div class="state-row"><div><span class="state-name">Reach</span></div><div>Twelve example markets, thirteen working locales, editorial material in five languages.</div></div>
+          <div class="state-row"><div><span class="state-name">Library</span></div><div>Agency and brand-operations documents from 2022 to 2026, with a handover snapshot dated 7 September 2026.</div></div>
+          <div class="state-row"><div><span class="state-name">Sources</span></div><div>25 source documents, including a claims register and an evidence dossier.</div></div>
+          <div class="state-row"><div><span class="state-name">Assets</span></div><div>40 assets with a register of their production and rights state.</div></div>
+        </div>
+
+        <p class="micro-note">The corpus behaves like a real brand archive. Documents overlap and some contradict each other. Approvals expire. Rules differ by market, channel, product and date. Some things the brand does not know. Retained artwork is not automatically licensed for a new placement.</p>
+
+        <p class="micro-note">Some of the difficulty is deliberate. The evaluator holds 20 hidden cases that participants never see, covering scope, validity periods, conflicting authorities, claims that apply only in certain contexts, and truth that must stay unknown. They are described by category only, because SUPABRAND remains in use as a test.</p>
+      </div>
+    </section>
+
+    <section class="section" id="setup">
+      <div class="section-number">03 / Setup</div>
+      <div class="section-content">
+        <h2>How Round 4 ran</h2>
+        <p class="lead">Both candidates received the same public corpus at one pinned commit and OBDS 4.1.2 at its release commit. The evaluator verified every corpus file byte for byte, hashed each candidate's complete file tree on receipt, and rechecked at the end. Neither had changed during the evaluation.</p>
+
+        <div class="scroll-x">
+        <table class="cmp">
+          <tr><th></th><th>Candidate A</th><th>Candidate B</th></tr>
+          <tr><td>Built by, as labelled by the operator</td><td>Claude</td><td>Astra</td></tr>
+          <tr><td>Language</td><td>Python</td><td>JavaScript (Node)</td></tr>
+          <tr><td>Task Facts evaluator</td><td>The published OBDS Python reference evaluator, called from its own runner</td><td>Its own independently written evaluator</td></tr>
+          <tr><td>Deliverable</td><td>Library code and a draft package, with no final report or seal</td><td>Sealed package with a final report</td></tr>
+        </table>
+        </div>
+
+        <div class="q">
+          <h3>What was separate, and what was not</h3>
+          <p>Separate: two systems, two languages, two submissions, and no reference found from one candidate's output to the other's.</p>
+          <ul class="plain">
+            <li>Candidate A had an internal curation guide from earlier rounds and cited it in its code, so the guide-free premise of the round does not hold for A.</li>
+            <li>Candidate B disclosed that it had read the published Task Facts conformance results beforehand.</li>
+            <li>Candidate A's Task Facts evaluator is the published reference implementation, not one that A wrote.</li>
+            <li>Without complete access logs, isolation between the two cannot be certified.</li>
+            <li>The evaluation was run by the project, separately from both candidates. It is not an external audit.</li>
+          </ul>
+          <p class="micro-note">Each system ran once. There were no repeated runs, no equal budgets, and model versions were not recorded. One qualified run per system does not establish general model capability, and this page does not rank the two systems.</p>
+        </div>
+
+        <div class="q">
+          <h3>How the scoring was protected</h3>
+          <ul class="plain">
+            <li>The 20 hidden cases and their expected outcomes were recorded before any candidate code ran.</li>
+            <li>Curation scores were frozen, and the frozen files hashed, before the two candidates were compared. No material from earlier rounds was read.</li>
+            <li>54 independent applicability probes were written with expected results fixed before execution, then run against each candidate's unchanged code in temporary copies.</li>
+            <li>Both Task Facts paths ran the official OBDS suite, and the same evaluator-owned inputs were replayed through both.</li>
+            <li>Each package was copied to a new location and rerun to test portability.</li>
+            <li>Every claim a candidate made about itself was audited against evidence.</li>
+          </ul>
+        </div>
+
+        <div class="q">
+          <h3>The role of Task Facts</h3>
+          <p>Task Facts 1.0 is an optional OBDS capability, added in OBDS 4.1.0. It defines how the facts of one specific task, for example the market, the date and the set of claims or assets involved, are represented, hashed and evaluated against declared conditions. It covers sets, item-to-item associations and dates, and keeps missing, empty, unknown and contradictory values apart. A fact being present does not make it true: verification and provenance stay separate. Round 4 was the first SUPABRAND round in which this contract existed.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section inverse" id="results">
+      <div class="section-number">04 / Results</div>
+      <div class="section-content">
+        <h2>Round 4: mixed</h2>
+        <p class="lead">Three numbers carry the result, and each is narrower than it looks.</p>
+
+        <div class="result-grid">
+          <div>
+            <span class="result-figure">39/40</span>
+            <span class="label">Curation, both candidates</span>
+            <span class="result-note">Hidden-case curation points. 19 of 20 cases fully correct, one partial in each submission. It measures whether the governed truth was captured, not whether it was executed.</span>
+          </div>
+          <div>
+            <span class="result-figure">93/93</span>
+            <span class="label">Bounded replay agreement</span>
+            <span class="result-note">58 evaluator-owned inputs replayed through both Task Facts paths: every six-field decision record identical, invalid and unresolved records included. Bounded replay agreement, not universal interoperability.</span>
+          </div>
+          <div>
+            <span class="result-figure">0/20</span>
+            <span class="label">Complete governed execution</span>
+            <span class="result-note">None of the 20 hidden cases completed the required end-to-end governed pipeline for either candidate. This is not 20 incorrect decisions.</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <pre>         Same public SUPABRAND corpus, one pinned commit
+                              |
+        +---------------------+---------------------+
+        |                                           |
+  Candidate A: Claude / Python              Candidate B: Astra / Node
+  also had the internal curation guide      public material only
+        |                                           |
+   39/40 curation                            39/40 curation
+   (20 hidden cases)                         (20 hidden cases)
+         \                                        /
+          +-------------------+--------------------+
+                              |
+            Task Facts replay, 58 evaluator inputs
+               93/93 identical decision records
+       A's path: published Python reference evaluator
+       B's path: independently written Node evaluator
+                              |
+                 Complete governed execution
+                     0 of 20 demonstrated</pre>
+        </div>
+        <p class="code-caption">One corpus, two submissions, one shared decision layer, no completed execution. The two paths were not operationally identical: only Candidate B wrote its own evaluator.</p>
+
+        <div class="scroll-x">
+        <table class="cmp">
+          <tr><th>Measure</th><th>Candidate A</th><th>Candidate B</th></tr>
+          <tr><td>Hidden-case curation</td><td>19 of 20 fully correct, 39/40 points</td><td>19 of 20 fully correct, 39/40 points</td></tr>
+          <tr><td>Complete governed execution of a hidden case</td><td>0 of 20 demonstrated</td><td>0 of 20 demonstrated</td></tr>
+          <tr><td>Independent applicability probes</td><td>28/28 passed</td><td>26/26 passed</td></tr>
+          <tr><td>Official Task Facts suite</td><td>66/66 fixtures, 36/36 regressions</td><td>66/66 fixtures, 36/36 regressions</td></tr>
+          <tr><td>Shared Task Facts replay</td><td colspan="2">93/93 records identical, one shared result across both paths</td></tr>
+          <tr><td>Portability</td><td>Partially portable</td><td>Portable</td></tr>
+        </table>
+        </div>
+        <p class="code-caption">Some hidden cases had a bounded executable counterpart in each submission. None of them amounted to a complete governed run, and the delivered coverage differs between the two, so the two are not comparable as a score.</p>
+
+        <p class="micro-note">The evaluator called Candidate B the stronger and more reviewable package and the preferred basis for a real brand package. It remains a draft that needs further curation, occurrence coverage, trusted verification and governed integration. Neither candidate is ready for production.</p>
+      </div>
+    </section>
+
+    <section class="section" id="worked">
+      <div class="section-number">05 / What worked</div>
+      <div class="section-content">
+        <h2>What worked</h2>
+
+        <div class="q">
+          <h3>Curation reached a high level in both submissions</h3>
+          <p>Working from the same sources with OBDS 4.1.2, both captured 39 of 40 points on cases they had never seen. Candidate A also had the internal curation guide, so only Candidate B demonstrates this from public material alone.</p>
+        </div>
+
+        <div class="q">
+          <h3>Two Task Facts implementations produced identical decisions</h3>
+          <p>93 of 93 six-field records matched across an independently written JavaScript evaluator and the published Python reference evaluator, invalid and unresolved cases included. Both paths also pass the official suite: 66 fixture decisions and 36 regression records.</p>
+        </div>
+
+        <div class="q">
+          <h3>The applicability layer behaved as specified on the tested probes</h3>
+          <p>All 54 independent probes passed. They covered several claims or assets in one task, partner and campaign combinations, market against locale, missing, empty, unknown and contradictory inputs, misuse of a single value where a set is required, and ambiguous times. Neither submission needed a private predicate language for the conditions tested.</p>
+        </div>
+
+        <div class="q">
+          <h3>One package was reproducible elsewhere</h3>
+          <p>Candidate B was copied to a fresh location and environment and passed all six of its steps with its documented, pinned dependencies, without the original machine or paths. The first attempt failed on a missing Python package, which the documented lockfile resolved.</p>
+        </div>
+
+        <div class="q">
+          <h3>The approval boundary held</h3>
+          <p>Candidate B's package stayed a draft, and its production build refused that draft and produced no compiled context for a model. This demonstrates the approval gate, nothing beyond it.</p>
+        </div>
+
+        <div class="q">
+          <h3>Bounded claims were supported</h3>
+          <p>Candidate B stated draft status, partial coverage, no brand approval and no production readiness. The evaluator's audit found those statements supported, and Candidate B kept the brand's genuine unknowns explicit as unknown rather than resolving them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="failed">
+      <div class="section-number">06 / What failed</div>
+      <div class="section-content">
+        <h2>What failed</h2>
+
+        <div class="callout">
+          <div><span class="callout-key">0 / 20</span></div>
+          <div><p>Neither candidate demonstrated a complete governed execution for any of the 20 hidden cases. Neither delivered a path from curated sources, through a Task Facts decision, into a governed production result. This is the central negative result of Round 4. It does not mean that 20 decisions were wrong.</p></div>
+        </div>
+
+        <div class="q">
+          <h3>Where the execution boundary sits</h3>
+          <ul class="plain">
+            <li>Neither submission delivered a trusted host that carries every relevant occurrence, source scope and validity from the curated sources through Task Facts decisions into execution. The evaluator names this as the most important remaining gap.</li>
+            <li>OBDS 4.1 has no adopted binding from sources through Task Facts to Compiled Runtime, and no conformance test for such a binding.</li>
+            <li>Item-to-item associations were only partly handled, partly through implementer omissions and partly because general joins, relations across several targets and every-occurrence expansion are not in the standard.</li>
+            <li>Neither candidate authenticates where a task fact comes from, so a production gate would rest on unverified input.</li>
+          </ul>
+        </div>
+
+        <div class="q">
+          <h3>Some executed decisions were wrong</h3>
+          <p>Candidate A's private brand adapter was tested on 19 decisions. It matched the evaluator on 11 and differed on 8: two false allows, where content would have been let through that should have been blocked; two false blocks; three that turned an unresolved unknown or escalation into a plain block; and one that lost which item a problem belonged to. The evaluator attributes these to curation and implementation errors, not to missing OBDS guidance.</p>
+        </div>
+
+        <div class="q">
+          <h3>Associations were only partly handled</h3>
+          <p>Some rules depend on which item relates to which: this asset with that product, this partner with that placement, this campaign beside that hero image. Of four such challenges, Candidate A left three unhandled and Candidate B two. OBDS supports occurrence identifiers and exact association pairs, so part of this was an implementer omission. The rest is recorded as a standard gap.</p>
+        </div>
+
+        <div class="q">
+          <h3>Candidate B's clean error record is narrow</h3>
+          <p>Candidate B showed no false allows or false blocks, but only inside a narrow dependency layer. Many brand conditions were not implemented, and several obligations were not fully curated. A full-brand error rate for B cannot be measured from this round.</p>
+        </div>
+
+        <div class="q">
+          <h3>The intended experiment was not cleanly realised</h3>
+          <p>Candidate A never reached a verifiable final state: no final report, no seal, and files its own code refers to are missing. It also used the internal curation guide the round was meant to exclude. Candidate B had seen published conformance results in advance. This is therefore not a comparison of two complete, fully separate, guide-free submissions.</p>
+        </div>
+
+        <div class="q">
+          <h3>Portability was partial for Candidate A</h3>
+          <p>Its submission ran only when the delivered OBDS inputs beside it were copied as well, and it has no reproduction entry point of its own.</p>
+        </div>
+
+        <div class="q">
+          <h3>Provenance was not established</h3>
+          <p>Neither candidate authenticates where a task fact comes from, and both created their own test contexts. A caller asserting that rights exist does not establish that they do.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="obds">
+      <div class="section-number">07 / For OBDS</div>
+      <div class="section-content">
+        <h2>What this says about OBDS</h2>
+        <p class="lead">Within this bounded experiment, three statements hold.</p>
+
+        <div class="integrity-list">
+          <div class="integrity-item">
+            <div>
+              <h3>A shared contract for task-level facts can remove the need for a private condition language at the predicate level</h3>
+              <p>Both submissions used the published Task Facts semantics for the conditions tested, and two implementations agreed exactly. The evaluator's answer to whether OBDS 4.1.2 removed that need is partially: at the predicate layer yes, for complete brand decisions no.</p>
+            </div>
+          </div>
+          <div class="integrity-item">
+            <div>
+              <h3>The public specification appears sufficient for faithful curation, and not yet for complete execution</h3>
+              <p>Candidate B supports the first half from public material alone. Candidate A cannot corroborate it, having used the internal guide. The evaluator's answer on authoring sufficiency is also partially.</p>
+            </div>
+          </div>
+          <div class="integrity-item">
+            <div>
+              <h3>The next boundary is the host, not the vocabulary</h3>
+              <p>What is missing is a trusted host that carries occurrence, scope and validity from sources through decisions into execution, together with an adopted binding for that path, a conformance test for it, standard occurrence expansion, interval operators and a protocol for authenticated verifiers.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="micro-note">Rounds 1 to 3 ran on OBDS 4.0.4 and led to the Task Facts work. Their scores used different methods and are not compared with Round 4, and no claim is made that changes to OBDS caused an improvement between rounds.</p>
+      </div>
+    </section>
+
+    <section class="section" id="unproven">
+      <div class="section-number">08 / Unproven</div>
+      <div class="section-content">
+        <h2>What remains unproven</h2>
+        <p class="lead">This round does not demonstrate any of the following.</p>
+        <ul class="plain">
+          <li>Complete automated brand enforcement, on SUPABRAND or any brand.</li>
+          <li>Production readiness of any submission, or of an OBDS-based production pipeline.</li>
+          <li>End-to-end portability of conditional brand logic, as opposed to portability at the Task Facts layer.</li>
+          <li>That the public OBDS material alone is sufficient for independent authoring, since only one candidate supports it.</li>
+          <li>Two independently authored evaluators from the two candidates, because one used the reference implementation.</li>
+          <li>A clean, isolated, guide-free experiment.</li>
+          <li>Any ranking of the systems involved.</li>
+          <li>That changes to OBDS caused score changes between rounds.</li>
+          <li>Authenticated provenance, rights verification, or the completeness of an asset inventory.</li>
+          <li>Extraction of facts from natural-language task requests, or complete publication review.</li>
+          <li>Full-brand rates of false allows and false blocks.</li>
+          <li>Behaviour on real brands, or beyond one synthetic corpus.</li>
+          <li>Usability for external implementers outside this project.</li>
+          <li>Review by an external, third-party evaluator.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="reproduce">
+      <div class="section-number">09 / Reproduce</div>
+      <div class="section-content">
+        <h2>Reproduce and inspect</h2>
+        <p class="lead">The corpus and the specification are public. The hidden cases are not, because publishing them would turn SUPABRAND into an answer key.</p>
+
+        <div class="state-list">
+          <div class="state-row"><div><span class="state-name">Corpus</span></div><div>The public SUPABRAND corpus, at the commit used in every round: <a href="https://github.com/ktdmax/supabrand.xyz/tree/2d1651b791e2f8628c4bc253b2edd56238df3a70" target="_blank" rel="noopener">ktdmax/supabrand.xyz @ 2d1651b</a>.</div></div>
+          <div class="state-row"><div><span class="state-name">Specification</span></div><div>OBDS 4.1.2, the release Round 4 ran against: <a href="/spec/4.1.2/OBDS-4.1.2.md">OBDS-4.1.2.md</a>, section 35 for Task Facts and section 26.10 for its conformance claims.</div></div>
+          <div class="state-row"><div><span class="state-name">Task Facts suite</span></div><div>The published evaluators and their suite: <a href="/reference/task-facts/1.0/README.md">reference/task-facts/1.0/README.md</a>. Anyone can rerun the 66 fixture decisions and 36 regression records.</div></div>
+          <div class="state-row"><div><span class="state-name">Not published</span></div><div>The hidden cases, their expected outcomes, the probe and replay inputs, and the candidates' full submissions, whose curated packages contain near-correct answers. The 93-record replay therefore cannot be rerun from public material; the official suite can.</div></div>
+        </div>
+
+        <div class="actions">
+          <a href="/research/">
+            <span class="action-name">Other OBDS research</span>
+            <span class="action-note">Deterministic result hashes, the governed communications benchmark, and the known limits.</span>
+          </a>
+          <a href="/research/limits/README.md">
+            <span class="action-name">Known limits</span>
+            <span class="action-note">What OBDS cannot prove, written down before anyone asks.</span>
+          </a>
+          <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener">
+            <span class="action-name">OBDS on GitHub</span>
+            <span class="action-note">Specification, schemas, reference implementation and conformance suite.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="closing">
+      <div class="section-number">10 / Open question</div>
+      <div class="section-content">
+        <h2>The question that stays open</h2>
+        <p class="lead">Can independent systems reconstruct and apply the same governed brand truth from the same difficult source material?</p>
+        <p class="pull">At the level of decisions, this round says yes. Acting on that truth end to end is still untested.</p>
+        <p class="micro-note">Round 4 was the first SUPABRAND round with a published contract for task-level decisions, and the first in which two implementations could be compared decision by decision. They agreed on every shared decision, curated conflicting material to the same score, and needed no private condition language for the conditions tested. It also found a boundary: no hidden case completed a governed run, associations were only partly handled, and the step from correct decisions to trusted, governed execution was not delivered.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>&copy; 2026 Kill The Dragon GmbH</span>
+    <span>Open Brand Definition / Research / SUPABRAND</span>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# OBDS 4.1.2 Implementer Quickstart
+# OBDS 4.1.3 Implementer Quickstart
 
 ## Start with five concepts
 
@@ -129,7 +129,7 @@ not a default, it is a governed decision the artefact never stated.
 
 ## Optional Task Facts 1.0
 
-This prospective release adds the separately claimed optional evaluator [adoption contract](reference/task-facts/1.0/ADOPTION.md) and [raw-file suite](reference/task-facts/1.0/README.md). Existing packages need no migration or evaluator dependency. No production integration is claimed. Payload 0.1 and TFJ-0.1 remain unchanged.
+Task Facts 1.0 is a published, optional capability, added in OBDS 4.1.0 and unchanged since: the separately claimed evaluator [adoption contract](reference/task-facts/1.0/ADOPTION.md) and [raw-file suite](reference/task-facts/1.0/README.md). Existing packages need no migration or evaluator dependency. No production integration is claimed. Payload 0.1 and TFJ-0.1 remain unchanged.
 
 ```sh
 python3 reference/task-facts/1.0/run-suite.py --result /tmp/task-facts-python.json --implementation-name research-python --implementation-version frozen-cycle-1 -- python3 reference/task-facts/1.0/evidence/interop/cycles/cycle-1/implementation-python/evaluate.py
