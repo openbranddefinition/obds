@@ -374,6 +374,165 @@
     opacity: .6;
   }
 </style>
+<style>
+  /* ---------------------------------------------------------------------
+     Shared navigation and layout corrections. This block is appended to
+     every public page, so a page keeps working on its own without a
+     stylesheet request. Everything below is additive; earlier rules stay.
+     --------------------------------------------------------------------- */
+
+  /* --- topbar: mark, status, optional language note, burger --- */
+  .topbar { grid-template-columns: minmax(0, 1fr) auto auto auto; }
+
+  /* --- burger toggle in the topbar --- */
+  .menu-toggle {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 var(--pad);
+    border: 0;
+    border-left: 1px solid var(--line);
+    background: transparent;
+    color: inherit;
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .menu-toggle:hover { background: var(--ink); color: var(--paper); }
+  .menu-toggle:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+  .burger { display: inline-grid; gap: 3px; width: 17px; }
+  .burger i {
+    display: block;
+    height: 2px;
+    background: var(--ink);
+    transition: transform .18s ease, opacity .18s ease;
+  }
+  .menu-toggle:hover .burger i { background: var(--paper); }
+  .menu-toggle[aria-expanded="true"] .burger i:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .burger i:nth-child(2) { opacity: 0; }
+  .menu-toggle[aria-expanded="true"] .burger i:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+
+  /* --- the panel itself --- */
+  .site-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: color-mix(in srgb, var(--ink) 62%, transparent);
+  }
+  .site-menu[hidden] { display: none; }
+  .site-menu-panel {
+    width: min(100%, var(--max));
+    margin: 0 auto;
+    background: var(--paper);
+    color: var(--ink);
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-menu-bar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 64px;
+    padding: 0 var(--pad);
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .site-menu-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .site-menu-close {
+    flex: none;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: inherit;
+    padding: 9px 14px;
+    font-size: var(--small);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    cursor: pointer;
+  }
+  .site-menu-close:hover { background: var(--ink); color: var(--paper); }
+  .site-menu-close:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+  .site-menu-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .site-menu-grid a {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+    min-width: 0;
+    min-height: 168px;
+    padding: 18px var(--pad) 22px;
+    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .site-menu-grid a:nth-child(3n + 1) { border-left: 0; }
+  .site-menu-grid a:hover,
+  .site-menu-grid a:focus-visible,
+  .site-menu-grid a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+  .site-menu-grid a:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+  .site-menu-index { font-size: var(--small); letter-spacing: .1em; }
+  .site-menu-name {
+    font-size: clamp(21px, 1.9vw, 31px);
+    line-height: .97;
+    letter-spacing: -.05em;
+    text-transform: uppercase;
+    font-weight: 700;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  .site-menu-note { font-size: var(--small); line-height: 1.4; letter-spacing: 0; opacity: .72; max-width: 30ch; }
+
+  /* --- display type ---------------------------------------------------
+     No automatic hyphenation. hyphens:auto fills lines greedily, so it also
+     splits words that wrap cleanly on their own. Display type is instead
+     sized to its column, and the two German compounds that cannot fit at any
+     sane size carry a soft hyphen (&shy;) at their correct break point. --- */
+
+  /* --- mobile: keep the page itself at viewport width ---------------------
+     A grid item defaults to min-width:auto, so one wide table, code block or
+     diagram pushes its whole column past the viewport instead of scrolling
+     inside its own container. --- */
+  @media (max-width: 900px) {
+    .topbar { grid-template-columns: minmax(0, 1fr) auto auto; }
+    .section, .section-content, .section-number { min-width: 0; }
+    .scroll-x, .code-block { min-width: 0; max-width: 100%; }
+    table.cmp { min-width: 0; }
+    /* A comparison table with four or more columns is unreadable once every
+       cell is one word wide. Give it a floor and let it scroll sideways in
+       its own container instead. */
+    .scroll-x table.cmp:has(th:nth-child(4)) { min-width: 620px; }
+    .chain, .chain > div, .flow, .flow-step, .actions, .actions > a { min-width: 0; }
+    .site-menu-grid { grid-template-columns: 1fr; }
+    .site-menu-grid a { min-height: 0; border-left: 0; padding: 16px 16px 20px; gap: 14px; }
+    .site-menu-bar { min-height: 58px; padding: 0 16px; }
+    .site-menu-panel { border-left: 0; border-right: 0; min-height: 100%; }
+    .menu-toggle { padding: 0 14px; }
+  }
+  @media (max-width: 560px) {
+    .menu-label { display: none; }
+    .lang-note { display: none; }
+    .menu-toggle { padding: 0 16px; }
+    .site-menu-title { font-size: 11px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .burger i { transition: none; }
+  }
+  @media print {
+    .menu-toggle, .site-menu { display: none !important; }
+  }
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -382,8 +541,31 @@
     <a class="mark" href="/" aria-label="Open Brand Definition home">Open Brand Definition</a>
     <div class="status">OBDS / 4.1.3 stable</div>
     <div class="lang-note" lang="en">English only</div>
-    <a class="back" href="/">&larr; Back</a>
+    <button type="button" class="menu-toggle" data-menu-toggle aria-expanded="false" aria-controls="site-menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="menu-label">Menu</span></button>
   </header>
+
+    <nav id="site-menu" class="site-menu" aria-label="Site" hidden>
+      <div class="site-menu-panel">
+        <div class="site-menu-bar">
+          <span class="site-menu-title">Open Brand Definition &mdash; Navigation</span>
+          <button type="button" class="site-menu-close" data-menu-close>Close <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="site-menu-grid">
+        <a href="/"><span class="site-menu-index">01</span><span class="site-menu-name">Home</span><span class="site-menu-note">The specification in one page. English and German.</span></a>
+        <a href="/what-is-obds/"><span class="site-menu-index">02</span><span class="site-menu-name">What is OBDS</span><span class="site-menu-note">The definition, the difference from retrieval, one worked example.</span></a>
+        <a href="/machine-readable-brand-guidelines/"><span class="site-menu-index">03</span><span class="site-menu-name">Machine-readable brand guidelines</span><span class="site-menu-note">One category, three different problems. Where governed applicability sits.</span></a>
+        <a href="/brand-governance-for-ai/"><span class="site-menu-index">04</span><span class="site-menu-name">Brand governance for AI</span><span class="site-menu-note">Where the decision belongs in the pipeline, before the model is called.</span></a>
+        <a href="/authoring/"><span class="site-menu-index">05</span><span class="site-menu-name">Authoring and curation</span><span class="site-menu-note">How governed brand truth is written, sourced and kept current.</span></a>
+        <a href="/examples/"><span class="site-menu-index">06</span><span class="site-menu-name">Examples</span><span class="site-menu-note">Two runnable examples. One compiles, one fails closed.</span></a>
+        <a href="/compare/machine-readable-brand-specifications/"><span class="site-menu-index">07</span><span class="site-menu-name">Compare approaches</span><span class="site-menu-note">BRAND.md, Brand Context Protocol, Brando, MRBS and OBDS against primary sources.</span></a>
+        <a href="/research/"><span class="site-menu-index">08</span><span class="site-menu-name">Research</span><span class="site-menu-note">Deterministic result hashes, the communications benchmark, published limits.</span></a>
+        <a href="/research/supabrand/"><span class="site-menu-index">09</span><span class="site-menu-name">SUPABRAND</span><span class="site-menu-note">Governed brand truth tested across two independent submissions.</span></a>
+        <a href="/#release"><span class="site-menu-index">10</span><span class="site-menu-name">The current release</span><span class="site-menu-note">OBDS 4.1.3: the normative document, the package and every published file.</span></a>
+        <a href="/#licensing"><span class="site-menu-index">11</span><span class="site-menu-name">Licensing</span><span class="site-menu-note">CC BY 4.0 for the specification, Apache 2.0 for the implementation layer.</span></a>
+        <a href="https://github.com/openbranddefinition/obds" target="_blank" rel="noopener"><span class="site-menu-index">12</span><span class="site-menu-name">GitHub</span><span class="site-menu-note">The repository behind this site, with the full release history.</span></a>
+        </div>
+      </div>
+    </nav>
 
   <main id="main">
     <section class="hero" id="top">
@@ -591,5 +773,43 @@ sourceRefs:
     <span>Open Brand Definition / Authoring</span>
   </footer>
 </div>
+<script>
+  /* Burger navigation. Progressive: without JavaScript the panel stays
+     hidden and every page is still reachable from the in-page links. */
+  (() => {
+    const toggle = document.querySelector('[data-menu-toggle]');
+    const menu = document.getElementById('site-menu');
+    if (!toggle || !menu) return;
+
+    const here = window.location.pathname.replace(/index\.html$/, '');
+    menu.querySelectorAll('a').forEach((link) => {
+      const url = new URL(link.href, window.location.href);
+      if (url.origin === window.location.origin && url.pathname === here) {
+        link.setAttribute('aria-current', 'page');
+      }
+    });
+
+    const setOpen = (open) => {
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) {
+        const first = menu.querySelector('[aria-current="page"]') || menu.querySelector('a');
+        if (first) first.focus({ preventScroll: true });
+      }
+    };
+
+    toggle.addEventListener('click', () => setOpen(menu.hidden));
+    menu.addEventListener('click', (event) => {
+      if (event.target === menu || event.target.closest('[data-menu-close]')) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  })();
+</script>
 </body>
 </html>
