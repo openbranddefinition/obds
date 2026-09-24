@@ -6,6 +6,7 @@
 
 # Local working notes, research and internal reports.
 answers/
+md/
 
 # Internal tooling source. `tools/` ships in the release package because the
 # archive has to be able to verify itself, but the website never serves it: the
@@ -14,7 +15,6 @@ answers/
 tools/
 
 # Withdrawn drafts and local-only material, mirrored from .gitignore.
-md/
 licensing/
 archive/
 openbranddefinition-site-*-public-draft/

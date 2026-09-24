@@ -6,9 +6,49 @@ Current release: 4.1.3 (stable, 12 September 2026)
 Publisher: Kill The Dragon GmbH, Vienna, Austria
 Canonical address: https://openbranddefinition.org/
 
+Legal notice: https://openbranddefinition.org/legal/
+
+Language: explanatory pages are English. The homepage and legal notice contain
+both English and German text in the same HTML; do not treat translations as
+separate claims. The legal notice defaults to German without JavaScript.
+
+## Website and evidence boundary
+
+Current explanatory website: 19 September 2026. This website publication is separate
+from frozen OBDS 4.1.3 release evidence. The normative specification is unchanged.
+Website record: https://openbranddefinition.org/website-publication.json
+
+Ecosystem jobs: DEFINE / STRUCTURE → PUBLISH / DISCOVER → RESOLVE / GOVERN → EXECUTE / VALIDATE.
+OBDS sits primarily at RESOLVE / GOVERN. It is not discovery infrastructure, a registry,
+an MCP replacement, a renderer or a complete autonomous execution system.
+Canonical OBDS truth may have derived human, task-specific, API, MCP and Markdown views;
+these are not parallel sources of approved truth or a promise of available adapters.
+
+How it works: https://openbranddefinition.org/what-is-obds/
+Use cases: https://openbranddefinition.org/use-cases/
+Insights: https://openbranddefinition.org/insights/
+Resources: https://openbranddefinition.org/resources/
+Ecosystem: https://openbranddefinition.org/ecosystem/
+
+Authoring is non-normative and review-first. Sources are evidence, not approval.
+Candidate truth is not approved truth. Automatic ADMIT is not production-cleared.
+Research question: Governance completeness before automatic ADMIT. No demonstrated
+normative OBDS core gap follows from the supplied Intake/Curation or Sameness learnings.
+
+SUPABRAND ROUND 4 MIXED (tested against OBDS 4.1.2): both submissions 39/40 hidden-case curation points;
+93/93 Task Facts replay records agree within the tested boundary; 0/20 complete
+end-to-end governed execution for either submission. 0/20 means incomplete pipelines,
+not 20 wrong decisions. No universal interoperability or guaranteed on-brand output.
+Research: https://openbranddefinition.org/research/
+Round 4: https://openbranddefinition.org/research/supabrand/
+
+The comparison separates open specifications/protocols (OBDS, BRAND.md, BCP, MRBS,
+Brando) from adjacent products/infrastructure (Sameness), and explains MCP as access
+infrastructure. Not a ranking. Documented responsibilities are not implementation proof.
+
 ## Definition
 
-OBDS is an open, implementation-ready specification for determining which governed brand
+OBDS is an open specification with a reference implementation for determining which governed brand
 truth is authoritative and applicable to a specific AI task, and whether execution may
 proceed.
 
@@ -27,9 +67,33 @@ machine-readable brand specification, brand context for AI agents, AI brand gove
 governed brand context, brand applicability for AI, deterministic brand governance,
 fail-closed brand AI.
 
+## Common questions
+
+Can brand guidelines simply go into the system prompt? A prompt carries text, not
+authority. The model cannot tell whether a paragraph was approved, which market it covers
+or whether it has expired. OBDS resolves that before the call.
+
+Is OBDS a RAG system for brands? No. Retrieval answers which information looks relevant;
+OBDS decides which governed brand truth is authoritative and applicable, and whether the
+task may proceed. The two compose.
+
+Does OBDS stop LLM brand hallucinations? Not on its own. It limits what reaches the model
+to approved, applicable truth, and the optional Compiled Runtime blocks the build when
+required truth is missing, unknown, expired or conflicting. Generated output still has to
+be checked by the host. SUPABRAND Round 4: 0/20 complete governed end-to-end runs.
+
+Does OBDS make AI output deterministic? The governance side is: builds use an explicit
+asOf date and the governed result hash agrees on 59 of 59 cross-language vectors. Model
+output is not made deterministic.
+
+Is there a LangChain or LlamaIndex integration? No framework adapter has been published
+or tested. The Python reference runtime receives the model call from the host application.
+
+Answers with links: https://openbranddefinition.org/what-is-obds/#questions
+
 ## Purpose
 
-An open, implementation-ready specification for governed brand truth and AI creation.
+An open specification with a reference implementation for governed brand truth and AI creation.
 
 OBDS is a governed brand control layer for AI systems. It is a specification for
 brand specifically, not a general policy, compliance or enterprise-governance
