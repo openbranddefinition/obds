@@ -11,85 +11,85 @@
       "path": "index.html",
       "url": "/",
       "status": 200,
-      "sha256": "b4289c782e16e3517108521fe271869a9de8ac54dd35f013aec1b081680e9b21"
+      "sha256": "ebd1bbaf21bb2cca03cb481ab8ea83949df5eed75f0ed8b33248f154501c031b"
     },
     {
       "path": "what-is-obds/index.html",
       "url": "/what-is-obds/",
       "status": 200,
-      "sha256": "c4aadd6c0f35a05f58ebebfd9cd019a07a3e798642f9626aade530bc6734e430"
+      "sha256": "f0fe5e6b5714cd6ae145a069263e1247d6f88860c66548a81828b28e60d352dd"
     },
     {
       "path": "use-cases/index.html",
       "url": "/use-cases/",
       "status": 200,
-      "sha256": "9105de89b73480b08793cb24b9ba97caa32ad31239abc9e9e20d1948224057e1"
+      "sha256": "7f9ceef88b2ef730e03b97cd67d08d54ecd8f94811f0c4dae1371ba4d7708fac"
     },
     {
       "path": "insights/index.html",
       "url": "/insights/",
       "status": 200,
-      "sha256": "8307753ee022010be1852eff0fd97285e86135f57d49dabc538e7852c5af3e2e"
+      "sha256": "ebdd3274e04c29783056b6fdc8bb41dd9e49b6ebeee2d4fdb5a0b0c9f734c3f0"
     },
     {
       "path": "resources/index.html",
       "url": "/resources/",
       "status": 200,
-      "sha256": "02a7f975069f82cc0a8623335129f3eb48ed7ed4dcf3820d81052e73537b020f"
+      "sha256": "d64448815e99bf1e3976dd71b7e520879b9c140f84efc27b1fa4e6b7e087df4d"
     },
     {
       "path": "ecosystem/index.html",
       "url": "/ecosystem/",
       "status": 200,
-      "sha256": "e3aeac8a55dbd2fea79a73ff6470af45131c89fd168b6b3db2d566c3b598fd49"
+      "sha256": "2f6f733638ed8ff7eb605b5acdfd8d0c9687de557192630705197f11db04cf9e"
     },
     {
       "path": "authoring/index.html",
       "url": "/authoring/",
       "status": 200,
-      "sha256": "7e48f528ff305c1a2c2747447c73bf40d5302e41d89a5b1afa4bd5fa1912e28b"
+      "sha256": "4ee61d48b7de4bfadf190fd7d04ddd7fcdf676eda37e83fd4f5b1a800e1f51b5"
     },
     {
       "path": "research/index.html",
       "url": "/research/",
       "status": 200,
-      "sha256": "2fa4eef5c0f381f7fcb5922c63b54f2d9b7e75a3a4757076ed6ec66318074e9f"
+      "sha256": "bb1178aacdf23a7bb2a14969779b096abbdfa0ae6640d8b428667d2e1a72529e"
     },
     {
       "path": "research/supabrand/index.html",
       "url": "/research/supabrand/",
       "status": 200,
-      "sha256": "1d13b350b8612a31a47289198b52ead439b7831e2a423cb9fbbbf9ad5ebb12ae"
+      "sha256": "92c9ce2d474b1f27596e5ae991b4836fc5cb70fbb91c4cf9189e2ce52d6b983d"
     },
     {
       "path": "machine-readable-brand-guidelines/index.html",
       "url": "/machine-readable-brand-guidelines/",
       "status": 200,
-      "sha256": "3935d1f8497e60bf856fa23f8983a3c47e204264ec9a5c082626f76861ed2791"
+      "sha256": "bc64c04de81368b9d910df42a3ef9e37754363d6ff1d23d34195961a783764ea"
     },
     {
       "path": "brand-governance-for-ai/index.html",
       "url": "/brand-governance-for-ai/",
       "status": 200,
-      "sha256": "dab1e9577d0a9e3400d35296976ee7e381dcd8ab286eb383f508eb9988b281b7"
+      "sha256": "d31ed54854dd3e6650a00406b30b6bf8a4ca1b280737aab8b694d3b67bfeec91"
     },
     {
       "path": "compare/machine-readable-brand-specifications/index.html",
       "url": "/compare/machine-readable-brand-specifications/",
       "status": 200,
-      "sha256": "ae34e4b4c797fea0fa35edfba1fac2ff877ce9b55448385aa893a958fecf85dc"
+      "sha256": "11701881e6e67743718f03ec67011a07e007cbad677e8bdbe7d95c7c42abf9b7"
     },
     {
       "path": "examples/index.html",
       "url": "/examples/",
       "status": 200,
-      "sha256": "47bed2335b1bd496df22d27accab27c120d289af2687ea2bfd295d01e048ea34"
+      "sha256": "f4277d11c7d19a3f6781d98fded606c8dcb0c4d44f849fe2cd2fe5e8dd15776b"
     },
     {
       "path": "legal/index.html",
       "url": "/legal/",
       "status": 200,
-      "sha256": "b514eddeea3ff8d7a685fcfa16feb1e3f01f83127b3df82a9352dcce32dc92b4"
+      "sha256": "e34a89246eae69aaf425e80256e3a8c20d5b4d12ff83da2f9b8f52e456f63ee9"
     },
     {
       "path": "assets/site.css",

@@ -166,6 +166,8 @@ def content_checks(root=ROOT):
         require(release_stamp == b'4.1.3', path + ': OG release stamp')
         for url in page.links:
             resolved = resolve_link(url, route)
+            if url.startswith("/_vercel/"):
+                continue  # served by Vercel Web Analytics, not a repo file
             if not resolved:
                 continue
             target, fragment = resolved
